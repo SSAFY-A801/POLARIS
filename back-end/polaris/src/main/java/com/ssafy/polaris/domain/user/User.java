@@ -14,6 +14,7 @@ import com.ssafy.polaris.domain.report.Report;
 import com.ssafy.polaris.domain.token.Token;
 
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -37,6 +38,7 @@ public class User extends BaseEntity {
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
 	private Token token;
 
+	@Column(length = 300)
 	private String password;
 
 	@Nullable
@@ -44,11 +46,14 @@ public class User extends BaseEntity {
 
 	private String nickname;
 
+	@Column(length = 3000)
 	private String profileUrl;
 
+	@Column(length = 600)
 	private String introduction;
 
 	@Nullable
+	@Column(length = 10)
 	private String oauth;
 
 	@OneToMany(mappedBy = "follower")

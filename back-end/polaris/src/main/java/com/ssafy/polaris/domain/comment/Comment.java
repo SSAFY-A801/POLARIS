@@ -6,6 +6,7 @@ import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.domain.essay.Essay;
 import com.ssafy.polaris.domain.user.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -21,6 +22,7 @@ public class Comment extends BaseEntity {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@Column(length = 600)
 	private String Content;
 
 	@ManyToOne(fetch = FetchType.LAZY)

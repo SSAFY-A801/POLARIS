@@ -2,6 +2,7 @@ package com.ssafy.polaris.domain.report;
 
 import com.ssafy.polaris.domain.user.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -32,9 +33,7 @@ public class Report {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "reported_user_id")
 	private User reportedUser;
-
 	private String title;
-
 	private String content;
 
 	public Report(ReportCategory category, User reporter, User reportedUser, String title, String content) {

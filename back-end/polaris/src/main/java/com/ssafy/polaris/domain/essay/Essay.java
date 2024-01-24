@@ -9,6 +9,7 @@ import com.ssafy.polaris.domain.book.UserBook;
 import com.ssafy.polaris.domain.comment.Comment;
 import com.ssafy.polaris.domain.user.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -34,6 +35,7 @@ public class Essay extends BaseEntity {
 
 	private String title;
 
+	@Column(length = 50000)
 	private String content;
 
 	private int hit;

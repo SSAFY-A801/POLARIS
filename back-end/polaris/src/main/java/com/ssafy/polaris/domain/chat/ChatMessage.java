@@ -6,7 +6,10 @@ import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.domain.trade.Trade;
 import com.ssafy.polaris.domain.user.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,7 +21,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChatMessage extends BaseEntity {
 
+	@Column(length = 3000)
 	private String message;
+
+	@Enumerated(EnumType.STRING)
+	private MessageType type;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")

@@ -3,6 +3,7 @@ package com.ssafy.polaris.domain.token;
 import com.ssafy.polaris.domain.user.User;
 
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
