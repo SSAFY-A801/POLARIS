@@ -34,25 +34,28 @@ public class Promotion extends BaseEntity {
 
 	private int hit;
 
-	private int favoritesAmount;
+	// private int favoritesAmount;
 
 	public void updateHit(){
 		hit += 1;
 	}
 
-	public void increaseFavoritesAmount() {
-		favoritesAmount += 1;
-	}
-
-	public void decreaseFavoritesAmount() {
-		if (favoritesAmount > 0)
-			favoritesAmount -= 1;
-	}
-
+	/*
+	* hit은 기본을 0으로 하기 때문에 넣어주지 않는다.
+	 */
 	public Promotion(User user, List<PromotionUserBook> promotionUserBooks, String title, String content) {
 		this.user = user;
 		this.promotionUserBooks = promotionUserBooks;
 		this.title = title;
 		this.content = content;
 	}
+
+	// public void increaseFavoritesAmount() {
+	// 	favoritesAmount += 1;
+	// }
+	//
+	// public void decreaseFavoritesAmount() {
+	// 	if (favoritesAmount > 0)
+	// 		favoritesAmount -= 1;
+	// }
 }

@@ -9,6 +9,7 @@ import com.ssafy.polaris.connectentity.PromotionUserBook;
 import com.ssafy.polaris.domain.user.User;
 
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -31,26 +32,30 @@ public class UserBook extends BaseEntity {
 
 	private int status;
 
-	private String userBookDescription;
+	@Column(length = 600)
+	private String description;
 
 	@Nullable
 	private Integer userBookPrice; // nullable한 경우 참조형 Wrapper class!
 
+	@Column(columnDefinition="CHAR(6)")
 	private String isOpened;
 
+	@Column(columnDefinition="CHAR(6)")
 	private String isOwned;
 
+	@Column(columnDefinition="CHAR(6)")
 	private String tradeType;
 
 	@OneToMany(mappedBy = "userBook")
 	List<PromotionUserBook> promotionUserBooks = new ArrayList<>();
 
-	public UserBook(User user, Book book, int status, String userBookDescription, @Nullable Integer userBookPrice,
+	public UserBook(User user, Book book, int status, String description, @Nullable Integer userBookPrice,
 		String isOpened, String isOwned, String tradeType, List<PromotionUserBook> promotionUserBooks) {
 		this.user = user;
 		this.book = book;
 		this.status = status;
-		this.userBookDescription = userBookDescription;
+		this.description = description;
 		this.userBookPrice = userBookPrice;
 		this.isOpened = isOpened;
 		this.isOwned = isOwned;

@@ -19,8 +19,8 @@ public class EssayDto {
 	private String title;
 	private String content;
 	private int hit;
-	private int scrapAmount;
-	private int repliesAmount;
+	// private int scrapAmount;
+	// private int repliesAmount;
 	private String isOpened;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;

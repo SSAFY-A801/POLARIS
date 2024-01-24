@@ -40,8 +40,9 @@ public class Essay extends BaseEntity {
 
 	private int hit;
 
-	private int scrapsAmount;
-	private int repliesAmount;
+	// private int scrapsAmount;
+	// private int repliesAmount;
+	@Column(columnDefinition="CHAR(6)")
 	private String isOpened;
 
 	@OneToMany(mappedBy = "essay")
@@ -50,6 +51,9 @@ public class Essay extends BaseEntity {
 	@OneToMany(mappedBy = "essay")
 	private List<Scrap> scraps = new ArrayList<>();
 
+	/*
+	* hit은 생성해주지 않고 기본 값을 0으로 생성한다.
+	 */
 	public Essay(User user, UserBook userBook, String title, String content, String isOpened, List<Comment> comments,
 		List<Scrap> scraps) {
 		this.user = user;
@@ -65,23 +69,6 @@ public class Essay extends BaseEntity {
 		hit += 1;
 	}
 
-	public void increaseScrap(){
-		scrapsAmount += 1;
-	}
-	public void decreaseScrap(){
-		if(scrapsAmount > 0)
-			scrapsAmount -= 1;
-	}
-
-	public void increaseReply() {
-		repliesAmount += 1;
-	}
-
-	public void decreaseReply() {
-		if (repliesAmount > 0)
-			repliesAmount -= 1;
-	}
-
 	public void setOpened(){
 		isOpened = "공개";
 	}
@@ -92,4 +79,21 @@ public class Essay extends BaseEntity {
 	public void deleteEssay(LocalDateTime now) {
 		setDeletedAt(now);
 	}
+
+	// public void increaseScrap(){
+	// 	scrapsAmount += 1;
+	// }
+	// public void decreaseScrap(){
+	// 	if(scrapsAmount > 0)
+	// 		scrapsAmount -= 1;
+	// }
+	//
+	// public void increaseReply() {
+	// 	repliesAmount += 1;
+	// }
+	//
+	// public void decreaseReply() {
+	// 	if (repliesAmount > 0)
+	// 		repliesAmount -= 1;
+	// }
 }
