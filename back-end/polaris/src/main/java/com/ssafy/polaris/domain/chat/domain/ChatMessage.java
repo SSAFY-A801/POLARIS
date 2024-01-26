@@ -1,7 +1,6 @@
 package com.ssafy.polaris.domain.chat.domain;
 
-import java.time.LocalDateTime;
-
+import com.ssafy.polaris.domain.chat.MessageType;
 import com.ssafy.polaris.domain.trade.Trade;
 import com.ssafy.polaris.domain.user.User;
 
