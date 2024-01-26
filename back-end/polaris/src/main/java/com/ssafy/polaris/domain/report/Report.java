@@ -11,16 +11,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
+@Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Report {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 
 	@OneToOne
 	@JoinColumn(name = "report_category_id")
@@ -35,12 +39,4 @@ public class Report {
 	private User reportedUser;
 	private String title;
 	private String content;
-
-	public Report(ReportCategory category, User reporter, User reportedUser, String title, String content) {
-		this.category = category;
-		this.reporter = reporter;
-		this.reportedUser = reportedUser;
-		this.title = title;
-		this.content = content;
-	}
 }

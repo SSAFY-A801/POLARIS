@@ -7,12 +7,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
+@Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Follow extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -23,10 +27,6 @@ public class Follow extends BaseEntity {
 	@JoinColumn(name = "following_user_id")
 	private User following;
 
-	public Follow(User follower, User following) {
-		this.follower = follower;
-		this.following = following;
-	}
 }
 
 

@@ -11,12 +11,16 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
+@Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Book {
 	@Id @Column(length = 13)
 	private String ISBN;
@@ -42,17 +46,4 @@ public class Book {
 	@JoinColumn(name = "series_id")
 	@Nullable
 	private Series series;
-
-	public Book(String ISBN, String title, String description, LocalDateTime pub_date, String cover, String publisher,
-		String author, Integer price_standard, @Nullable Series series) {
-		this.ISBN = ISBN;
-		this.title = title;
-		this.description = description;
-		this.pub_date = pub_date;
-		this.cover = cover;
-		this.publisher = publisher;
-		this.author = author;
-		this.price_standard = price_standard;
-		this.series = series;
-	}
 }

@@ -15,12 +15,16 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserBook extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
@@ -30,38 +34,23 @@ public class UserBook extends BaseEntity {
 	@JoinColumn(name = "book_isbn")
 	private Book book;
 
-	private int status;
-
 	@Column(length = 600)
 	private String description;
 
 	@Nullable
 	private Integer userBookPrice; // nullable한 경우 참조형 Wrapper class!
 
-	@Column(columnDefinition="CHAR(6)")
-	private String isOpened;
+	@Column(columnDefinition="tinyint(1)")
+	private Boolean isOpened;
+
+	@Column(columnDefinition="tinyint(1)")
+	private Boolean isOwned;
 
 	@Column(columnDefinition="CHAR(6)")
-	private String isOwned;
-
-	@Column(columnDefinition="CHAR(6)")
-	private String tradeType;
+	private UserBookTradeType tradeType;
 
 	@OneToMany(mappedBy = "userBook")
 	List<PromotionUserBook> promotionUserBooks = new ArrayList<>();
-
-	public UserBook(User user, Book book, int status, String description, @Nullable Integer userBookPrice,
-		String isOpened, String isOwned, String tradeType, List<PromotionUserBook> promotionUserBooks) {
-		this.user = user;
-		this.book = book;
-		this.status = status;
-		this.description = description;
-		this.userBookPrice = userBookPrice;
-		this.isOpened = isOpened;
-		this.isOwned = isOwned;
-		this.tradeType = tradeType;
-		this.promotionUserBooks = promotionUserBooks;
-	}
 
 	public void deleteUserBook(LocalDateTime now) {
 		setDeletedAt(now);
