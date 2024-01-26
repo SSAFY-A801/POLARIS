@@ -15,12 +15,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
+@Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Essay extends BaseEntity {
 	// fetch = FetchType.EAGER (default)
 	// EAGER를 적용한 이유는 독후감을 가져올 때 무조건 User를 가져와야 하기 때문에 한 쿼리에서 가져오기 위해서였다.
@@ -54,16 +58,6 @@ public class Essay extends BaseEntity {
 	/*
 	* hit은 생성해주지 않고 기본 값을 0으로 생성한다.
 	 */
-	public Essay(User user, UserBook userBook, String title, String content, String isOpened, List<Comment> comments,
-		List<Scrap> scraps) {
-		this.user = user;
-		this.userBook = userBook;
-		this.title = title;
-		this.content = content;
-		this.isOpened = isOpened;
-		this.comments = comments;
-		this.scraps = scraps;
-	}
 
 	public void updateHit(){
 		hit += 1;

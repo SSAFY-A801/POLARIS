@@ -13,12 +13,16 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ChatMessage extends BaseEntity {
 
 	@Column(length = 3000)
@@ -34,12 +38,6 @@ public class ChatMessage extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "trade_id")
 	private Trade trade;
-
-	public ChatMessage(String message, User user, Trade trade) {
-		this.message = message;
-		this.user = user;
-		this.trade = trade;
-	}
 
 	public void deleteChatMessage(LocalDateTime now) {
 		setDeletedAt(now);

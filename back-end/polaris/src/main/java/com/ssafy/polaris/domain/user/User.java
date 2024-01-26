@@ -20,12 +20,16 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
+@Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity {
 	// 지역코드
 	@OneToOne
@@ -78,26 +82,4 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "reportedUser")
 	List<Report> reportUserList = new ArrayList<>();
 
-	public User(Regcode regcode, List<Essay> essays, Token token, String password, @Nullable String email,
-		String nickname,
-		@Nullable String oauth, List<Follow> followers, List<Follow> followings, List<UserBook> userBooks,
-		List<Promotion> promotions, List<Scrap> scraps, List<Report> reporters, List<Report> reportUserList) {
-		this.regcode = regcode;
-		this.essays = essays;
-		this.token = token;
-		this.password = password;
-		this.email = email;
-		this.nickname = nickname;
-		this.oauth = oauth;
-		this.followers = followers;
-		this.followings = followings;
-		this.userBooks = userBooks;
-		this.promotions = promotions;
-		this.scraps = scraps;
-		this.reporters = reporters;
-		this.reportUserList = reportUserList;
-		// TODO: 기본 프로필 url
-		this.profileUrl = "basic Profile URL";
-		this.introduction = " ";
-	}
 }

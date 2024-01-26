@@ -18,16 +18,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Trade {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "trade_type")
@@ -55,15 +59,5 @@ public class Trade {
 			return;
 		this.status = status;
 		this.finishedAt = LocalDateTime.now();
-	}
-
-	public Trade(TradeType tradeType, User sender, User receiver,
-		List<TradeUserBook> tradeUserBooks) {
-		createdAt = LocalDateTime.now();
-		this.tradeType = tradeType;
-		this.sender = sender;
-		this.receiver = receiver;
-		this.status = TradeStatus.INPROGRESS;
-		this.tradeUserBooks = tradeUserBooks;
 	}
 }
