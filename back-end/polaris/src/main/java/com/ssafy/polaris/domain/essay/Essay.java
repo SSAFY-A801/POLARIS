@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.domain.book.UserBook;
 import com.ssafy.polaris.domain.comment.Comment;
@@ -15,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,27 +29,33 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
 public class Essay extends BaseEntity {
 	// fetch = FetchType.EAGER (default)
 	// EAGER를 적용한 이유는 독후감을 가져올 때 무조건 User를 가져와야 하기 때문에 한 쿼리에서 가져오기 위해서였다.
 	// TODO: EAGER와 LAZY를 적용하는 때의 차이는 무엇인가?
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@NotNull
 	@OneToOne
 	@JoinColumn(name = "user_book_id")
 	private UserBook userBook;
 
+	@NotNull
 	private String title;
 
 	@Column(length = 50000)
+	@NotNull
 	private String content;
 
+	@NotNull
+	@ColumnDefault(value = "0")
 	private int hit;
 
-	// private int scrapsAmount;
-	// private int repliesAmount;
+	@NotNull
 	@Column(columnDefinition="CHAR(6)")
 	private String isOpened;
 

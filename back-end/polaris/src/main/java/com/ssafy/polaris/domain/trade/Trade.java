@@ -4,6 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+
 import com.ssafy.polaris.connectentity.TradeUserBook;
 import com.ssafy.polaris.domain.user.User;
 
@@ -18,6 +22,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,25 +38,32 @@ public class Trade {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(name = "trade_type")
 	private TradeType tradeType;
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User sender;
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "receiver_id")
 	private User receiver;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TradeStatus status = TradeStatus.INPROGRESS;
 
 	@OneToMany(mappedBy = "trade")
 	private List<TradeUserBook> tradeUserBooks = new ArrayList<>();
 
+	@NotNull
+	@CreationTimestamp
 	private LocalDateTime createdAt;
+
 	private LocalDateTime finishedAt;
 
 	public void finishTrade(TradeStatus status){

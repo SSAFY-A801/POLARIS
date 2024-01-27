@@ -3,6 +3,9 @@ package com.ssafy.polaris.domain.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.domain.book.UserBook;
 import com.ssafy.polaris.domain.essay.Essay;
@@ -20,6 +23,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,10 +33,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Builder
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseEntity {
 	// 지역코드
+	@NotNull
 	@OneToOne
 	@JoinColumn(name = "regcode_id")
 	private Regcode regcode;
@@ -42,21 +49,24 @@ public class User extends BaseEntity {
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
 	private Token token;
 
+	@NotNull
 	@Column(length = 300)
 	private String password;
 
-	@Nullable
 	private String email;
 
+	@NotNull
 	private String nickname;
 
+	@NotNull
 	@Column(length = 3000)
+	// @ColumnDefault(value = "")
 	private String profileUrl;
 
+	@NotNull
 	@Column(length = 600)
 	private String introduction;
 
-	@Nullable
 	@Column(length = 10)
 	private String oauth;
 
@@ -82,4 +92,9 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "reportedUser")
 	List<Report> reportUserList = new ArrayList<>();
 
+	public void UpdateProfile(Regcode regcode, String nickname, String introduction){
+		this.regcode = regcode;
+		this.nickname = nickname;
+		this.introduction = introduction;
+	}
 }

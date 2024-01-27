@@ -3,6 +3,9 @@ package com.ssafy.polaris.domain.promotion;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.connectentity.PromotionUserBook;
 import com.ssafy.polaris.domain.user.User;
@@ -13,6 +16,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -20,7 +24,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
 public class Promotion extends BaseEntity {
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -28,11 +34,15 @@ public class Promotion extends BaseEntity {
 	@OneToMany(mappedBy = "promotion")
 	private List<PromotionUserBook> promotionUserBooks = new ArrayList<>();
 
+	@NotNull
 	private String title;
 
+	@NotNull
 	@Column(length = 30000)
 	private String content;
 
+	@NotNull
+	@ColumnDefault(value = "0")
 	private int hit;
 	// private int favoritesAmount;
 
