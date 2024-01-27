@@ -1,7 +1,6 @@
 package com.ssafy.polaris.domain.chat.domain;
 
-import java.time.LocalDateTime;
-
+import com.ssafy.polaris.domain.chat.MessageType;
 import com.ssafy.polaris.domain.trade.Trade;
 import com.ssafy.polaris.domain.user.User;
 
@@ -15,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,16 +30,20 @@ public class ChatMessage {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotNull
 	@Column(length = 3000)
 	private String message;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private MessageType type;
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "trade_id")
 	private Trade trade;
