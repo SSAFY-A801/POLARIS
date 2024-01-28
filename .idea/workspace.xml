@@ -4,24 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="45e2736c-6011-4461-8261-506ba9584d7c" name="Changes" comment="[POLARIS] BE Refactor : User 엔티티 followers, followings 즉시 로딩으로 수정">
-      <change afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/following/repository/FollowingRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/profile/controller/ProfileController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/profile/dto/ProfileDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/profile/dto/ProfileRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/profile/dto/ProfileResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/profile/service/ProfileService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/profile/service/ProfileServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/regcode/repository/RegcodeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back-end/polaris/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/polaris/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/following/Follow.java" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/following/Follow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/following/FollowDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/following/FollowDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/profile/ProfileDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/profile/response/StatusCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/profile/response/StatusCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/user/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/user/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/polaris/src/main/java/com/ssafy/polaris/user/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back-end/polaris/src/test/java/com/ssafy/polaris/RepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/polaris/src/test/java/com/ssafy/polaris/RepositoryTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="45e2736c-6011-4461-8261-506ba9584d7c" name="Changes" comment="[POLARIS] BE Refactor : User 엔티티 followers, followings 즉시 로딩으로 수정" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -170,7 +153,7 @@
       <option name="presentableId" value="Default" />
       <updated>1706336307690</updated>
       <workItem from="1706336309138" duration="1402000" />
-      <workItem from="1706337772782" duration="32386000" />
+      <workItem from="1706337772782" duration="32985000" />
     </task>
     <task id="LOCAL-00001" summary="[POLARIS] BE Refactor : User 엔티티 followers, followings 즉시 로딩으로 수정">
       <option name="closed" value="true" />
