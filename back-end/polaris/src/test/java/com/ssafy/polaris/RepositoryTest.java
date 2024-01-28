@@ -1,4 +1,4 @@
-package com.ssafy;
+package com.ssafy.polaris;
 
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.repository.UserRepository;
@@ -28,7 +28,7 @@ public class RepositoryTest {
 
         Optional<User> user2 = userRepository.findById(userId);
 
-        Assertions.assertThat(user.getId()).isEqualTo(user2.get().getId());
+        Assertions.assertThat(user).isEqualTo(user2.get());
 
 
     }
