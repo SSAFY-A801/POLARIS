@@ -1,4 +1,4 @@
-package com.ssafy.polaris.domain.profile.response;
+package com.ssafy.polaris.profile.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,9 @@ public enum StatusCode {
     // 201 CREATED : 새로운 리소스 생성
     SUCCESS_LOGIN(201, "로그인 성공"),
     CREATED_USER(201, "회원 가입 성공"),
-    CREATED_TOKEN(201, "토큰 갱신 성공");
+    CREATED_TOKEN(201, "토큰 갱신 성공"),
+
+    CREATED_CHATROOM_TRADE(201, "채팅방 생성 성공");
 
     private final int status;
     private final String message;

@@ -1,15 +1,13 @@
-package com.ssafy.polaris.domain.trade;
+package com.ssafy.polaris.trade;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.ColumnDefault;
+import com.ssafy.polaris.user.User;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import com.ssafy.polaris.connectentity.TradeUserBook;
-import com.ssafy.polaris.domain.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,6 +52,7 @@ public class Trade {
 	private User receiver;
 
 	@NotNull
+	@Builder.Default
 	@Enumerated(EnumType.STRING)
 	private TradeStatus status = TradeStatus.INPROGRESS;
 
