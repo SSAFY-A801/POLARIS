@@ -1,7 +1,7 @@
 package com.ssafy.polaris.connectentity;
 
-import com.ssafy.polaris.domain.book.UserBook;
-import com.ssafy.polaris.domain.trade.Trade;
+import com.ssafy.polaris.book.UserBook;
+import com.ssafy.polaris.trade.Trade;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
