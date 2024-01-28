@@ -1,7 +1,7 @@
-package com.ssafy.polaris.connectentity;
+package com.ssafy.polaris.favorite;
 
-import com.ssafy.polaris.book.UserBook;
 import com.ssafy.polaris.promotion.Promotion;
+import com.ssafy.polaris.user.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,27 +10,29 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
+@Entity
+@Builder
 @NoArgsConstructor
-public class PromotionUserBook {
+@AllArgsConstructor
+public class Favorite {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_book_id")
-	private UserBook userBook;
-
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "promotion_id")
 	private Promotion promotion;
 
-	public PromotionUserBook(UserBook userBook, Promotion promotion) {
-		this.userBook = userBook;
-		this.promotion = promotion;
-	}
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 }
