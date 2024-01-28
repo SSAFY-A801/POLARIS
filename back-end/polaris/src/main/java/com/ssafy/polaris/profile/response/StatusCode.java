@@ -19,8 +19,18 @@ public enum StatusCode {
     CREATED_USER(201, "회원 가입 성공"),
     CREATED_TOKEN(201, "토큰 갱신 성공"),
 
-    CREATED_CHATROOM_TRADE(201, "채팅방 생성 성공");
+    CREATED_CHATROOM_TRADE(201, "채팅방 생성 성공"),
 
+    // 204 NO CONTENT : 성공하였으나, 반환할 값이 없음
+    SUCEESS_UPDATE_USER(204, "프로필 업데이트 성공"),
+
+    SUCCESS_FOLLOW_USER(204, "팔로우 성공"),
+
+
+    // 404 NOT FOUND : 유저를 찾을 수 없음
+    FAIL_USER_VIEW(404, "프로필 조회 실패"),
+    FAIL_USER_UPDATE(404, "프로필 업데이트 실패"),
+    FAIL_USER_FOLLOW(404, "프로필 업데이트 실패");
     private final int status;
     private final String message;
 }

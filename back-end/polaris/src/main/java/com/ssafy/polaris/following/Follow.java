@@ -3,10 +3,8 @@ package com.ssafy.polaris.following;
 import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.user.User;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +27,15 @@ public class Follow extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "following_user_id")
 	private User following;
+
+	@Transactional
+	public void setFollow(User me, User otherPerson){
+		this.follower = me;
+		this.following = otherPerson;
+
+		me.getFollowings().add(this);
+		otherPerson.getFollowers().add(this);
+	}
 
 }
 
