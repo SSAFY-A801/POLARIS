@@ -1,12 +1,11 @@
 package com.ssafy.polaris.chat.dto;
 
-import com.ssafy.polaris.trade.TradeType;
+import com.ssafy.polaris.trade.domain.TradeType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.transaction.annotation.Transactional;
 
 @Getter
 @AllArgsConstructor

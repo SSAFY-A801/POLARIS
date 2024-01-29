@@ -1,4 +1,4 @@
-package com.ssafy.polaris.trade;
+package com.ssafy.polaris.trade.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
