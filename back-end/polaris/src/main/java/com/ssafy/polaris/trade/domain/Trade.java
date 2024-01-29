@@ -1,9 +1,11 @@
-package com.ssafy.polaris.trade;
+package com.ssafy.polaris.trade.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ssafy.polaris.trade.TradeStatus;
+import com.ssafy.polaris.trade.TradeType;
 import com.ssafy.polaris.user.domain.User;
 import org.hibernate.annotations.CreationTimestamp;
 

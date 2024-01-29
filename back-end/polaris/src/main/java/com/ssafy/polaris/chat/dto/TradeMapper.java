@@ -1,10 +1,10 @@
 package com.ssafy.polaris.chat.dto;
 
-import com.ssafy.polaris.trade.Trade;
+import com.ssafy.polaris.trade.domain.Trade;
 import com.ssafy.polaris.trade.TradeType;
 import com.ssafy.polaris.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Comment;
+
 import org.springframework.stereotype.Component;
 
 @Component
