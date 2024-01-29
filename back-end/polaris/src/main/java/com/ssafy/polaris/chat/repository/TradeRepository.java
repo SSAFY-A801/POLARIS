@@ -1,6 +1,6 @@
 package com.ssafy.polaris.chat.repository;
 
-import com.ssafy.polaris.trade.Trade;
+import com.ssafy.polaris.trade.domain.Trade;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TradeRepository extends JpaRepository<Trade, Integer> {
