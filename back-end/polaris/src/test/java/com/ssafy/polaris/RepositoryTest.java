@@ -1,6 +1,6 @@
 package com.ssafy;
 
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

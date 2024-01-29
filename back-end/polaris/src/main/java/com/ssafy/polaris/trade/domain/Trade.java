@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.trade.TradeStatus;
+import com.ssafy.polaris.user.domain.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.ssafy.polaris.connectentity.TradeUserBook;

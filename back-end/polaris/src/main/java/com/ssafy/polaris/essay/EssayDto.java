@@ -3,7 +3,7 @@ package com.ssafy.polaris.essay;
 import java.time.LocalDateTime;
 
 import com.ssafy.polaris.book.UserBook;
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.user.domain.User;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

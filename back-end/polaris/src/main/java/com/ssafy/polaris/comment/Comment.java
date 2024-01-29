@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.essay.Essay;
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

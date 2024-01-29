@@ -1,6 +1,6 @@
 package com.ssafy.polaris.token;
 
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.user.domain.User;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;

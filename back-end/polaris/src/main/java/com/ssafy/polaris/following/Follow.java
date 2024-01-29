@@ -1,7 +1,7 @@
 package com.ssafy.polaris.following;
 
 import com.ssafy.polaris.common.BaseEntity;
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

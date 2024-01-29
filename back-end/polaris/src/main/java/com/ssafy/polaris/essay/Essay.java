@@ -10,7 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.book.UserBook;
 import com.ssafy.polaris.comment.Comment;
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

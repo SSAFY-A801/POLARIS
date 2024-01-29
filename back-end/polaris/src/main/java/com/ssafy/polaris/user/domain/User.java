@@ -1,4 +1,4 @@
-package com.ssafy.polaris.user;
+package com.ssafy.polaris.user.domain;
 
 import java.util.ArrayList;
 import java.util.List;

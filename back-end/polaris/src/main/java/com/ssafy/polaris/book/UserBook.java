@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.user.domain.User;
 
 import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.connectentity.PromotionUserBook;
@@ -53,7 +53,7 @@ public class UserBook extends BaseEntity {
 	private Boolean isOwned;
 
 	@NotNull
-	@Column(columnDefinition="CHAR(6)")
+	@Column(columnDefinition="CHAR(10)")
 	private UserBookTradeType tradeType;
 
 	@OneToMany(mappedBy = "userBook")
