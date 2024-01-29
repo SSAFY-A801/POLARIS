@@ -1,11 +1,28 @@
 {
-  "files": [],
+  "files": [
+  ],
+
   "references": [
     {
       "path": "./tsconfig.node.json"
     },
     {
       "path": "./tsconfig.app.json"
-    }
-  ]
+    },
+  ],
+
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "CommonJS",
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+  },
+
+
+  //...tsconfig.json
+  "types": [
+    "vue-sweetalert2"
+  ],
+
+
 }
