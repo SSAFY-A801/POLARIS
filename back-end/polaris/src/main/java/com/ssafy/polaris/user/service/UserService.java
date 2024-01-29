@@ -1,9 +1,6 @@
 package com.ssafy.polaris.user.service;
 
-import com.ssafy.polaris.user.User;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import com.ssafy.polaris.user.domain.User;
 
 public interface UserService {
 	User getUserById(Long userId);

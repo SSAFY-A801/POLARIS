@@ -1,7 +1,7 @@
 package com.ssafy.polaris.chat.domain;
 
 import com.ssafy.polaris.trade.Trade;
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

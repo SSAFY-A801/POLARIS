@@ -1,6 +1,6 @@
 package com.ssafy.polaris.report;
 
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
