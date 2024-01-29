@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Book {
 	@Id @Column(length = 13)
-	private String ISBN;
+	private String isbn;
 
 	@NotNull
 	private String title;
@@ -33,7 +33,7 @@ public class Book {
 	private String description;
 
 	@NotNull
-	private LocalDateTime pub_date;
+	private LocalDateTime pubDate;
 
 	@Column(length = 2048)
 	private String cover;
@@ -44,7 +44,7 @@ public class Book {
 	@NotNull
 	private String author;
 
-	private Integer price_standard;
+	private Integer priceStandard;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "series_id")
