@@ -1,12 +1,11 @@
 package com.ssafy.polaris.chat.response;
-	;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import com.ssafy.polaris.profile.response.StatusCode;
+import com.ssafy.polaris.chat.response.StatusCode;
 
 /**
  * 사용자에게 JSON 형식으로 보여주기 위한 에러 응답 형식 지정 클래스입니다.
