@@ -1,0 +1,887 @@
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/domain/profile/response/StatusCode.java
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/profile/response/StatusCode.java b/back-end/polaris/src/main/java/com/ssafy/polaris/domain/profile/response/StatusCode.java
+deleted file mode 100644
+--- a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/profile/response/StatusCode.java	
++++ /dev/null	
+@@ -1,24 +0,0 @@
+-package com.ssafy.polaris.domain.profile.response;
+-
+-import lombok.AllArgsConstructor;
+-import lombok.Getter;
+-
+-@AllArgsConstructor
+-@Getter
+-public enum StatusCode {
+-
+-    // 200 OK : 성공
+-    SUCCESS_VIEW(200, "프로필 조회 성공"),
+-    SUCCESS_READ_USER(200, "회원 정보 조회 성공"),
+-    SUCCESS_UPDATE_USER(200, "회원 정보 수정 성공"),
+-    SUCCESS_LEAVE_USER(200, "회원 탈퇴 성공"),
+-    VALID_EMAIL(200, "유효한 이메일입니다."),
+-
+-    // 201 CREATED : 새로운 리소스 생성
+-    SUCCESS_LOGIN(201, "로그인 성공"),
+-    CREATED_USER(201, "회원 가입 성공"),
+-    CREATED_TOKEN(201, "토큰 갱신 성공");
+-
+-    private final int status;
+-    private final String message;
+-}
+\ No newline at end of file
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/domain/token/Token.java
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/token/Token.java b/back-end/polaris/src/main/java/com/ssafy/polaris/domain/token/Token.java
+deleted file mode 100644
+--- a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/token/Token.java	
++++ /dev/null	
+@@ -1,31 +0,0 @@
+-package com.ssafy.polaris.domain.token;
+-
+-import com.ssafy.polaris.domain.user.User;
+-
+-import jakarta.annotation.Nullable;
+-import jakarta.persistence.Column;
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.FetchType;
+-import jakarta.persistence.Id;
+-import jakarta.persistence.JoinColumn;
+-import jakarta.persistence.OneToOne;
+-import jakarta.validation.constraints.NotNull;
+-import lombok.AllArgsConstructor;
+-import lombok.Builder;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-
+-@Getter
+-@Entity
+-@Builder
+-@NoArgsConstructor
+-@AllArgsConstructor
+-public class Token {
+-	@Id
+-	@OneToOne(fetch = FetchType.LAZY)
+-	@JoinColumn(name = "user_id")
+-	private User user;
+-
+-	@Nullable
+-	private String refreshToken;
+-}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/domain/user/User.java
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/user/User.java b/back-end/polaris/src/main/java/com/ssafy/polaris/domain/user/User.java
+deleted file mode 100644
+--- a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/user/User.java	
++++ /dev/null	
+@@ -1,100 +0,0 @@
+-package com.ssafy.polaris.domain.user;
+-
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-import org.hibernate.annotations.ColumnDefault;
+-import org.hibernate.annotations.DynamicInsert;
+-
+-import com.ssafy.polaris.common.BaseEntity;
+-import com.ssafy.polaris.domain.book.UserBook;
+-import com.ssafy.polaris.domain.essay.Essay;
+-import com.ssafy.polaris.domain.essay.Scrap;
+-import com.ssafy.polaris.domain.following.Follow;
+-import com.ssafy.polaris.domain.promotion.Promotion;
+-import com.ssafy.polaris.domain.regcode.Regcode;
+-import com.ssafy.polaris.domain.report.Report;
+-import com.ssafy.polaris.domain.token.Token;
+-
+-import jakarta.annotation.Nullable;
+-import jakarta.persistence.Column;
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.FetchType;
+-import jakarta.persistence.JoinColumn;
+-import jakarta.persistence.OneToMany;
+-import jakarta.persistence.OneToOne;
+-import jakarta.persistence.Table;
+-import jakarta.validation.constraints.NotNull;
+-import lombok.AllArgsConstructor;
+-import lombok.Builder;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-
+-@Getter
+-@Entity
+-@Builder
+-@Table(name = "users")
+-@NoArgsConstructor
+-@AllArgsConstructor
+-public class User extends BaseEntity {
+-	// 지역코드
+-	@NotNull
+-	@OneToOne
+-	@JoinColumn(name = "regcode_id")
+-	private Regcode regcode;
+-
+-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+-	private List<Essay> essays;
+-
+-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+-	private Token token;
+-
+-	@NotNull
+-	@Column(length = 300)
+-	private String password;
+-
+-	private String email;
+-
+-	@NotNull
+-	private String nickname;
+-
+-	@NotNull
+-	@Column(length = 3000)
+-	// @ColumnDefault(value = "")
+-	private String profileUrl;
+-
+-	@NotNull
+-	@Column(length = 600)
+-	private String introduction;
+-
+-	@Column(length = 10)
+-	private String oauth;
+-
+-	@OneToMany(mappedBy = "follower")
+-	private List<Follow> followers = new ArrayList<>();
+-
+-	@OneToMany(mappedBy = "following")
+-	private List<Follow> followings = new ArrayList<>();
+-
+-	@OneToMany(mappedBy = "user")
+-	private List<UserBook> userBooks = new ArrayList<>();
+-
+-	@OneToMany(mappedBy = "user")
+-	private List<Promotion> promotions = new ArrayList<>();
+-
+-	@OneToMany(mappedBy = "user")
+-	private List<Scrap> scraps = new ArrayList<>();
+-
+-	@OneToMany(mappedBy = "reporter")
+-	private List<Report> reporters = new ArrayList<>();
+-
+-	// TODO: 나는 다른 유저 여러 명을 신고할 수 있다. 재귀적인 관계를 어떻게 풀 것인가?
+-	@OneToMany(mappedBy = "reportedUser")
+-	List<Report> reportUserList = new ArrayList<>();
+-
+-	public void UpdateProfile(Regcode regcode, String nickname, String introduction){
+-		this.regcode = regcode;
+-		this.nickname = nickname;
+-		this.introduction = introduction;
+-	}
+-}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/domain/chat/MessageType.java
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/chat/MessageType.java b/back-end/polaris/src/main/java/com/ssafy/polaris/domain/chat/MessageType.java
+deleted file mode 100644
+--- a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/chat/MessageType.java	
++++ /dev/null	
+@@ -1,5 +0,0 @@
+-package com.ssafy.polaris.domain.chat;
+-
+-public enum MessageType {
+-	TEXT, IMAGE;
+-}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/domain/following/FollowDto.java
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/following/FollowDto.java b/back-end/polaris/src/main/java/com/ssafy/polaris/domain/following/FollowDto.java
+deleted file mode 100644
+--- a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/following/FollowDto.java	
++++ /dev/null	
+@@ -1,16 +0,0 @@
+-package com.ssafy.polaris.domain.following;
+-
+-import com.ssafy.polaris.domain.user.User;
+-
+-import jakarta.persistence.FetchType;
+-import jakarta.persistence.JoinColumn;
+-import jakarta.persistence.ManyToOne;
+-import lombok.Getter;
+-import lombok.Setter;
+-
+-@Getter
+-@Setter
+-public class FollowDto {
+-	private User follower;
+-	private User following;
+-}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/domain/chat/domain/ChatMessage.java
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/chat/domain/ChatMessage.java b/back-end/polaris/src/main/java/com/ssafy/polaris/domain/chat/domain/ChatMessage.java
+deleted file mode 100644
+--- a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/chat/domain/ChatMessage.java	
++++ /dev/null	
+@@ -1,50 +0,0 @@
+-package com.ssafy.polaris.domain.chat.domain;
+-
+-import com.ssafy.polaris.domain.chat.MessageType;
+-import com.ssafy.polaris.domain.trade.Trade;
+-import com.ssafy.polaris.domain.user.User;
+-
+-import jakarta.persistence.Column;
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.EnumType;
+-import jakarta.persistence.Enumerated;
+-import jakarta.persistence.FetchType;
+-import jakarta.persistence.GeneratedValue;
+-import jakarta.persistence.GenerationType;
+-import jakarta.persistence.Id;
+-import jakarta.persistence.JoinColumn;
+-import jakarta.persistence.ManyToOne;
+-import jakarta.validation.constraints.NotNull;
+-import lombok.AllArgsConstructor;
+-import lombok.Builder;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-
+-@Getter
+-@Entity
+-@Builder
+-@NoArgsConstructor
+-@AllArgsConstructor
+-public class ChatMessage {
+-
+-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+-	private Long id;
+-
+-	@NotNull
+-	@Column(length = 3000)
+-	private String message;
+-
+-	@NotNull
+-	@Enumerated(EnumType.STRING)
+-	private MessageType type;
+-
+-	@NotNull
+-	@ManyToOne(fetch = FetchType.LAZY)
+-	@JoinColumn(name = "user_id")
+-	private User user;
+-
+-	@NotNull
+-	@ManyToOne(fetch = FetchType.LAZY)
+-	@JoinColumn(name = "trade_id")
+-	private Trade trade;
+-}
+\ No newline at end of file
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/domain/comment/Comment.java
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/comment/Comment.java b/back-end/polaris/src/main/java/com/ssafy/polaris/domain/comment/Comment.java
+deleted file mode 100644
+--- a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/comment/Comment.java	
++++ /dev/null	
+@@ -1,43 +0,0 @@
+-package com.ssafy.polaris.domain.comment;
+-
+-import java.time.LocalDateTime;
+-
+-import com.ssafy.polaris.common.BaseEntity;
+-import com.ssafy.polaris.domain.essay.Essay;
+-import com.ssafy.polaris.domain.user.User;
+-
+-import jakarta.persistence.Column;
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.FetchType;
+-import jakarta.persistence.JoinColumn;
+-import jakarta.persistence.ManyToOne;
+-import jakarta.validation.constraints.NotNull;
+-import lombok.AllArgsConstructor;
+-import lombok.Builder;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-
+-@Getter
+-@Entity
+-@Builder
+-@NoArgsConstructor
+-@AllArgsConstructor
+-public class Comment extends BaseEntity {
+-	@NotNull
+-	@ManyToOne
+-	@JoinColumn(name = "user_id")
+-	private User user;
+-
+-	@NotNull
+-	@Column(length = 600)
+-	private String content;
+-
+-	@NotNull
+-	@ManyToOne(fetch = FetchType.LAZY)
+-	@JoinColumn(name = "essay_id")
+-	private Essay essay;
+-
+-	public void deleteComment(LocalDateTime now) {
+-		setDeletedAt(now);
+-	}
+-}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/domain/series/Series.java
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/series/Series.java b/back-end/polaris/src/main/java/com/ssafy/polaris/domain/series/Series.java
+deleted file mode 100644
+--- a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/series/Series.java	
++++ /dev/null	
+@@ -1,23 +0,0 @@
+-package com.ssafy.polaris.domain.series;
+-
+-import jakarta.persistence.Column;
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.Id;
+-import jakarta.validation.constraints.NotNull;
+-import lombok.AllArgsConstructor;
+-import lombok.Builder;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-
+-@Getter
+-@Entity
+-@Builder
+-@NoArgsConstructor
+-@AllArgsConstructor
+-public class Series {
+-	@Id
+-	private Long id;
+-
+-	@NotNull
+-	private String name;
+-}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/domain/report/ReportCategory.java
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/report/ReportCategory.java b/back-end/polaris/src/main/java/com/ssafy/polaris/domain/report/ReportCategory.java
+deleted file mode 100644
+--- a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/report/ReportCategory.java	
++++ /dev/null	
+@@ -1,31 +0,0 @@
+-package com.ssafy.polaris.domain.report;
+-
+-import jakarta.persistence.Column;
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.GeneratedValue;
+-import jakarta.persistence.GenerationType;
+-import jakarta.persistence.Id;
+-import jakarta.persistence.OneToOne;
+-import jakarta.validation.constraints.NotNull;
+-import lombok.AllArgsConstructor;
+-import lombok.Builder;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-
+-@Getter
+-@Entity
+-@Builder
+-@NoArgsConstructor
+-@AllArgsConstructor
+-public class ReportCategory {
+-	@Id
+-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+-	private Long id;
+-
+-	@NotNull
+-	@OneToOne(mappedBy = "category")
+-	private Report report;
+-
+-	@NotNull
+-	private String content;
+-}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/domain/report/Report.java
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/report/Report.java b/back-end/polaris/src/main/java/com/ssafy/polaris/domain/report/Report.java
+deleted file mode 100644
+--- a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/report/Report.java	
++++ /dev/null	
+@@ -1,50 +0,0 @@
+-package com.ssafy.polaris.domain.report;
+-
+-import com.ssafy.polaris.domain.user.User;
+-
+-import jakarta.persistence.Column;
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.FetchType;
+-import jakarta.persistence.GeneratedValue;
+-import jakarta.persistence.GenerationType;
+-import jakarta.persistence.Id;
+-import jakarta.persistence.JoinColumn;
+-import jakarta.persistence.ManyToOne;
+-import jakarta.persistence.OneToOne;
+-import jakarta.validation.constraints.NotNull;
+-import lombok.AllArgsConstructor;
+-import lombok.Builder;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-
+-@Getter
+-@Entity
+-@Builder
+-@NoArgsConstructor
+-@AllArgsConstructor
+-public class Report {
+-	@Id
+-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+-	private Long id;
+-
+-	@NotNull
+-	@OneToOne
+-	@JoinColumn(name = "report_category_id")
+-	private ReportCategory category;
+-
+-	@NotNull
+-	@ManyToOne(fetch = FetchType.LAZY)
+-	@JoinColumn(name = "reporter_user_id")
+-	private User reporter;
+-
+-	@NotNull
+-	@ManyToOne(fetch = FetchType.LAZY)
+-	@JoinColumn(name = "reported_user_id")
+-	private User reportedUser;
+-
+-	@NotNull
+-	private String title;
+-
+-	@NotNull
+-	private String content;
+-}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/domain/regcode/Regcode.java
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/regcode/Regcode.java b/back-end/polaris/src/main/java/com/ssafy/polaris/domain/regcode/Regcode.java
+deleted file mode 100644
+--- a/back-end/polaris/src/main/java/com/ssafy/polaris/domain/regcode/Regcode.java	
++++ /dev/null	
+@@ -1,31 +0,0 @@
+-package com.ssafy.polaris.domain.regcode;
+-
+-import jakarta.annotation.Nullable;
+-import jakarta.persistence.Column;
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.GeneratedValue;
+-import jakarta.persistence.GenerationType;
+-import jakarta.persistence.Id;
+-import jakarta.validation.constraints.NotNull;
+-import lombok.AllArgsConstructor;
+-import lombok.Builder;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-
+-@Getter
+-@Entity
+-@Builder
+-@NoArgsConstructor
+-@AllArgsConstructor
+-public class Regcode {
+-	@Id
+-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+-	private int id;
+-
+-	@NotNull
+-	private String si;
+-
+-	private String gungu;
+-
+-	private String dong;
+-}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/profile/dto/ProfileResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/profile/dto/ProfileResponse.java b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/dto/ProfileResponse.java
+new file mode 100644
+--- /dev/null	
++++ b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/dto/ProfileResponse.java	
+@@ -0,0 +1,23 @@
++package com.ssafy.polaris.profile.dto;
++
++import com.ssafy.polaris.following.Follow;
++import com.ssafy.polaris.regcode.Regcode;
++import lombok.AllArgsConstructor;
++import lombok.Getter;
++import lombok.Setter;
++
++import java.util.ArrayList;
++import java.util.List;
++
++@Getter
++@Setter
++@AllArgsConstructor
++public class ProfileResponse {
++    Regcode regcode;
++    String nickname;
++    String profileUrl;
++    String introduction;
++    List<Follow> followings = new ArrayList<>();
++    int tradingCnt;
++    int exchangeCnt;
++}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/profile/response/StatusCode.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/profile/response/StatusCode.java b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/response/StatusCode.java
+new file mode 100644
+--- /dev/null	
++++ b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/response/StatusCode.java	
+@@ -0,0 +1,24 @@
++package com.ssafy.polaris.profile.response;
++
++import lombok.AllArgsConstructor;
++import lombok.Getter;
++
++@AllArgsConstructor
++@Getter
++public enum StatusCode {
++
++    // 200 OK : 성공
++    SUCCESS_VIEW(200, "프로필 조회 성공"),
++
++    // 201 CREATED : 새로운 리소스 생성
++
++    // 204 NO CONTENT : 반환할 내용 없음
++    SUCCESS_UPDATE(204, "프로필 수정 성공"),
++    SUCCESS_FOLLOW(204, "다른 유저 팔로잉 성공"),
++
++    // 404 NOT FOUND : 프로필을 찾을 수 없음
++    FAIL_FOUND(404, "프로필 조회 실패");
++
++    private final int status;
++    private final String message;
++}
+\ No newline at end of file
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/profile/service/ProfileService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/profile/service/ProfileService.java b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/service/ProfileService.java
+new file mode 100644
+--- /dev/null	
++++ b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/service/ProfileService.java	
+@@ -0,0 +1,16 @@
++package com.ssafy.polaris.profile.service;
++
++import com.ssafy.polaris.common.DefaultResponse;
++import com.ssafy.polaris.profile.dto.ProfileRequest;
++import com.ssafy.polaris.profile.dto.ProfileResponse;
++import org.springframework.http.ResponseEntity;
++
++public interface ProfileService {
++    public ResponseEntity<DefaultResponse<ProfileResponse>> getProfile(Long userId);
++
++    public ResponseEntity<DefaultResponse<String>> updateProfile(Long userId, ProfileRequest profileRequest);
++
++    //public ResponseEntity<DefaultResponse<String>> updatePassword(Long userId, String password);
++
++    public ResponseEntity<DefaultResponse<String>> followUser(Long userId, Long followUserId);
++}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/profile/service/ProfileServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/profile/service/ProfileServiceImpl.java b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/service/ProfileServiceImpl.java
+new file mode 100644
+--- /dev/null	
++++ b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/service/ProfileServiceImpl.java	
+@@ -0,0 +1,77 @@
++package com.ssafy.polaris.profile.service;
++
++import com.ssafy.polaris.common.DefaultResponse;
++import com.ssafy.polaris.following.Follow;
++import com.ssafy.polaris.following.repository.FollowingRepository;
++import com.ssafy.polaris.profile.dto.ProfileRequest;
++import com.ssafy.polaris.profile.dto.ProfileResponse;
++import com.ssafy.polaris.profile.response.StatusCode;
++import com.ssafy.polaris.regcode.Regcode;
++import com.ssafy.polaris.regcode.repository.RegcodeRepository;
++import com.ssafy.polaris.trade.TradeStatus;
++import com.ssafy.polaris.trade.TradeType;
++import com.ssafy.polaris.user.User;
++import com.ssafy.polaris.user.repository.UserRepository;
++import jakarta.persistence.EntityManager;
++import jakarta.transaction.Transactional;
++import lombok.RequiredArgsConstructor;
++import org.springframework.http.HttpStatus;
++import org.springframework.http.ResponseEntity;
++import org.springframework.stereotype.Service;
++
++@Service
++@Transactional
++@RequiredArgsConstructor
++public class ProfileServiceImpl implements ProfileService {
++    private final EntityManager em;
++    private final UserRepository userRepository;
++    private final RegcodeRepository regcodeRepository;
++    private final FollowingRepository followingRepsitory;
++
++    // profile view
++    public ResponseEntity<DefaultResponse<ProfileResponse>> getProfile(Long userId){
++        // TODO: Convert to Optional Processing
++        User findUser = userRepository.getReferenceById(userId);
++
++        if(findUser == null){
++            return null;
++        }
++        em.persist(findUser);
++        Regcode reg = regcodeRepository.getRegcodeById(findUser.getRegcode().getId());
++        int tradingCnt = userRepository.getTradeCnt(findUser.getId(), TradeStatus.COMPLETED, TradeType.TRADE);
++        int exchangeCnt = userRepository.getTradeCnt(findUser.getId(), TradeStatus.COMPLETED, TradeType.EXCHANGE);
++        ProfileResponse profileResponse = new ProfileResponse(reg,
++                findUser.getNickname(),
++                findUser.getProfileUrl(),
++                findUser.getIntroduction(),
++                findUser.getFollowings(),
++                tradingCnt,
++                exchangeCnt
++        );
++        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_VIEW, profileResponse);
++    }
++
++    // Update Profile
++    @Override
++    public ResponseEntity<DefaultResponse<String>> updateProfile(Long userId, ProfileRequest profileRequest) {
++        User findUser = userRepository.getReferenceById(userId);
++        Regcode newRegcode = regcodeRepository.getRegcodeById(profileRequest.getRegcode().getId());
++        findUser.UpdateProfile(newRegcode,
++                profileRequest.getNickname(),
++                profileRequest.getIntroduction());
++
++        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_UPDATE, "");
++    }
++
++    // follow user
++    @Override
++    public ResponseEntity<DefaultResponse<String>> followUser(Long userId, Long toFollowUserId){
++        User user = userRepository.getReferenceById(userId);
++        User toFollowUser = userRepository.getReferenceById(toFollowUserId);
++        Follow follow = new Follow(user, toFollowUser);
++        follow.setFollow(user, toFollowUser);
++        em.persist(follow);
++
++        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_FOLLOW, "");
++    }
++}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/profile/dto/ProfileRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/profile/dto/ProfileRequest.java b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/dto/ProfileRequest.java
+new file mode 100644
+--- /dev/null	
++++ b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/dto/ProfileRequest.java	
+@@ -0,0 +1,15 @@
++package com.ssafy.polaris.profile.dto;
++
++import com.ssafy.polaris.regcode.Regcode;
++import lombok.AllArgsConstructor;
++import lombok.Getter;
++import lombok.Setter;
++
++@Getter
++@Setter
++@AllArgsConstructor
++public class ProfileRequest {
++    String nickname;
++    Regcode regcode;
++    String introduction;
++}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/user/repository/UserRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/user/repository/UserRepository.java b/back-end/polaris/src/main/java/com/ssafy/polaris/user/repository/UserRepository.java
+new file mode 100644
+--- /dev/null	
++++ b/back-end/polaris/src/main/java/com/ssafy/polaris/user/repository/UserRepository.java	
+@@ -0,0 +1,21 @@
++package com.ssafy.polaris.user.repository;
++
++import com.ssafy.polaris.trade.TradeStatus;
++import com.ssafy.polaris.trade.TradeType;
++import org.springframework.data.jpa.repository.Query;
++import org.springframework.data.repository.query.Param;
++import org.springframework.stereotype.Repository;
++
++@Repository
++public interface UserRepository extends JpaRepository<User, Long> {
++    User getReferenceById(Long userId);
++
++    @Query("select count(u) from User u inner join Trade t on u.id = t.sender.id " +
++            "where t.finishedAt is not null " +
++            "and t.sender.id = :userId " +
++            "and t.status = :tradeStatus " +
++            "and t.tradeType = :tradeType")
++    int getTradeCnt(@Param("userId") Long userId,
++                    @Param("tradeStatus") TradeStatus tradeStatus,
++                    @Param("tradeType")TradeType tradeType);
++}
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+--- /dev/null	
++++ b/.idea/.gitignore	
+@@ -0,0 +1,8 @@
++# Default ignored files
++/shelf/
++/workspace.xml
++# Editor-based HTTP Client requests
++/httpRequests/
++# Datasource local storage ignored files
++/dataSources/
++/dataSources.local.xml
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/chat/MessageType.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/chat/MessageType.java b/back-end/polaris/src/main/java/com/ssafy/polaris/chat/MessageType.java
+new file mode 100644
+--- /dev/null	
++++ b/back-end/polaris/src/main/java/com/ssafy/polaris/chat/MessageType.java	
+@@ -0,0 +1,5 @@
++package com.ssafy.polaris.chat;
++
++public enum MessageType {
++	TEXT, IMAGE;
++}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/following/repository/FollowingRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/following/repository/FollowingRepository.java b/back-end/polaris/src/main/java/com/ssafy/polaris/following/repository/FollowingRepository.java
+new file mode 100644
+--- /dev/null	
++++ b/back-end/polaris/src/main/java/com/ssafy/polaris/following/repository/FollowingRepository.java	
+@@ -0,0 +1,8 @@
++package com.ssafy.polaris.following.repository;
++
++import com.ssafy.polaris.following.Follow;
++import org.springframework.data.jpa.repository.JpaRepository;
++
++public interface FollowingRepository extends JpaRepository<Follow, Long> {
++
++}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/following/FollowDto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/following/FollowDto.java b/back-end/polaris/src/main/java/com/ssafy/polaris/following/FollowDto.java
+new file mode 100644
+--- /dev/null	
++++ b/back-end/polaris/src/main/java/com/ssafy/polaris/following/FollowDto.java	
+@@ -0,0 +1,13 @@
++package com.ssafy.polaris.following;
++
++import com.ssafy.polaris.user.User;
++
++import lombok.Getter;
++import lombok.Setter;
++
++@Getter
++@Setter
++public class FollowDto {
++	private User follower;
++	private User following;
++}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/regcode/repository/RegcodeRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/regcode/repository/RegcodeRepository.java b/back-end/polaris/src/main/java/com/ssafy/polaris/regcode/repository/RegcodeRepository.java
+new file mode 100644
+--- /dev/null	
++++ b/back-end/polaris/src/main/java/com/ssafy/polaris/regcode/repository/RegcodeRepository.java	
+@@ -0,0 +1,8 @@
++package com.ssafy.polaris.regcode.repository;
++
++import com.ssafy.polaris.regcode.Regcode;
++import org.springframework.data.jpa.repository.JpaRepository;
++
++public interface RegcodeRepository extends JpaRepository<Regcode, Long> {
++    Regcode getRegcodeById(Long regcode);
++}
+Index: back-end/polaris/src/main/java/com/ssafy/polaris/profile/controller/ProfileController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back-end/polaris/src/main/java/com/ssafy/polaris/profile/controller/ProfileController.java b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/controller/ProfileController.java
+new file mode 100644
+--- /dev/null	
++++ b/back-end/polaris/src/main/java/com/ssafy/polaris/profile/controller/ProfileController.java	
+@@ -0,0 +1,65 @@
++package com.ssafy.polaris.profile.controller;
++
++import com.ssafy.polaris.common.DefaultResponse;
++import com.ssafy.polaris.profile.dto.ProfileRequest;
++import com.ssafy.polaris.profile.dto.ProfileResponse;
++import com.ssafy.polaris.profile.response.StatusCode;
++import com.ssafy.polaris.profile.service.ProfileService;
++import lombok.RequiredArgsConstructor;
++import org.springframework.http.HttpStatus;
++import org.springframework.http.ResponseEntity;
++import org.springframework.web.bind.annotation.*;
++
++@RestController
++@RequestMapping("/profile")
++@RequiredArgsConstructor
++public class ProfileController {
++    private final ProfileService profileService;
++    // TODO: ProfileDto Response 만들 때 status, message, data 들어갈 수 있도록 하기!!
++
++    /**
++     * @param userId 유저를 식별하기 위한 ID
++     * @return 프로필을 조회한 결과
++     * */
++    @GetMapping("/{id}")
++    public ResponseEntity<DefaultResponse<ProfileResponse>> getProfile(@PathVariable(name="id") Long userId) {
++        ResponseEntity<DefaultResponse<ProfileResponse>> profile = profileService.getProfile(userId);
++        System.out.println("hi!!!");
++        if(profile == null){
++            return DefaultResponse.toResponseEntity(HttpStatus.NOT_FOUND, StatusCode.FAIL_FOUND, null);
++        }
++        return profile;
++    }
++
++
++    /**
++     * @param userId 유저를 식별하기 위한 ID
++     * @param profileRequest 수정하기 위한 정보들을 담고 있는 RequestBody
++     * @return 요청을 수행했다는 정보를 담고 있는 ResponseEntity
++     */
++    @PatchMapping("/{id}")
++    public ResponseEntity<DefaultResponse<String>> updateProfile(@PathVariable(name="id") Long userId,
++                                                                 @RequestBody ProfileRequest profileRequest){
++        System.out.println("update hi!");
++        return profileService.updateProfile(userId, profileRequest);
++    }
++
++//    @PatchMapping("/{id}/password")
++//    public ResponseEntity<DefaultResponse<String>> updatePassword(@PathVariable(name="id") Long userId,
++//                                                                  @RequestBody String password
++//                                                                  ){
++//        return profileService.updatePassword(userId, password);
++//    }
++
++    /**
++     * @param userId 나의 ID
++     * @param followUserId 팔로우할 유저의 ID
++     * @return 팔로우 완료 status 및 메시지
++     */
++    @PostMapping("/{id}/follow")
++    public ResponseEntity<DefaultResponse<String>> followUser(@PathVariable("id") Long userId,
++                                                              @RequestBody Long followUserId){
++        System.out.println("follow other person!");
++        return profileService.followUser(userId, followUserId);
++    }
++}
