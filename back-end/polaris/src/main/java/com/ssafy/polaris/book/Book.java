@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Book {
 	@Id @Column(length = 13)
-	private String ISBN;
+	private String Isbn;
 
 	@NotNull
 	private String title;
