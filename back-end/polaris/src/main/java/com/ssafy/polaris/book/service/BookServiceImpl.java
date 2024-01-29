@@ -1,8 +1,7 @@
 package com.ssafy.polaris.book.service;
 
-import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.book.dto.UserBookResponse;
-import com.ssafy.polaris.book.repository.BookRepository;
+import com.ssafy.polaris.book.repository.UserBookRepository;
 import com.ssafy.polaris.book.response.DefaultResponse;
 import com.ssafy.polaris.book.response.StatusCode;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService{
 
-    private final BookRepository bookRepository;
+    private final UserBookRepository bookRepository;
     @Override
     public ResponseEntity<DefaultResponse<List<UserBookResponse>>> getUserLibrary(Long userId) {
         List<UserBookResponse> userBooks = bookRepository.findAllByUserId(userId);

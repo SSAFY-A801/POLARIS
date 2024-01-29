@@ -1,6 +1,7 @@
 package com.ssafy.polaris.profile.controller;
 
 
+import com.ssafy.polaris.book.dto.UserBookResponse;
 import com.ssafy.polaris.profile.response.DefaultResponse;
 import com.ssafy.polaris.following.dto.FollowDto;
 import com.ssafy.polaris.profile.dto.ProfileRequest;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/profile")
@@ -62,6 +65,13 @@ public class ProfileController {
             return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_FOLLOW, "");
         }
         return retVal;
+    }
+
+    @GetMapping("/{id}/library")
+    public ResponseEntity<DefaultResponse<List<UserBookResponse>>> getLibrary(
+            @PathVariable("id") Long userId
+    ){
+        return profileService.getLibrary(userId);
     }
 
 }

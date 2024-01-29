@@ -30,7 +30,8 @@ public enum StatusCode {
     // 404 NOT FOUND : 유저를 찾을 수 없음
     FAIL_USER_VIEW(404, "프로필 조회 실패"),
     FAIL_USER_UPDATE(404, "프로필 업데이트 실패"),
-    FAIL_USER_FOLLOW(404, "프로필 업데이트 실패");
+    FAIL_USER_FOLLOW(404, "프로필 업데이트 실패"),
+    FAIL_USER_LIBRARY_VIEW(404, "서재 조회 실패");
     private final int status;
     private final String message;
 }

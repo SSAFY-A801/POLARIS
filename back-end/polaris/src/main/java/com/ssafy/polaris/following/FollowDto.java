@@ -1,6 +1,5 @@
 package com.ssafy.polaris.following;
 
-import com.ssafy.polaris.user.User;
 
 import lombok.Getter;
 import lombok.Setter;

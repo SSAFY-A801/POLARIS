@@ -53,7 +53,7 @@ public class UserBook extends BaseEntity {
 	private Boolean isOwned;
 
 	@NotNull
-	@Column(columnDefinition="CHAR(6)")
+	@Column(columnDefinition="CHAR(10)")
 	private UserBookTradeType tradeType;
 
 	@OneToMany(mappedBy = "userBook")

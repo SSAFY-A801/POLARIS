@@ -1,5 +1,7 @@
 package com.ssafy.polaris.profile.service;
 
+import com.ssafy.polaris.book.dto.UserBookResponse;
+import com.ssafy.polaris.book.repository.UserBookRepository;
 import com.ssafy.polaris.following.dto.FollowDto;
 import com.ssafy.polaris.profile.dto.ProfileDto;
 import com.ssafy.polaris.profile.response.DefaultResponse;
@@ -22,6 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
@@ -29,6 +33,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final UserRepository userRepository;
     private final RegcodeRepository regcodeRepository;
     private final FollowingRepository followingRepository;
+    private final UserBookRepository userBookRepository;
 
     // profile view
     // TODO: User 조회 시 no Session 에러가 발생.
@@ -116,5 +121,16 @@ public class ProfileServiceImpl implements ProfileService {
         followingRepository.save(follow);
 
         return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_FOLLOW_USER, "");
+    }
+
+    @Override
+    public ResponseEntity<DefaultResponse<List<UserBookResponse>>> getLibrary(Long userId) {
+        List<UserBookResponse> userbooks = userBookRepository.findAllByUserId(userId);
+
+        if(userbooks.size() == 0){
+            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_LIBRARY_VIEW, null);
+        }
+
+        return null;
     }
 }
