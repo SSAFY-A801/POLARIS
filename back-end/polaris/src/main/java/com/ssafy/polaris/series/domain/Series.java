@@ -1,10 +1,7 @@
-package com.ssafy.polaris.regcode;
+package com.ssafy.polaris.series.domain;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,15 +14,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Regcode {
+public class Series {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotNull
-	private String si;
-
-	private String gungu;
-
-	private String dong;
+	private String name;
 }

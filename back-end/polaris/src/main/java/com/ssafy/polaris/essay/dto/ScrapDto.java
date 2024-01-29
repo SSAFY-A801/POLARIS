@@ -1,6 +1,7 @@
-package com.ssafy.polaris.essay;
+package com.ssafy.polaris.essay.dto;
 
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.essay.domain.Essay;
+import com.ssafy.polaris.user.domain.User;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

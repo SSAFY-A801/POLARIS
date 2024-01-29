@@ -1,17 +1,19 @@
 package com.ssafy.polaris.profile.service;
 
-import com.ssafy.polaris.common.DefaultResponse;
-import com.ssafy.polaris.following.Follow;
+import com.ssafy.polaris.following.dto.FollowDto;
+import com.ssafy.polaris.profile.dto.ProfileDto;
+import com.ssafy.polaris.profile.response.DefaultResponse;
+import com.ssafy.polaris.following.domain.Follow;
 import com.ssafy.polaris.following.repository.FollowingRepository;
 import com.ssafy.polaris.profile.dto.ProfileRequest;
 import com.ssafy.polaris.profile.dto.ProfileResponse;
 import com.ssafy.polaris.profile.response.StatusCode;
-import com.ssafy.polaris.regcode.Regcode;
+import com.ssafy.polaris.regcode.domain.Regcode;
 
 import com.ssafy.polaris.regcode.repository.RegcodeRepository;
-import com.ssafy.polaris.trade.TradeStatus;
-import com.ssafy.polaris.trade.TradeType;
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.trade.domain.TradeStatus;
+import com.ssafy.polaris.trade.domain.TradeType;
+import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -21,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
     private final EntityManager em;
@@ -30,6 +31,9 @@ public class ProfileServiceImpl implements ProfileService {
     private final FollowingRepository followingRepository;
 
     // profile view
+    // TODO: User 조회 시 no Session 에러가 발생.
+    // TODO: 조회 요청에 Transactional 어노테이션이 필요할까? -> 권장 x!
+    @Transactional
     public ResponseEntity<DefaultResponse<ProfileResponse>> getProfile(Long userId){
         User findUser = userRepository.getReferenceById(userId);
 
@@ -39,23 +43,48 @@ public class ProfileServiceImpl implements ProfileService {
 
         System.out.println(findUser.getEmail());
         Regcode reg = regcodeRepository.getReferenceById(findUser.getRegcode().getId());
-        int tradingCnt = userRepository.getTradeCnt(findUser.getId(), TradeStatus.COMPLETED, TradeType.TRADE);
+        int purchaseCnt = userRepository.getTradeCnt(findUser.getId(), TradeStatus.COMPLETED, TradeType.PURCHASE);
         int exchangeCnt = userRepository.getTradeCnt(findUser.getId(), TradeStatus.COMPLETED, TradeType.EXCHANGE);
         ProfileResponse profileResponse = new ProfileResponse(reg,
                 findUser.getNickname(),
                 findUser.getProfileUrl(),
                 findUser.getIntroduction(),
                 findUser.getFollowings(),
-                tradingCnt,
+                purchaseCnt,
                 exchangeCnt
         );
         return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_VIEW, profileResponse);
+
+//        ProfileDto findUser = userRepository.getProfile(userId);
+//
+//        if(findUser == null){
+//            return null;
+//        }
+//
+//        Regcode reg = regcodeRepository.getReferenceById(findUser.getRegcode().getId());
+//        int tradingCnt = userRepository.getTradeCnt(userId, TradeStatus.COMPLETED, TradeType.TRADE);
+//        int exchangeCnt = userRepository.getTradeCnt(userId, TradeStatus.COMPLETED, TradeType.EXCHANGE);
+//        FollowDto followings = followingRepository.getFollowings(userId);
+//
+//        ProfileResponse profileResponse = new ProfileResponse(reg,
+//                findUser.getNickname(),
+//                findUser.getProfileUrl(),
+//                findUser.getIntroduction(),
+//                followings.getFollowings(),
+//                tradingCnt,
+//                exchangeCnt
+//        );
+//        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_VIEW, profileResponse);
     }
 
     // Update Profile
     @Override
     public ResponseEntity<DefaultResponse<String>> updateProfile(Long userId, ProfileRequest profileRequest) {
         User findUser = userRepository.getReferenceById(userId);
+
+        if(findUser == null){
+            return null;
+        }
         Regcode newRegcode = regcodeRepository.getReferenceById(profileRequest.getRegcode().getId());
         findUser.UpdateProfile(newRegcode,
                 profileRequest.getNickname(),

@@ -1,6 +1,6 @@
 package com.ssafy.polaris.profile.dto;
 
-import com.ssafy.polaris.regcode.Regcode;
+import com.ssafy.polaris.regcode.domain.Regcode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package com.ssafy.polaris.trade.domain;
 
 public enum TradeType {
-	EXCHANGE, TRADE;
+	EXCHANGE, PURCHASE;
 }
 

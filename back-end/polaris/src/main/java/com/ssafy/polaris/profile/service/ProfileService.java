@@ -1,6 +1,6 @@
 package com.ssafy.polaris.profile.service;
 
-import com.ssafy.polaris.common.DefaultResponse;
+import com.ssafy.polaris.profile.response.DefaultResponse;
 import com.ssafy.polaris.profile.dto.ProfileRequest;
 import com.ssafy.polaris.profile.dto.ProfileResponse;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
 package com.ssafy.polaris.profile.controller;
 
 
-import com.ssafy.polaris.common.DefaultResponse;
-import com.ssafy.polaris.following.FollowDto;
+import com.ssafy.polaris.profile.response.DefaultResponse;
+import com.ssafy.polaris.following.dto.FollowDto;
 import com.ssafy.polaris.profile.dto.ProfileRequest;
 import com.ssafy.polaris.profile.dto.ProfileResponse;
 import com.ssafy.polaris.profile.response.StatusCode;
@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/profile")
@@ -58,7 +56,7 @@ public class ProfileController {
     @PostMapping("/{id}/follow")
     public ResponseEntity<DefaultResponse<String>> followUser(@PathVariable("id") Long userId,
                                                               @RequestBody FollowDto data){
-        ResponseEntity<DefaultResponse<String>> retVal = profileService.followUser(userId, data.getFollowUserId());
+        ResponseEntity<DefaultResponse<String>> retVal = profileService.followUser(userId, data.getFollowerUserId());
         System.out.println("hi follow!");
         if(retVal == null){
             return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_FOLLOW, "");

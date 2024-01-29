@@ -1,10 +1,11 @@
-package com.ssafy.polaris.report;
+package com.ssafy.polaris.regcode.domain;
 
+import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,15 +17,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportCategory {
+public class Regcode {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotNull
-	@OneToOne(mappedBy = "category")
-	private Report report;
+	private String si;
 
-	@NotNull
-	private String content;
+	private String gungu;
+
+	private String dong;
 }

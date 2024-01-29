@@ -1,6 +1,7 @@
-package com.ssafy.polaris.report;
+package com.ssafy.polaris.favorite.domain;
 
-import com.ssafy.polaris.user.User;
+import com.ssafy.polaris.promotion.domain.Promotion;
+import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,29 +21,18 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Report {
+public class Favorite {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotNull
-	@OneToOne
-	@JoinColumn(name = "report_category_id")
-	private ReportCategory category;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "promotion_id")
+	private Promotion promotion;
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "reporter_user_id")
-	private User reporter;
-
-	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "reported_user_id")
-	private User reportedUser;
-
-	@NotNull
-	private String title;
-
-	@NotNull
-	private String content;
+	@JoinColumn(name = "user_id")
+	private User user;
 }

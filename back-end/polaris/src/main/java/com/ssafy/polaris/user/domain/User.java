@@ -1,18 +1,18 @@
-package com.ssafy.polaris.user;
+package com.ssafy.polaris.user.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ssafy.polaris.essay.Essay;
-import com.ssafy.polaris.promotion.Promotion;
-import com.ssafy.polaris.regcode.Regcode;
-import com.ssafy.polaris.report.Report;
+import com.ssafy.polaris.essay.domain.Essay;
+import com.ssafy.polaris.promotion.domain.Promotion;
+import com.ssafy.polaris.regcode.domain.Regcode;
+import com.ssafy.polaris.report.domain.Report;
 
-import com.ssafy.polaris.common.BaseEntity;
-import com.ssafy.polaris.book.UserBook;
-import com.ssafy.polaris.essay.Scrap;
-import com.ssafy.polaris.following.Follow;
-import com.ssafy.polaris.token.Token;
+import com.ssafy.polaris.common.domain.BaseEntity;
+import com.ssafy.polaris.book.domain.UserBook;
+import com.ssafy.polaris.essay.domain.Scrap;
+import com.ssafy.polaris.following.domain.Follow;
+import com.ssafy.polaris.token.domain.Token;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +26,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
 @Getter
 @Entity

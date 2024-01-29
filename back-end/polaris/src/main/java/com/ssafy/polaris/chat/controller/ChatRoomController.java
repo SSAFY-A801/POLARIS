@@ -2,7 +2,7 @@ package com.ssafy.polaris.chat.controller;
 
 import com.ssafy.polaris.chat.dto.ChatRoomCreateRequestDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateResponseDto;
-import com.ssafy.polaris.common.DefaultResponse;
+import com.ssafy.polaris.profile.response.DefaultResponse;
 import com.ssafy.polaris.profile.response.StatusCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
