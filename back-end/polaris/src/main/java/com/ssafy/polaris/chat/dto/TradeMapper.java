@@ -1,7 +1,7 @@
 package com.ssafy.polaris.chat.dto;
 
 import com.ssafy.polaris.trade.domain.Trade;
-import com.ssafy.polaris.trade.TradeType;
+import com.ssafy.polaris.trade.domain.TradeType;
 import com.ssafy.polaris.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 
