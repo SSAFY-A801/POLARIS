@@ -9,5 +9,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class TradeBookListResponseDto {
 	private Long userId;
-	private List<TradeBookResponseDto> tradeBookResponseDtoList;
+	private List<TradeBookResponseDto> books;
 }
