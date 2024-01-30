@@ -1,6 +1,6 @@
 package com.ssafy.polaris.following.domain;
 
-import com.ssafy.polaris.common.domain.BaseEntity;
+import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.*;
