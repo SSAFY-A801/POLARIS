@@ -9,7 +9,7 @@ import com.ssafy.polaris.regcode.Regcode;
 import com.ssafy.polaris.report.Report;
 
 import com.ssafy.polaris.common.BaseEntity;
-import com.ssafy.polaris.book.UserBook;
+import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.essay.Scrap;
 import com.ssafy.polaris.following.Follow;
 import com.ssafy.polaris.token.Token;
@@ -26,7 +26,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
 @Getter
 @Entity
