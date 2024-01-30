@@ -123,7 +123,7 @@
               <div class="mb-2">27,000</div>
             </div>
           </div>
-          <div id="sell-price" class="container grid grid-cols-6">
+          <div v-if="tradeType=='TRADE'" id="sell-price" class="container grid grid-cols-6">
             <div class="text-maintheme1 m-2 font-bold col-span-1">
               <div class="mb-2">판매가</div>
             </div>

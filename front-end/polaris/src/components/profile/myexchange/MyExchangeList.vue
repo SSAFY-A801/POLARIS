@@ -3,10 +3,12 @@
     <table class="table">
       <thead>
         <tr>
-          <th><i class="fa-solid fa-book-open mr-2"></i>도서 제목</th>
-          <th><i class="fa-solid fa-person mr-2"></i>거래 대상</th>
-          <th><i class="fa-solid fa-arrow-right-arrow-left mr-2"></i>교환받은 도서</th>
-          <th><i class="fa-solid fa-calendar-days mr-2"></i>날짜</th>
+          <th><font-awesome-icon icon="fa-solid fa-book-open" class="mr-2" />도서 제목</th>
+          <th><font-awesome-icon icon="fa-solid fa-user" class="mr-2" />거래 대상</th>
+          <th>
+            <!-- <font-awesome-icon icon="fa-solid fa-arrow-right-arrow-left" class="mr-2"/> -->
+            교환받은 도서</th>
+          <th><font-awesome-icon icon="fa-solid fa-calendar-days" class="mr-2"/>날짜</th>
         </tr>
       </thead>
       <tbody>

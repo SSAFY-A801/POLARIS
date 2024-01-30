@@ -16,14 +16,17 @@
       <div class="col-span-4">
         <div>
           <div class="flex justify-center">
-            <img v-if="imageUrl" id="profile-image" :src="imageUrl" alt="Profile Picture" />
-            <img v-else id="profile-image" src="@\assets\profile-default.jpg" alt="">
+            <img src="@/assets/profile-default.jpg" alt="profile-image" id="profile-image">
+            <!-- <img v-if="user.profile_url" id="profile-image" :src="user.profile_url" alt="대체 이미지" />
+            <img v-else id="profile-image" src="@\assets\profile-default.jpg" alt=""> -->
           </div>
           <!-- {{ imageUrl }} -->
           <div class="text-maintheme1 text-center mt-3">
             <div>
               <label for="update-image" class="custom-file-input-label">
-                <button id="update-image-button" @click="triggerFileInput" ><i class="fa-regular fa-image mr-2"></i>대표사진 변경</button>
+                <button id="update-image-button" @click="triggerFileInput" >
+                  <font-awesome-icon icon="fa-solid fa-images" />
+                  대표사진 변경</button>
               </label>
               <input id="update-image" type="file" @change="handleFileChange" class="hidden" />
             </div>
@@ -35,14 +38,17 @@
       <div class="col-span-8 m">
         <h2 class="font-bold mb-4 text-lg">기본 정보</h2>
         <button type="button"  class="password-change" @click="gotoPasswordChange">
-          <i class="fa-solid fa-lock mr-1"></i>
+          <font-awesome-icon icon="fa-solid fa-lock" />
           비밀번호 변경
         </button>
         <div class="font-semibold mt-8">닉네임</div>
-        <input type="nickname" id="Usernickname" placeholder="역삼동미친고양이" class="mt-2 mb-4 rounded-md border h-8"/>
+        <input type="nickname" id="Usernickname" :placeholder="user.nickname" class="mt-2 mb-4 rounded-md border h-8"/>
         <div class="font-semibold">나의 위치</div>
-        <input type="location" id="UserLocation" placeholder="서울특별시 강남구 역삼동" class="mt-2 mb-4 w-64 rounded-md border h-8"/>
-        <button type="button"><i class="fa-solid fa-map-location-dot mr-2"></i>위치찾기</button>
+        <input readonly type="location" id="UserLocation" :placeholder="user.regcode_id" class="mt-2 mb-4 w-64 rounded-md border h-8"/>
+        <button type="button">
+          <font-awesome-icon icon="fa-solid fa-location-dot" />
+          위치찾기
+        </button>
         <div class="font-semibold">ABOUT ME</div>
         <div class="mb-4">
           <label for="OrderNotes" class="sr-only">Order notes</label>
@@ -53,7 +59,7 @@
           id="OrderNotes"
           class="mt-2 mb-4 w-full resize-none sm:text-sm"
           rows="5"
-          placeholder="책 읽기를 좋아하는 세상에서 제일 귀여운 고양이입니다. 제가 쓴 독후감 많이 읽어주세요.북극성 정말 잘 사용하고 있어요. 히히"
+          :placeholder="user.introduction"
           ></textarea>
         </div>
       </div>
@@ -67,10 +73,13 @@
   import { ref } from 'vue';
   import axios from 'axios';
   import { useRouter } from 'vue-router'
-  
+  import { profileCounterStore } from '@/stores/profilecounter';
+
+  const store = profileCounterStore();
   const router = useRouter();
   const imageUrl = ref<string | null>(null);
-  
+  const user = store.user
+
   const handleFileChange = (event: Event) => {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -122,7 +131,7 @@
 #update-image {
   opacity: 0;
   position: absolute;
-  left: -9999px;
+  /* left: -9999px; */
 }
 
 .custom-file-input-label {
@@ -146,6 +155,6 @@
 
 
 button {
-    @apply w-auto bg-[#323F59] border text-white m-[3px] px-2.5 py-[5px] rounded-[10px] border-solid border-[black];
+    @apply w-auto bg-[#323F59] border text-white m-[3px] px-2.5 py-[5px] rounded-[10px] border-solid border-[black] hover:bg-gray-600;
 }
 </style>

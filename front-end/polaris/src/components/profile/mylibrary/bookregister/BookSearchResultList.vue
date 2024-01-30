@@ -16,7 +16,7 @@
   import { profileCounterStore } from "@/stores/profilecounter";
 
   const store = profileCounterStore();
-  const searchListResult = store.mybookLists
+  const searchListResult = store.searchbookLists
   const handleShowAlert = () => {
     alert('이미 포함된 도서입니다.')
   }

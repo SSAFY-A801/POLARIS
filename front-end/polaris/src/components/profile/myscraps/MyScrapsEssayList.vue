@@ -3,10 +3,10 @@
     <table class="table">
       <thead>
         <tr>
-          <th>독후감 제목</th>
-          <th><i class="fa-solid fa-book-open mr-2"></i>도서명</th>
-          <th><i class="fa-solid fa-person mr-2"></i>작성자</th>
-          <th><i class="fa-solid fa-calendar-days mr-2"></i>날짜</th>
+          <th><font-awesome-icon icon="fa-solid fa-note-sticky" class="mr-2"/>독후감 제목</th>
+          <th><font-awesome-icon icon="fa-solid fa-book-open" class="mr-2" />도서 제목</th>
+          <th><font-awesome-icon icon="fa-solid fa-user" class="mr-2" />작성자</th>
+          <th><font-awesome-icon icon="fa-solid fa-calendar-days" class="mr-2"/>날짜</th>
         </tr>
       </thead>
       <tbody>

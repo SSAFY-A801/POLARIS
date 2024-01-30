@@ -40,6 +40,7 @@ const addBookcart = (searchResult: SearchBookinfo['searchResult']) => {
     bookCart.value.push(searchResult);
   } else {
     emitShowAlert();
+    console.log('현재 도서바구니목록: ',store.bookCartList)
   }
 };
 </script>
