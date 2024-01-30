@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "trade")
+@RequestMapping(value = "/trade")
 public class TradeController {
 	private final TradeService tradeService;
 
