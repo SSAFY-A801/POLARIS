@@ -8,11 +8,11 @@ import com.ssafy.polaris.promotion.domain.Promotion;
 import com.ssafy.polaris.regcode.domain.Regcode;
 import com.ssafy.polaris.report.domain.Report;
 
-import com.ssafy.polaris.common.domain.BaseEntity;
+import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.book.domain.UserBook;
-import com.ssafy.polaris.essay.domain.Scrap;
-import com.ssafy.polaris.following.domain.Follow;
-import com.ssafy.polaris.token.domain.Token;
+import com.ssafy.polaris.essay.Scrap;
+import com.ssafy.polaris.following.Follow;
+import com.ssafy.polaris.token.Token;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,6 +26,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Getter
 @Entity

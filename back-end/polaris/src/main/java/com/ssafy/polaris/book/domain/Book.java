@@ -2,14 +2,9 @@ package com.ssafy.polaris.book.domain;
 
 import java.time.LocalDateTime;
 
-import com.ssafy.polaris.series.domain.Series;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +28,7 @@ public class Book {
 	private String description;
 
 	@NotNull
-	private LocalDateTime pub_date;
+	private LocalDateTime pubDate;
 
 	@Column(length = 2048)
 	private String cover;
@@ -44,9 +39,7 @@ public class Book {
 	@NotNull
 	private String author;
 
-	private Integer price_standard;
+	private Integer priceStandard;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "series_id")
-	private Series series;
+	private Long seriesId;
 }

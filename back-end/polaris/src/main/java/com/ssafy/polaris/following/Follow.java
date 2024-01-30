@@ -1,12 +1,8 @@
-package com.ssafy.polaris.comment.domain;
-
-import java.time.LocalDateTime;
+package com.ssafy.polaris.following;
 
 import com.ssafy.polaris.common.BaseEntity;
-import com.ssafy.polaris.essay.Essay;
 import com.ssafy.polaris.user.domain.User;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -22,22 +18,18 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment extends BaseEntity {
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-
-	@NotNull
-	@Column(length = 600)
-	private String content;
+public class Follow extends BaseEntity {
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "essay_id")
-	private Essay essay;
+	@JoinColumn(name = "follower_user_id")
+	private User follower;
 
-	public void deleteComment(LocalDateTime now) {
-		setDeletedAt(now);
-	}
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "following_user_id")
+	private User following;
+
 }
+
+

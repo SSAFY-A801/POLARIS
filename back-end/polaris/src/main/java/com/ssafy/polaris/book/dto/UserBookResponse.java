@@ -9,14 +9,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class UserBookResponse {
-    Long id;
-    String bookIsbn;
-    String title;
-    String author;
-    String cover;
-    Boolean isOpened;
-    Boolean isOwned;
-    TradeType tradeType;
-    Long seriesId;
-    String seriesName;
+	Long id;
+	String bookIsbn;
+	String title;
+	String author;
+	String cover;
+	Boolean isOpened;
+	Boolean isOwned;
+	TradeType tradeType;
+	Long seriesId;
+	String seriesName;
 }

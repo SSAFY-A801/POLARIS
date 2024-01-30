@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 //	public User findUserById(Long userId);
@@ -27,4 +29,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("select u.nickname, u.profileUrl, u.introduction from User u " +
 			"where u.id = :userId")
 	ProfileDto getProfile(@Param("userId") Long userId);
+	public Optional<User> getUserByEmail(String email);
 }
