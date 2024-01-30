@@ -1,7 +1,7 @@
-package com.ssafy.polaris.connectentity.domain;
+package com.ssafy.polaris.connectentity;
 
 import com.ssafy.polaris.book.domain.UserBook;
-import com.ssafy.polaris.promotion.Promotion;
+import com.ssafy.polaris.promotion.domain.Promotion;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

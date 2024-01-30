@@ -1,4 +1,4 @@
-package com.ssafy.polaris.connectentity.domain;
+package com.ssafy.polaris.connectentity;
 
 import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.trade.domain.Trade;
