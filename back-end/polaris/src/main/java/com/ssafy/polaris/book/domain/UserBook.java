@@ -1,4 +1,4 @@
-package com.ssafy.polaris.book;
+package com.ssafy.polaris.book.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,6 +11,8 @@ import com.ssafy.polaris.connectentity.PromotionUserBook;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -53,8 +55,9 @@ public class UserBook extends BaseEntity {
 	private Boolean isOwned;
 
 	@NotNull
-	@Column(columnDefinition="CHAR(10)")
-	private UserBookTradeType tradeType;
+	@Column(columnDefinition="VARCHAR(10)")
+	@Enumerated(EnumType.STRING)
+	private UserBookTradeType userBookTradeType;
 
 	@OneToMany(mappedBy = "userBook")
 	List<PromotionUserBook> promotionUserBooks = new ArrayList<>();
