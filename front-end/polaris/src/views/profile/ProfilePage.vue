@@ -4,7 +4,6 @@
       <!-- 프로필 페이지 상단 -->
       <div class="upper-section">
         <div class="flex justify-end">
-          <font-awesome-icon icon="fa-solid fa-rotate-right" />
           <button v-if="isMe" id="profile-update" @click="gotoUpdateProfile" class="profile-button hover:bg-gray-500">
             <font-awesome-icon icon="pen-to-square" />
             프로필 수정
@@ -14,16 +13,17 @@
           <!-- 프로필 상단 - 좌측 -->
           <div class="md:col-span-4 col-span-12" >
             <div class="flex justify-center">
-              <img src="@\assets\profile-default.jpg" alt="profile-image" id="profile-image">
-            </div>
+              <img src="@/assets/profile-default.jpg" alt="profile-image" id="profile-image">
+              <!-- <img :src="require(`${user.profile_url}`)" alt="profile-image" id="profile-image"> -->
+              </div>
               <div v-if="isMe" class="text-maintheme1 font-bold text-center m-3 justify-center p-2">
-                <div id="userid" class="font-bold flex items-center justify-center m-2">
-                  왕이될상의고양이  
+                <div id="usernickname" class="font-bold flex items-center justify-center m-2">
+                  {{ user.nickname }}  
                 </div>
               </div>
               <div v-else class="text-maintheme1 font-bold text-center m-3 grid grid-cols-3 justify-center p-2">
-                <div id="userid" class="col-span-2 font-bold flex items-center justify-center m-2">
-                  왕이될상의고양이  
+                <div id="usernickname" class="col-span-2 font-bold flex items-center justify-center m-2">
+                  {{  user.nickname }}  
                 </div>
                 <button v-if="myFollwing"  class="col-span-1" id="follow">
                   언팔로우
@@ -36,15 +36,15 @@
               <div class="inline-grid grid-cols-3 gap-4">
                 <button @click="gotoTradeList" id="trade" class=" hover:text-deepgray">
                   <div>판매/구매</div>
-                  <div>100</div>
+                  <div>{{ user.trade_cnt }}</div>
                 </button>
                 <button @click="gotoExchangeList" id="exchange" class=" hover:text-deepgray">
                   <div >교환</div>
-                  <div>50</div>
+                  <div>{{ user.exchange_cnt }}</div>
                 </button>
                 <button @click="gotoFollowingList" id="following" class="hover:text-deepgray">
                   <div>Following</div>
-                  <div>122</div>
+                  <div>{{ user.followings.length }}</div>
                 </button>
               </div>
             </div>
@@ -56,7 +56,7 @@
                 <div class="mb-2">나의 위치</div>
               </div>
               <div class="col-span-2 text-maintheme1 m-2">
-                <div class="mb-2">서울특별시 강남구 역삼동</div>
+                <div class="mb-2">{{ user.regcode_id }}</div>
               </div>
             </div>
             <div class="container grid grid-cols-4 flex mb-20">
@@ -64,9 +64,7 @@
                 <div>ABOUT ME</div>
               </div>
               <div class="col-span-2 text-maintheme1 m-2">
-                  책 읽기를 좋아하는 세상에서 제일 귀여운 고양이입니다. 
-                  제가 쓴 독후감 많이 읽어주세요.북극성 정말 잘 사용하고 있어요. 히히
-                  그리고용 또..
+                  {{ user.introduction }}
               </div>
             </div>
             <div class="flex justify-end">
@@ -80,6 +78,7 @@
               </div>
               <div v-else>
                 <button @click="gotoMychatList" id="mychat">
+                  <font-awesome-icon icon="fa-solid fa-comments" style="color: #ffffff;" />
                   나의 채팅
                 </button>
               </div>
@@ -136,15 +135,20 @@
 <script setup lang="ts">
   import { ref, onMounted } from "vue";
   import { useRouter } from 'vue-router'
+  import { profileCounterStore } from "@/stores/profilecounter";
+  import type { User } from "@/stores/profilecounter";
+
+
+
   const router = useRouter();
+  const store = profileCounterStore();
   const isMe = ref<boolean>(true)
   const myFollwing = ref<boolean>(true)
-
+  const user = ref<User>(store.user)
   // button 클릭
   const gotoUpdateProfile = () => {
     router.push({name: "ProfileUpdatePage"});
   }
-
   const gotoTradeList = () => {
     router.push({name: "MyTradeListPage"});
   }

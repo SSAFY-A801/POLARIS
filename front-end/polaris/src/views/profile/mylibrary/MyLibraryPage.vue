@@ -6,11 +6,11 @@
           <button @click="clickbutton" 
           class="text-white w- py-2 px-4 m-2 bg-maintheme1 hover:bg-gray-500 rounded-lg">
             <div v-if="deleteState == false">
-              <i class="fa-solid fa-trash-can mr-1"></i>
+              <font-awesome-icon icon="fa-solid fa-trash-can" style="color: #ffffff;"/>
               삭제
             </div>
             <div v-else @click="deleteBooks">
-              <i class="fa-solid fa-trash-can mr-1"></i>
+              <font-awesome-icon icon="fa-solid fa-trash-can" style="color: #ffffff;"/>
               삭제완료
             </div>
           </button>
@@ -26,12 +26,12 @@
         <form action="">
           <input type="text" id="rounded-book" class="w-64 rounded-lg appearance-none border border-gray-500 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="내 도서 검색"/>
           <button type="submit" class="text-white w-16 py-2 px-4 m-2 bg-maintheme1 hover:bg-gray-500 rounded-lg ">
-            <i class="fa-solid fa-magnifying-glass fa-lg" style="color: #ffffff;"></i>
+            <font-awesome-icon icon="fa-solid fa-magnifying-glass" size="xl"/>
           </button>
         </form>
         <!-- 2. 필터링 -->
         <div class="relative inline-block">
-          {{ selectValue }}
+          <!-- {{ selectValue }} -->
           <select v-model="selectValue" id="filter" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option>전체도서</option>
             <option>공개</option>
@@ -55,11 +55,14 @@
 import MyLibraryList from '@/components/profile/mylibrary/MyLibraryList.vue';
 import { ref, watch, onMounted, computed } from 'vue';
 import { profileCounterStore } from '@/stores/profilecounter';
+import type { Book } from '@/stores/profilecounter';
 
 const store = profileCounterStore();
 const selectValue = ref("전체도서");
 const filterResult = ref(store.filterResult);
 const mybookList = ref(store.mybookLists);
+const deleteBookList = ref(store.deleteBookList);
+const newbookList = ref<Book[]>([])
 
 // selectValue의 변화를 감지하는 watch 설정
 const selectWatch = watch(selectValue, (newValue) => {
@@ -89,7 +92,15 @@ const selectWatch = watch(selectValue, (newValue) => {
 
 
 const deleteBooks = () => {
+  console.log(deleteBookList.value)
+  mybookList.value.forEach((book)=> {
+    if(!deleteBookList.value.includes(book.isbn)){
+      newbookList.value.push(book)
+    }
+  })
+
   console.log("도서 삭제를 완료하였다.")
+  deleteBookList.value = []
 }
 
 const clickbutton = () => { 

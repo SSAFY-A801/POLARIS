@@ -4,6 +4,7 @@
       <input id="default-checkbox" 
         type="checkbox"
         v-model="deleteBook"
+        @click="emitDeleteState"
          class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
     </div>
     <button 
@@ -56,9 +57,6 @@ import { profileCounterStore } from '@/stores/profilecounter';
 import { useRouter } from 'vue-router';
 import type { Book } from '@/stores/profilecounter';
 
-// 근데 시리즈물로 오면 내가 어떻게 받아줘야 함??????????
-// 차라리 탭 하나 더 만들어서 따로 받음 안되나..?
-// 되면 하고 아님 어쩔수 없음.
 
 interface Bookinfo {
   bookinfo: Book
@@ -68,7 +66,17 @@ const { bookinfo }= defineProps<Bookinfo>();
 const router = useRouter()
 const store = profileCounterStore();
 const deleteBook = ref<boolean>(false)
-const deleteBooks = computed(() => {
+
+const emit = defineEmits<{
+(e: 'deleteBooks', isbn: string, deleteBook: boolean): void
+}>()
+
+const emitDeleteState = () => {
+  emit('deleteBooks', bookinfo.isbn, !deleteBook.value)
+}
+
+
+  const deleteBooks = computed(() => {
   return store.deletebuttonState
 })
 

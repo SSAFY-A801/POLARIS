@@ -4,7 +4,8 @@
   <MyLibraryListItem
   v-for="(mybook, index) in mybookList"
   :key = "index"
-  :bookinfo = "mybook" 
+  :bookinfo = "mybook"
+  @delete-books="deleteBookstate" 
   />
 </template>
 
@@ -17,12 +18,24 @@ const { mybookList } = defineProps(['mybookList']);
 
 const router = useRouter();
 const store = profileCounterStore()
+const deleteBookList = ref<string[]>(store.deleteBookList)
 const deleteState = computed(() => {
   return store.deletebuttonState
 })
 
 function registerBook() {
   router.push({name: "BookRegisterPage"});
+}
+
+const deleteBookstate = (isbn: string, deleteBook:boolean) => {
+  if (deleteBook == true){
+    if (!deleteBookList.value.includes(isbn)){
+      deleteBookList.value.push(isbn)
+    }
+  } else if (deleteBook == false){
+    deleteBookList.value = deleteBookList.value.filter((isbn)=> isbn != isbn)
+  }
+  console.log(deleteBookList.value)
 }
 
 onMounted(()=> {

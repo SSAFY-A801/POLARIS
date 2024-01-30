@@ -3,10 +3,10 @@
     <table class="table">
       <thead>
         <tr>
-          <th>게시글 제목 <i class="fa-brands fa-get-pocket ml-2 fa-lg"></i></th>
-          <th><i class="fa-solid fa-person mr-2"></i>거래 대상</th>
+          <th><font-awesome-icon icon="fa-solid fa-note-sticky" class="mr-2"/>게시글 제목</th>
+          <th><font-awesome-icon icon="fa-solid fa-user" class="mr-2" />거래 대상</th>
           <th>거래 종류</th>
-          <th><i class="fa-solid fa-calendar-days mr-2"></i>날짜</th>
+          <th><font-awesome-icon icon="fa-solid fa-calendar-days" class="mr-2"/>날짜</th>
         </tr>
       </thead>
       <tbody>
