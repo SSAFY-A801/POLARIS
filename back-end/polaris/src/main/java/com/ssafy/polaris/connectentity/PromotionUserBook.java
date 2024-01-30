@@ -1,6 +1,6 @@
 package com.ssafy.polaris.connectentity;
 
-import com.ssafy.polaris.book.UserBook;
+import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.promotion.Promotion;
 
 import jakarta.persistence.Entity;
