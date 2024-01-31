@@ -18,11 +18,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
@@ -33,9 +38,12 @@ import lombok.*;
 public class User extends BaseEntity {
 	// 지역코드
 	@NotNull
-	@OneToOne
-	@JoinColumn(name = "regcode_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "regcode_id", updatable = false, insertable = false)
 	private Regcode regcode;
+
+	@Column(name = "regcode_id")
+	private Long regcodeId;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Essay> essays;
