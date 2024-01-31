@@ -41,7 +41,7 @@ public class UserBook extends BaseEntity {
 
 	@Column(length = 600)
 	@NotNull
-	private String description;
+	private String userBookDescription;
 
 	@Column(name = "price")
 	private Integer userBookPrice; // nullable한 경우 참조형 Wrapper class!
