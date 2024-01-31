@@ -13,6 +13,7 @@ public interface TradeRepository extends JpaRepository<Trade, Integer> {
 	@Query(value =
 		"SELECT " +
 			"    new com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto( " +
+			"        t.id as chatRoomId, " +
 			"        CASE WHEN t.sender.id = :senderId THEN ru.id ELSE su.id END as receiverId, " +
 			"        CASE WHEN t.sender.id = :senderId THEN ru.nickname ELSE su.nickname END as nickname, " +
 			"        CASE WHEN t.sender.id = :senderId THEN ru.profileUrl ELSE su.profileUrl END as profileUrl, " +
