@@ -1,10 +1,9 @@
 package com.ssafy.polaris.trade.service;
 
-import java.util.List;
-import com.ssafy.polaris.trade.dto.TradeBookResponseDto;
+import com.ssafy.polaris.trade.dto.TradeBookListResponseDto;
 
 public interface TradeService {
-	public List<TradeBookResponseDto> getPurchaseBookList(Long userId);
-	public List<TradeBookResponseDto> getExchangeBookList(Long userId);
+	TradeBookListResponseDto getPurchaseBookList(Long userId);
+	TradeBookListResponseDto getExchangeBookList(Long userId);
 	void completeTrade(Long chatRoomId);
 }

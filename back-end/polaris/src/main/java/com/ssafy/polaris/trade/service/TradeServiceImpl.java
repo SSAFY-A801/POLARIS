@@ -7,8 +7,10 @@ import com.ssafy.polaris.book.domain.UserBookTradeType;
 import com.ssafy.polaris.book.repository.UserBookRepository;
 import com.ssafy.polaris.chat.repository.TradeRepository;
 import com.ssafy.polaris.trade.domain.TradeStatus;
+import com.ssafy.polaris.trade.dto.TradeBookListResponseDto;
 import com.ssafy.polaris.trade.dto.TradeBookResponseDto;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,15 +19,20 @@ public class TradeServiceImpl implements TradeService{
 	private final UserBookRepository userBookRepository;
 	private final TradeRepository tradeRepository;
 	@Override
-	public List<TradeBookResponseDto> getPurchaseBookList(Long userId) {
-		return userBookRepository.getTradeBookList(userId, UserBookTradeType.PURCHASE);
+	public TradeBookListResponseDto getPurchaseBookList(Long userId) {
+		List<TradeBookResponseDto> purchaseBookResponseDtoList = userBookRepository.getTradeBookList(userId, UserBookTradeType.PURCHASE);
+
+		return new TradeBookListResponseDto(userId, purchaseBookResponseDtoList);
 	}
 
 	@Override
-	public List<TradeBookResponseDto> getExchangeBookList(Long userId) {
-		return userBookRepository.getTradeBookList(userId, UserBookTradeType.EXCHANGE);
+	public TradeBookListResponseDto getExchangeBookList(Long userId) {
+		List<TradeBookResponseDto> exchangeBookResponseDtoList = userBookRepository.getTradeBookList(userId, UserBookTradeType.EXCHANGE);
+
+		return new TradeBookListResponseDto(userId, exchangeBookResponseDtoList);
 	}
 
+	@Transactional
 	@Override
 	public void completeTrade(Long chatRoomId) {
 		tradeRepository.completeTrade(chatRoomId, TradeStatus.COMPLETED);

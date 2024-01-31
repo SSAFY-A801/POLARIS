@@ -1,8 +1,5 @@
 package com.ssafy.polaris.chat.controller;
 
-import java.util.List;
-
-import com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateRequestDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomListResponseDto;
@@ -44,7 +41,7 @@ public class ChatRoomController {
 	 * @param chatRoomId
 	 */
 	@GetMapping(path="/{chatRoomId}")
-	public void getChatRoom(@PathVariable Long chatRoomId){
+	public void getChatRoom(@PathVariable("chatRoomId") Long chatRoomId){
 		System.out.println("Controller - getChatRoom");
 	}
 
@@ -60,13 +57,11 @@ public class ChatRoomController {
 		// TODO: 사용자 ID 빼내기
 		Long senderId = 5L;
 		// trade의 user id , recevier id 둘다 확인 해줘야한다. 내가 건, 받은 채팅방 모두 보여야 하니까
-		List<BasicChatRoomResponseDto> basicChatRoomResponseDtoList = chatRoomService.getChatRoomList(senderId);
-		ChatRoomListResponseDto chatRoomListResponseDto = new ChatRoomListResponseDto(senderId, basicChatRoomResponseDtoList);
 
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
 			StatusCode.SUCCESS_READ_CHATROOM_LIST,
-			chatRoomListResponseDto
+			chatRoomService.getChatRoomList(senderId)
 		);
 	}
 }
