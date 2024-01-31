@@ -2,6 +2,7 @@ package com.ssafy.polaris.user.service;
 
 import java.util.Map;
 
+import com.ssafy.polaris.security.SecurityUser;
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 
@@ -21,4 +22,6 @@ public interface UserService {
 	Boolean emailCheck(String email);
 
 	Boolean nicknameCheck(String nickname);
+
+	void resignation(Long id) throws Exception;
 }

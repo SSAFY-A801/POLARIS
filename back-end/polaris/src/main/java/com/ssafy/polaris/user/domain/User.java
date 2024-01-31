@@ -1,5 +1,6 @@
 package com.ssafy.polaris.user.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,5 +100,9 @@ public class User extends BaseEntity {
 		this.nickname = nickname;
 		this.introduction = introduction;
 		this.profileUrl = profileUrl;
+	}
+
+	public void resignation(){
+		setDeletedAt(LocalDateTime.now());
 	}
 }

@@ -3,10 +3,14 @@ package com.ssafy.polaris.user.service;
 import java.util.Collections;
 import java.util.Map;
 
+import com.ssafy.polaris.security.SecurityUser;
 import com.ssafy.polaris.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 import com.ssafy.polaris.user.repository.UserRepository;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
+    private final EntityManager em;
     private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -69,6 +74,13 @@ public class UserServiceImpl implements UserService{
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    @Transactional
+    public void resignation(Long id) throws Exception {
+        User user = em.find(User.class, id);
+        user.resignation();
     }
 
     @Override
