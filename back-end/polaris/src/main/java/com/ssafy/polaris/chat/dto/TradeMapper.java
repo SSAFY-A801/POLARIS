@@ -15,10 +15,10 @@ public class TradeMapper {
 	// 채팅방 생성 request -> trade entity로 변환
 	public Trade toEntity(ChatRoomCreateRequestDto dto){
 		System.out.println("trade mapper to entity");
-		System.out.println(dto.getTradeType());
+
 		return Trade.builder()
 			.tradeType(TradeType.valueOf(dto.getTradeType()))
-			.sender(userService.getUserById(dto.getUserId()))
+			.sender(userService.getUserById(dto.getSenderId()))
 			.receiver(userService.getUserById(dto.getReceiverId()))
 			.build();
 	}
@@ -27,9 +27,9 @@ public class TradeMapper {
 	public static ChatRoomCreateResponseDto toDto(Trade trade){
 		return ChatRoomCreateResponseDto.builder()
 			.chatroomId(trade.getId())
-			.userId(trade.getSender().getId())
+			.senderId(trade.getSender().getId())
 			.receiverId(trade.getReceiver().getId())
-			.type(trade.getTradeType())
+			.tradeType(String.valueOf(trade.getTradeType()))
 			.build();
 	}
 }

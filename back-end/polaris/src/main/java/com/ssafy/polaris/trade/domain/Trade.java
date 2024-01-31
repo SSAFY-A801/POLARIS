@@ -43,7 +43,7 @@ public class Trade {
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "sender_id")
 	private User sender;
 
 	@NotNull
