@@ -31,7 +31,6 @@ public interface TradeRepository extends JpaRepository<Trade, Integer> {
 			"    t.sender.id = :senderId OR t.receiver.id = :senderId")
 	List<BasicChatRoomResponseDto> getChatRoomList(@Param("senderId") Long senderId);
 
-	@Transactional
 	@Modifying
 	@Query(value =
 		"update Trade " +
