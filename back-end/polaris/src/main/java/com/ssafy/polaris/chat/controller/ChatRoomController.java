@@ -32,8 +32,8 @@ public class ChatRoomController {
 		System.out.println("create chat room");
 		ChatRoomCreateResponseDto chatroom = chatRoomService.createChatRoom(request);
 		return DefaultResponse.toResponseEntity(
-				HttpStatus.OK,
-				StatusCode.SUCCESS_READ_CHATROOM_LIST,
+				HttpStatus.CREATED,
+				StatusCode.CREATED_CHATROOM_TRADE,
 				chatroom
 		);
 	}
