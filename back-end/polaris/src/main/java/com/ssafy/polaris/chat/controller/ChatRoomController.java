@@ -41,10 +41,10 @@ public class ChatRoomController {
 	/**
 	 * 채팅방 조회
 	 * 채팅방 id로 채팅방의 정보를 조회합니다 - 상대방 데이터, 거래 도서 정보
-	 * @param chatroomId
+	 * @param chatRoomId
 	 */
-	@GetMapping(path="/{chatroomId}")
-	public void getChatRoom(@PathVariable Long chatroomId){
+	@GetMapping(path="/{chatRoomId}")
+	public void getChatRoom(@PathVariable Long chatRoomId){
 		System.out.println("Controller - getChatRoom");
 	}
 

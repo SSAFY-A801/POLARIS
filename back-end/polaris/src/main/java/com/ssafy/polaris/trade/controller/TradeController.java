@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ssafy.polaris.trade.dto.TradeBookListResponseDto;
@@ -55,6 +57,16 @@ public class TradeController {
 			HttpStatus.OK,
 			StatusCode.SUCCESS_VIEW,
 			purchaseBookListResponseDto
+		);
+	}
+
+	@PatchMapping("/{chatRoomId}")
+	public ResponseEntity<DefaultResponse<Void>> completeTrade(@PathVariable("chatRoomId") Long chatRoomId){
+		System.out.println(" controller - complete trade ");
+		tradeService.completeTrade(chatRoomId);
+		return DefaultResponse.emptyResponse(
+			HttpStatus.OK,
+			StatusCode.SUCCESS_COMPLETE_TRADE
 		);
 	}
 
