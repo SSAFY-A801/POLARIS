@@ -43,6 +43,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public Boolean emailCheck(String email) {
+        try {
+            getUserByEmail(email);
+            return true;
+            // TODO: 2개의 값이 반환될 때도 exception을 반환하긴 한다.
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
     public Map<String, String> login(UserLoginRequestDto userLoginRequestDto) throws Exception {
         // 1. authentication token을 만들어준다 인증 전에는 auth여부가 false, 완료되면 true가 된 객체를 반환할 수 있도록한다.
         // 2. 실제 검증 : db에 저장된 id, 비번과 같으냐?? -> 검증성공시 실제 auth여부가 true인 Authentication 객체 반환

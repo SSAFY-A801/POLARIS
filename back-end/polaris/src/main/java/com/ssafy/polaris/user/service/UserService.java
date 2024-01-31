@@ -14,4 +14,6 @@ public interface UserService {
 	Map<String, String> login(UserLoginRequestDto userLoginRequestDto) throws Exception;
 
 	void join(User user);
+
+	Boolean emailCheck(String email);
 }
