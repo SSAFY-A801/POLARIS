@@ -89,9 +89,10 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "reportedUser")
 	List<Report> reportUserList = new ArrayList<>();
 
-	public void UpdateProfile(Regcode regcode, String nickname, String introduction){
+	public void UpdateProfile(Regcode regcode, String nickname, String introduction, String profileUrl){
 		this.regcode = regcode;
 		this.nickname = nickname;
 		this.introduction = introduction;
+		this.profileUrl = profileUrl;
 	}
 }

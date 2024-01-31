@@ -8,10 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ProfileRequest {
+public class ProfileRequestDto {
     String nickname;
     Regcode regcode;
     String introduction;
+    String imageUrl;
 }
 
 

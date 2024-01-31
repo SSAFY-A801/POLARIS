@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ProfileResponse {
+public class ProfileResponseDto {
     Regcode regcode;
     String nickname;
     String profileUrl;

@@ -1,14 +1,10 @@
 package com.ssafy.polaris.profile.service;
-
-import com.ssafy.polaris.book.dto.UserBookResponse;
 import com.ssafy.polaris.book.repository.UserBookRepository;
-import com.ssafy.polaris.following.dto.FollowDto;
-import com.ssafy.polaris.profile.dto.ProfileDto;
+import com.ssafy.polaris.profile.dto.ProfileRequestDto;
+import com.ssafy.polaris.profile.dto.ProfileResponseDto;
 import com.ssafy.polaris.profile.response.DefaultResponse;
 import com.ssafy.polaris.following.domain.Follow;
 import com.ssafy.polaris.following.repository.FollowingRepository;
-import com.ssafy.polaris.profile.dto.ProfileRequest;
-import com.ssafy.polaris.profile.dto.ProfileResponse;
 import com.ssafy.polaris.profile.response.StatusCode;
 import com.ssafy.polaris.regcode.domain.Regcode;
 
@@ -39,10 +35,10 @@ public class ProfileServiceImpl implements ProfileService {
     // TODO: User 조회 시 no Session 에러가 발생.
     // TODO: 조회 요청에 Transactional 어노테이션이 필요할까? -> 권장 x!
     @Transactional
-    public ResponseEntity<DefaultResponse<ProfileResponse>> getProfile(Long userId){
+    public ResponseEntity<DefaultResponse<ProfileResponseDto>> getProfile(Long userId) {
         User findUser = userRepository.getReferenceById(userId);
 
-        if(findUser == null){
+        if (findUser == null) {
             return null;
         }
 
@@ -50,7 +46,7 @@ public class ProfileServiceImpl implements ProfileService {
         Regcode reg = regcodeRepository.getReferenceById(findUser.getRegcode().getId());
         int purchaseCnt = userRepository.getTradeCnt(findUser.getId(), TradeStatus.COMPLETED, TradeType.PURCHASE);
         int exchangeCnt = userRepository.getTradeCnt(findUser.getId(), TradeStatus.COMPLETED, TradeType.EXCHANGE);
-        ProfileResponse profileResponse = new ProfileResponse(reg,
+        ProfileResponseDto profileResponse = new ProfileResponseDto(reg,
                 findUser.getNickname(),
                 findUser.getProfileUrl(),
                 findUser.getIntroduction(),
@@ -59,32 +55,12 @@ public class ProfileServiceImpl implements ProfileService {
                 exchangeCnt
         );
         return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_VIEW, profileResponse);
-
-//        ProfileDto findUser = userRepository.getProfile(userId);
-//
-//        if(findUser == null){
-//            return null;
-//        }
-//
-//        Regcode reg = regcodeRepository.getReferenceById(findUser.getRegcode().getId());
-//        int tradingCnt = userRepository.getTradeCnt(userId, TradeStatus.COMPLETED, TradeType.TRADE);
-//        int exchangeCnt = userRepository.getTradeCnt(userId, TradeStatus.COMPLETED, TradeType.EXCHANGE);
-//        FollowDto followings = followingRepository.getFollowings(userId);
-//
-//        ProfileResponse profileResponse = new ProfileResponse(reg,
-//                findUser.getNickname(),
-//                findUser.getProfileUrl(),
-//                findUser.getIntroduction(),
-//                followings.getFollowings(),
-//                tradingCnt,
-//                exchangeCnt
-//        );
-//        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_VIEW, profileResponse);
     }
 
     // Update Profile
     @Override
-    public ResponseEntity<DefaultResponse<String>> updateProfile(Long userId, ProfileRequest profileRequest) {
+    @Transactional
+    public ResponseEntity<DefaultResponse<String>> updateProfile(Long userId, ProfileRequestDto profileRequest) {
         User findUser = userRepository.getReferenceById(userId);
 
         if(findUser == null){
@@ -93,7 +69,8 @@ public class ProfileServiceImpl implements ProfileService {
         Regcode newRegcode = regcodeRepository.getReferenceById(profileRequest.getRegcode().getId());
         findUser.UpdateProfile(newRegcode,
                 profileRequest.getNickname(),
-                profileRequest.getIntroduction());
+                profileRequest.getIntroduction(),
+                profileRequest.getImageUrl());
 
         return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_UPDATE_USER, "");
     }
@@ -121,16 +98,5 @@ public class ProfileServiceImpl implements ProfileService {
         followingRepository.save(follow);
 
         return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_FOLLOW_USER, "");
-    }
-
-    @Override
-    public ResponseEntity<DefaultResponse<List<UserBookResponse>>> getLibrary(Long userId) {
-        List<UserBookResponse> userbooks = userBookRepository.findAllByUserId(userId);
-
-        if(userbooks.size() == 0){
-            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_LIBRARY_VIEW, null);
-        }
-
-        return null;
     }
 }

@@ -1,6 +1,5 @@
 package com.ssafy.polaris.user.repository;
 
-import com.ssafy.polaris.profile.dto.ProfileDto;
 import com.ssafy.polaris.trade.domain.TradeStatus;
 import com.ssafy.polaris.trade.domain.TradeType;
 import com.ssafy.polaris.user.domain.User;
@@ -8,8 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -25,9 +22,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	int getTradeCnt(@Param("userId") Long userId,
 					@Param("tradeStatus") TradeStatus tradeStatus,
 					@Param("tradeType") TradeType tradeType);
-
-	@Query("select u.nickname, u.profileUrl, u.introduction from User u " +
-			"where u.id = :userId")
-	ProfileDto getProfile(@Param("userId") Long userId);
-	public Optional<User> getUserByEmail(String email);
 }

@@ -1,11 +1,8 @@
 package com.ssafy.polaris.profile.controller;
 
-
-import com.ssafy.polaris.book.dto.UserBookResponse;
+import com.ssafy.polaris.profile.dto.ProfileRequestDto;
+import com.ssafy.polaris.profile.dto.ProfileResponseDto;
 import com.ssafy.polaris.profile.response.DefaultResponse;
-import com.ssafy.polaris.following.dto.FollowDto;
-import com.ssafy.polaris.profile.dto.ProfileRequest;
-import com.ssafy.polaris.profile.dto.ProfileResponse;
 import com.ssafy.polaris.profile.response.StatusCode;
 import com.ssafy.polaris.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +29,8 @@ public class ProfileController {
      * }
      * */
     @GetMapping("/{id}")
-    public ResponseEntity<DefaultResponse<ProfileResponse>> getProfile(@PathVariable("id") Long userId) {
-        ResponseEntity<DefaultResponse<ProfileResponse>> retVal = profileService.getProfile(userId);
+    public ResponseEntity<DefaultResponse<ProfileResponseDto>> getProfile(@PathVariable("id") Long userId) {
+        ResponseEntity<DefaultResponse<ProfileResponseDto>> retVal = profileService.getProfile(userId);
 
         System.out.println(retVal.getBody().getData().getNickname());
         if(retVal == null){
@@ -45,7 +42,7 @@ public class ProfileController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<DefaultResponse<String>> updateProfile(@PathVariable(name="id") Long userId,
-                                                            @RequestBody ProfileRequest reqDto){
+                                                            @RequestBody ProfileRequestDto reqDto){
 
         ResponseEntity<DefaultResponse<String>> retVal = profileService.updateProfile(userId, reqDto);
         System.out.println("update profile hi!!");
@@ -56,22 +53,15 @@ public class ProfileController {
         return retVal;
     }
 
-    @PostMapping("/{id}/follow")
-    public ResponseEntity<DefaultResponse<String>> followUser(@PathVariable("id") Long userId,
-                                                              @RequestBody FollowDto data){
-        ResponseEntity<DefaultResponse<String>> retVal = profileService.followUser(userId, data.getFollowerUserId());
-        System.out.println("hi follow!");
-        if(retVal == null){
-            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_FOLLOW, "");
-        }
-        return retVal;
-    }
-
-    @GetMapping("/{id}/library")
-    public ResponseEntity<DefaultResponse<List<UserBookResponse>>> getLibrary(
-            @PathVariable("id") Long userId
-    ){
-        return profileService.getLibrary(userId);
-    }
+//    @PostMapping("/{id}/follow")
+//    public ResponseEntity<DefaultResponse<String>> followUser(@PathVariable("id") Long userId,
+//                                                              @RequestBody FollowDto data){
+//        ResponseEntity<DefaultResponse<String>> retVal = profileService.followUser(userId, data.getFollowerUserId());
+//        System.out.println("hi follow!");
+//        if(retVal == null){
+//            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_FOLLOW, "");
+//        }
+//        return retVal;
+//    }
 
 }
