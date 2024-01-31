@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService{
     private final EntityManager em;
     private final UserRepository userRepository;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     @Override
@@ -84,6 +83,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
+    public void setPassword(Long id, String password) {
+        User user = em.find(User.class, id);
+        user.setPassword(passwordEncoder.encode(password));
+    }
+
+    @Override
     public Map<String, String> login(UserLoginRequestDto userLoginRequestDto) throws Exception {
         // 1. authentication token을 만들어준다 인증 전에는 auth여부가 false, 완료되면 true가 된 객체를 반환할 수 있도록한다.
         // 2. 실제 검증 : db에 저장된 id, 비번과 같으냐?? -> 검증성공시 실제 auth여부가 true인 Authentication 객체 반환
@@ -107,4 +113,6 @@ public class UserServiceImpl implements UserService{
 
         return tokenMap;
     }
+
+
 }

@@ -9,9 +9,9 @@ import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 public interface UserService {
 	User getUserById(Long userId);
 
-	Object getUserByEmail(String email) throws Exception;
+	User getUserByEmail(String email) throws Exception;
 
-	Object getUserByNickname(String nickname) throws Exception;
+	User getUserByNickname(String nickname) throws Exception;
 
 
 	// TODO: 토큰 2개 반환하는 response dto 필요
@@ -24,4 +24,7 @@ public interface UserService {
 	Boolean nicknameCheck(String nickname);
 
 	void resignation(Long id) throws Exception;
+
+	void setPassword(Long id, String password);
+
 }

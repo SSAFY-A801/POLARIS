@@ -105,4 +105,7 @@ public class User extends BaseEntity {
 	public void resignation(){
 		setDeletedAt(LocalDateTime.now());
 	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }
