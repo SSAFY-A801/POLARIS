@@ -8,18 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-//	public User findUserById(Long userId);
+	Optional<User> findByEmail(String email);
 
-	public User getReferenceById(long userId);
+	User getReferenceById(long userId);
 
 	@Query("select count(u) from User u inner join Trade t on u.id = t.sender.id " +
-			"where t.finishedAt is not null " +
-			"and t.sender.id = :userId " +
-			"and t.status = :tradeStatus " +
-			"and t.tradeType = :tradeType")
+		"where t.finishedAt is not null " +
+		"and t.sender.id = :userId " +
+		"and t.status = :tradeStatus " +
+		"and t.tradeType = :tradeType")
 	int getTradeCnt(@Param("userId") Long userId,
-					@Param("tradeStatus") TradeStatus tradeStatus,
-					@Param("tradeType") TradeType tradeType);
+		@Param("tradeStatus") TradeStatus tradeStatus,
+		@Param("tradeType") TradeType tradeType);
 }
