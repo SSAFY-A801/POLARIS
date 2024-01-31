@@ -1,4 +1,4 @@
-package com.ssafy.polaris.report;
+package com.ssafy.polaris.report.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

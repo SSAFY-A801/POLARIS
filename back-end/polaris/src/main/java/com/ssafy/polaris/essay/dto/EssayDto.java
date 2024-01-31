@@ -1,4 +1,4 @@
-package com.ssafy.polaris.essay;
+package com.ssafy.polaris.essay.dto;
 
 import java.time.LocalDateTime;
 

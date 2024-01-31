@@ -1,4 +1,4 @@
-package com.ssafy;
+package com.ssafy.polaris;
 
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.repository.UserRepository;

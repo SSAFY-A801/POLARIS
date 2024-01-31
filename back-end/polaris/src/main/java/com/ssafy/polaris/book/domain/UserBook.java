@@ -18,15 +18,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Entity
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class UserBook extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -41,7 +38,7 @@ public class UserBook extends BaseEntity {
 
 	@Column(length = 600)
 	@NotNull
-	private String description;
+	private String userBookDescription;
 
 	@Column(name = "price")
 	private Integer userBookPrice; // nullable한 경우 참조형 Wrapper class!
