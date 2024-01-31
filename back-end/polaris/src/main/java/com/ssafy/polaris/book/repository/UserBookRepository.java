@@ -15,7 +15,7 @@ import java.util.List;
 public interface UserBookRepository extends JpaRepository<UserBook, String> {
 
 	@Query("SELECT NEW com.ssafy.polaris.book.dto.UserBookResponseDto(ub.id, b.cover, b.title, b.author, b.isbn, b.publisher, " +
-			"b.pubDate, b.description, ub.userBookDescription, b.priceStandard, ub.userBookPrice, ub.isOpened, ub.isOwned, " +
+			"b.pubDate, b.bookDescription, ub.userBookDescription, b.priceStandard, ub.userBookPrice, ub.isOpened, ub.isOwned, " +
 			"ub.userBookTradeType, b.seriesId, s.name) " +
 			"FROM UserBook ub " +
 			"LEFT JOIN Book b ON ub.book.isbn = b.isbn " +
