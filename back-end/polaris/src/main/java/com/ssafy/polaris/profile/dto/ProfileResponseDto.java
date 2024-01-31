@@ -17,7 +17,7 @@ public class ProfileResponseDto {
     String nickname;
     String profileUrl;
     String introduction;
-    List<Follow> followings = new ArrayList<>();
+    int followingsCnt;
     int tradingCnt;
     int exchangeCnt;
 }
