@@ -10,10 +10,15 @@ public interface UserService {
 
 	Object getUserByEmail(String email) throws Exception;
 
+	Object getUserByNickname(String nickname) throws Exception;
+
+
 	// TODO: 토큰 2개 반환하는 response dto 필요
 	Map<String, String> login(UserLoginRequestDto userLoginRequestDto) throws Exception;
 
 	void join(User user);
 
 	Boolean emailCheck(String email);
+
+	Boolean nicknameCheck(String nickname);
 }

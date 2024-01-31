@@ -45,6 +45,20 @@ public class UserController {
 		);
 	}
 
+	@GetMapping("/nickname_check/{nickname}")
+	public ResponseEntity<DefaultResponse<Map<String, Boolean>>> nicknameCheck(@PathVariable("nickname") String nickname) {
+		boolean result = userService.nicknameCheck(nickname);
+		StatusCode statusCode = StatusCode.NICKNAME_NOT_IN_USE;
+		if (result)
+			statusCode = StatusCode.NICKNAME_IN_USE;
+
+		return DefaultResponse.toResponseEntity(
+			HttpStatus.OK,
+			statusCode,
+			Map.of("isInUse", result)
+		);
+	}
+
 	@PostMapping
 	public ResponseEntity<DefaultResponse<UserResponseDto>> join(@RequestBody UserResponseDto userResponseDto) {
 		// TODO: findUserByEmail, Nickname등을 사용하여 중복된다면 거부

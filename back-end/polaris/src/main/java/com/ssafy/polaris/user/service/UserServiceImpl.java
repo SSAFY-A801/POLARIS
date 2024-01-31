@@ -37,6 +37,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User getUserByNickname(String nickname) throws Exception {
+        // TODO: 에러 정의
+        return userRepository.findUserByNickname(nickname)
+            .orElseThrow(() -> new Exception());
+    }
+
+    @Override
     @Transactional
     public void join(User user) {
         userRepository.save(user);
@@ -46,6 +53,17 @@ public class UserServiceImpl implements UserService{
     public Boolean emailCheck(String email) {
         try {
             getUserByEmail(email);
+            return true;
+            // TODO: 2개의 값이 반환될 때도 exception을 반환하긴 한다.
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean nicknameCheck(String nickname) {
+        try {
+            getUserByNickname(nickname);
             return true;
             // TODO: 2개의 값이 반환될 때도 exception을 반환하긴 한다.
         } catch (Exception e) {
