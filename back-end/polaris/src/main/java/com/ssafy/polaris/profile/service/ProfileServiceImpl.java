@@ -1,5 +1,7 @@
 package com.ssafy.polaris.profile.service;
 import com.ssafy.polaris.book.repository.UserBookRepository;
+import com.ssafy.polaris.following.dto.FollowListResponseDto;
+import com.ssafy.polaris.following.dto.FollowResponseDto;
 import com.ssafy.polaris.profile.dto.ProfileRequestDto;
 import com.ssafy.polaris.profile.dto.ProfileResponseDto;
 import com.ssafy.polaris.profile.response.DefaultResponse;
@@ -50,7 +52,7 @@ public class ProfileServiceImpl implements ProfileService {
                 findUser.getNickname(),
                 findUser.getProfileUrl(),
                 findUser.getIntroduction(),
-                findUser.getFollowings(),
+                followingRepository.getFollowingCnt(userId),
                 purchaseCnt,
                 exchangeCnt
         );
@@ -95,5 +97,18 @@ public class ProfileServiceImpl implements ProfileService {
         followingRepository.save(follow);
 
         return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_FOLLOW_USER, "");
+    }
+
+    @Override
+    public ResponseEntity<DefaultResponse<FollowListResponseDto>> getFollowingList(Long userId) {
+        List<FollowResponseDto> follows = followingRepository.getFollowingList(userId);
+
+        FollowListResponseDto followingList = new FollowListResponseDto(follows);
+
+        if(follows.isEmpty()){
+            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_VIEW, null);
+        }
+
+        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_READ_FOLLOWING_LIST, followingList);
     }
 }

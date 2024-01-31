@@ -1,4 +1,5 @@
 package com.ssafy.polaris.profile.service;
+import com.ssafy.polaris.following.dto.FollowListResponseDto;
 import com.ssafy.polaris.profile.dto.ProfileRequestDto;
 import com.ssafy.polaris.profile.dto.ProfileResponseDto;
 import com.ssafy.polaris.profile.response.DefaultResponse;
@@ -11,5 +12,6 @@ public interface ProfileService {
 
     public ResponseEntity<DefaultResponse<String>> followUser(Long userId, Long followUserId);
 
+    ResponseEntity<DefaultResponse<FollowListResponseDto>> getFollowingList(Long userId);
 }
 

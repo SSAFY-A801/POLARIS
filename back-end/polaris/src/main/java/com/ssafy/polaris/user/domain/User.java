@@ -39,7 +39,7 @@ import lombok.NoArgsConstructor;
 public class User extends BaseEntity {
 	// 지역코드
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "regcode_id", updatable = false, insertable = false)
 	private Regcode regcode;
 

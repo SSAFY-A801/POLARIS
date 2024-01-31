@@ -1,5 +1,7 @@
 package com.ssafy.polaris.profile.controller;
 
+import com.ssafy.polaris.following.dto.FollowListResponseDto;
+import com.ssafy.polaris.following.dto.FollowRequestDto;
 import com.ssafy.polaris.profile.dto.ProfileRequestDto;
 import com.ssafy.polaris.profile.dto.ProfileResponseDto;
 import com.ssafy.polaris.profile.response.DefaultResponse;
@@ -54,15 +56,20 @@ public class ProfileController {
         return retVal;
     }
 
-//    @PostMapping("/{id}/follow")
-//    public ResponseEntity<DefaultResponse<String>> followUser(@PathVariable("id") Long userId,
-//                                                              @RequestBody FollowDto data){
-//        ResponseEntity<DefaultResponse<String>> retVal = profileService.followUser(userId, data.getFollowerUserId());
-//        System.out.println("hi follow!");
-//        if(retVal == null){
-//            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_FOLLOW, "");
-//        }
-//        return retVal;
-//    }
+    @PostMapping("/{id}/follow")
+    public ResponseEntity<DefaultResponse<String>> followUser(@PathVariable("id") Long userId,
+                                                              @RequestBody FollowRequestDto data){
+        ResponseEntity<DefaultResponse<String>> retVal = profileService.followUser(userId, data.getFollowingId());
+        System.out.println("hi follow!");
+        if(retVal == null){
+            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_FOLLOW, "");
+        }
+        return retVal;
+    }
+
+    @GetMapping("/{id}/follow")
+    public ResponseEntity<DefaultResponse<FollowListResponseDto>> getFollowingList(@PathVariable("id") Long userId){
+        return profileService.getFollowingList(userId);
+    }
 
 }
