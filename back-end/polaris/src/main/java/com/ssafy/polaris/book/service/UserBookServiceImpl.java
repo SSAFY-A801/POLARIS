@@ -8,6 +8,8 @@ import com.ssafy.polaris.book.repository.BookRepository;
 import com.ssafy.polaris.book.repository.UserBookRepository;
 import com.ssafy.polaris.book.response.DefaultResponse;
 import com.ssafy.polaris.book.response.StatusCode;
+import com.ssafy.polaris.series.dto.SeriesMapper;
+import com.ssafy.polaris.series.repository.SeriesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +21,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserBookServiceImpl implements UserBookService{
     private final UserBookMapper userBookMapper;
+    private final SeriesMapper seriesMapper;
+
     private final UserBookRepository userBookRepository;
     private final BookRepository bookRepository;
-
+    private final SeriesRepository seriesRepository;
     @Override
     public ResponseEntity<DefaultResponse<String>> createUserBook(Long userId, BookRequestDto bookRequestDto) {
         bookRepository.save(userBookMapper.toBookEntity(bookRequestDto));
         userBookRepository.save(userBookMapper.toUserBookEntity(userId, bookRequestDto));
+        if(bookRequestDto.getSeriesId() != null){
+            seriesRepository.save(seriesMapper.toSeriesEntity(bookRequestDto.getSeriesId(), bookRequestDto.getSeriesName()));
+        }
 
         return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_CREATE_USER_BOOK, "");
     }
