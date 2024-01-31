@@ -1,7 +1,7 @@
 package com.ssafy.polaris.connectentity;
 
-import com.ssafy.polaris.book.UserBook;
-import com.ssafy.polaris.promotion.Promotion;
+import com.ssafy.polaris.book.domain.UserBook;
+import com.ssafy.polaris.promotion.domain.Promotion;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,12 +10,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PromotionUserBook {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

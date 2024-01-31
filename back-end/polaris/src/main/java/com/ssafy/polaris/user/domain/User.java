@@ -3,16 +3,16 @@ package com.ssafy.polaris.user.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ssafy.polaris.essay.Essay;
-import com.ssafy.polaris.promotion.Promotion;
-import com.ssafy.polaris.regcode.Regcode;
-import com.ssafy.polaris.report.Report;
+import com.ssafy.polaris.essay.domain.Essay;
+import com.ssafy.polaris.essay.domain.Scrap;
+import com.ssafy.polaris.promotion.domain.Promotion;
+import com.ssafy.polaris.regcode.domain.Regcode;
+import com.ssafy.polaris.report.domain.Report;
+import com.ssafy.polaris.token.domain.Token;
 
 import com.ssafy.polaris.common.BaseEntity;
-import com.ssafy.polaris.book.UserBook;
-import com.ssafy.polaris.essay.Scrap;
-import com.ssafy.polaris.following.Follow;
-import com.ssafy.polaris.token.Token;
+import com.ssafy.polaris.book.domain.UserBook;
+import com.ssafy.polaris.following.domain.Follow;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,17 +22,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.*;
 
 @Getter
 @Entity
 @Builder
 @Table(name = "users")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User extends BaseEntity {
 	// 지역코드
@@ -90,9 +86,10 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "reportedUser")
 	List<Report> reportUserList = new ArrayList<>();
 
-	public void UpdateProfile(Regcode regcode, String nickname, String introduction){
+	public void UpdateProfile(Regcode regcode, String nickname, String introduction, String profileUrl){
 		this.regcode = regcode;
 		this.nickname = nickname;
 		this.introduction = introduction;
+		this.profileUrl = profileUrl;
 	}
 }

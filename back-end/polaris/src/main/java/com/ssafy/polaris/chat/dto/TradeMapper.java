@@ -4,7 +4,6 @@ import com.ssafy.polaris.trade.domain.Trade;
 import com.ssafy.polaris.trade.domain.TradeType;
 import com.ssafy.polaris.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 @Component

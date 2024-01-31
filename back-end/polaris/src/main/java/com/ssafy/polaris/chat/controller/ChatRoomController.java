@@ -2,8 +2,8 @@ package com.ssafy.polaris.chat.controller;
 
 import com.ssafy.polaris.chat.dto.ChatRoomCreateRequestDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateResponseDto;
-import com.ssafy.polaris.common.DefaultResponse;
-import com.ssafy.polaris.profile.response.StatusCode;
+import com.ssafy.polaris.chat.response.DefaultResponse;
+import com.ssafy.polaris.chat.response.StatusCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,6 @@ public class ChatRoomController {
 	@PostMapping
 	public ResponseEntity<DefaultResponse<ChatRoomCreateResponseDto>> createChatRoom(@RequestBody ChatRoomCreateRequestDto request){
 		// trade 테이블에 등록하기 -> userid, receiverid, tradeType이 온다.
-
 		System.out.println("create chat room");
 		ChatRoomCreateResponseDto chatroom = chatRoomService.save(request);
 		return DefaultResponse.toResponseEntity(
@@ -43,5 +42,11 @@ public class ChatRoomController {
 	@GetMapping(path="/{chatroomId}")
 	public void getChatRoom(@PathVariable Long chatroomId){
 		System.out.println("Controller - getChatRoom");
+	}
+
+	@GetMapping
+	public void getChatRoomList(){
+		System.out.println("controller - get chat room list");
+		// 사용자 id가 필요하고, 사용자가 참여중인 채팅방 리스트를 반환한다. 
 	}
 }
