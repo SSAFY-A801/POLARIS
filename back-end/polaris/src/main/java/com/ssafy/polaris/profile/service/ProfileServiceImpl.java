@@ -82,11 +82,8 @@ public class ProfileServiceImpl implements ProfileService {
         User user = userRepository.getReferenceById(userId);
         User toFollowUser = userRepository.getReferenceById(toFollowUserId);
         // JpaRepository에서 가져왔으므로 이미 두 유저는 영속화된 상태이다!
-        Follow follow = new Follow();
-        System.out.println(em.contains(user)); // true
-        System.out.println(em.contains(toFollowUser)); // true
+        Follow follow = new Follow(user, toFollowUser);
 
-        follow.setFollow(user, toFollowUser);
         System.out.println("user1 : " + follow.getFollower());
         System.out.println("user2 : " + follow.getFollowing());
         System.out.println(user.getFollowings().toString());
