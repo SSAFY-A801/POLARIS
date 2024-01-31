@@ -25,7 +25,7 @@ public class UserBookMapper {
                 .pubDate(dto.getPubDate())
                 .seriesId(dto.getSeriesId())
                 .priceStandard(dto.getPriceStandard())
-                .description(dto.getDescription())
+                .bookDescription(dto.getBookDescription())
                 .build();
     }
 
