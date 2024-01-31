@@ -72,10 +72,10 @@ public class User extends BaseEntity {
 	@Column(length = 10)
 	private String oauth;
 
-	@OneToMany(mappedBy = "follower", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "follower", fetch = FetchType.LAZY)
 	private List<Follow> followers = new ArrayList<>();
 
-	@OneToMany(mappedBy = "following", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "following", fetch = FetchType.LAZY)
 	private List<Follow> followings = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user")
