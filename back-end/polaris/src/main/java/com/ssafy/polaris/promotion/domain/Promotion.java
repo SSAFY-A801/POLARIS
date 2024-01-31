@@ -22,7 +22,7 @@ import lombok.*;
 @Getter
 @Entity
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
 public class Promotion extends BaseEntity {
