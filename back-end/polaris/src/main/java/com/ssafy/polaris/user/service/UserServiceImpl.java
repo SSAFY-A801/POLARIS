@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserByEmail(String email) throws Exception {
         // TODO: 에러 정의
-        return userRepository.findByEmail(email)
+        return userRepository.findUserByEmail(email)
             .orElseThrow(() -> new Exception());
     }
 
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService{
         // 2. 실제 검증 : db에 저장된 id, 비번과 같으냐?? -> 검증성공시 실제 auth여부가 true인 Authentication 객체 반환
 
         // TODO: 에러 정의하기
-        User user = userRepository.findByEmail(userLoginRequestDto.getEmail())
+        User user = userRepository.findUserByEmail(userLoginRequestDto.getEmail())
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
         if (!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword())) {
 			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
