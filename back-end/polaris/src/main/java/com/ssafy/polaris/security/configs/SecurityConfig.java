@@ -43,6 +43,7 @@ public class SecurityConfig {
 				authorize
 					.requestMatchers("/user", "/user/login").permitAll()
 					.requestMatchers("/user/email_check/**", "/user/nickname_check/**").permitAll()
+					.requestMatchers("/user/email_cert").permitAll()
 					.requestMatchers("/send-mail/**").permitAll()
 					.anyRequest().authenticated())
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userRepository),
