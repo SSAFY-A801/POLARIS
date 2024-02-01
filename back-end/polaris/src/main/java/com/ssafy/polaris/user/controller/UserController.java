@@ -122,4 +122,14 @@ public class UserController {
 			null
 		);
 	}
+
+	@PostMapping("/email_cert")
+	public ResponseEntity<DefaultResponse<Void>> emailCertification(@RequestBody Map<String, String> body) {
+		return DefaultResponse.toResponseEntity(
+			HttpStatus.OK,
+			StatusCode.EMAIL_NOT_IN_USE,
+			null
+		);
+
+	}
 }
