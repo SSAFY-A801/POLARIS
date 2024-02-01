@@ -31,21 +31,17 @@ public class ProfileServiceImpl implements ProfileService {
     private final UserRepository userRepository;
     private final RegcodeRepository regcodeRepository;
     private final FollowingRepository followingRepository;
-    private final UserBookRepository userBookRepository;
 
     // profile view
     // TODO: User 조회 시 no Session 에러가 발생.
     // TODO: 조회 요청에 Transactional 어노테이션이 필요할까? -> 권장 x!
+    // TODO: 찾는 유저가 없을 때 예외 처리 필요
     @Transactional
-    public ResponseEntity<DefaultResponse<ProfileResponseDto>> getProfile(Long userId) {
+    public ProfileResponseDto getProfile(Long userId) {
+
         User findUser = userRepository.getReferenceById(userId);
-
-        if (findUser == null) {
-            return null;
-        }
-
-        System.out.println(findUser.getEmail());
         Regcode reg = regcodeRepository.getReferenceById(findUser.getRegcode().getId());
+        System.out.println(reg.getId());
         int purchaseCnt = userRepository.getTradeCnt(findUser.getId(), TradeStatus.COMPLETED, TradeType.PURCHASE);
         int exchangeCnt = userRepository.getTradeCnt(findUser.getId(), TradeStatus.COMPLETED, TradeType.EXCHANGE);
         ProfileResponseDto profileResponse = new ProfileResponseDto(reg,
@@ -56,31 +52,28 @@ public class ProfileServiceImpl implements ProfileService {
                 purchaseCnt,
                 exchangeCnt
         );
-        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_VIEW, profileResponse);
+        return profileResponse;
     }
 
     // Update Profile
+    // TODO: 찾는 유저가 없을 때 예외 처리 필요
     @Override
     @Transactional
-    public ResponseEntity<DefaultResponse<String>> updateProfile(Long userId, ProfileRequestDto profileRequest) {
+    public String updateProfile(Long userId, ProfileRequestDto profileRequest) {
         User findUser = userRepository.getReferenceById(userId);
-
-        if(findUser == null){
-            return null;
-        }
         Regcode newRegcode = regcodeRepository.getReferenceById(profileRequest.getRegcode().getId());
         findUser.UpdateProfile(newRegcode,
                 profileRequest.getNickname(),
                 profileRequest.getIntroduction(),
                 profileRequest.getImageUrl());
 
-        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_UPDATE_USER, "");
+        return "";
     }
 
     // follow user
     @Override
     @Transactional
-    public ResponseEntity<DefaultResponse<String>> followUser(Long userId, Long toFollowUserId){
+    public String followUser(Long userId, Long toFollowUserId){
         User user = userRepository.getReferenceById(userId);
         User toFollowUser = userRepository.getReferenceById(toFollowUserId);
         // JpaRepository에서 가져왔으므로 이미 두 유저는 영속화된 상태이다!
@@ -96,19 +89,23 @@ public class ProfileServiceImpl implements ProfileService {
         // TODO: 영속화를 진행하려고 하는데 에러가 뜸!
         followingRepository.save(follow);
 
-        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_FOLLOW_USER, "");
+        return "";
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<FollowListResponseDto>> getFollowingList(Long userId) {
+    public FollowListResponseDto getFollowingList(Long userId) {
         List<FollowResponseDto> follows = followingRepository.getFollowingList(userId);
 
-        FollowListResponseDto followingList = new FollowListResponseDto(follows);
-
         if(follows.isEmpty()){
-            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_VIEW, null);
+            return null;
         }
+        FollowListResponseDto followingList = new FollowListResponseDto(follows);
+        return followingList;
+    }
 
-        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_READ_FOLLOWING_LIST, followingList);
+    @Transactional
+    public Integer unfollow(Long followerId, Long followingId){
+        Integer deleteVal = followingRepository.deleteFollowUser(followerId, followingId);
+        return deleteVal;
     }
 }
