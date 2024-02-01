@@ -28,9 +28,6 @@ import jakarta.validation.constraints.NotNull;
 @AllArgsConstructor
 @DynamicInsert
 public class Essay extends BaseEntity {
-	// fetch = FetchType.EAGER (default)
-	// EAGER를 적용한 이유는 독후감을 가져올 때 무조건 User를 가져와야 하기 때문에 한 쿼리에서 가져오기 위해서였다.
-	// TODO: EAGER와 LAZY를 적용하는 때의 차이는 무엇인가?
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -48,6 +45,9 @@ public class Essay extends BaseEntity {
 	@NotNull
 	private String content;
 
+	/*
+	 * hit은 생성해주지 않고 기본 값을 0으로 생성한다.
+	 */
 	@NotNull
 	@ColumnDefault(value = "0")
 	private int hit;
@@ -62,9 +62,6 @@ public class Essay extends BaseEntity {
 	@OneToMany(mappedBy = "essay")
 	private List<Scrap> scraps = new ArrayList<>();
 
-	/*
-	* hit은 생성해주지 않고 기본 값을 0으로 생성한다.
-	 */
 
 	public void updateHit(){
 		hit += 1;
@@ -80,21 +77,4 @@ public class Essay extends BaseEntity {
 	public void deleteEssay(LocalDateTime now) {
 		setDeletedAt(now);
 	}
-
-	// public void increaseScrap(){
-	// 	scrapsAmount += 1;
-	// }
-	// public void decreaseScrap(){
-	// 	if(scrapsAmount > 0)
-	// 		scrapsAmount -= 1;
-	// }
-	//
-	// public void increaseReply() {
-	// 	repliesAmount += 1;
-	// }
-	//
-	// public void decreaseReply() {
-	// 	if (repliesAmount > 0)
-	// 		repliesAmount -= 1;
-	// }
 }
