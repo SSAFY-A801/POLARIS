@@ -36,16 +36,17 @@ public class SecurityConfig {
 			.httpBasic(HttpBasicConfigurer::disable)
 			.csrf(CsrfConfigurer::disable)
 			// .cors(Customizer.withDefaults())
-			.cors(AbstractHttpConfigurer::disable)
+			.cors(CorsConfigurer::disable)
 			.sessionManagement(configurer ->
 				configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(authorize ->
 				authorize
-					.requestMatchers("/user", "/user/login").permitAll()
-					.requestMatchers("/user/email_check/**", "/user/nickname_check/**").permitAll()
-					.requestMatchers("/user/email_cert").permitAll()
-					.requestMatchers("/send-mail/**").permitAll()
-					.anyRequest().authenticated())
+					.anyRequest().permitAll())
+					// .requestMatchers("/user", "/user/login").permitAll()
+					// .requestMatchers("/user/email_check/**", "/user/nickname_check/**").permitAll()
+					// .requestMatchers("/user/email_cert").permitAll()
+					// .requestMatchers("/send-mail/**").permitAll()
+					// .anyRequest().authenticated())
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userRepository),
 				UsernamePasswordAuthenticationFilter.class);
 
