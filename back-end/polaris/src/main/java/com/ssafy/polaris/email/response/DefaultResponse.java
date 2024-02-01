@@ -39,10 +39,10 @@ public class DefaultResponse<T> {
                 );
     }
 
-    public static <T> ResponseEntity<com.ssafy.polaris.chat.response.DefaultResponse<T>> emptyResponse(HttpStatus httpStatus, com.ssafy.polaris.chat.response.StatusCode statusCode) {
+    public static <T> ResponseEntity<DefaultResponse<T>> emptyResponse(HttpStatus httpStatus, StatusCode statusCode) {
         return ResponseEntity
                 .status(httpStatus)
-                .body(com.ssafy.polaris.chat.response.DefaultResponse.<T>builder()
+                .body(DefaultResponse.<T>builder()
                         .status(statusCode.getStatus())
                         .message(statusCode.getMessage())
                         .build()
