@@ -18,6 +18,7 @@ export default defineConfig({
       "/api": {
         target: "http://www.aladin.co.kr/ttb",
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
       },
     },
   },
