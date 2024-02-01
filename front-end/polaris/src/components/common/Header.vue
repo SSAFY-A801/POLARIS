@@ -32,6 +32,7 @@
                         <router-link :to="{name: 'login'}" v-if="!userToken" class="text-white mr-5">로그인</router-link>
                         <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-white">회원가입</router-link>
                         <router-link :to="{name: 'profilePage'}" v-if="userToken"  class="text-white">프로필</router-link>
+                        <button v-if="userToken" @click="logout"  class="text-white bg-transparent border-none outline-none focus:outline-none cursor-pointer">로그아웃</button>
                     </div>
                     
                 </div>
@@ -54,13 +55,36 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
 
 const userToken = ref(localStorage.getItem('user_token'))
+const router = useRouter()
+
 
 onMounted(() => {
     userToken.value = localStorage.getItem('user_token')
 
 })
+
+
+//로그아웃
+const logout = async () => {
+    await axios.post('http://i10a801.p.ssafy.io:8082/user/logout', {
+    headers: {
+    "Authorization" : "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGE0QGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTYsImVtYWlsIjoia2luZ2ppbmhhNEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuPme2DhOu2iOyjvOuoueq5gOuvuOyEnCIsImV4cCI6MTcyNDc1MzQ0NX0.BPYiE7fRj2n1_fssmIFJsgYdj5yTYYGcv5yTmZ8jv20",
+    "Content-Type": "application/json",
+  }
+  })
+  .then(function (response) {
+    userToken.value = null
+    localStorage.removeItem('user_token')
+    alert("로그아웃 되었습니다")
+    console.log(response.status)
+    router.push({name: 'home'})
+  })
+
+}
 
 </script>
 

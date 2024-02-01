@@ -72,14 +72,14 @@ const dongList = ref<Region[]>([])
 
 watchEffect(async () => {
   if (selectedSido.value) {
-    const response = await axios.get(`https://fc4c8f31-6e7c-47a0-a894-76295c737c08.mock.pstmn.io/gugun`)
+    const response = await axios.get('http://i10a801.p.ssafy.io:8082/recode/gugun')
     gugunList.value = response.data.data.regcodes
   }
 })
 
 watchEffect(async () => {
   if (selectedGugun.value) {
-    const response = await axios.get(`https://fc4c8f31-6e7c-47a0-a894-76295c737c08.mock.pstmn.io/dong`)
+    const response = await axios.get('http://i10a801.p.ssafy.io:8082/recode/dong')
     dongList.value = response.data.data.regcodes
   }
 })
@@ -93,7 +93,7 @@ watchEffect(() => {
 });
 
 (async () => {
-  const response = await axios.get('https://fc4c8f31-6e7c-47a0-a894-76295c737c08.mock.pstmn.io/sido')
+  const response = await axios.get('http://i10a801.p.ssafy.io:8082/recode/sido')
   sidoList.value = response.data.data.regcodes
 })()
 
