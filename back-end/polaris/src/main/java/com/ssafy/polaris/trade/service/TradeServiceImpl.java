@@ -37,4 +37,11 @@ public class TradeServiceImpl implements TradeService{
 	public void completeTrade(Long chatRoomId) {
 		tradeRepository.completeTrade(chatRoomId, TradeStatus.COMPLETED);
 	}
+
+	@Transactional
+	@Override
+	public void deleteTrade(Long chatRoomId) {
+		tradeRepository.deleteById(chatRoomId);
+	}
+
 }
