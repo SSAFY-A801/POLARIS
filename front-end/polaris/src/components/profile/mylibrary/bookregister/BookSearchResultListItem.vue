@@ -3,13 +3,13 @@
     <div class="grid grid-cols-12 items-center">
       <div id="book-image"  class="col-span-2">
         <div class="mr-2">
-          <img class="p-2" src="@\assets\book-image.jpg" alt="book-image">
+          <img class="p-2" :src="searchResult.cover" alt="book-image">
         </div>
       </div>
-      <div id="book-info" class="col-span-8">
+      <div id="book-info" class="col-span-9">
         <div>{{ searchResult.title }}</div>
       </div>
-      <div id="register-book-cart" class="col-span-2">
+      <div id="register-book-cart" class="col-span-1">
         <button @click="addBookcart(searchResult)" id="register-book-cart-button" class="w-8">
           <font-awesome-icon icon="fa-solid fa-plus" />
         </button>
@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { profileCounterStore } from '@/stores/profilecounter';
 import type { Book } from '@/stores/profilecounter'
 type SearchBookinfo = {
@@ -33,14 +33,24 @@ const emitShowAlert = () => {
 
 const { searchResult } = defineProps<SearchBookinfo>();
 const store = profileCounterStore();
-const bookCart = ref<Array<SearchBookinfo['searchResult']>>(store.bookCartList);
+const bookCartList = computed(()=> {
+  return store.bookCartList
+})
+
+const mybookLists = computed(()=> {
+  return store.mybookLists
+})
+
 const addBookcart = (searchResult: SearchBookinfo['searchResult']) => {
-  const included = bookCart.value.some(item => item.isbn === searchResult.isbn)
-  if (!included) {
-    bookCart.value.push(searchResult);
-  } else {
+  const bookcartIncluded = bookCartList.value.some(item => item.isbn === searchResult.isbn)
+  const libraryIncluded = mybookLists.value.some(item => item.isbn === searchResult.isbn)
+  const included = libraryIncluded || bookcartIncluded
+  console.log(included)
+  if (included) {
     emitShowAlert();
     console.log('현재 도서바구니목록: ',store.bookCartList)
+  } else {
+    bookCartList.value.push(searchResult);
   }
 };
 </script>
