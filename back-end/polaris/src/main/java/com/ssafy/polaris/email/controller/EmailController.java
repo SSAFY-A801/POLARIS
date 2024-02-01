@@ -53,6 +53,8 @@ public class EmailController {
 		EmailResponseDto emailResponseDto = new EmailResponseDto();
 		emailResponseDto.setCode(code);
 
+		// TODO : redis 등에 저장하여 시간 내로 검사하는 로직 추가 필요
+
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
 			StatusCode.CERTIFICATION_EMAIL_SEND_SUCCEEDED,
