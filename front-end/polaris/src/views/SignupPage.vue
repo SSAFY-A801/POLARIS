@@ -151,7 +151,7 @@ const updateRegion = (newRegion: {name: string, code: string}) => {
 // 입력한 닉네임 서버로 전송
 // 중복 검사 성공시 isNicknameVerified = true로 바꾸기
 const checkNickname = async () => {
-  await axios.get('http://i10a801.p.ssafy.io:8082/user/nickname_check/${nicknameInput}', {
+  await axios.get(`http://i10a801.p.ssafy.io:8082/user/nickname_check/${nicknameInput.value}`, {
     headers: {
     "Content-Type": "application/json",
   }
@@ -201,7 +201,7 @@ const sendEmail = async () => {
 //이메일 중복 체크
 //존재하지 않는 이메일일 경우 sendEmail 함수 실행(이메일 전송)
 const checkEmail = async () => {
-  await axios.get('http://i10a801.p.ssafy.io:8082/user/email_check/${emailInput}', {
+  await axios.get(`http://i10a801.p.ssafy.io:8082/user/email_check/${emailInput.value}`, {
     headers: {
     "Content-Type": "application/json",
   }
