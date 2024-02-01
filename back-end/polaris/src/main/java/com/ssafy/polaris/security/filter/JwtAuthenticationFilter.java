@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 			// 토큰이 유효할 경우 토큰에서 authentication 객체(사용자 정보)를 받아온다.
 			Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 			// TODO: throw할 에러 정의
-			User user = userRepository.findByEmail(authentication.getName())
+			User user = userRepository.findUserByEmail(authentication.getName())
 				.orElseThrow();
 
 			SecurityUser securityUser = new SecurityUser(user);
