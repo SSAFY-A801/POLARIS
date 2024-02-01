@@ -75,7 +75,7 @@
   const store = profileCounterStore();
   const router = useRouter();
   const user = ref(store.user)
-  const imageUrl = ref<string | null>(user.value.profile_url);
+  const imageUrl = ref<string | null>(user.value.profileUrl);
   const nickname = ref("")
   const mylocation = ref("")
   const introduction = ref("")
@@ -121,7 +121,7 @@
       user.value.nickname = nickname.value,
       // user.value.regcode_id = mylocation.value,
       user.value.introduction = introduction.value,
-      user.value.profile_url = imageUrl.value,
+      user.value.profileUrl = imageUrl.value,
     // // axios 요청
     // axios({
     //   method: 'put',

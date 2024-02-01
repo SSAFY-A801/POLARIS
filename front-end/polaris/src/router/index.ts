@@ -62,8 +62,8 @@ const router = createRouter({
     },
     // Profile
     {
-      path: '/profile',
-      redirect: '/profile/library',
+      path: '/profile/:id',
+      redirect: '/profile/:id/library',
       name: 'ProfilePage',
       component: ProfilePage,
       children: [
@@ -80,7 +80,7 @@ const router = createRouter({
           component: MyFavoritesPage
          },
         { path: 'myarticle',
-          redirect: '/profile/myarticle/myessay',
+          redirect: '/profile/:id/myarticle/myessay',
           name: 'MyArticlePage', 
           component: MyArticlePage, 
           // 나의독후감, 나의홍보게시글
@@ -99,37 +99,37 @@ const router = createRouter({
     },
     // Profile 수정
     { 
-      path: '/profile/update',
+      path: '/profile/:id/update',
       name: 'ProfileUpdatePage',
       component: ProfileUpdatePage, 
     },
     // Password 변경
     { 
-      path: '/passwordchange',
+      path: '/profile/:id/password',
       name: 'PasswordChangePage',
       component: PasswordChangePage, 
     },
 
     // 서재에 도서등록 => 모달 제작이 되면 없앨 예정
     { 
-      path: '/registerbook',
+      path: '/book/:id/library',
       name: 'BookRegisterPage',
       component: BookRegisterPage,
     },
     // 거래내역 확인
     { 
-      path: '/profile/trade-books',
+      path: '/profile/:id/trade-books',
       name: 'MyTradeListPage',
       component: MyTradeListPage,
     },
     { 
-      path: '/profile/exchange-books',
+      path: '/profile/:id/exchange-books',
       name: 'MyExchangeListPage',
       component: MyExchangeListPage,
     },
     // 사용자 도서 상세 페이지
     {
-      path: '/bookdetail',
+      path: '/profile/:id/libray/:isbn',
       name: 'BookDetailPage',
       component: BookDetailPage,
 

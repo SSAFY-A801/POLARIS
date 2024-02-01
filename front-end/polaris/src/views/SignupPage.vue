@@ -264,7 +264,7 @@ const submitUserSignup = async () => {
   if (isNicknameVerified.value && isEmailVerified.value && !isPasswordVerified.value && regionInputCode.value) {
   await axios.post('http://i10a801.p.ssafy.io:8082/user', 
   JSON.stringify({
-    id: emailInput.value,
+    email: emailInput.value,
     password: passwordInput.value,
     region : regionInputCode.value,
 		nickname : nicknameInput.value

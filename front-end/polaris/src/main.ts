@@ -17,13 +17,14 @@ import { faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCartSh
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
+// import dotenv from 'dotenv';
 
 library.add(faTwitter, faComment, faComments, faTrashCan, faCalendarDays,faUser, faImages,
   faXmark, faCircleCheck,faBookOpen, faCartShopping, faUserSecret, faLock, faLocationDot,
   faPenToSquare, faPlus, faMagnifyingGlass, faNoteSticky, faBookmark, faArrowRightArrowLeft)
 
 
-
+// dotenv.config();
 const app = createApp(App)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)

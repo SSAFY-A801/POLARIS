@@ -206,8 +206,11 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
+  import { onMounted, ref } from 'vue';
+  import { useRouter, useRoute } from 'vue-router';
+  import type { Book } from '@/stores/profilecounter';
+  import { profileCounterStore } from '@/stores/profilecounter';
+  import axios from 'axios';
   const router = useRouter();
 
   // 이후에는 store.ts로 옮겨서 서버에서 데이터를 받아올 예정 
@@ -217,6 +220,10 @@
   const isMe = ref<boolean>(true)
   const updateBook = ref<boolean>(false)
   const existEssay = ref<boolean>(false)
+  const store = profileCounterStore();
+  const usebook = ref(null)
+  const route = useRoute();
+  const BACK_API_URL = store.BACK_API_URL
 
   // 수정정보 저장
   const saveBookinfo = () => {
@@ -244,6 +251,23 @@
     console.log("사용자의 프로필로 이동합니다.")
     // router.push({name: ProfilePage , params: userid})
   }
+
+  onMounted(()=>{
+    axios({
+      headers: {
+        Authorization: `${store.token}`
+      },
+      method: 'get',
+      url: `${BACK_API_URL}/profile/${route.params.id}/library/${route.params.isbn}`
+    })
+    .then((response)=> 
+      console.log(response.data)
+    )
+    .catch((error)=> {
+      console.error("요청실패: ",error)
+    })
+
+  })
 </script>
 
 <style scoped>

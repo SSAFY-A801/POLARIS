@@ -1,6 +1,7 @@
 import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios';
+import { convertTypeAcquisitionFromJson } from 'typescript';
 
 export interface Searchbook  {
   isbn: string,
@@ -35,9 +36,9 @@ export type Regcode = {
 
 export type User = {
   id: number,
-  profile_url: string|null,
+  profileUrl: string|null,
   nickname: string|null,
-  regcode_id: Regcode,
+  regcode: Regcode,
   introduction: string,
   trade_cnt: number,
   exchange_cnt: number,
@@ -51,9 +52,9 @@ export const profileCounterStore = defineStore('counter', () => {
   // ProfilePage
   const user: User = {
     id: 1,
-    profile_url:"https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2023/07/28/05455ec6-dec5-4016-81b4-97e568c8e249.jpg",
+    profileUrl:"https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2023/07/28/05455ec6-dec5-4016-81b4-97e568c8e249.jpg",
     nickname: "절대존엄퀸갓상시숭배피겨올타임레전드",
-    regcode_id: {
+    regcode: {
       id: 2629010700,
       si: "경기도",
       gungu: "군포시",
@@ -72,18 +73,18 @@ export const profileCounterStore = defineStore('counter', () => {
   // MyScrapsPage
   // MyFavoritePage
   // MyPromotionPage
-  // FollowingListPage
   
   // BookRegisterPage
-  
+
   type searchType = {
     [key: string]: string;
   }
   const searchbookLists = ref<Searchbook[]>([]);
   const bookCartList = ref<Searchbook[]>([])
-  const Aladin_API_URL = '/api/ItemSearch.aspx'
-  const TTBKey = 'ttbkimsw28261657004'
-  
+  const Aladin_API_URL = '/p-api/ItemSearch.aspx'
+  // const TTBKey = process.env.VUE_APP_TTBKEY
+  const TTBKEY='ttbkimsw28261657004'  
+
   const searchAPIbookList = (Query:string, searchCondition: string|null) => {
     if (Query == ""){
       alert('검색어를 입력해주세요.')
@@ -101,7 +102,7 @@ export const profileCounterStore = defineStore('counter', () => {
       }
       axios({
         method: 'get',
-        url: `${Aladin_API_URL}?ttbkey=${TTBKey}&Query=${Query}&QueryType=${QueryType.value}
+        url: `${Aladin_API_URL}?ttbkey=${TTBKEY}&Query=${Query}&QueryType=${QueryType.value}
         &MaxResults=20&start=1&SearchTarget=Book&output=js&Version=20131101&Cover=MidBig`,
       })
       .then((response)=>{
@@ -134,7 +135,7 @@ export const profileCounterStore = defineStore('counter', () => {
   
   // MyLibraryPage
   
-  // const BACK_API_URL = 'http://i10a801.p.ssafy.io:8082'
+  const BACK_API_URL = 'http://i10a801.p.ssafy.io:8082'
   const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGE0QGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTYsImVtYWlsIjoia2luZ2ppbmhhNEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuPme2DhOu2iOyjvOuoueq5gOuvuOyEnCIsImV4cCI6MTcyNDc1MzQ0NX0.BPYiE7fRj2n1_fssmIFJsgYdj5yTYYGcv5yTmZ8jv20'
   const deleteBookList = ref<Book[]>([])
   const bookSearchResultList = ref([]);
@@ -143,12 +144,13 @@ export const profileCounterStore = defineStore('counter', () => {
 const getMybookList = ()=> {
   axios({
     headers: {
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGEyQGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTQsImVtYWlsIjoia2luZ2ppbmhhMkBnbWFpbC5jb20iLCJleHAiOjE3MjQ2ODc5MjJ9.lzyGKu9Vgq3aBItSvODOKmRzE59WrRwx-win-v4uHKI'
+      Authorization: `${token}`
     },
       method: 'get',
-      url: '/another-api/book/1/library',
+      url: `${BACK_API_URL}/book/1/library`,
     })  
   .then((response) => {
+    console.log(response.data)
     const res = response.data
     mybookLists.value = res.data['books']
     })
@@ -157,24 +159,7 @@ const getMybookList = ()=> {
     })
 }
 
-  // const getMybookList = () => {
-  //   axios.get('/another-api/profile/1',{
-  //     headers: {
-  //       Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGE0QGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTYsImVtYWlsIjoia2luZ2ppbmhhNEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuPme2DhOu2iOyjvOuoueq5gOuvuOyEnCIsImV4cCI6MTcyNDc1MzQ0NX0.BPYiE7fRj2n1_fssmIFJsgYdj5yTYYGcv5yTmZ8jv20',
-  //     },
-  //   })
-  //       .then((response) => {
-  //         console.log("response 결과:")
-  //         console.log(response.data)
-  //   })
-  //   .catch((error) => {
-  //     console.log(error)
-  //   })
-  // }
   const filterResult = mybookLists.value
-
-
-
 
   const deletebuttonState = ref(false)
   function toggledeletebutton() {
@@ -182,6 +167,6 @@ const getMybookList = ()=> {
   }
   return { 
     user, 
-    searchAPIbookList,
+    searchAPIbookList, BACK_API_URL, token,
     getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }
 },{persist: true})
