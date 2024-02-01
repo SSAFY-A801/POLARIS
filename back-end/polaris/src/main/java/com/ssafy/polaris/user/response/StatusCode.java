@@ -16,6 +16,7 @@ public enum StatusCode {
 	CREATED_USER(201, "회원가입 성공"),
 	USER_EMAIL_CONFLICT(409, "이미 가입한 회원입니다."),
 	USER_NICKNAME_CONFLICT(409, "닉네임이 중복됩니다."),
+	USER_EMAIL_OR_NICKNAME_CONFLICT(409, "중복되는 이메일/닉네임 입니다."),
 
 	SUCCESS_LOGOUT(200, "로그아웃 성공"),
 
