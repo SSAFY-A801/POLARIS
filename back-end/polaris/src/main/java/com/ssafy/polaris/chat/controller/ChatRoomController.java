@@ -58,10 +58,20 @@ public class ChatRoomController {
 		Long senderId = 5L;
 		// trade의 user id , recevier id 둘다 확인 해줘야한다. 내가 건, 받은 채팅방 모두 보여야 하니까
 
+		ChatRoomListResponseDto chatRoomListResponseDto = chatRoomService.getChatRoomList(senderId);
+
+		// 사용자의 채팅방이 없을 때
+		if (chatRoomListResponseDto.getChatRoomList().isEmpty()){
+			return DefaultResponse.emptyResponse(
+				HttpStatus.OK,
+				StatusCode.SUCCESS_READ_EMPTY_CHATROOM_LIST
+			);
+		}
+
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
 			StatusCode.SUCCESS_READ_CHATROOM_LIST,
-			chatRoomService.getChatRoomList(senderId)
+			chatRoomListResponseDto
 		);
 	}
 }
