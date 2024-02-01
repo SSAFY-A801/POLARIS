@@ -31,6 +31,7 @@
                     <div class="ml-auto">
                         <router-link :to="{name: 'login'}" v-if="!userToken" class="text-white mr-5">로그인</router-link>
                         <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-white">회원가입</router-link>
+                        <router-link :to="{name: 'profilePage'}" v-if="userToken"  class="text-white">프로필</router-link>
                     </div>
                     
                 </div>
