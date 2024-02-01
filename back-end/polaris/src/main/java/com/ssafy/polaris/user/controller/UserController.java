@@ -67,6 +67,17 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<DefaultResponse<UserResponseDto>> join(@RequestBody UserResponseDto userResponseDto) {
 		// TODO: findUserByEmail, Nickname등을 사용하여 중복된다면 거부
+		boolean isEmailInUse = userService.emailCheck(userResponseDto.getEmail());
+		boolean isNicknameInUse = userService.nicknameCheck(userResponseDto.getNickname());
+
+		if (isEmailInUse || isNicknameInUse) {
+			return DefaultResponse.toResponseEntity(
+				HttpStatus.CONFLICT,
+				StatusCode.USER_EMAIL_OR_NICKNAME_CONFLICT,
+				null
+			);
+		}
+
 		String encodedPassword = passwordEncoder.encode(userResponseDto.getPassword());
 		userResponseDto.setPassword("");
 		User user =  User.builder()
