@@ -21,7 +21,7 @@ import com.ssafy.polaris.email.service.EmailService;
 @RequiredArgsConstructor
 public class EmailController {
 
-	private final EmailService emailService;
+	private final EmailService emailServiceImpl;
 
 	// 임시 비밀번호 발급
 	@PostMapping("/password")
@@ -31,7 +31,7 @@ public class EmailController {
 			.subject("[북극성] 임시 비밀번호 발급")
 			.build();
 
-		emailService.sendMail(emailMessage, "password");
+		emailServiceImpl.sendMail(emailMessage, "password");
 
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
@@ -48,7 +48,7 @@ public class EmailController {
 			.subject("[북극성] 이메일 인증을 위한 인증 코드 발송")
 			.build();
 
-		String code = emailService.sendMail(emailMessage, "email");
+		String code = emailServiceImpl.sendMail(emailMessage, "email");
 
 		EmailResponseDto emailResponseDto = new EmailResponseDto();
 		emailResponseDto.setCode(code);
