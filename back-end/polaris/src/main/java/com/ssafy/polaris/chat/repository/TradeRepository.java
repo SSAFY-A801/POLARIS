@@ -4,15 +4,20 @@ import java.util.List;
 
 import com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto;
 import com.ssafy.polaris.trade.domain.Trade;
+import com.ssafy.polaris.trade.domain.TradeStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import jakarta.transaction.Transactional;
 
 public interface TradeRepository extends JpaRepository<Trade, Integer> {
 	// 나의 채팅방 목록
 	@Query(value =
 		"SELECT " +
 			"    new com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto( " +
+			"        t.id as chatRoomId, " +
 			"        CASE WHEN t.sender.id = :senderId THEN ru.id ELSE su.id END as receiverId, " +
 			"        CASE WHEN t.sender.id = :senderId THEN ru.nickname ELSE su.nickname END as nickname, " +
 			"        CASE WHEN t.sender.id = :senderId THEN ru.profileUrl ELSE su.profileUrl END as profileUrl, " +
@@ -25,6 +30,15 @@ public interface TradeRepository extends JpaRepository<Trade, Integer> {
 			"WHERE " +
 			"    t.sender.id = :senderId OR t.receiver.id = :senderId")
 	List<BasicChatRoomResponseDto> getChatRoomList(@Param("senderId") Long senderId);
+
+	@Modifying
+	@Query(value =
+		"update Trade " +
+		"set finishedAt = CURRENT_TIMESTAMP, " +
+		"status = :tradeStatus " +
+		"where id = :chatRoomId"
+	)
+	void completeTrade(@Param("chatRoomId") Long chatRoomId , @Param("tradeStatus") TradeStatus tradeStatus);
 
 	// @Query(value =
 	// 	"select new com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto( " +

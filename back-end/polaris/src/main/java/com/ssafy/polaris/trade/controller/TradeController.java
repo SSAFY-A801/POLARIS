@@ -1,15 +1,14 @@
 package com.ssafy.polaris.trade.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ssafy.polaris.trade.dto.TradeBookListResponseDto;
-import com.ssafy.polaris.trade.dto.TradeBookResponseDto;
 import com.ssafy.polaris.trade.response.DefaultResponse;
 import com.ssafy.polaris.trade.response.StatusCode;
 import com.ssafy.polaris.trade.service.TradeService;
@@ -30,13 +29,11 @@ public class TradeController {
 	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getExchangeBookList(){
 		// TODO : userId 토큰에서 가져오기
 		Long userId = 1L;
-		List<TradeBookResponseDto> exchangeBookResponseDtoList = tradeService.getExchangeBookList(userId);
 
-		TradeBookListResponseDto exchangeBookListResponseDto = new TradeBookListResponseDto(userId, exchangeBookResponseDtoList);
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
 			StatusCode.SUCCESS_VIEW,
-			exchangeBookListResponseDto
+			tradeService.getExchangeBookList(userId)
 		);
 	}
 
@@ -48,13 +45,21 @@ public class TradeController {
 	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getPurchaseBookList(){
 		// TODO : userId 토큰에서 가져오기
 		Long userId = 1L;
-		List<TradeBookResponseDto> purchaseBookResponseDtoList = tradeService.getPurchaseBookList(userId);
 
-		TradeBookListResponseDto purchaseBookListResponseDto = new TradeBookListResponseDto(userId, purchaseBookResponseDtoList);
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
 			StatusCode.SUCCESS_VIEW,
-			purchaseBookListResponseDto
+			tradeService.getPurchaseBookList(userId)
+		);
+	}
+
+	@PatchMapping("/{chatRoomId}")
+	public ResponseEntity<DefaultResponse<Void>> completeTrade(@PathVariable("chatRoomId") Long chatRoomId){
+		System.out.println(" controller - complete trade ");
+		tradeService.completeTrade(chatRoomId);
+		return DefaultResponse.emptyResponse(
+			HttpStatus.OK,
+			StatusCode.SUCCESS_COMPLETE_TRADE
 		);
 	}
 
