@@ -140,7 +140,7 @@ const closeRegionModal = () => {
 const updateRegion = (newRegion: {name: string, code: string}) => {
   regionInputName.value = newRegion.name
   regionInputCode.value = newRegion.code
-  console.log("메인페이지:", regionInputName.value)
+  // console.log("메인페이지:", regionInputName.value)
   closeRegionModal()
 }
 
@@ -160,13 +160,13 @@ const checkNickname = async () => {
     if (response.data.data.isInUse) {
       isNicknameVerified.value = false
       alert('이미 존재하는 닉네임 입니다')
-      console.log(isNicknameVerified.value)
-	    console.log(response.data.message)
+      // console.log(isNicknameVerified.value)
+	    // console.log(response.data.message)
     } else {
       alert('사용 가능한 닉네임 입니다')
       isNicknameVerified.value = true
-      console.log(isNicknameVerified.value)
-      console.log(response.data.message)
+      // console.log(isNicknameVerified.value)
+      // console.log(response.data.message)
     }
 
 })
@@ -190,7 +190,7 @@ const sendEmail = async () => {
 )
 .then(function (response) {
   isEmailVerificationInput.value = true
-	console.log(response.status)
+	// console.log(response.status)
 })
 .catch(function () {
 	alert("인증이메일이 발송되지 않았습니다.")
@@ -209,10 +209,10 @@ const checkEmail = async () => {
   .then(function (response) {
     if (response.data.data.isInUse) {
       alert('이미 존재하는 이메일 입니다.')
-      console.log('이메일 인증 여부 검증 실패')
+      // console.log('이메일 인증 여부 검증 실패')
     } else {
       alert('가입이 가능한 이메일 입니다.')
-      console.log('이메일 인증 여부 검증  성공')
+      // console.log('이메일 인증 여부 검증  성공')
       sendEmail()
     }
   })
@@ -238,7 +238,7 @@ const checkVerifyCode = async () => {
   alert(response.data.message)
   isEmailVerificationInput.value =false
   isEmailVerified.value = true
-	console.log(response.status)
+	// console.log(response.status)
 })
 .catch(function (error) {
 	alert(error.message)

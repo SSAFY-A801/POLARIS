@@ -72,14 +72,14 @@ const dongList = ref<Region[]>([])
 
 watchEffect(async () => {
   if (selectedSido.value) {
-    const response = await axios.get('http://i10a801.p.ssafy.io:8082/recode/gugun')
+    const response = await axios.get(`http://i10a801.p.ssafy.io:8082/recode/gugun?sido=${selectedSido.value}`)
     gugunList.value = response.data.data.regcodes
   }
 })
 
 watchEffect(async () => {
   if (selectedGugun.value) {
-    const response = await axios.get('http://i10a801.p.ssafy.io:8082/recode/dong')
+    const response = await axios.get(`http://i10a801.p.ssafy.io:8082/recode/dong?sido=${selectedSido.value}&gugun=${selectedGugun.value}`)
     dongList.value = response.data.data.regcodes
   }
 })
@@ -108,7 +108,7 @@ watchEffect(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 350px; /* 원하는 너비로 조절 */
-  height: 55%; /* 원하는 높이로 조절 */
+  height: 500px; /* 원하는 높이로 조절 */
   padding: 20px;
   background-color: white;
   border: 1px solid #ccc;
