@@ -1,4 +1,37 @@
 <template>
+<!-- Main modal -->
+<div v-if="showModal" 
+    id="default-modal"
+    tabindex="-1"
+    aria-hidden="true"
+    class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl max-h-full p-2 bg-white rounded-lg shadow dark:bg-gray-700">
+    <div class="relative w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <!-- Modal header -->
+        <div class="flex justify-between rounded-t-lg bg-maintheme1 text-white p-2">
+          <h3 class="text-xl text-white">
+              Following 목록
+          </h3>
+        </div>
+        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+        </div>
+        <!-- Modal body -->
+        <div id="following-list" class="overflow-auto max-h-[500px] overflow-y-auto">
+          <!-- 팔로잉 목록 -->
+          <followingListitem 
+            v-for="(user,index) in followings"
+            :key="index"
+            :user="user"  
+            class="border p-3 min-w-[400] "
+          />
+        </div>
+        <!-- Modal footer -->
+        <div class="flex justify-between p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <button id="updateFollowings" @click="updateFollowings" data-modal-hide="default-modal" type="button" class="w-full">확인</button>
+            <button id="closeModal" @click="closeModal" data-modal-hide="default-modal" type="button" class="w-full">취소</button>
+        </div>
+    </div>
+</div>
   <div class="flex justify-center">
     <div class="container w-full mt-8 max-w-6xl bg-backgroundgray p-4">
       <!-- 프로필 페이지 상단 -->
@@ -13,9 +46,9 @@
           <!-- 프로필 상단 - 좌측 -->
           <div class="md:col-span-4 col-span-12" >
             <div class="flex justify-center">
-              <img src="@/assets/profile-default.jpg" alt="profile-image" id="profile-image">
-              <!-- <img :src="require(`${user.profile_url}`)" alt="profile-image" id="profile-image"> -->
-              </div>
+              <img v-if="user.profile_url" :src="user.profile_url" alt="profile-image" id="profile-image">
+              <img v-else src="@\assets\profile-default.jpg" alt="alternative-image">
+            </div>
               <div v-if="isMe" class="text-maintheme1 font-bold text-center m-3 justify-center p-2">
                 <div id="usernickname" class="font-bold flex items-center justify-center m-2">
                   {{ user.nickname }}  
@@ -23,7 +56,7 @@
               </div>
               <div v-else class="text-maintheme1 font-bold text-center m-3 grid grid-cols-3 justify-center p-2">
                 <div id="usernickname" class="col-span-2 font-bold flex items-center justify-center m-2">
-                  {{  user.nickname }}  
+                  {{ user.nickname }}  
                 </div>
                 <button v-if="myFollwing"  class="col-span-1" id="follow">
                   언팔로우
@@ -32,38 +65,36 @@
                   팔로우
                 </button>
               </div>
-            <div class="flex justify-center mb-8">
-              <div class="inline-grid grid-cols-3 gap-4">
-                <button @click="gotoTradeList" id="trade" class=" hover:text-deepgray">
-                  <div>판매/구매</div>
-                  <div>{{ user.trade_cnt }}</div>
-                </button>
-                <button @click="gotoExchangeList" id="exchange" class=" hover:text-deepgray">
-                  <div >교환</div>
-                  <div>{{ user.exchange_cnt }}</div>
-                </button>
-                <button @click="gotoFollowingList" id="following" class="hover:text-deepgray">
-                  <div>Following</div>
-                  <div>{{ user.followings.length }}</div>
-                </button>
-              </div>
+          <div class="flex justify-center mb-8">
+            <div class="inline-grid grid-cols-3 gap-4">
+              <button @click="gotoTradeList" id="trade" class=" hover:text-deepgray">
+                <div>판매/구매</div>
+                <div>{{ user.trade_cnt }}</div>
+              </button>
+              <button @click="gotoExchangeList" id="exchange" class=" hover:text-deepgray">
+                <div >교환</div>
+                <div>{{ user.exchange_cnt }}</div>
+              </button>
+              <button @click="clickModal" id="following" class="hover:text-deepgray">
+                <div>Following</div>
+                <div>{{ user.followings }}</div>
+              </button>
             </div>
           </div>
+        </div>
           <!-- 프로필 상단 - 우측 -->
-          <div class="md:col-span-8 col-span-12 m-2">
-            <div class="container grid grid-cols-4 flex">
-              <div class="text-maintheme1 m-2 font-bold">
+          <div class="md:col-span-8 col-span-12 m-2 flex flex-col justify-between">
+            <div class="grid grid-cols-4">
+              <div class="text-maintheme1 m-2 font-bold col-span-1">
                 <div class="mb-2">나의 위치</div>
               </div>
-              <div class="col-span-2 text-maintheme1 m-2">
-                <div class="mb-2">{{ user.regcode_id }}</div>
+              <div class="col-span-3 text-maintheme1 m-2">
+                <div class="mb-2">{{ user.regcode_id.si }} {{ user.regcode_id.gungu }} {{ user.regcode_id.dong }}</div>
               </div>
-            </div>
-            <div class="container grid grid-cols-4 flex mb-20">
               <div class="text-maintheme1 m-2 font-bold">
-                <div>ABOUT ME</div>
+                <div class="col-span-2">ABOUT ME</div>
               </div>
-              <div class="col-span-2 text-maintheme1 m-2">
+              <div class="col-span-3 text-maintheme1 m-2">
                   {{ user.introduction }}
               </div>
             </div>
@@ -133,18 +164,36 @@
 </template>
 
 <script setup lang="ts">
+  import followingListitem from '@/components/profile/following/followingListitem.vue';
   import { ref, onMounted } from "vue";
   import { useRouter } from 'vue-router'
   import { profileCounterStore } from "@/stores/profilecounter";
   import type { User } from "@/stores/profilecounter";
 
-
-
+  
   const router = useRouter();
   const store = profileCounterStore();
+  const followings = store.user.followings
   const isMe = ref<boolean>(true)
   const myFollwing = ref<boolean>(true)
   const user = ref<User>(store.user)
+
+  const showModal = ref(false) 
+
+  const clickModal = () => {
+    showModal.value = true
+  }
+  
+  const closeModal = () => {
+    showModal.value = false
+  }
+
+  const updateFollowings = () => {
+    // 이후 추가
+    showModal.value = false
+  }
+
+
   // button 클릭
   const gotoUpdateProfile = () => {
     router.push({name: "ProfileUpdatePage"});
@@ -157,9 +206,6 @@
     router.push({name: "MyExchangeListPage"});
   }
 
-  const gotoFollowingList = () => {
-    router.push({name: "FollowingListPage"});
-  }
 
   const gotoMychatList = () => {
     // router.push({name: "FollowingListPage"});
@@ -173,6 +219,10 @@
     // router.push({name: "FollowingListPage"});
   }
 
+  
+  onMounted(()=> {
+    
+  })
 </script>
 
 <style scoped>
@@ -180,6 +230,8 @@
     @apply w-[150px] h-[150px] object-cover justify-items-center rounded-[70%] border-[3px] border-solid border-[#121212];
 }
 
+#updateFollowings,
+#closeModal,
 #tradechat,
 #exchangechat,
 #mychat,
@@ -187,6 +239,11 @@
 #profile-update {
     @apply bg-[#323F59] border text-white m-[5px] px-2.5 py-[5px] rounded-[10px]  hover:bg-gray-500;
 }
+
+#follow-toggle {
+    @apply  w-full m-4 bg-[#323F59] text-center text-white m-[3px] px-3 py-[3px] rounded-[10px]  hover:bg-gray-500;
+  }
+
 a {
     @apply text-white
 }

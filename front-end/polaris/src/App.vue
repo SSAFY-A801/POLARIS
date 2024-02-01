@@ -1,10 +1,9 @@
 <template>
-  <div>
-    <Header></Header>
-    <router-view></router-view>
-    <Footer></Footer>
-
+  <Header></Header>
+  <div class="col-span-12 mt-20">
+    <RouterView/>
   </div>
+  <Footer></Footer>
 </template>
 
 <script setup lang="ts">
