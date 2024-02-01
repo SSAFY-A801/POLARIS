@@ -1,9 +1,4 @@
-package com.ssafy.polaris.book.dto;
-
-import com.ssafy.polaris.book.domain.Book;
-import com.ssafy.polaris.book.domain.UserBook;
-import com.ssafy.polaris.book.domain.UserBookTradeType;
-import com.ssafy.polaris.book.repository.BookRepository;
+package com.ssafy.polaris.following.dto;
 import com.ssafy.polaris.following.domain.Follow;
 import com.ssafy.polaris.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
