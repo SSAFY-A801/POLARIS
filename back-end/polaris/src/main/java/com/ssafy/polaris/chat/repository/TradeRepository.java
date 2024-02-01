@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 import jakarta.transaction.Transactional;
 
-public interface TradeRepository extends JpaRepository<Trade, Integer> {
+public interface TradeRepository extends JpaRepository<Trade, Long> {
 	// 나의 채팅방 목록
 	@Query(value =
 		"SELECT " +
