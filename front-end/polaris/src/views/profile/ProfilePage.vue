@@ -174,7 +174,7 @@
   const router = useRouter();
   const store = profileCounterStore();
   const followings = store.user.followings
-  const isMe = ref<boolean>(false)
+  const isMe = ref<boolean>(true)
   const myFollwing = ref<boolean>(true)
   const user = ref<User>(store.user)
 
@@ -219,8 +219,9 @@
     // router.push({name: "FollowingListPage"});
   }
 
+  
   onMounted(()=> {
-    store.getMybookList();
+    
   })
 </script>
 
