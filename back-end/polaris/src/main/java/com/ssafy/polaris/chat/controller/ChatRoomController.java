@@ -14,6 +14,7 @@ import com.ssafy.polaris.chat.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
 
+@CrossOrigin
 @Controller
 @RequestMapping(value = "/chat")
 @RequiredArgsConstructor
