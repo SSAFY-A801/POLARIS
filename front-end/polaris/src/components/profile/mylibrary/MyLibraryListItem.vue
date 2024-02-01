@@ -1,5 +1,6 @@
 <template>
-  <div class="bg-backgroundgray inline-block rounded-lg px-4  py-1 shadow-sm shadow-stone-400 hover:bg-gray-200">
+  <div class=" bg-gray-100 inline-block rounded-lg px-4 py-1 shadow-sm shadow-stone-400 hover:bg-gray-200">
+    <!-- checkbox -->
     <div v-if="deleteBooks == true" class="flex">
       <input id="default-checkbox" 
         type="checkbox"
@@ -9,36 +10,52 @@
     </div>
     <button 
       @click="showMybookdetail"
+      class="container"
       :class="{'pointer-events-none cursor-not-allowed': deleteBooks}">
-      <img
-          alt="Home"
-          src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?crop=entropy&cs=srgb&fm=jpg&ixid=M3w0Mzc0NDd8MHwxfHNlYXJjaHwyfHxib29rJTIwY292ZXJ8ZW58MHx8fHwxNzA2MDE3NDQyfDA&ixlib=rb-4.0.3&q=85&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450"
-          class="h-64 w-full rounded-md object-cover"
-      >
+      <div class="flex justify-center py-2 rounded-lg">
+        <div v-if="bookinfo.cover">
+          <img
+              alt="Home"
+              :src="bookinfo.cover"
+              class="rounded-md object-cover"
+          >
+        </div>
+        <div v-else>
+          <img
+              alt="Home"
+              src="@\assets\book-image.jpg"
+              class="rounded-md object-cover"
+          >
+        </div>
+      </div>
       <!-- 도서상태 -->
-      <div class="mt-4 flex gap-2 text-xs">
+      <div class="mt-4 flex justify-center gap-2 text-xs">
         <div id="isOwned" class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2 border  bg-maintheme2">
-            <p  class="p-1.5 text-lightgray">{{ bookinfo.isOwned }}</p>
+          <p v-if="bookinfo.isOwned" class="p-1.5 text-lightgray"> 보유 </p>
+          <p v-else  class="p-1.5 text-lightgray"> 미보유 </p>
         </div>
         <div id="isOpened" class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2   bg-maintheme2">
-            <p  class="p-1.5 text-lightgray">{{ bookinfo.isOpened }}</p>
+          <p v-if="bookinfo.isOpened" class="p-1.5 text-lightgray">공개</p>
+          <p v-else  class="p-1.5 text-lightgray">미공개</p>
         </div>
         <!-- 보유 & 공개 일때만 거래 여부 출력 -->
-        <div v-if="bookinfo.isOwned =='보유' && bookinfo.isOpened=='공개'" id="tradeType">
-          <div v-if="bookinfo.tradeType =='TRADE'" id="trade"  class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2  bg-red-600"  >
-            <p  class="p-1.5 text-lightgray">판매</p>
-          </div>
-          <div v-else-if="bookinfo.tradeType == 'EXCHANGE'" id="exchange"   class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2 bg-yellow-500">
-            <p  class="p-1.5 text-lightgray">교환</p>
-          </div>
+        <div v-if="bookinfo.userBooktradeType =='PURCHASE'" id="trade"  class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2  bg-red-600"  >
+          <p  class="p-1.5 text-lightgray">판매</p>
+        </div>
+        <div v-else-if="bookinfo.userBooktradeType == 'EXCHANGE'" id="exchange"   class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2 bg-yellow-500">
+          <p  class="p-1.5 text-lightgray">교환</p>
+        </div>
+        <div v-else id="undefined"   class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2 bg-gray-500">
+          <p  class="p-1.5 text-lightgray">미거래</p>
         </div>
       </div>
       <div class="mt-2">
           <dl>
             <div>
                 <dt class="sr-only">Title</dt>
-
-                <dd class="font-bold text-maintheme1">{{ bookinfo.title }}</dd>
+                
+                <dd v-if="bookinfo.title.length > 30" class="font-bold text-maintheme1">{{ bookinfo.title.slice(0,30) }}...</dd>
+                <dd v-else  class="font-bold text-maintheme1">{{ bookinfo.title }}</dd>
             </div>
             <div>
                 <dt class="sr-only">Author</dt>
@@ -68,11 +85,11 @@ const store = profileCounterStore();
 const deleteBook = ref<boolean>(false)
 
 const emit = defineEmits<{
-(e: 'deleteBooks', isbn: string, deleteBook: boolean): void
+(e: 'deleteBooks', book: Book, deleteBook: boolean): void
 }>()
 
 const emitDeleteState = () => {
-  emit('deleteBooks', bookinfo.isbn, !deleteBook.value)
+  emit('deleteBooks', bookinfo, !deleteBook.value)
 }
 
 
@@ -95,13 +112,14 @@ watch(deleteBooks,(newValue) => {
 <style scoped>
   #isOwned,
   #isOpened,
+  #undefined,
   #trade,
   #exchange {
     @apply rounded-md
   }
 
   button {
-    height: 380px;
+    height: auto;
   }
 
 </style>

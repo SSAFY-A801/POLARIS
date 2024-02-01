@@ -2,11 +2,11 @@
 
   <div class="border">
     <BookSearchResultListItem 
-      v-for="(item,index) in searchListResult"
+      v-for="(item,index) in searchbookLists"
       :key="index"
       :searchResult="item"
       @show-alert="handleShowAlert"
-       class="border p-3"
+       class="border p-3 "
        />
   </div>
 </template>
@@ -14,12 +14,18 @@
 <script setup lang="ts">
   import BookSearchResultListItem from "./BookSearchResultListItem.vue";
   import { profileCounterStore } from "@/stores/profilecounter";
+  import { computed } from "vue";
 
   const store = profileCounterStore();
-  const searchListResult = store.searchbookLists
   const handleShowAlert = () => {
-    alert('이미 포함된 도서입니다.')
+    alert('이미 서재나 도서바구니에 포함된 도서입니다.')
   }
+
+  const searchbookLists = computed(()=> {
+    return store.searchbookLists
+  })
+
+
 </script>
 
 <style scoped>

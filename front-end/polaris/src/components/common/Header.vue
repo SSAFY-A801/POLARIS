@@ -1,11 +1,8 @@
 <template>
-    
-<div>
     <nav class="bg-maintheme1 fixed top-0 w-full">
         <div class="px-12 mx-0 ">
             <div class="flex items-center justify-between h-24">
                 <div class=" flex items-center w-full h-24">
-
                     <a class="flex-shrink-0" href="/">
                         <img class="w-8 h-8" src="" alt="Workflow"/>
                     </a>
@@ -49,8 +46,6 @@
             </div>
         </div>
     </nav>
-</div>
-
 </template>
 
 <script setup lang="ts">
