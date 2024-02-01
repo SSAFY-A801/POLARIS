@@ -72,15 +72,20 @@ const dongList = ref<Region[]>([])
 
 watchEffect(async () => {
   if (selectedSido.value) {
-    const response = await axios.get(`http://i10a801.p.ssafy.io:8082/regcode/gugun?sido=${selectedSido.value}`)
-    gugunList.value = response.data.data.regcodes
+    console.log(selectedSido.value)
+    await axios.get(`http://i10a801.p.ssafy.io:8082/regcode/gugun?sido=${selectedSido.value.name}`)
+    .then (function(response) {
+      gugunList.value = response.data.data.regcodes
+    })
   }
 })
 
 watchEffect(async () => {
-  if (selectedGugun.value) {
-    const response = await axios.get(`http://i10a801.p.ssafy.io:8082/regcode/dong?sido=${selectedSido.value}&gugun=${selectedGugun.value}`)
-    dongList.value = response.data.data.regcodes
+  if (selectedSido.value && selectedGugun.value) {
+    await axios.get(`http://i10a801.p.ssafy.io:8082/regcode/dong?sido=${selectedSido.value.name}&gugun=${selectedGugun.value.name}`)
+    .then (function(response) {
+       dongList.value = response.data.data.regcodes
+    })
   }
 })
 
@@ -93,8 +98,14 @@ watchEffect(() => {
 });
 
 (async () => {
-  const response = await axios.get('http://i10a801.p.ssafy.io:8082/regcode/sido')
-  sidoList.value = response.data.data.regcodes
+  await axios.get('http://i10a801.p.ssafy.io:8082/regcode/sido', {
+    headers: {
+    "Content-Type": "application/json",
+  }
+  })
+  .then (function(response) {
+    sidoList.value = response.data.data.regcodes
+  })
 })()
 
 
