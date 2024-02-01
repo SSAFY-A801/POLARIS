@@ -23,22 +23,16 @@ public class UserBookServiceImpl implements UserBookService{
     private final BookRepository bookRepository;
 
     @Override
-    public ResponseEntity<DefaultResponse<String>> createUserBook(Long userId, BookRequestDto bookRequestDto) {
+    public String createUserBook(Long userId, BookRequestDto bookRequestDto) {
         bookRepository.save(userBookMapper.toBookEntity(bookRequestDto));
         userBookRepository.save(userBookMapper.toUserBookEntity(userId, bookRequestDto));
 
-        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_CREATE_USER_BOOK, "");
+        return "";
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<UserBookListResponseDto>> getLibrary(Long userId) {
-        List<UserBookResponseDto> userBooks = userBookRepository.findAllByUserId(userId);
-        System.out.println("user id : " + userId);
-        System.out.println(userBooks.toString());
-        if(userBooks.isEmpty()){
-            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_LIBRARY_VIEW, null);
-        }
-        UserBookListResponseDto userBookListResponseDto = new UserBookListResponseDto(userBooks);
-        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_LIBRARY_VIEW, userBookListResponseDto);
+    public List<UserBookResponseDto> getLibrary(Long userId) {
+        return userBookRepository.findAllByUserId(userId);
+
     }
 }

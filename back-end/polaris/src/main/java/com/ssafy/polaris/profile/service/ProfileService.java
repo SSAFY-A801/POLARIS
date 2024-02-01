@@ -6,12 +6,14 @@ import com.ssafy.polaris.profile.response.DefaultResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface ProfileService {
-    public ResponseEntity<DefaultResponse<ProfileResponseDto>> getProfile(Long userId);
+    public ProfileResponseDto getProfile(Long userId);
 
-    public ResponseEntity<DefaultResponse<String>> updateProfile(Long userId, ProfileRequestDto profileRequest);
+    public String updateProfile(Long userId, ProfileRequestDto profileRequest);
 
-    public ResponseEntity<DefaultResponse<String>> followUser(Long userId, Long followUserId);
+    public String followUser(Long userId, Long followUserId);
 
-    ResponseEntity<DefaultResponse<FollowListResponseDto>> getFollowingList(Long userId);
+    FollowListResponseDto getFollowingList(Long userId);
+
+    Integer unfollow(Long followerId, Long followingId);
 }
 
