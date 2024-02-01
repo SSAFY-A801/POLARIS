@@ -1,24 +1,46 @@
-import './assets/styles/main.css'
+
+import './assets/styles/main.css';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons'
+import { faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCartShopping, faCircleCheck,
+   faComment, faComments,faImages, faLocationDot, faLock, faMagnifyingGlass, faNoteSticky,
+    faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark } from '@fortawesome/free-solid-svg-icons';
+
+// import VueSweetalert2 from 'vue-sweetalert2';
+// import 'sweetalert2/dist/sweetalert2.min.css';
 
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 
-const app = createApp(App)
+library.add(faTwitter, faComment, faComments, faTrashCan, faCalendarDays,faUser, faImages,
+  faXmark, faCircleCheck,faBookOpen, faCartShopping, faUserSecret, faLock, faLocationDot,
+  faPenToSquare, faPlus, faMagnifyingGlass, faNoteSticky, faBookmark, faArrowRightArrowLeft)
 
-// const api = axios.create({
-//     baseURL: 'http://www.aladin.co.kr/api/ItemList.aspx?ttbkey=ttbkimsw28261657007&QueryType=Bestseller&MaxResults=20&start=1&SearchTarget=Book&output=JS&Version=20131101', // Open API의 엔드포인트로 변경
-//     withCredentials: true, // CORS 오류 해결을 위해 필요한 옵션
-//   });
+
+
+const app = createApp(App)
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
 
 app.use(createPinia())
+
+
 app.use(router)
+app.use(pinia)
 
 app.config.globalProperties.axios = axios;    
 
+
+app.component('font-awesome-icon',FontAwesomeIcon)
+// app.use(VueSweetalert2)
+
 app.mount('#app')
 
-// export default api;
+
