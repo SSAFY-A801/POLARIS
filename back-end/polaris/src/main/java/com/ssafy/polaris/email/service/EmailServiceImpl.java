@@ -33,13 +33,17 @@ public class EmailServiceImpl implements EmailService{
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
 		// TODO: 비밀번호 재설정을 이메일만으로 하면 안될 것 같음
-		User userByEmail = null;
-		try {
-			userByEmail = userService.getUserByEmail(emailMessage.getTo());
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		log.info("Email Send to "+emailMessage.getTo());
+
+		if ("password".equals(type)) {
+			User userByEmail = null;
+			try {
+				userByEmail = userService.getUserByEmail(emailMessage.getTo());
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			userService.setPassword(userByEmail.getId(), authNum);
 		}
-		userService.setPassword(userByEmail.getId(), authNum);
 
 		try {
 			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
@@ -48,7 +52,7 @@ public class EmailServiceImpl implements EmailService{
 			mimeMessageHelper.setText(setContext(authNum, type), true); // 메일 본문 내용, HTML 여부
 			javaMailSender.send(mimeMessage);
 
-			log.info("Success");
+			log.info("Email Send to "+emailMessage.getTo()+"Success");
 
 			return authNum;
 
