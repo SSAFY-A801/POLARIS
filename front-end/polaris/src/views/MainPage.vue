@@ -53,7 +53,11 @@ const booklistItem = ref<bookListType | null>()
 
 
 onMounted(async () => {
-   await axios.get<bookListType,{data:bookListType}>('/api/api/ItemList.aspx?ttbkey=ttbkimsw28261657008&Query=aladdin&QueryType=Bestseller&MaxResults=20&start=1&SearchTarget=Book&output=js&Version=20131101')
+   await axios.get<bookListType,{data:bookListType}>('http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=ttbkimsw28261657008&Query=aladdin&QueryType=Bestseller&MaxResults=20&start=1&SearchTarget=Book&output=js&Version=20131101',{
+    headers: {
+    "Content-Type": "applicatio/json",
+    "Accept":"applicatio/json",
+  }})
    .then((data) => 
     console.log(booklistItem.value = data.data)
     )
