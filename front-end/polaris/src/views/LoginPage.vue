@@ -59,14 +59,15 @@ const userPassword = ref('')
 
 const userLogin = async () => {
     if ( userEmail.value && userPassword.value ) {
-    await axios.post('http://i10a801.p.ssafy.io:8082/user/login', {
-    headers: {
-    "Content-Type": "application/json",
-  }, body:{
+    await axios.post('http://i10a801.p.ssafy.io:8082/user/login', 
+  JSON.stringify({
     id: userEmail.value,
     password: userPassword.value
-    }
-  }
+    }),
+    {headers: {
+      "Content-Type": "application/json",
+    }}
+  
 )
 .then(function (response) {
   alert('로그인에 성공하였습니다')

@@ -180,13 +180,13 @@ const checkNickname = async () => {
  // 입력한 이메일을 서버로 전송
   // 성공시 isEmailVerificationInput.value =true로 바꾸기
 const sendEmail = async () => {
-  await axios.post('http://i10a801.p.ssafy.io:8082/send-mail/email', {
-    headers: {
-    "Content-Type": "application/json",
-  }, body:{
+  await axios.post('http://i10a801.p.ssafy.io:8082/send-mail/email', 
+  JSON.stringify({
       email: emailInput.value
-    }
-  }
+    }),
+    {headers: {
+      "Content-Type": "application/json",
+    }}
 )
 .then(function (response) {
   isEmailVerificationInput.value = true
@@ -226,13 +226,13 @@ const checkEmail = async () => {
 // 입력받은 인증코드 서버로 전송
 // 인증 성공시 isEmailVerificationInput.value =false 로 바꾸기,  isEmailVerified = true로 바꾸기
 const checkVerifyCode = async () => {
-  await axios.post('http://i10a801.p.ssafy.io:8082/user/email_cert', {
-    headers: {
-    "Content-Type": "application/json",
-  }, body:{
+  await axios.post('http://i10a801.p.ssafy.io:8082/user/email_cert', 
+    JSON.stringify({
       code: verificationCode.value
-    }
-  }
+    }),
+    {headers: {
+      "Content-Type": "application/json",
+    }}
 )
 .then(function (response) {
   alert(response.data.message)
@@ -262,16 +262,16 @@ const checkPassword = () => {
   //회원가입 성공시 로그인 페이지로 이동
 const submitUserSignup = async () => {
   if (isNicknameVerified.value && isEmailVerified.value && !isPasswordVerified.value && regionInputCode.value) {
-  await axios.post('http://i10a801.p.ssafy.io:8082/user', {
-    headers: {
-    "Content-Type": "application/json",
-  }, body:{
+  await axios.post('http://i10a801.p.ssafy.io:8082/user', 
+  JSON.stringify({
     id: emailInput.value,
     password: passwordInput.value,
     region : regionInputCode.value,
 		nickname : nicknameInput.value
-    }
-  }
+    }),
+    {headers: {
+      "Content-Type": "application/json",
+    }}
 )
 .then(function (response) {
   console.log(response.status)
