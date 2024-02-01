@@ -38,6 +38,9 @@ public class Essay extends BaseEntity {
 	@JoinColumn(name = "user_book_id")
 	private UserBook userBook;
 
+	@Column(name = "user_book_id")
+	private Long userBookId;
+
 	@NotNull
 	private String title;
 
