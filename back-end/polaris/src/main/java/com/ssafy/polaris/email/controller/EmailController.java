@@ -1,6 +1,7 @@
 package com.ssafy.polaris.email.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import com.ssafy.polaris.email.response.DefaultResponse;
 import com.ssafy.polaris.email.response.StatusCode;
 import com.ssafy.polaris.email.service.EmailService;
 
+@Slf4j
 @CrossOrigin
 @RequestMapping("/send-mail")
 @RestController
@@ -45,10 +47,12 @@ public class EmailController {
 	// 회원가입 이메일 인증 - 요청 시 body로 인증번호 반환하도록 작성하였음
 	@PostMapping("/email")
 	public ResponseEntity sendJoinMail(@RequestBody EmailPostDto emailPostDto) {
+		log.info("email : " + emailPostDto.getEmail());
 		EmailMessage emailMessage = EmailMessage.builder()
 			.to(emailPostDto.getEmail())
 			.subject("[북극성] 이메일 인증을 위한 인증 코드 발송")
 			.build();
+		log.info("emailMessage.email : " + emailMessage.getTo());
 
 		String code = emailServiceImpl.sendMail(emailMessage, "email");
 
