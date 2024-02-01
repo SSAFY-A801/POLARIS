@@ -42,6 +42,8 @@ public class SecurityConfig {
 			.authorizeHttpRequests(authorize ->
 				authorize
 					.requestMatchers("/user", "/user/login").permitAll()
+					.requestMatchers("/user/email_check/**", "/user/nickname_check/**").permitAll()
+					.requestMatchers("/send-mail/**").permitAll()
 					.anyRequest().authenticated())
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userRepository),
 				UsernamePasswordAuthenticationFilter.class);
