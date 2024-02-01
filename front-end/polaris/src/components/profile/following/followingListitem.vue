@@ -1,24 +1,40 @@
 <template>
   <div class="flex grid grid-cols-12 items-center">
     <div id="following-image"  class="col-span-2">
-      <img src="@\assets\following-user.jpg" alt="NO IMAGE" class="profile-image">
+      <img v-if="following.profileUrl" :src="following.profileUrl" alt="NO IMAGE" class="profile-image">
+      <img v-else src="@\assets\following-user.jpg" alt="NO IMAGE" class="profile-image">
     </div>
     <div id="following-nickname" class="col-span-3">
-      <div>{{ user }}</div>
+      <div>{{ following.nickname }}</div>
     </div>
     <div id="following-location" class="col-span-4">
-      <div>팔로잉 지역</div>
+      <div>{{ following.regcode.si }} {{ following.regcode.gungu }} {{ following.regcode.dong }}</div>
     </div>
-    <div id="follow-toggle" class="col-span-3">
-      <button id="follow-toggle">언팔로우</button>
+    <div @click="followchange" id="follow-toggle" class="col-span-3">
+      <button v-if="follow" id="follow-button">언팔로우</button>
+      <button v-else id="follow-button">팔로우</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  defineProps({
-    user: Number
-  })
+import { ref } from 'vue';
+import type { User } from '@/stores/profilecounter';
+  interface FollowingInfo {
+    following: User
+  }
+
+  const emit = defineEmits<{
+    (e: 'followToggle', following: User, follow: boolean): void
+  }>()
+
+  const follow = ref(true)
+  const followchange = () => {
+    follow.value = !follow.value
+    emit('followToggle',following, follow.value)
+  }
+
+  const { following } = defineProps<FollowingInfo>();
 </script>
 
 <style scoped>

@@ -19,9 +19,10 @@
         <div id="following-list" class="overflow-auto max-h-[500px] overflow-y-auto">
           <!-- 팔로잉 목록 -->
           <followingListitem 
-            v-for="(user,index) in followings"
+            v-for="(following,index) in followings_list"
             :key="index"
-            :user="user"  
+            :following="following"  
+            @follow-toggle="handlefollow"
             class="border p-3 min-w-[400] "
           />
         </div>
@@ -32,6 +33,8 @@
         </div>
     </div>
 </div>
+
+<!-- 프로필 페이지 -->
   <div class="flex justify-center">
     <div class="container w-full mt-8 max-w-6xl bg-backgroundgray p-4">
       <!-- 프로필 페이지 상단 -->
@@ -46,7 +49,7 @@
           <!-- 프로필 상단 - 좌측 -->
           <div class="md:col-span-4 col-span-12" >
             <div class="flex justify-center">
-              <img v-if="user.profile_url" :src="user.profile_url" alt="profile-image" id="profile-image">
+              <img v-if="user.profileUrl" :src="user.profileUrl" alt="profile-image" id="profile-image">
               <img v-else src="@\assets\profile-default.jpg" alt="alternative-image">
             </div>
               <div v-if="isMe" class="text-maintheme1 font-bold text-center m-3 justify-center p-2">
@@ -89,7 +92,7 @@
                 <div class="mb-2">나의 위치</div>
               </div>
               <div class="col-span-3 text-maintheme1 m-2">
-                <div class="mb-2">{{ user.regcode_id.si }} {{ user.regcode_id.gungu }} {{ user.regcode_id.dong }}</div>
+                <div class="mb-2">{{ user.regcode.si }} {{ user.regcode.gungu }} {{ user.regcode.dong }}</div>
               </div>
               <div class="text-maintheme1 m-2 font-bold">
                 <div class="col-span-2">ABOUT ME</div>
@@ -122,7 +125,7 @@
         <div class=" border-gray-200 dark:border-gray-700 bg-maintheme1">
           <nav class="-mb-px flex gap-6">
             <div class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-              <RouterLink :to="{ name: 'MyLibraryPage' }">
+              <RouterLink :to="{ name: 'MyLibraryPage', params: {id: user.id}}">
                 <a
                   class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
                 >
@@ -131,21 +134,21 @@
               </RouterLink>
               <!-- 접속자 == User 인 경우에만 보여주기  -->
               <span v-if="isMe">
-                <RouterLink :to="{ name: 'MyScrapsPage' }">
+                <RouterLink :to="{ name: 'MyScrapsPage', params: {id: user.id} }">
                   <a
                     class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
                   >
                   스크랩한 독후감 
                   </a>
                 </RouterLink>
-                <RouterLink :to="{ name: 'MyFavoritesPage' }">
+                <RouterLink :to="{ name: 'MyFavoritesPage', params: {id: user.id} }">
                   <a
                     class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
                   >
                   찜한 홍보 게시글
                   </a>
                 </RouterLink>
-                <RouterLink :to="{ name: 'MyArticlePage' }">
+                <RouterLink :to="{ name: 'MyArticlePage',  params: {id: user.id} }">
                   <a
                     class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
                   >
@@ -169,19 +172,37 @@
   import { useRouter } from 'vue-router'
   import { profileCounterStore } from "@/stores/profilecounter";
   import type { User } from "@/stores/profilecounter";
+  import axios from 'axios';
 
   
   const router = useRouter();
   const store = profileCounterStore();
-  const followings = store.user.followings
+  const followings_list = ref<User[]>([])
   const isMe = ref<boolean>(true)
   const myFollwing = ref<boolean>(true)
   const user = ref<User>(store.user)
-
+  const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
-
+  const unfollow_list = ref<User[]>([])
   const clickModal = () => {
     showModal.value = true
+    // followings 명단 호출
+    axios({
+      headers: {
+        Authorization: `${store.token}`
+      },
+      method: 'get',
+      url: `${BACK_API_URL}/profile/${user.value.id}/follow`,
+    })
+    .then((response)=> {
+      const res = response.data
+      followings_list.value = res.data['followings']
+      console.log(followings_list.value)
+
+    })
+    .catch((error)=> {
+      console.error('요청실패: ',error)
+    })
   }
   
   const closeModal = () => {
@@ -193,17 +214,25 @@
     showModal.value = false
   }
 
+  const handlefollow = (following: User, follow: boolean) => {
+    if (!follow){
+      unfollow_list.value.push(following)
+    } else {
+      unfollow_list.value = unfollow_list.value.filter((user)=> user.id != following.id)
+    }
+    console.log(unfollow_list.value)
+  }
 
   // button 클릭
   const gotoUpdateProfile = () => {
-    router.push({name: "ProfileUpdatePage"});
+    router.push({name: "ProfileUpdatePage",params:{id:user.value.id}});
   }
   const gotoTradeList = () => {
-    router.push({name: "MyTradeListPage"});
+    router.push({name: "MyTradeListPage",params:{id:user.value.id}});
   }
 
   const gotoExchangeList = () => {
-    router.push({name: "MyExchangeListPage"});
+    router.push({name: "MyExchangeListPage",params:{id:user.value.id}});
   }
 
 
@@ -221,7 +250,22 @@
 
   
   onMounted(()=> {
-    
+  //   axios({
+  //     headers: {
+  //       Authorization: ""
+  //     },
+  //     method: 'get',
+  //     url: 'asdf',
+      
+
+  //   })
+  //   .then((response)=> {
+  //     console.log(response.data)
+  //   })
+  //   .catch((error)=> {
+      
+  //     console.error('에러 발생: ',error)
+  //   })
   })
 </script>
 

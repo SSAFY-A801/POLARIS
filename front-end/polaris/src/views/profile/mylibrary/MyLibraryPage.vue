@@ -9,7 +9,7 @@
               <font-awesome-icon icon="fa-solid fa-trash-can" style="color: #ffffff;"/>
               삭제
             </div>
-            <div v-else @click="deleteBooks">
+            <div v-else>
               <font-awesome-icon icon="fa-solid fa-trash-can" style="color: #ffffff;"/>
               삭제완료
             </div>
@@ -144,7 +144,14 @@ const deleteBooks = () => {
 }
 
 const clickbutton = () => { 
-  store.toggledeletebutton();
+  if(deleteState.value && deleteBookList.value.length == 0){
+    alert("도서목록을 선택하세요.")
+  } else if(deleteState.value && deleteBookList.value.length){
+    deleteBooks();
+    store.toggledeletebutton();
+  } else if(!deleteState.value){
+    store.toggledeletebutton();
+  }
 }
 
 const cancelDelete = () => {
