@@ -61,7 +61,7 @@ const userLogin = async () => {
     if ( userEmail.value && userPassword.value ) {
     await axios.post('http://i10a801.p.ssafy.io:8082/user/login', 
   JSON.stringify({
-    id: userEmail.value,
+    email: userEmail.value,
     password: userPassword.value
     }),
     {headers: {
