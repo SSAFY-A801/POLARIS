@@ -38,9 +38,9 @@
           비밀번호 변경
         </button>
         <div class="font-semibold mt-8">닉네임</div>
-        <input type="nickname" v-model="nickname" id="Usernickname" :placeholder="user.nickname" class="w-64 mt-2 mb-4 rounded-md border h-8"/>
+        <input type="nickname" v-model="nickname" id="Usernickname" placeholder="user.nickname" class="w-64 mt-2 mb-4 rounded-md border h-8"/>
         <div class="font-semibold">나의 위치</div>
-        <input readonly v-model="mylocation" type="location" id="UserLocation" :placeholder="user.regcode_id" class="mt-2 mb-4 w-64 rounded-md border h-8"/>
+        <input readonly v-model="mylocation" type="location" id="UserLocation" placeholder="user.regcode_id" class="mt-2 mb-4 w-64 rounded-md border h-8"/>
         <button type="button" id="update-loc-button">
           <font-awesome-icon icon="fa-solid fa-location-dot" />
           위치찾기
@@ -79,7 +79,6 @@
   const nickname = ref("")
   const mylocation = ref("")
   const introduction = ref("")
-  const BACK_API_URL = store.BACK_API_URL
 
   const handleFileChange = (event: Event) => {
     const input = event.target as HTMLInputElement;
@@ -120,7 +119,7 @@
     } else {
       // 임시 확인 코드
       user.value.nickname = nickname.value,
-      user.value.regcode_id = mylocation.value,
+      // user.value.regcode_id = mylocation.value,
       user.value.introduction = introduction.value,
       user.value.profile_url = imageUrl.value,
     // // axios 요청
