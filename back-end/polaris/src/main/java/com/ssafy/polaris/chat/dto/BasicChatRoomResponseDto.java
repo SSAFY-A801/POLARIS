@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 public class BasicChatRoomResponseDto {
+	private Long chatRoomId;
 	private Long receiverId;
 	private String nickname;
 	private String profileUrl;

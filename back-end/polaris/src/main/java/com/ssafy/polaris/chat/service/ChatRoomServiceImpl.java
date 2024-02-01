@@ -5,6 +5,7 @@ import java.util.List;
 import com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateRequestDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateResponseDto;
+import com.ssafy.polaris.chat.dto.ChatRoomListResponseDto;
 import com.ssafy.polaris.chat.dto.TradeMapper;
 import com.ssafy.polaris.trade.domain.Trade;
 import org.springframework.stereotype.Service;
@@ -39,9 +40,9 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	 * @return 사용자의 채팅 목록
 	 */
 	@Override
-	public List<BasicChatRoomResponseDto> getChatRoomList(Long senderId) {
+	public ChatRoomListResponseDto getChatRoomList(Long senderId) {
 		System.out.println("get chat room list - service ");
-
-		return tradeRepository.getChatRoomList(senderId);
+		List<BasicChatRoomResponseDto> basicChatRoomResponseDtoList = tradeRepository.getChatRoomList(senderId);
+		return new ChatRoomListResponseDto(senderId, basicChatRoomResponseDtoList);
 	}
 }

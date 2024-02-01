@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum StatusCode {
 
 	// 200 OK : 성공
-	SUCCESS_VIEW(200, "거래 도서 목록 조회 성공");
+	SUCCESS_VIEW(200, "거래 도서 목록 조회 성공"),
+	SUCCESS_COMPLETE_TRADE(200, "거래가 완료되었습니다.");
 
 	// SUCCESS_READ_USER(200, "회원 정보 조회 성공"),
 	// SUCCESS_UPDATE_USER(200, "회원 정보 수정 성공"),
