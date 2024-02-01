@@ -5,7 +5,8 @@ import axios from 'axios';
 export interface Searchbook  {
   isbn: string,
   title: string,
-  bookDescription: string,
+  // 설정 안한 경우 빈 문자열(string)
+  bookDescription: string|null,
   pubDate : string,
   cover: string,
   publisher : string,
@@ -13,9 +14,9 @@ export interface Searchbook  {
   price_standard: number,
   isOpened?: number,
   isOwned?: number,
-  userBooktradeType?: string,
-  seriesId?: number,
-  seriesName?: string,
+  userBooktradeType?: string|null,
+  seriesId?: number|null,
+  seriesName?: string|null,
 }
 
 export interface Book extends Searchbook  {
@@ -45,8 +46,6 @@ export type User = {
 
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
-  const Aladin_API_URL = '/api/ItemSearch.aspx'
-  const TTBKey = 'ttbkimsw28261657004'
   
   
   // ProfilePage
@@ -82,6 +81,8 @@ export const profileCounterStore = defineStore('counter', () => {
   }
   const searchbookLists = ref<Searchbook[]>([]);
   const bookCartList = ref<Searchbook[]>([])
+  const Aladin_API_URL = '/api/ItemSearch.aspx'
+  const TTBKey = 'ttbkimsw28261657004'
   
   const searchAPIbookList = (Query:string, searchCondition: string|null) => {
     if (Query == ""){
@@ -133,27 +134,43 @@ export const profileCounterStore = defineStore('counter', () => {
   
   // MyLibraryPage
   
-  const BACK_API_URL = 'http://i10a801.p.ssafy.io:8082'
-  const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoamhAZ21haWwuY29tIiwiYXV0aCI6IkFVVEhPUklUWSIsImlkIjo4LCJlbWFpbCI6ImhqaEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iu2CueynhO2VmCIsImV4cCI6MTcyNDY4Nzg5NH0.RGSg_mX4rSNrHAIIBkfHg1AowDKwyAmzhnk2b7X8xaE'
+  // const BACK_API_URL = 'http://i10a801.p.ssafy.io:8082'
+  const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGE0QGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTYsImVtYWlsIjoia2luZ2ppbmhhNEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuPme2DhOu2iOyjvOuoueq5gOuvuOyEnCIsImV4cCI6MTcyNDc1MzQ0NX0.BPYiE7fRj2n1_fssmIFJsgYdj5yTYYGcv5yTmZ8jv20'
   const deleteBookList = ref<Book[]>([])
   const bookSearchResultList = ref([]);
   const mybookLists = ref<Book[]>([]);
-  const getMybookList = () => {
-    axios({
-        headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoamhAZ21haWwuY29tIiwiYXV0aCI6IkFVVEhPUklUWSIsImlkIjo4LCJlbWFpbCI6ImhqaEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iu2CueynhO2VmCIsImV4cCI6MTcyNDY4Nzg5NH0.RGSg_mX4rSNrHAIIBkfHg1AowDKwyAmzhnk2b7X8xaE',
-        },
-          method: 'get',
-          url: 'backend/profile/1',
-        })
-        .then((response) => {
-          console.log("response 결과:")
-          console.log(response.data)
+
+const getMybookList = ()=> {
+  axios({
+    headers: {
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGEyQGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTQsImVtYWlsIjoia2luZ2ppbmhhMkBnbWFpbC5jb20iLCJleHAiOjE3MjQ2ODc5MjJ9.lzyGKu9Vgq3aBItSvODOKmRzE59WrRwx-win-v4uHKI'
+    },
+      method: 'get',
+      url: '/another-api/book/1/library',
+    })  
+  .then((response) => {
+    const res = response.data
+    mybookLists.value = res.data['books']
     })
-    .catch((error) => {
-      console.log(error)
+    .catch((error)=> {
+      console.error(error)
     })
-  }
+}
+
+  // const getMybookList = () => {
+  //   axios.get('/another-api/profile/1',{
+  //     headers: {
+  //       Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGE0QGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTYsImVtYWlsIjoia2luZ2ppbmhhNEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuPme2DhOu2iOyjvOuoueq5gOuvuOyEnCIsImV4cCI6MTcyNDc1MzQ0NX0.BPYiE7fRj2n1_fssmIFJsgYdj5yTYYGcv5yTmZ8jv20',
+  //     },
+  //   })
+  //       .then((response) => {
+  //         console.log("response 결과:")
+  //         console.log(response.data)
+  //   })
+  //   .catch((error) => {
+  //     console.log(error)
+  //   })
+  // }
   const filterResult = mybookLists.value
 
 
@@ -164,7 +181,7 @@ export const profileCounterStore = defineStore('counter', () => {
     deletebuttonState.value = !deletebuttonState.value
   }
   return { 
-    user, BACK_API_URL,
+    user, 
     searchAPIbookList,
     getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }
 },{persist: true})

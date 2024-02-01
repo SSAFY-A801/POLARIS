@@ -13,10 +13,17 @@
       class="container"
       :class="{'pointer-events-none cursor-not-allowed': deleteBooks}">
       <div class="flex justify-center py-2 rounded-lg">
-        <div>
+        <div v-if="bookinfo.cover">
           <img
               alt="Home"
               :src="bookinfo.cover"
+              class="rounded-md object-cover"
+          >
+        </div>
+        <div v-else>
+          <img
+              alt="Home"
+              src="@\assets\book-image.jpg"
               class="rounded-md object-cover"
           >
         </div>

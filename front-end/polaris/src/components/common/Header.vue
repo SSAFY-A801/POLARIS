@@ -1,11 +1,8 @@
 <template>
-    
-<div>
     <nav class="bg-maintheme1 fixed top-0 w-full">
         <div class="px-12 mx-0 ">
             <div class="flex items-center justify-between h-24">
                 <div class=" flex items-center w-full h-24">
-
                     <a class="flex-shrink-0" href="/">
                         <img class="w-8 h-8" src="" alt="Workflow"/>
                     </a>
@@ -31,8 +28,6 @@
                     <div class="ml-auto">
                         <router-link :to="{name: 'login'}" v-if="!userToken" class="text-white mr-5">로그인</router-link>
                         <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-white">회원가입</router-link>
-                        <router-link :to="{name: 'profilePage'}" v-if="userToken"  class="text-white">프로필</router-link>
-                        <button v-if="userToken" @click="logout"  class="text-white bg-transparent border-none outline-none focus:outline-none cursor-pointer">로그아웃</button>
                     </div>
                     
                 </div>
@@ -49,8 +44,6 @@
             </div>
         </div>
     </nav>
-</div>
-
 </template>
 
 <script setup lang="ts">

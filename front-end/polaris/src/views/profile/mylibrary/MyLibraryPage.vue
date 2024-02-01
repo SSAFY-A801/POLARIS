@@ -73,6 +73,7 @@ const booksearch = ref(false)
 
 const mybookLists = ref<Book[]>(store.mybookLists)
 const mybookList = computed(()=> {
+  console.log(mybookLists.value)
   return mybookLists.value
 })
 
@@ -159,6 +160,7 @@ const deleteState = computed(() => {
 
 onMounted(()=> {
   selectWatch;
+  store.getMybookList();
 })
 </script>
 

@@ -76,7 +76,7 @@ import { useRouter } from 'vue-router'
 import BookCartList from '@/components/profile/mylibrary/bookregister/BookCartList.vue';
 import BookSearchResultList from '@/components/profile/mylibrary/bookregister/BookSearchResultList.vue';
 import { profileCounterStore } from '@/stores/profilecounter';
-import  { Book }  from '@/stores/profilecounter'
+import type { Book }  from '@/stores/profilecounter'
 
 
 const keyword = ref<string>("")
