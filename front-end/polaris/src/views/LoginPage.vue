@@ -73,6 +73,7 @@ const userLogin = async () => {
   alert('로그인에 성공하였습니다')
   localStorage.setItem('user_token',JSON.stringify(response.data.accessToken))
   router.push({ name: 'home'})
+  console.log(localStorage.getItem('user_token'))
   // localStorage.setItem('user_info' , JSON.stringify(response.userInfo))
   // const localStorageInfo = JSON.parse(localStorage.getItem('userInfo')) localstorage에서 가져올때
   })
