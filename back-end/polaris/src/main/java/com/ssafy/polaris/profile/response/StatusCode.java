@@ -14,6 +14,7 @@ public enum StatusCode {
     SUCCESS_LEAVE_USER(200, "회원 탈퇴 성공"),
     VALID_EMAIL(200, "유효한 이메일입니다."),
     SUCCESS_READ_FOLLOWING_LIST(200, "성공적으로 팔로잉 리스트를 가져왔습니다."),
+    SUCCESS_UNFOLLOW_USER(200, "언팔로우 성공"),
 
     // 201 CREATED : 새로운 리소스 생성
 
@@ -26,7 +27,7 @@ public enum StatusCode {
     FAIL_USER_VIEW(404, "프로필 조회 실패"),
     FAIL_USER_UPDATE(404, "프로필 업데이트 실패"),
     FAIL_READ_FOLLOWING_LIST(404, "팔로잉 리스트 가져오기 실패"),
-    
+    NOT_FOUND_FOLLOWING_USER(404, "언팔로우 실패"),
     FAIL_USER_FOLLOW(404, "유저 팔로우 실패");
     private final int status;
     private final String message;
