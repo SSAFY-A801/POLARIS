@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -19,7 +18,12 @@ export default defineConfig({
         target: "http://www.aladin.co.kr/ttb",
         changeOrigin: true,
       },
+
+      '/backend': {
+        target: 'http://i10a801.p.ssafy.io:8082',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/backend/, ''), // 이 부분이 rewrite 설정
+      },
     },
-  },
-  
+  }, 
 })

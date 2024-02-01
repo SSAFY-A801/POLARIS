@@ -4,7 +4,7 @@
       <img src="@\assets\following-user.jpg" alt="NO IMAGE" class="profile-image">
     </div>
     <div id="following-nickname" class="col-span-3">
-      <div>닉네임</div>
+      <div>{{ user }}</div>
     </div>
     <div id="following-location" class="col-span-4">
       <div>팔로잉 지역</div>
@@ -16,7 +16,9 @@
 </template>
 
 <script setup lang="ts">
-
+  defineProps({
+    user: Number
+  })
 </script>
 
 <style scoped>

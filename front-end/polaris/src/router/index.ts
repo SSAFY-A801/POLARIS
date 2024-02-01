@@ -18,7 +18,6 @@ import PasswordChangePage from '@/views/profile/userinfo/PasswordChangePage.vue'
 import BookRegisterPage from '@/views/profile/mylibrary/BookRegisterPage.vue'
 import MyTradeListPage from '@/views/profile/mytradeinfo/MyTradeListPage.vue'
 import MyExchangeListPage from '@/views/profile/mytradeinfo/MyExchangeListPage.vue'
-import FollowingListPage from '@/views/profile/FollowingListPage.vue'
 import BookDetailPage from '@/views/profile/mylibrary/BookDetailPage.vue'
 
 
@@ -127,12 +126,6 @@ const router = createRouter({
       path: '/profile/exchange-books',
       name: 'MyExchangeListPage',
       component: MyExchangeListPage,
-    },
-    // 팔로잉 목록 확인
-    { 
-      path: '/profile/follow',
-      name: 'FollowingListPage',
-      component: FollowingListPage,
     },
     // 사용자 도서 상세 페이지
     {

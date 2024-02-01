@@ -6,7 +6,7 @@
           <th><font-awesome-icon icon="fa-solid fa-book-open" class="mr-2" />도서 제목</th>
           <th><font-awesome-icon icon="fa-solid fa-user" class="mr-2" />거래 대상</th>
           <th>
-            <!-- <font-awesome-icon icon="fa-solid fa-arrow-right-arrow-left" class="mr-2"/> -->
+            <font-awesome-icon icon="fa-solid fa-arrow-right-arrow-left" class="mr-2"/>
             교환받은 도서</th>
           <th><font-awesome-icon icon="fa-solid fa-calendar-days" class="mr-2"/>날짜</th>
         </tr>
