@@ -53,7 +53,7 @@ const booklistItem = ref<bookListType | null>()
 
 
 onMounted(async () => {
-   await axios.get<bookListType,{data:bookListType}>('/api/ItemList.aspx?ttbkey=ttbkimsw28261657008&Query=aladdin&QueryType=Bestseller&MaxResults=20&start=1&SearchTarget=Book&output=js&Version=20131101')
+   await axios.get<bookListType,{data:bookListType}>('/api/api/ItemList.aspx?ttbkey=ttbkimsw28261657008&Query=aladdin&QueryType=Bestseller&MaxResults=20&start=1&SearchTarget=Book&output=js&Version=20131101')
    .then((data) => 
     console.log(booklistItem.value = data.data)
     )
