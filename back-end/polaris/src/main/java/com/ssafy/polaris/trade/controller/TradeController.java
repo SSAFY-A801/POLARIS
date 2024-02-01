@@ -72,7 +72,7 @@ public class TradeController {
 	}
 
 	/**
-	 * 거래를 취소하거나, 채티방을 나갑니다.
+	 * 거래를 취소하거나, 채팅방을 나갑니다.
 	 * @param chatRoomId
 	 * @return
 	 */
