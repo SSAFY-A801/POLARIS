@@ -38,4 +38,14 @@ public class DefaultResponse<T> {
                         .build()
                 );
     }
+
+    public static <T> ResponseEntity<com.ssafy.polaris.chat.response.DefaultResponse<T>> emptyResponse(HttpStatus httpStatus, com.ssafy.polaris.chat.response.StatusCode statusCode) {
+        return ResponseEntity
+                .status(httpStatus)
+                .body(com.ssafy.polaris.chat.response.DefaultResponse.<T>builder()
+                        .status(statusCode.getStatus())
+                        .message(statusCode.getMessage())
+                        .build()
+                );
+    }
 }
