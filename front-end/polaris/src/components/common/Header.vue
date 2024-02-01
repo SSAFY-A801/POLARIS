@@ -28,6 +28,8 @@
                     <div class="ml-auto">
                         <router-link :to="{name: 'login'}" v-if="!userToken" class="text-white mr-5">로그인</router-link>
                         <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-white">회원가입</router-link>
+                        <router-link :to="{name: 'ProfilePage'}" v-if="userToken"  class="text-white mr-4">프로필</router-link>
+                        <button v-if="userToken" @click="logout"  class="text-white ml-4 bg-transparent border-none outline-none focus:outline-none cursor-pointer">로그아웃</button>
                     </div>
                     
                 </div>
@@ -52,6 +54,9 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 
 const userToken = ref(localStorage.getItem('user_token'))
+// const userToken = ref("Dd")
+console.log(userToken)
+
 const router = useRouter()
 
 
@@ -70,7 +75,7 @@ const logout = async () => {
   }
   })
   .then(function (response) {
-    userToken.value = null
+    // userToken.value = null
     localStorage.removeItem('user_token')
     alert("로그아웃 되었습니다")
     console.log(response.status)
