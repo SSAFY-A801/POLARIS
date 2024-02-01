@@ -2,9 +2,6 @@ package com.ssafy.polaris.email.service;
 
 import java.util.Random;
 
-// import javax.mail.MessagingException;
-// import javax.mail.internet.MimeMessage;
-
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -21,8 +18,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-// import server.email.entity.EmailMessage;
-// import server.user.service.UserService;
 
 @Slf4j
 @Service
