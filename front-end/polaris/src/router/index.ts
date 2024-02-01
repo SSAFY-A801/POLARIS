@@ -6,6 +6,7 @@ import BookSearchPage from '@/views/BookSearchPage.vue'
 import EssayListPage from '@/views/EssayListPage.vue'
 import PromotionListPage from '@/views/PromotionListPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
+import PasswordSearchPage from '@/views/PasswordSearchPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,11 @@ const router = createRouter({
       name: 'profile',
       component: ProfilePage,
     },
+    {//비밀번호 찾기
+      path: '/passwordsearch',
+      name: 'passwordsearch',
+      component: PasswordSearchPage,
+    }
   ]
 })
 

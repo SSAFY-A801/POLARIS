@@ -5,16 +5,18 @@
         <div class="px-12 mx-0 ">
             <div class="flex items-center justify-between h-24">
                 <div class=" flex items-center w-full h-24">
+
                     <a class="flex-shrink-0" href="/">
                         <img class="w-8 h-8" src="" alt="Workflow"/>
                     </a>
-                  
+
                     <div class="flex items-baseline ml-10 space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8">
                         <router-link :to="{name: 'home'}" class="text-white">Home</router-link>
                         <router-link :to="{name: 'booksearch'}" class="text-white">도서 검색</router-link>
                         <router-link :to="{name: 'essaylist'}" class="text-white" >독후감 게시판</router-link>
                         <router-link :to="{name: 'promotionlist'}" class="text-white" >홍보 게시판</router-link>
                     </div>
+
                     <div class='flex items-center justify-center w-1/2 h-24 bg-maintheme1'>
                     <div class="flex w-full mx-10 rounded bg-white">
                         <input class=" w-full border-none bg-transparent px-4 py-1 text-gray-400 outline-none focus:outline-none " type="search" name="search" placeholder="검색어를 입력하세요" />
@@ -25,13 +27,14 @@
                         </button>
                     </div>
                     </div>
+
                     <div class="ml-auto">
-                        <router-link :to="{name: 'login'}" class="text-white mr-5">로그인</router-link>
-                        <router-link :to="{name: 'signup'}" class="text-white">회원가입</router-link>
+                        <router-link :to="{name: 'login'}" v-if="!userToken" class="text-white mr-5">로그인</router-link>
+                        <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-white">회원가입</router-link>
                     </div>
                     
-
                 </div>
+
                 <div class="flex -mr-2 md:hidden">
                     <button class="text-gray-800 dark:text-white hover:text-gray-300 inline-flex items-center justify-center p-2 rounded-md focus:outline-none">
                         <svg width="20" height="20" fill="currentColor" class="w-8 h-8" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
@@ -40,6 +43,7 @@
                         </svg>
                     </button>
                 </div>
+
             </div>
         </div>
     </nav>
@@ -48,6 +52,14 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
+const userToken = ref(localStorage.getItem('user_token'))
+
+onMounted(() => {
+    userToken.value = localStorage.getItem('user_token')
+
+})
 
 </script>
 
