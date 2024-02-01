@@ -1,3 +1,4 @@
+
 import './assets/styles/main.css';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
@@ -15,6 +16,7 @@ import { faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCartSh
 
 import App from './App.vue'
 import router from './router'
+import axios from 'axios'
 
 library.add(faTwitter, faComment, faComments, faTrashCan, faCalendarDays,faUser, faImages,
   faXmark, faCircleCheck,faBookOpen, faCartShopping, faUserSecret, faLock, faLocationDot,
@@ -27,9 +29,18 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
 
+app.use(createPinia())
+
+
 app.use(router)
 app.use(pinia)
 
+app.config.globalProperties.axios = axios;    
+
+
 app.component('font-awesome-icon',FontAwesomeIcon)
 // app.use(VueSweetalert2)
+
 app.mount('#app')
+
+

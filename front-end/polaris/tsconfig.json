@@ -8,7 +8,7 @@
     },
     {
       "path": "./tsconfig.app.json"
-    },
+    }
   ],
 
   "compilerOptions": {
@@ -16,11 +16,10 @@
     "module": "CommonJS",
     "noImplicitAny": true,
     "strictNullChecks": true,
-    // require 모듈 설치를 위해서 적음.
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": ["./@types", "./node_modules/@types"],
     "types": [
       "node","vue-sweetalert2"
-    ],
-  },
+    ]
+  }
 
 }
