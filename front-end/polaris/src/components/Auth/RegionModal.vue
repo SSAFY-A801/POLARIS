@@ -72,14 +72,14 @@ const dongList = ref<Region[]>([])
 
 watchEffect(async () => {
   if (selectedSido.value) {
-    const response = await axios.get(`http://i10a801.p.ssafy.io:8082/recode/gugun?sido=${selectedSido.value}`)
+    const response = await axios.get(`http://i10a801.p.ssafy.io:8082/regcode/gugun?sido=${selectedSido.value}`)
     gugunList.value = response.data.data.regcodes
   }
 })
 
 watchEffect(async () => {
   if (selectedGugun.value) {
-    const response = await axios.get(`http://i10a801.p.ssafy.io:8082/recode/dong?sido=${selectedSido.value}&gugun=${selectedGugun.value}`)
+    const response = await axios.get(`http://i10a801.p.ssafy.io:8082/regcode/dong?sido=${selectedSido.value}&gugun=${selectedGugun.value}`)
     dongList.value = response.data.data.regcodes
   }
 })
@@ -93,7 +93,7 @@ watchEffect(() => {
 });
 
 (async () => {
-  const response = await axios.get('http://i10a801.p.ssafy.io:8082/recode/sido')
+  const response = await axios.get('http://i10a801.p.ssafy.io:8082/regcode/sido')
   sidoList.value = response.data.data.regcodes
 })()
 
