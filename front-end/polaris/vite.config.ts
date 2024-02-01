@@ -17,17 +17,12 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': {
+      '/p-api': {
         target: "http://www.aladin.co.kr/ttb",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },
 
-      '/another-api': {
-        target: 'http://i10a801.p.ssafy.io:8082',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/another-api/, ''), // 이 부분이 rewrite 설정
-      },
     },
   }, 
 })
