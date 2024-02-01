@@ -12,17 +12,16 @@ import lombok.Setter;
 @Setter
 @Getter
 @RequiredArgsConstructor
-public class EssayDto {
-	private long id;
-	private User user;
-	private UserBook userBook;
+public class EssayRequestDto {
+	// private long id;
+	// private User user;
+	// private UserBook userBook;
+	private Long userBookId;
 	private String title;
 	private String content;
-	private int hit;
-	// private int scrapAmount;
-	// private int repliesAmount;
+	// private int hit;
 	private String isOpened;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
-	private LocalDateTime deletedAt;
+	// private LocalDateTime createdAt;
+	// private LocalDateTime updatedAt;
+	// private LocalDateTime deletedAt;
 }

@@ -55,6 +55,7 @@ public class Essay extends BaseEntity {
 	@ColumnDefault(value = "0")
 	private int hit;
 
+	// TODO : Enum으로 바꾸는게 어떤지?
 	@NotNull
 	@Column(columnDefinition="CHAR(6)")
 	private String isOpened;
