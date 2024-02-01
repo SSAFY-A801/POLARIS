@@ -6,4 +6,5 @@ public interface TradeService {
 	TradeBookListResponseDto getPurchaseBookList(Long userId);
 	TradeBookListResponseDto getExchangeBookList(Long userId);
 	void completeTrade(Long chatRoomId);
+	void deleteTrade(Long chatRoomId);
 }
