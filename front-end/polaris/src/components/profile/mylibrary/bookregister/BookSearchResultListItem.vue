@@ -21,9 +21,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { profileCounterStore } from '@/stores/profilecounter';
-import type { Book } from '@/stores/profilecounter'
+import type { Searchbook } from '@/stores/profilecounter'
 type SearchBookinfo = {
-  searchResult: Book
+  searchResult: Searchbook
 };
 
 const emit = defineEmits(['showAlert'])
