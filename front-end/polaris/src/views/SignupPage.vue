@@ -21,7 +21,7 @@
             <!-- 이메일 입력받기 -->
             <div class="relative flex">
               <p class="bg-white pt-0 pr-2 pb-0 pl-2 -mt-3 mr-0 mb-0 ml-2 font-medium text-gray-600 absolute">이메일</p>
-              <div class="flex items-center space-x-2 w-full"><input :readonly="isEmailVerifyCodeSend" v-model="emailInput" placeholder="polaris@gmail.com" type="text" class="border placeholder-gray-400 focus:outline-none focus:border-2 focus:border-maintheme1 w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-2 ml-0 text-base block bg-white border-gray-300 rounded-md"/>
+              <div class="flex items-center space-x-2 w-full"><input :readonly="isEmailVerified" v-model="emailInput" placeholder="polaris@gmail.com" type="text" class="border placeholder-gray-400 focus:outline-none focus:border-2 focus:border-maintheme1 w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-2 ml-0 text-base block bg-white border-gray-300 rounded-md"/>
               <button @click.prevent="checkEmail" :disabled="!isValidEmail" id="emailcheck" type="button" class="py-2 px-4 bg-white border border-gray-300 hover:border-2 hover:border-maintheme1 hover:text-maintheme1 text-gray-600 transition ease-in duration-200 text-center text-base font-medium  rounded-lg " >
                   인증
               </button></div> 
