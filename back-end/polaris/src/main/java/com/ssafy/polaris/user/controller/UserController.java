@@ -26,7 +26,9 @@ import com.ssafy.polaris.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("/user")
@@ -109,6 +111,7 @@ public class UserController {
 	@PostMapping("/logout")
 	public ResponseEntity<DefaultResponse<Void>> logout(HttpServletRequest request) {
 		String accessToken = SecurityUtil.getAccessToken(request);
+		log.info("UserController::logout: accessToken = " + accessToken);
 		if (accessToken == null) {
 			return DefaultResponse.toResponseEntity(
 				HttpStatus.UNAUTHORIZED,
