@@ -2,6 +2,7 @@ package com.ssafy.polaris.chat.repository;
 
 import java.util.List;
 
+import com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto;
 import com.ssafy.polaris.trade.domain.Trade;
 import com.ssafy.polaris.trade.domain.TradeStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
