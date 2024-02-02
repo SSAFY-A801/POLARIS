@@ -12,7 +12,6 @@
   import BookCartListItem from './BookCartListItem.vue';
   import { onMounted, ref, computed } from 'vue';
   import { profileCounterStore } from '@/stores/profilecounter';
-  import type { Book } from '@/stores/profilecounter';
   
 
   const store = profileCounterStore();
