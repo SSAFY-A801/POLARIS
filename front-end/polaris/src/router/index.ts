@@ -62,8 +62,8 @@ const router = createRouter({
     },
     // Profile
     {
-      path: '/profile',
-      redirect: '/profile/library',
+      path: '/profile/:id',
+      redirect: '/profile/:id/library',
       name: 'ProfilePage',
       component: ProfilePage,
       children: [
