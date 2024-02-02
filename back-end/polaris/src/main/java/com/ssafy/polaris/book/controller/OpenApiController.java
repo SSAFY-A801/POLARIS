@@ -16,8 +16,6 @@ import java.net.URL;
 @CrossOrigin(origins = "*", maxAge = 3600L)
 @RequestMapping("/api")
 public class OpenApiController {
-    // ItemNewAll101Bookxml
-
     @Value("${aladinApiConfig.serviceKey}")
     private String serviceKey;
 
