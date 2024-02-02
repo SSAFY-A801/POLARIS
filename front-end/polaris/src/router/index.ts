@@ -63,7 +63,8 @@ const router = createRouter({
     // Profile
     {
       path: '/profile/:id',
-      redirect: '/profile/:id/library',
+      redirect: to => {
+        return `/profile/${to.params.id}/library`},
       name: 'ProfilePage',
       component: ProfilePage,
       children: [
@@ -80,7 +81,8 @@ const router = createRouter({
           component: MyFavoritesPage
          },
         { path: 'myarticle',
-          redirect: '/profile/:id/myarticle/myessay',
+          redirect: to => {
+            return `/profile/${to.params.id}/myarticle/myessay`},
           name: 'MyArticlePage', 
           component: MyArticlePage, 
           // 나의독후감, 나의홍보게시글
