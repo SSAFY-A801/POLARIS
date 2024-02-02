@@ -19,9 +19,47 @@ public class OpenApiController {
     @Value("${aladinApiConfig.serviceKey}")
     private String serviceKey;
 
-    @Value("${aladinApiConfig.callBackUrl}")
-    private String callBackUrl;
+    @Value("${aladinApiConfig.bestSellerCallBackUrl}")
+    private String bestSellerCallBackUrl;
 
+    @Value("${aladinApiConfig.searchCallBackUrl}")
+    private String searchCallBackUrl;
+    @GetMapping("/search")
+    public ResponseEntity<String> callSearchType(@RequestParam("query") String query,
+                                                 @RequestParam("queryType") String queryType){
+        HttpURLConnection urlConnection = null;
+        InputStream stream = null;
+        String result = null;
+
+        String urlStr = searchCallBackUrl +
+                "ttbkey=" + serviceKey +
+                "&Query=" + query +
+                "&QueryType=" + queryType +
+                "&MaxResults=" + "20" +
+                "&start=" + "1" +
+                "&SearchTarget=" + "Book" +
+                "&output=" + "js" +
+                "&Version=" + "20131101" +
+                "&Cover=" + "MidBig";
+
+        try {
+            URL url = new URL(urlStr);
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+            stream = getNetworkConnection(urlConnection);
+            result = readStreamToString(stream);
+
+            if (stream != null) stream.close();
+        } catch(IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
     @GetMapping("/bestseller")
     public ResponseEntity<String> callBestSellerApi(){
@@ -29,7 +67,7 @@ public class OpenApiController {
         InputStream stream = null;
         String result = null;
 
-        String urlStr = callBackUrl +
+        String urlStr = bestSellerCallBackUrl +
                 "ttbkey=" + serviceKey +
                 "&QueryType=" + "BestSeller" +
                 "&MaxResults=" + "20" +
