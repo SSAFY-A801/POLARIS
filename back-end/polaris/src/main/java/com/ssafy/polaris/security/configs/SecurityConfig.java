@@ -47,7 +47,8 @@ public class SecurityConfig {
 				configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(authorize ->
 				authorize
-					.anyRequest().permitAll())
+					.requestMatchers("/**").permitAll()
+					.anyRequest().authenticated())
 					// .requestMatchers("/user", "/user/login").permitAll()
 					// .requestMatchers("/user/email_check/**", "/user/nickname_check/**").permitAll()
 					// .requestMatchers("/user/email_cert").permitAll()
