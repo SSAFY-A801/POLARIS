@@ -189,6 +189,7 @@ const sendEmail = async () => {
     }}
 )
 .then(function (response) {
+  alert('이메일로 인증코드가 발송되었습니다.')
   isEmailVerificationInput.value = true
 	// console.log(response.status)
 })
@@ -235,7 +236,7 @@ const checkVerifyCode = async () => {
     }}
 )
 .then(function (response) {
-  alert(response.data.message)
+  // alert('인증이 완료되었습니다.')
   isEmailVerificationInput.value =false
   isEmailVerified.value = true
 	// console.log(response.status)

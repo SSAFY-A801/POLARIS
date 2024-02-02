@@ -63,9 +63,9 @@ const router = useRouter()
 
 watchEffect(() => {
     userToken.value = localStorage.getItem('user_token')
-    console.log(localStorage.getItem('user_token'))
-    console.log("watchEffect is running") 
-    console.log(userToken.value)
+    // console.log(localStorage.getItem('user_token'))
+    // console.log("watchEffect is running") 
+    // console.log(userToken.value)
 
 })
 
