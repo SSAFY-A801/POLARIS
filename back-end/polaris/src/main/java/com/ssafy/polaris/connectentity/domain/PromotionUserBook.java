@@ -1,4 +1,4 @@
-package com.ssafy.polaris.connectentity;
+package com.ssafy.polaris.connectentity.domain;
 
 import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.promotion.domain.Promotion;

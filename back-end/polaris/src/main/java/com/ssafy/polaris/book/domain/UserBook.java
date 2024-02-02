@@ -7,7 +7,7 @@ import java.util.List;
 import com.ssafy.polaris.user.domain.User;
 
 import com.ssafy.polaris.common.BaseEntity;
-import com.ssafy.polaris.connectentity.PromotionUserBook;
+import com.ssafy.polaris.connectentity.domain.PromotionUserBook;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

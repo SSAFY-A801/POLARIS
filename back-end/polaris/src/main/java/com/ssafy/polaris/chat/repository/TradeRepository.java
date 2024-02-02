@@ -10,8 +10,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import jakarta.transaction.Transactional;
-
 public interface TradeRepository extends JpaRepository<Trade, Long> {
 	// 나의 채팅방 목록
 	@Query(value =
