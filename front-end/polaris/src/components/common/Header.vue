@@ -74,7 +74,7 @@ watchEffect(() => {
 const logout = async () => {
     await axios.post('http://i10a801.p.ssafy.io:8082/user/logout', {}, {
     headers: {
-    "Authorization" : `${userToken.value}`,
+    "Authorization" : userToken.value?.replace("\"", ""),
     "Content-Type": "application/json",
   }
   })

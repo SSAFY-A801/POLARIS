@@ -59,7 +59,7 @@ const userPassword = ref('')
 
 const userLogin = async () => {
     if ( userEmail.value && userPassword.value ) {
-    await axios.post('http://i10a801.p.ssafy.io:8082/user/login', 
+    await axios.post('/api/user/login', 
   JSON.stringify({
     email: userEmail.value,
     password: userPassword.value
@@ -71,8 +71,9 @@ const userLogin = async () => {
 )
 .then(function (response) {
   alert('로그인에 성공하였습니다')
+//   console.log(response)
 //   console.log( response.data.data.access)
-  localStorage.setItem('user_token',JSON.stringify(response.data.data.access))
+  localStorage.setItem('user_token',(response.data.data.access))
 //   console.log(localStorage)
   console.log(localStorage.getItem('user_token'))
   router.push({ name: 'home'})
