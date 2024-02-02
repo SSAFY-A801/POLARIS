@@ -1,5 +1,7 @@
 package com.ssafy.polaris.profile.controller;
 
+import com.ssafy.polaris.following.dto.FollowListResponseDto;
+import com.ssafy.polaris.following.dto.FollowRequestDto;
 import com.ssafy.polaris.profile.dto.ProfileRequestDto;
 import com.ssafy.polaris.profile.dto.ProfileResponseDto;
 import com.ssafy.polaris.profile.response.DefaultResponse;
@@ -31,38 +33,59 @@ public class ProfileController {
      * */
     @GetMapping("/{id}")
     public ResponseEntity<DefaultResponse<ProfileResponseDto>> getProfile(@PathVariable("id") Long userId) {
-        ResponseEntity<DefaultResponse<ProfileResponseDto>> retVal = profileService.getProfile(userId);
-
-        System.out.println(retVal.getBody().getData().getNickname());
-        if(retVal == null){
-            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_VIEW, null);
+        ProfileResponseDto profileResponseDto = profileService.getProfile(userId);
+        if(profileResponseDto == null){
+            return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_USER_VIEW);
         }
-
-        return retVal;
+        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_VIEW, profileResponseDto);
     }
 
+    /**
+     * @param userId : user identifier,
+     * @param reqDto :
+     *     String nickname
+     *     Regcode regcode
+     *     String introduction
+     *     String imageUrl
+     * */
     @PatchMapping("/{id}")
-    public ResponseEntity<DefaultResponse<String>> updateProfile(@PathVariable(name="id") Long userId,
+    public ResponseEntity<DefaultResponse<Object>> updateProfile(@PathVariable(name="id") Long userId,
                                                             @RequestBody ProfileRequestDto reqDto){
 
-        ResponseEntity<DefaultResponse<String>> retVal = profileService.updateProfile(userId, reqDto);
+        String retVal = profileService.updateProfile(userId, reqDto);
         System.out.println("update profile hi!!");
         if(retVal == null){
-            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_UPDATE, "");
+            return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_USER_UPDATE);
         }
-
-        return retVal;
+        return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCEESS_UPDATE_USER);
     }
 
-//    @PostMapping("/{id}/follow")
-//    public ResponseEntity<DefaultResponse<String>> followUser(@PathVariable("id") Long userId,
-//                                                              @RequestBody FollowDto data){
-//        ResponseEntity<DefaultResponse<String>> retVal = profileService.followUser(userId, data.getFollowerUserId());
-//        System.out.println("hi follow!");
-//        if(retVal == null){
-//            return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAIL_USER_FOLLOW, "");
-//        }
-//        return retVal;
-//    }
+    @PostMapping("/{id}/follow")
+    public ResponseEntity<DefaultResponse<Object>> followUser(@PathVariable("id") Long userId,
+                                                              @RequestBody FollowRequestDto data){
+        String retVal = profileService.followUser(userId, data.getFollowingId());
+        if(retVal == null){
+            return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_USER_FOLLOW);
+        }
+        return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_FOLLOW_USER);
+    }
 
+    @GetMapping("/{id}/follow")
+    public ResponseEntity<DefaultResponse<FollowListResponseDto>> getFollowingList(@PathVariable("id") Long userId){
+        FollowListResponseDto followingList = profileService.getFollowingList(userId);
+        if(followingList.getFollowings().isEmpty()){
+            return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_READ_FOLLOWING_LIST);
+        }
+        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_READ_FOLLOWING_LIST, followingList);
+    }
+
+    @DeleteMapping("/{id}/unfollow")
+    public ResponseEntity<DefaultResponse<Object>> unfollow(@PathVariable("id") Long userId,
+                                                            @RequestBody FollowRequestDto followRequestDto){
+        int deleteVal = profileService.unfollow(userId, followRequestDto.getFollowingId());
+        if(deleteVal == 0){
+            return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.NOT_FOUND_FOLLOWING_USER);
+        }
+        return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_UNFOLLOW_USER);
+    }
 }

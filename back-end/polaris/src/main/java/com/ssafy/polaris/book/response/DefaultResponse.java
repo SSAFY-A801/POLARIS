@@ -35,4 +35,14 @@ public class DefaultResponse<T> {
                         .build()
                 );
     }
+
+    public static <T> ResponseEntity<DefaultResponse<T>> emptyResponse(HttpStatus httpStatus, StatusCode statusCode) {
+        return ResponseEntity
+                .status(httpStatus)
+                .body(DefaultResponse.<T>builder()
+                        .status(statusCode.getStatus())
+                        .message(statusCode.getMessage())
+                        .build()
+                );
+    }
 }

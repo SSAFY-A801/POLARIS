@@ -1,4 +1,4 @@
-package com.ssafy.polaris.profile.response;
+package com.ssafy.polaris.regcode.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,10 @@ public enum StatusCode {
     VALID_EMAIL(200, "유효한 이메일입니다."),
     SUCCESS_READ_FOLLOWING_LIST(200, "성공적으로 팔로잉 리스트를 가져왔습니다."),
     SUCCESS_UNFOLLOW_USER(200, "언팔로우 성공"),
-
+    SUCCESS_VIEW_SI(200, "시도 조회 성공"),
+    SUCCESS_VIEW_GUNGU(200, "군구 조회 성공"),
+    SUCCESS_VIEW_DONG(200, "동 조회 성공"),
+    
     // 201 CREATED : 새로운 리소스 생성
 
     // 204 NO CONTENT : 성공하였으나, 반환할 값이 없음

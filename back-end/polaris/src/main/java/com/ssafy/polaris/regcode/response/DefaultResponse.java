@@ -1,4 +1,4 @@
-package com.ssafy.polaris.profile.response;
+package com.ssafy.polaris.regcode.response;
 
 import lombok.Builder;
 import lombok.Data;

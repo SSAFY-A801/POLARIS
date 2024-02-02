@@ -23,6 +23,16 @@ public interface UserBookRepository extends JpaRepository<UserBook, String> {
 			"WHERE ub.user.id = :userId")
 	List<UserBookResponseDto> findAllByUserId(@Param("userId") Long userId);
 
+	@Query("SELECT NEW com.ssafy.polaris.book.dto.UserBookResponseDto(ub.id, b.cover, b.title, b.author, b.isbn, b.publisher, " +
+			"b.pubDate, b.bookDescription, ub.userBookDescription, b.priceStandard, ub.userBookPrice, ub.isOpened, ub.isOwned, " +
+			"ub.userBookTradeType, b.seriesId, s.name) " +
+			"FROM UserBook ub " +
+			"LEFT JOIN Book b ON ub.book.isbn = b.isbn " +
+			"LEFT JOIN Series s ON b.seriesId = s.id " +
+			"WHERE ub.user.id = :userId " +
+			"AND ub.book.isbn = :isbn")
+	UserBookResponseDto getUserBook(@Param("userId") Long userId, @Param("isbn") String isbn);
+
 	/**
 	 *
 	 * @param userId

@@ -3,6 +3,7 @@ package com.ssafy.polaris.following.dto;
 import com.ssafy.polaris.following.domain.Follow;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class FollowDto {
-	private Long followerUserId;
-	private List<Follow> followings;
+@NoArgsConstructor
+public class FollowListResponseDto {
+    List<FollowResponseDto> followings;
 }
