@@ -58,18 +58,6 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	// @Bean
-	// CorsConfigurationSource corsConfigurationSource() {
-	// 	CorsConfiguration configuration = new CorsConfiguration();
-	// 	configuration.setAllowedOrigins(Arrays.asList("http://i10a801.p.ssafy.io"));
-	// 	configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","FETCH","DELETE"));
-	// 	// you can configure many allowed CORS headers
-	//
-	// 	UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	// 	source.registerCorsConfiguration("/**", configuration);
-	// 	return source;
-	// }
-
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
