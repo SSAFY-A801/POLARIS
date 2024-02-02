@@ -34,6 +34,7 @@ public class SecurityConfig {
 
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserRepository userRepository;
+	private final CorsConfigurationSource corsConfigurationSource;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,7 +42,7 @@ public class SecurityConfig {
 			.httpBasic(HttpBasicConfigurer::disable)
 			.csrf(CsrfConfigurer::disable)
 			// .cors(Customizer.withDefaults())
-			.cors(Customizer.withDefaults())
+			.cors(cors -> cors.configurationSource(corsConfigurationSource))
 			.sessionManagement(configurer ->
 				configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(authorize ->
