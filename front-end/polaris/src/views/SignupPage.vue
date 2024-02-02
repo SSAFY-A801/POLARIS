@@ -189,6 +189,7 @@ const sendEmail = async () => {
     }}
 )
 .then(function (response) {
+  alert('이메일로 인증코드가 발송되었습니다.')
   isEmailVerificationInput.value = true
 	// console.log(response.status)
 })
@@ -235,7 +236,7 @@ const checkVerifyCode = async () => {
     }}
 )
 .then(function (response) {
-  alert(response.data.message)
+  // alert('인증이 완료되었습니다.')
   isEmailVerificationInput.value =false
   isEmailVerified.value = true
 	// console.log(response.status)
@@ -264,7 +265,7 @@ const submitUserSignup = async () => {
   if (isNicknameVerified.value && isEmailVerified.value && !isPasswordVerified.value && regionInputCode.value) {
   await axios.post('http://i10a801.p.ssafy.io:8082/user', 
   JSON.stringify({
-    id: emailInput.value,
+    email: emailInput.value,
     password: passwordInput.value,
     region : regionInputCode.value,
 		nickname : nicknameInput.value
