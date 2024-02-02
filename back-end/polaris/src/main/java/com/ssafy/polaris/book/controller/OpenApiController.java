@@ -24,8 +24,7 @@ public class OpenApiController {
 
 
     @GetMapping("/bestseller")
-    public ResponseEntity<String> callBestSellerApi(
-    ){
+    public ResponseEntity<String> callBestSellerApi(){
         HttpURLConnection urlConnection = null;
         InputStream stream = null;
         String result = null;
@@ -36,7 +35,7 @@ public class OpenApiController {
                 "&MaxResults=" + "20" +
                 "&start=" + "1" +
                 "&SearchTarget=" + "Book" +
-                "&output=" + "xml" +
+                "&output=" + "js" +
                 "&Version=" + "20131101";
 
         try {
