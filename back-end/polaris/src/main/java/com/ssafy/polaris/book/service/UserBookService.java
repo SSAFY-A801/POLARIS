@@ -1,5 +1,6 @@
 package com.ssafy.polaris.book.service;
 
+import com.ssafy.polaris.book.dto.BookListRequestDto;
 import com.ssafy.polaris.book.dto.BookRequestDto;
 import com.ssafy.polaris.book.dto.UserBookListResponseDto;
 import com.ssafy.polaris.book.dto.UserBookResponseDto;
@@ -9,5 +10,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface UserBookService {
-    String createUserBook(Long userId, BookRequestDto bookRequestDto);
-    List<UserBookResponseDto> getLibrary(Long userId);}
+    void createUserBook(Long userId, BookListRequestDto bookListRequestDto);
+    List<UserBookResponseDto> getLibrary(Long userId);
+    UserBookResponseDto getUserBook(Long userId, String isbn);
+}
+
+
