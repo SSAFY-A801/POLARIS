@@ -22,7 +22,7 @@ public class Book {
 
 	@Column(length = 30000)
 	@NotNull
-	private String description;
+	private String bookDescription;
 
 	@NotNull
 	private LocalDateTime pubDate;

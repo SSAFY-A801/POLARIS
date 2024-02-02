@@ -14,13 +14,14 @@ import java.time.LocalDateTime;
 public class BookRequestDto {
     String isbn;
     String title;
-    String description;
+    String bookDescription;
     LocalDateTime pubDate;
     String cover;
     String publisher;
     String author;
     Integer priceStandard;
     Long seriesId;
+    String seriesName;
     Boolean isOpened;
     Boolean isOwned;
 }

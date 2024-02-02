@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ChatRoomCreateRequestDto {
-	private Long userId;
+	private Long senderId;
 	private Long receiverId;
 	private String tradeType;
 }
