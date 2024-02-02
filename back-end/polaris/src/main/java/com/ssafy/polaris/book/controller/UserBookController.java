@@ -1,6 +1,7 @@
 package com.ssafy.polaris.book.controller;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ssafy.polaris.book.dto.BookListRequestDto;
 import com.ssafy.polaris.book.dto.BookRequestDto;
 import com.ssafy.polaris.book.dto.UserBookListResponseDto;
 import com.ssafy.polaris.book.dto.UserBookResponseDto;
@@ -41,17 +42,34 @@ public class UserBookController {
 
     /**
      * @param userId user identifier
-     * @param bookRequestDto 등록할 도서 정보
+     * @param bookListRequestDto 등록할 도서 리스트 정보
      *
      * @return 빈 문자열을 가진 ResponseEntity
      * */
     // TODO: 사용자 등록 도서 예외 처리 필요
     @PostMapping("/{id}/library")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-    public ResponseEntity<DefaultResponse<String>> createUserBook(
-            @PathVariable("id") Long userId, @RequestBody BookRequestDto bookRequestDto){
-        userBookService.createUserBook(userId, bookRequestDto);
+    public ResponseEntity<DefaultResponse<String>> createUserBooks(
+            @PathVariable("id") Long userId, @RequestBody BookListRequestDto bookListRequestDto){
+        userBookService.createUserBook(userId, bookListRequestDto);
         return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_CREATE_USER_BOOK);
+    }
+
+    @GetMapping("/{id}/library/{isbn}")
+    public ResponseEntity<DefaultResponse<UserBookResponseDto>> getUserBook(@PathVariable("id") Long userId,
+                                                                            @PathVariable("isbn") String isbn){
+        UserBookResponseDto userBookResponseDto = userBookService.getUserBook(userId, isbn);
+
+        if(userBookResponseDto == null){
+            return DefaultResponse.emptyResponse(
+                    HttpStatus.OK,
+                    StatusCode.FAIL_USER_BOOK_VIEW
+            );
+        }
+        return DefaultResponse.toResponseEntity(
+                HttpStatus.OK,
+                StatusCode.SUCCESS_USER_BOOK_VIEW,
+                userBookResponseDto
+        );
     }
 
 }

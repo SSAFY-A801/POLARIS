@@ -12,8 +12,9 @@ import java.util.List;
 public interface FollowingRepository extends JpaRepository<Follow, Long> {
     @Query("select count(f) from Follow f where f.follower.id = :userId")
     int getFollowingCnt(@Param("userId")Long userId);
-    @Query("select new com.ssafy.polaris.following.dto.FollowResponseDto(f.following.id, u.profileUrl, u.nickname, u.regcode) from Follow f " +
-            "left join User u on f.follower.id = u.id ")
+    @Query("select distinct new com.ssafy.polaris.following.dto.FollowResponseDto(f.following.id, f.following.profileUrl, " +
+            "f.following.nickname, f.following.regcode) from Follow f " +
+            "left join User u on f.follower.id = :userId ")
     List<FollowResponseDto> getFollowingList(@Param("userId") Long userId);
 
     @Modifying
