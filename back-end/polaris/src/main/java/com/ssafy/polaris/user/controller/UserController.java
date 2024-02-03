@@ -74,10 +74,9 @@ public class UserController {
 		boolean isNicknameInUse = userService.nicknameCheck(userJoinRequestDto.getNickname());
 
 		if (isEmailInUse || isNicknameInUse) {
-			return DefaultResponse.toResponseEntity(
+			return DefaultResponse.emptyResponse(
 				HttpStatus.CONFLICT,
-				StatusCode.USER_EMAIL_OR_NICKNAME_CONFLICT,
-				null
+				StatusCode.USER_EMAIL_OR_NICKNAME_CONFLICT
 			);
 		}
 
@@ -118,18 +117,16 @@ public class UserController {
 		String accessToken = SecurityUtil.getAccessToken(request);
 		log.info("UserController::logout: accessToken = " + accessToken);
 		if (accessToken == null) {
-			return DefaultResponse.toResponseEntity(
+			return DefaultResponse.emptyResponse(
 				HttpStatus.UNAUTHORIZED,
-				StatusCode.NO_ACCESS_TOKEN,
-				null
+				StatusCode.NO_ACCESS_TOKEN
 			);
 		}
 		// TODO : 검증이 되면 Redis에 저장되어 있던 Email(key)과 Refresh Token(value)을 삭제한다.
 		// TODO : Access Token을 key “logout” 문자열을 value로 Redis에 저장하여 해당 토큰을 Black List 처리한다.
-		return DefaultResponse.toResponseEntity(
+		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
-			StatusCode.SUCCESS_LOGOUT,
-			null
+			StatusCode.SUCCESS_LOGOUT
 		);
 	}
 
@@ -137,19 +134,17 @@ public class UserController {
 	@DeleteMapping
 	public ResponseEntity<DefaultResponse<Void>> resignation(@AuthenticationPrincipal SecurityUser securityUser) throws Exception {
 		userService.resignation(securityUser.getId());
-		return DefaultResponse.toResponseEntity(
+		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
-			StatusCode.SUCCESS_RESIGNATION,
-			null
+			StatusCode.SUCCESS_RESIGNATION
 		);
 	}
 
 	@PostMapping("/email_cert")
 	public ResponseEntity<DefaultResponse<Void>> emailCertification(@RequestBody Map<String, String> body) {
-		return DefaultResponse.toResponseEntity(
+		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
-			StatusCode.EMAIL_NOT_IN_USE,
-			null
+			StatusCode.EMAIL_NOT_IN_USE
 		);
 
 	}
