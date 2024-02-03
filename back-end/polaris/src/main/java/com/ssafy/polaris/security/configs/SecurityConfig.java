@@ -34,6 +34,7 @@ public class SecurityConfig {
 
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserRepository userRepository;
+	private final CorsConfigurationSource corsConfigurationSource;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,12 +42,13 @@ public class SecurityConfig {
 			.httpBasic(HttpBasicConfigurer::disable)
 			.csrf(CsrfConfigurer::disable)
 			// .cors(Customizer.withDefaults())
-			.cors(Customizer.withDefaults())
+			.cors(cors -> cors.configurationSource(corsConfigurationSource))
 			.sessionManagement(configurer ->
 				configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(authorize ->
 				authorize
-					.anyRequest().permitAll())
+					.requestMatchers("/**").permitAll()
+					.anyRequest().authenticated())
 					// .requestMatchers("/user", "/user/login").permitAll()
 					// .requestMatchers("/user/email_check/**", "/user/nickname_check/**").permitAll()
 					// .requestMatchers("/user/email_cert").permitAll()
@@ -58,17 +60,16 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	// @Bean
-	// CorsConfigurationSource corsConfigurationSource() {
-	// 	CorsConfiguration configuration = new CorsConfiguration();
-	// 	configuration.setAllowedOrigins(Arrays.asList("http://i10a801.p.ssafy.io"));
-	// 	configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","FETCH","DELETE"));
-	// 	// you can configure many allowed CORS headers
-	//
-	// 	UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	// 	source.registerCorsConfiguration("/**", configuration);
-	// 	return source;
-	// }
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("http://i10a801.p.ssafy.io", "http://localhost"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		configuration.setAllowedHeaders(Arrays.asList("*"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 
 
 	@Bean
