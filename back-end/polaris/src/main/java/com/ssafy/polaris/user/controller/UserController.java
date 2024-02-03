@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.polaris.security.SecurityUser;
 import com.ssafy.polaris.security.util.SecurityUtil;
+import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.response.DefaultResponse;
 import com.ssafy.polaris.user.response.StatusCode;
 import com.ssafy.polaris.user.domain.User;
@@ -67,38 +68,41 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<DefaultResponse<UserResponseDto>> join(@RequestBody UserResponseDto userResponseDto) {
+	public ResponseEntity<DefaultResponse<UserResponseDto>> join(@RequestBody UserJoinRequestDto userJoinRequestDto) {
 		// TODO: findUserByEmail, Nickname등을 사용하여 중복된다면 거부
-		boolean isEmailInUse = userService.emailCheck(userResponseDto.getEmail());
-		boolean isNicknameInUse = userService.nicknameCheck(userResponseDto.getNickname());
+		boolean isEmailInUse = userService.emailCheck(userJoinRequestDto.getEmail());
+		boolean isNicknameInUse = userService.nicknameCheck(userJoinRequestDto.getNickname());
 
 		if (isEmailInUse || isNicknameInUse) {
-			return DefaultResponse.toResponseEntity(
+			return DefaultResponse.emptyResponse(
 				HttpStatus.CONFLICT,
-				StatusCode.USER_EMAIL_OR_NICKNAME_CONFLICT,
-				null
+				StatusCode.USER_EMAIL_OR_NICKNAME_CONFLICT
 			);
 		}
 
-		String encodedPassword = passwordEncoder.encode(userResponseDto.getPassword());
-		userResponseDto.setPassword("");
+		String encodedPassword = passwordEncoder.encode(userJoinRequestDto.getPassword());
+		userJoinRequestDto.setPassword("");
 		User user =  User.builder()
-			.email(userResponseDto.getEmail())
+			.email(userJoinRequestDto.getEmail())
 			.password(encodedPassword)
-			.nickname(userResponseDto.getNickname())
-			.regcodeId(userResponseDto.getRegion()).build();
+			.nickname(userJoinRequestDto.getNickname())
+			.regcodeId(userJoinRequestDto.getRegion()).build();
 		userService.join(user);
-		userResponseDto.setId(user.getId());
 
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.CREATED,
 			StatusCode.CREATED_USER,
-			userResponseDto
+			UserResponseDto.builder()
+				.id(user.getId())
+				.email(user.getEmail())
+				.region(user.getRegcodeId())
+				.nickname(user.getNickname())
+				.build()
 		);
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<DefaultResponse<Map>> login(@RequestBody UserLoginRequestDto userLoginRequestDto) throws Exception {
+	public ResponseEntity<DefaultResponse<Map<String, String>>> login(@RequestBody UserLoginRequestDto userLoginRequestDto) throws Exception {
 		Map<String, String> tokenMap = userService.login(userLoginRequestDto);
 		// TODO: "어떤 토큰"을 "어디에 담아서" 반환할 것인지 정해야 한다.
 		return DefaultResponse.toResponseEntity(
@@ -113,18 +117,16 @@ public class UserController {
 		String accessToken = SecurityUtil.getAccessToken(request);
 		log.info("UserController::logout: accessToken = " + accessToken);
 		if (accessToken == null) {
-			return DefaultResponse.toResponseEntity(
+			return DefaultResponse.emptyResponse(
 				HttpStatus.UNAUTHORIZED,
-				StatusCode.NO_ACCESS_TOKEN,
-				null
+				StatusCode.NO_ACCESS_TOKEN
 			);
 		}
 		// TODO : 검증이 되면 Redis에 저장되어 있던 Email(key)과 Refresh Token(value)을 삭제한다.
 		// TODO : Access Token을 key “logout” 문자열을 value로 Redis에 저장하여 해당 토큰을 Black List 처리한다.
-		return DefaultResponse.toResponseEntity(
+		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
-			StatusCode.SUCCESS_LOGOUT,
-			null
+			StatusCode.SUCCESS_LOGOUT
 		);
 	}
 
@@ -132,19 +134,17 @@ public class UserController {
 	@DeleteMapping
 	public ResponseEntity<DefaultResponse<Void>> resignation(@AuthenticationPrincipal SecurityUser securityUser) throws Exception {
 		userService.resignation(securityUser.getId());
-		return DefaultResponse.toResponseEntity(
+		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
-			StatusCode.SUCCESS_RESIGNATION,
-			null
+			StatusCode.SUCCESS_RESIGNATION
 		);
 	}
 
 	@PostMapping("/email_cert")
 	public ResponseEntity<DefaultResponse<Void>> emailCertification(@RequestBody Map<String, String> body) {
-		return DefaultResponse.toResponseEntity(
+		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
-			StatusCode.EMAIL_NOT_IN_USE,
-			null
+			StatusCode.EMAIL_NOT_IN_USE
 		);
 
 	}
