@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.polaris.security.SecurityUser;
 import com.ssafy.polaris.security.util.SecurityUtil;
+import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.response.DefaultResponse;
 import com.ssafy.polaris.user.response.StatusCode;
 import com.ssafy.polaris.user.domain.User;
@@ -67,10 +68,10 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<DefaultResponse<UserResponseDto>> join(@RequestBody UserResponseDto userResponseDto) {
+	public ResponseEntity<DefaultResponse<UserResponseDto>> join(@RequestBody UserJoinRequestDto userJoinRequestDto) {
 		// TODO: findUserByEmail, Nickname등을 사용하여 중복된다면 거부
-		boolean isEmailInUse = userService.emailCheck(userResponseDto.getEmail());
-		boolean isNicknameInUse = userService.nicknameCheck(userResponseDto.getNickname());
+		boolean isEmailInUse = userService.emailCheck(userJoinRequestDto.getEmail());
+		boolean isNicknameInUse = userService.nicknameCheck(userJoinRequestDto.getNickname());
 
 		if (isEmailInUse || isNicknameInUse) {
 			return DefaultResponse.toResponseEntity(
@@ -80,25 +81,29 @@ public class UserController {
 			);
 		}
 
-		String encodedPassword = passwordEncoder.encode(userResponseDto.getPassword());
-		userResponseDto.setPassword("");
+		String encodedPassword = passwordEncoder.encode(userJoinRequestDto.getPassword());
+		userJoinRequestDto.setPassword("");
 		User user =  User.builder()
-			.email(userResponseDto.getEmail())
+			.email(userJoinRequestDto.getEmail())
 			.password(encodedPassword)
-			.nickname(userResponseDto.getNickname())
-			.regcodeId(userResponseDto.getRegion()).build();
+			.nickname(userJoinRequestDto.getNickname())
+			.regcodeId(userJoinRequestDto.getRegion()).build();
 		userService.join(user);
-		userResponseDto.setId(user.getId());
 
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.CREATED,
 			StatusCode.CREATED_USER,
-			userResponseDto
+			UserResponseDto.builder()
+				.id(user.getId())
+				.email(user.getEmail())
+				.region(user.getRegcodeId())
+				.nickname(user.getNickname())
+				.build()
 		);
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<DefaultResponse<Map>> login(@RequestBody UserLoginRequestDto userLoginRequestDto) throws Exception {
+	public ResponseEntity<DefaultResponse<Map<String, String>>> login(@RequestBody UserLoginRequestDto userLoginRequestDto) throws Exception {
 		Map<String, String> tokenMap = userService.login(userLoginRequestDto);
 		// TODO: "어떤 토큰"을 "어디에 담아서" 반환할 것인지 정해야 한다.
 		return DefaultResponse.toResponseEntity(
