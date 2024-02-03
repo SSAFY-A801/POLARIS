@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.book.domain.UserBook;
+import com.ssafy.polaris.essay.dto.EssayRequestDto;
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.comment.domain.Comment;
 
@@ -30,15 +31,18 @@ import jakarta.validation.constraints.NotNull;
 public class Essay extends BaseEntity {
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", updatable = false, insertable = false)
 	private User user;
+
+	@Column(name = "user_id")
+	private Long userId;
 
 	@NotNull
 	@OneToOne
 	@JoinColumn(name = "user_book_id")
 	private UserBook userBook;
 
-	@Column(name = "user_book_id")
+	@Column(name = "user_book_id", updatable = false, insertable = false)
 	private Long userBookId;
 
 	@NotNull
@@ -78,7 +82,13 @@ public class Essay extends BaseEntity {
 		isOpened = "비공개";
 	}
 
-	public void deleteEssay(LocalDateTime now) {
-		setDeletedAt(now);
+	public void updateEssay(EssayRequestDto essayRequestDto) {
+		this.title = essayRequestDto.getTitle();
+		this.content = essayRequestDto.getContent();
+		this.isOpened = essayRequestDto.getIsOpened();
+	}
+
+	public void deleteEssay() {
+		setDeletedAt(LocalDateTime.now());
 	}
 }

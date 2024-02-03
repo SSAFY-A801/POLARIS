@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @RequiredArgsConstructor
 public class EssayRequestDto {
-	// private long id;
+	private long id;
 	// private User user;
 	// private UserBook userBook;
 	private Long userBookId;
