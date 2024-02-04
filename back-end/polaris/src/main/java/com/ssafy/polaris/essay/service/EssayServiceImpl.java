@@ -1,20 +1,20 @@
 package com.ssafy.polaris.essay.service;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.polaris.book.dto.UserBookMapper;
 import com.ssafy.polaris.common.SearchConditions;
 import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.essay.dto.EssayRequestDto;
 import com.ssafy.polaris.essay.dto.EssayResponseDto;
+import com.ssafy.polaris.essay.dto.ScrapDto;
 import com.ssafy.polaris.essay.repository.EssayRepository;
+import com.ssafy.polaris.essay.repository.ScrapRepository;
 import com.ssafy.polaris.security.SecurityUser;
-import com.ssafy.polaris.user.dto.UserResponseDto;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -26,8 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class EssayServiceImpl implements EssayService{
 
 	private final EssayRepository essayRepository;
+	private final ScrapRepository scrapRepository;
 	private final EntityManager em;
-	private final UserBookMapper userBookMapper;
 
 	@Override
 	@Transactional
@@ -126,5 +126,20 @@ public class EssayServiceImpl implements EssayService{
 		return essayResponseDtoList;
 	}
 
+	/*
+	 * 리턴값 true : 추가, false : 삭제
+	 */
+	@Override
+	@Transactional
+	public boolean scrapEssay(Long essayId, SecurityUser securityUser) {
+		Optional<Long> id = scrapRepository.findScrapByEssayIdAndUserID(essayId, securityUser.getId());
+		if (id.isEmpty()) {
+			scrapRepository.saveWithEssayIdAndUserId(essayId, securityUser.getId());
+			return true;
+		} else {
+			scrapRepository.deleteWithEssayIdAndUserId(essayId, securityUser.getId());
+			return false;
+		}
+	}
 
 }

@@ -18,4 +18,6 @@ public interface EssayService {
 	List<EssayResponseDto> getEssayList(SearchConditions searchConditions);
 
 	void updateHit(Long essayId);
+
+	boolean scrapEssay(Long essayId, SecurityUser securityUser);
 }

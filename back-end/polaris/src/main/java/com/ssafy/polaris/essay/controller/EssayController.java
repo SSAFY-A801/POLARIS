@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,13 +66,12 @@ public class EssayController {
 		);
 	}
 
-	// TODO
 	@GetMapping
 	public  ResponseEntity getEssayList(@ModelAttribute SearchConditions searchConditions) {
 		List<EssayResponseDto> essayResponseDtoList = essayService.getEssayList(searchConditions);
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
-			StatusCode.ESSAY_READ_SUCCESS,
+			StatusCode.ESSAY_READ_LIST_SUCCESS,
 			essayResponseDtoList
 		);
 	}
@@ -91,6 +91,20 @@ public class EssayController {
 		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
 			StatusCode.ESSAY_DELETE_SUCCESS
+		);
+	}
+
+	@PutMapping("/{essayId}")
+	public ResponseEntity<DefaultResponse<Void>> scrapEssay(
+		@PathVariable("essayId") Long essayId,
+		@AuthenticationPrincipal SecurityUser securityUser) {
+
+		boolean isScrapped = essayService.scrapEssay(essayId, securityUser);
+		StatusCode returnStatus = isScrapped ? StatusCode.SCRAP_ADD_SUCCESS : StatusCode.SCRAP_REMOVE_SUCCESS;
+
+		return DefaultResponse.emptyResponse(
+			HttpStatus.OK,
+			returnStatus
 		);
 	}
 }
