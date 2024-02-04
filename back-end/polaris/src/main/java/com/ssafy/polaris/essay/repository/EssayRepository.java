@@ -23,9 +23,5 @@ public interface EssayRepository extends JpaRepository<Essay, Long> {
 		+ " left join fetch e.userBook.book "
 		+ "where e.deletedAt is null "
 		+ "	and :id = e.id")
-	// @Query("select e "
-	// 	+ "from Essay e "
-	// 	+ "where e.deletedAt is null "
-	// 	+ "and :id = e.id")
 	Optional<Essay> findJoinedEssayById(@Param("id") Long id);
 }
