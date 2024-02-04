@@ -1,10 +1,6 @@
 package com.ssafy.polaris.book.controller;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ssafy.polaris.book.dto.BookListRequestDto;
-import com.ssafy.polaris.book.dto.BookRequestDto;
-import com.ssafy.polaris.book.dto.UserBookListResponseDto;
-import com.ssafy.polaris.book.dto.UserBookResponseDto;
+import com.ssafy.polaris.book.dto.*;
 import com.ssafy.polaris.book.response.DefaultResponse;
 import com.ssafy.polaris.book.response.StatusCode;
 import com.ssafy.polaris.book.service.UserBookService;
@@ -54,6 +50,11 @@ public class UserBookController {
         return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_CREATE_USER_BOOK);
     }
 
+    /**
+     * @param userId 사용자 id
+     * @param isbn 도서 식별 번호
+     * @return 사용자 도서 상세 정보
+     */
     @GetMapping("/{id}/library/{isbn}")
     public ResponseEntity<DefaultResponse<UserBookResponseDto>> getUserBook(@PathVariable("id") Long userId,
                                                                             @PathVariable("isbn") String isbn){
@@ -71,5 +72,20 @@ public class UserBookController {
                 userBookResponseDto
         );
     }
+
+    /**
+     * @param userId 사용자 id
+     * @param data 변경할 사용자 도서 정보
+     * @return void
+     */
+    @PatchMapping("/{id}/library")
+    public ResponseEntity<DefaultResponse<Void>> updateUserBook(@PathVariable("id") Long userId, @RequestBody UserBookUpdateRequestDto data){
+        int result = userBookService.updateUserBook(userId, data);
+        if(result == 0){ // 만약 변경하지 못했을 경우 ServiceImpl 에서 0을 리턴
+            return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_USER_BOOK_UPDATE);
+        }
+        return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_USER_BOOK_UPDATE);
+    }
+
 
 }
