@@ -1,13 +1,11 @@
 package com.ssafy.polaris.profile.service;
-import com.ssafy.polaris.book.repository.UserBookRepository;
 import com.ssafy.polaris.following.dto.FollowListResponseDto;
+import com.ssafy.polaris.following.dto.FollowRequestDto;
 import com.ssafy.polaris.following.dto.FollowResponseDto;
 import com.ssafy.polaris.profile.dto.ProfileRequestDto;
 import com.ssafy.polaris.profile.dto.ProfileResponseDto;
-import com.ssafy.polaris.profile.response.DefaultResponse;
 import com.ssafy.polaris.following.domain.Follow;
 import com.ssafy.polaris.following.repository.FollowingRepository;
-import com.ssafy.polaris.profile.response.StatusCode;
 import com.ssafy.polaris.regcode.domain.Regcode;
 
 import com.ssafy.polaris.regcode.repository.RegcodeRepository;
@@ -18,8 +16,6 @@ import com.ssafy.polaris.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -104,8 +100,12 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Transactional
-    public Integer unfollow(Long followerId, Long followingId){
-        Integer deleteVal = followingRepository.deleteFollowUser(followerId, followingId);
+    public Integer unfollow(Long followerId, List<FollowRequestDto> followRequestDtos){
+        Integer deleteVal = 0;
+        for(FollowRequestDto followRequestDto : followRequestDtos){
+            deleteVal += followingRepository.deleteFollowUser(followerId, followRequestDto.getFollowingId());
+        }
+
         return deleteVal;
     }
 }
