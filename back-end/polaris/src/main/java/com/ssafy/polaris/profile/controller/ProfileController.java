@@ -1,5 +1,6 @@
 package com.ssafy.polaris.profile.controller;
 
+import com.ssafy.polaris.following.dto.FollowListRequestDto;
 import com.ssafy.polaris.following.dto.FollowListResponseDto;
 import com.ssafy.polaris.following.dto.FollowRequestDto;
 import com.ssafy.polaris.profile.dto.ProfileRequestDto;
@@ -12,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @CrossOrigin
 @RestController
 @RequestMapping("/profile")
@@ -23,7 +22,7 @@ public class ProfileController {
     // TODO: ProfileDto Response 만들 때 status, message, data 들어갈 수 있도록 하기!!
 
     /**
-     * @param userId user 식별용 ID
+     * @param userId 사용자 id
      * @return ProfileDto
      * {
      *   "status": Integer,
@@ -41,15 +40,15 @@ public class ProfileController {
     }
 
     /**
-     * @param userId : user identifier,
-     * @param reqDto :
+     * @param userId 사용자 id,
+     * @param reqDto 업데이트할 사용자 정보
      *     String nickname
      *     Regcode regcode
      *     String introduction
      *     String imageUrl
      * */
     @PatchMapping("/{id}")
-    public ResponseEntity<DefaultResponse<Object>> updateProfile(@PathVariable(name="id") Long userId,
+    public ResponseEntity<DefaultResponse<Void>> updateProfile(@PathVariable(name="id") Long userId,
                                                             @RequestBody ProfileRequestDto reqDto){
 
         String retVal = profileService.updateProfile(userId, reqDto);
@@ -60,9 +59,15 @@ public class ProfileController {
         return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCEESS_UPDATE_USER);
     }
 
+    /**
+     * @param userId 사용자 id
+     * @param data 팔로잉할 사용자 id
+     * @return void
+     */
     @PostMapping("/{id}/follow")
-    public ResponseEntity<DefaultResponse<Object>> followUser(@PathVariable("id") Long userId,
-                                                              @RequestBody FollowRequestDto data){
+    public ResponseEntity<DefaultResponse<Void>> followUser(@PathVariable("id") Long userId,
+                                                               @RequestBody FollowRequestDto data){
+        System.out.println(data.getFollowingId());
         String retVal = profileService.followUser(userId, data.getFollowingId());
         if(retVal == null){
             return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_USER_FOLLOW);
@@ -70,6 +75,10 @@ public class ProfileController {
         return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_FOLLOW_USER);
     }
 
+    /**
+     * @param userId 팔로잉 리스트를 조회할 유저의 id
+     * @return 팔로잉하는 유저의 리스트
+     */
     @GetMapping("/{id}/follow")
     public ResponseEntity<DefaultResponse<FollowListResponseDto>> getFollowingList(@PathVariable("id") Long userId){
         FollowListResponseDto followingList = profileService.getFollowingList(userId);
@@ -79,10 +88,15 @@ public class ProfileController {
         return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_READ_FOLLOWING_LIST, followingList);
     }
 
+    /**
+     * @param userId 언팔로우 작업을 수행할 나의 id
+     * @param data 언팔로우할 유저들을 담고 있는 리스트
+     * @return
+     */
     @DeleteMapping("/{id}/unfollow")
-    public ResponseEntity<DefaultResponse<Object>> unfollow(@PathVariable("id") Long userId,
-                                                            @RequestBody FollowRequestDto followRequestDto){
-        int deleteVal = profileService.unfollow(userId, followRequestDto.getFollowingId());
+    public ResponseEntity<DefaultResponse<Void>> unfollow(@PathVariable("id") Long userId,
+                                                            @RequestBody FollowListRequestDto data){
+        int deleteVal = profileService.unfollow(userId, data.getUnfollowings());
         if(deleteVal == 0){
             return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.NOT_FOUND_FOLLOWING_USER);
         }
