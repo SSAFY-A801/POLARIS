@@ -87,7 +87,7 @@ public class UserBookController {
         return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_USER_BOOK_UPDATE);
     }
 
-    @PatchMapping("/{id}/library/{isbn}")
+    @PutMapping("/{id}/library/{isbn}")
     public ResponseEntity<DefaultResponse<Void>> deleteUserBook(@PathVariable("id") Long userId,
                                                                 @PathVariable("isbn") String isbn){
         int result = userBookService.deleteUserBook(userId, isbn);
