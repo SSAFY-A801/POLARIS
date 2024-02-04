@@ -14,13 +14,13 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class EssayRequestDto {
 	private long id;
-	// private User user;
-	// private UserBook userBook;
-	private Long userBookId;
+	private long userBookId;
 	private String title;
 	private String content;
-	// private int hit;
 	private String isOpened;
+	// private User user;
+	// private UserBook userBook;
+	// private int hit;
 	// private LocalDateTime createdAt;
 	// private LocalDateTime updatedAt;
 	// private LocalDateTime deletedAt;

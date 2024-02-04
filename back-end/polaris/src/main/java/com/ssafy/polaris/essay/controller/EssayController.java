@@ -1,6 +1,7 @@
 package com.ssafy.polaris.essay.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,8 @@ public class EssayController {
 		@RequestBody EssayRequestDto essayRequestDto,
 		@AuthenticationPrincipal SecurityUser securityUser) {
 
-		EssayResponseDto essayResponseDto = essayService.writeEssay(essayRequestDto, securityUser);
+		Long essayId = essayService.writeEssay(essayRequestDto, securityUser);
+		EssayResponseDto essayResponseDto = essayService.getEssay(essayId);
 
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
@@ -54,6 +56,7 @@ public class EssayController {
 	@GetMapping("/{essayId}")
 	public ResponseEntity<DefaultResponse<EssayResponseDto>> getEssay(@PathVariable Long essayId) {
 		EssayResponseDto essayResponseDto = essayService.getEssay(essayId);
+		essayService.updateHit(essayId);
 
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
@@ -62,25 +65,29 @@ public class EssayController {
 		);
 	}
 
+	// TODO
 	@GetMapping
 	public  ResponseEntity getEssayList(@ModelAttribute SearchConditions searchConditions) {
 		List<EssayResponseDto> essayResponseDtoList = essayService.getEssayList(searchConditions);
-		return null;
+		return DefaultResponse.toResponseEntity(
+			HttpStatus.OK,
+			StatusCode.ESSAY_READ_SUCCESS,
+			essayResponseDtoList
+		);
 	}
 
 	@PatchMapping
 	public ResponseEntity<DefaultResponse<EssayResponseDto>> updateEssay(@RequestBody EssayRequestDto essayRequestDto) {
-		EssayResponseDto essayResponseDto = essayService.updateEssay(essayRequestDto);
-		return DefaultResponse.toResponseEntity(
+		essayService.updateEssay(essayRequestDto);
+		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
-			StatusCode.ESSAY_UPDATE_SUCCESS,
-			essayResponseDto
+			StatusCode.ESSAY_UPDATE_SUCCESS
 		);
 	}
 
 	@DeleteMapping
-	public ResponseEntity<DefaultResponse<Void>> deleteEssay(@RequestBody Long essayId) {
-		essayService.deleteEssay(essayId);
+	public ResponseEntity<DefaultResponse<Void>> deleteEssay(@RequestBody EssayRequestDto essayRequestDto) {
+		essayService.deleteEssay(essayRequestDto.getId());
 		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
 			StatusCode.ESSAY_DELETE_SUCCESS

@@ -8,12 +8,14 @@ import com.ssafy.polaris.essay.dto.EssayResponseDto;
 import com.ssafy.polaris.security.SecurityUser;
 
 public interface EssayService {
-	EssayResponseDto writeEssay(EssayRequestDto essay, SecurityUser securityUser);
+	Long writeEssay(EssayRequestDto essay, SecurityUser securityUser);
 
 	EssayResponseDto getEssay(Long essayId);
-	EssayResponseDto updateEssay(EssayRequestDto essayRequestDto);
+	void updateEssay(EssayRequestDto essayRequestDto);
 
 	void deleteEssay(Long essayId);
 
 	List<EssayResponseDto> getEssayList(SearchConditions searchConditions);
+
+	void updateHit(Long essayId);
 }

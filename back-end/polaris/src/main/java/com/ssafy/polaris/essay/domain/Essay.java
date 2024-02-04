@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.FetchType;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -30,7 +31,7 @@ import jakarta.validation.constraints.NotNull;
 @DynamicInsert
 public class Essay extends BaseEntity {
 	@NotNull
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", updatable = false, insertable = false)
 	private User user;
 
