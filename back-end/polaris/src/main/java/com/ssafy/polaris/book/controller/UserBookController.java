@@ -78,7 +78,7 @@ public class UserBookController {
      * @param data 변경할 사용자 도서 정보
      * @return void
      */
-    @PatchMapping("/{id}/library")
+    @PutMapping("/{id}/library")
     public ResponseEntity<DefaultResponse<Void>> updateUserBook(@PathVariable("id") Long userId, @RequestBody UserBookUpdateRequestDto data){
         int result = userBookService.updateUserBook(userId, data);
         if(result == 0){ // 만약 변경하지 못했을 경우 ServiceImpl 에서 0을 리턴
