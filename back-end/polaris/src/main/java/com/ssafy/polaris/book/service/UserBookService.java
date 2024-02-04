@@ -9,6 +9,7 @@ public interface UserBookService {
     List<UserBookResponseDto> getLibrary(Long userId);
     UserBookResponseDto getUserBook(Long userId, String isbn);
     int updateUserBook(Long userId, UserBookUpdateRequestDto data);
+    int deleteUserBook(Long userId, String isbn);
 }
 
 

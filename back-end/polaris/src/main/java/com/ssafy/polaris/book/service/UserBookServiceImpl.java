@@ -10,6 +10,8 @@ import com.ssafy.polaris.series.repository.SeriesRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -53,6 +55,16 @@ public class UserBookServiceImpl implements UserBookService{
             return 0;
         }
         userBook.updateUserBook(data);
+        return 1;
+    }
+
+    @Override
+    public int deleteUserBook(Long userId, String isbn) {
+        UserBook userBook = userBookRepository.getUserBookByIdAndIsbn(userId, isbn);
+        if(userBook == null){
+            return 0;
+        }
+        userBook.deleteUserBook(LocalDateTime.now());
         return 1;
     }
 }

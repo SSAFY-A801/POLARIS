@@ -87,5 +87,14 @@ public class UserBookController {
         return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_USER_BOOK_UPDATE);
     }
 
-
+    @PatchMapping("/{id}/library/{isbn}")
+    public ResponseEntity<DefaultResponse<Void>> deleteUserBook(@PathVariable("id") Long userId,
+                                                                @PathVariable("isbn") String isbn){
+        int result = userBookService.deleteUserBook(userId, isbn);
+        if(result == 0){
+            // TODO: 삭제하려고 하는 책이 이미 삭제가 된 경우라면? 이런 상황은 발생할 수 없는 것인가?
+            return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_USER_BOOK_DELETE);
+        }
+        return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_USER_BOOK_DELETE);
+    }
 }
