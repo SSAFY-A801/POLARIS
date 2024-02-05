@@ -8,6 +8,8 @@ import jakarta.persistence.FetchType;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import com.ssafy.polaris.common.BaseEntity;
 import com.ssafy.polaris.book.domain.UserBook;
@@ -26,10 +28,12 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
-@SuperBuilder
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
+@SQLDelete(sql = "update essay set deleted_at = CURRENT_TIMESTAMP where id = ?")
+@SQLRestriction("deleted_at is NULL")
 public class Essay extends BaseEntity {
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -75,17 +79,10 @@ public class Essay extends BaseEntity {
 		hit += 1;
 	}
 
-	public void setOpened(){
-		isOpened = true;
-	}
-	public void setClosed(){
-		isOpened = false;
-	}
-
 	public void updateEssay(EssayRequestDto essayRequestDto) {
 		this.title = essayRequestDto.getTitle();
 		this.content = essayRequestDto.getContent();
-		this.isOpened = essayRequestDto.isOpened();
+		this.isOpened = essayRequestDto.getIsOpened();
 	}
 
 	public void deleteEssay() {

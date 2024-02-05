@@ -17,5 +17,5 @@ public class EssayRequestDto {
 	private long userBookId;
 	private String title;
 	private String content;
-	private boolean isOpened;
+	private Boolean isOpened;
 }

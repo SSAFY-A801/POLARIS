@@ -24,7 +24,7 @@ public class EssayResponseDto {
 	private String title;
 	private String content;
 	private int hit;
-	private boolean isOpened;
+	private Boolean isOpened;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	private LocalDateTime deletedAt;

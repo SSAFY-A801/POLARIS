@@ -38,7 +38,7 @@ public class EssayServiceImpl implements EssayService{
 			.content(essayRequestDto.getContent())
 			.userId(securityUser.getId())
 			.userBookId(essayRequestDto.getUserBookId())
-			.isOpened(essayRequestDto.isOpened())
+			.isOpened(essayRequestDto.getIsOpened())
 			.build());
 		return essay.getId();
 	}
@@ -50,10 +50,8 @@ public class EssayServiceImpl implements EssayService{
 		Essay essay = essayRepository.findJoinedEssayById(essayId)
 			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
 
-		boolean viewable = !essay.isOpened();
-
 		// TODO: deletedat 없앤다.
-		if (essay.getDeletedAt() != null || viewable) {
+		if (essay.getDeletedAt() != null || !essay.isOpened()) {
 			throw new RuntimeException("해당 게시글이 존재하지 않습니다.");
 		}
 
@@ -84,10 +82,9 @@ public class EssayServiceImpl implements EssayService{
 	@Override
 	@Transactional
 	public void deleteEssay(Long essayId) {
-		Essay essay = essayRepository.findById(essayId)
-			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
-
-		essay.deleteEssay();
+		// Essay essay = essayRepository.findById(essayId)
+		// 	.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
+		essayRepository.deleteById(essayId);
 	}
 
 	@Override
