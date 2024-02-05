@@ -1,6 +1,6 @@
 <template>
     <!-- 모달 제작이 되면 페이지를 없애고 다 모달로 옮길 예정-->
-  <div id="register-book"  class="container md:mx-auto min-w-[600px] mt-8 max-w-6xl border rounded-xl h-[600px]">
+  <div id="register-book"  class="container md:mx-auto min-w-[600px] mt-28 max-w-6xl border rounded-xl h-[600px]">
     <!-- header -->
     <div class="flex justify-between rounded-t-lg bg-maintheme1 p-2 h-[50px]">
       <div class="text-white text-xl ml-3">
@@ -59,7 +59,7 @@
             <!-- 담기완료 button 행 -->
             <div class="w-full border-t-2 border-gray-200 absolute bottom-0 right-0">
               <div class="flex justify-end m-1">
-                <button @click.prevent="submitForm" type="submit" id="complete-register-book-button">
+                <button @click="addAPIbook(bookcartList)" type="button" id="complete-register-book-button">
                   등록
                   <font-awesome-icon icon="fa-solid fa-circle-check" style="color: white;"/>
                 </button>
@@ -72,17 +72,19 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
+import axios from 'axios';
 import { useRouter } from 'vue-router'
 import BookCartList from '@/components/profile/mylibrary/bookregister/BookCartList.vue';
 import BookSearchResultList from '@/components/profile/mylibrary/bookregister/BookSearchResultList.vue';
 import { profileCounterStore } from '@/stores/profilecounter';
-import type { Book }  from '@/stores/profilecounter'
+import type { Searchbook }  from '@/stores/profilecounter'
 
 
 const keyword = ref<string>("")
 const filter = ref<string|null>(null)
 const store = profileCounterStore();
 const router = useRouter()
+const BACK_API_URL = store.BACK_API_URL
 
 const searchbookLists = computed(()=> {
   return store.searchbookLists
@@ -104,30 +106,36 @@ const cancelRegister = () => {
   router.push({name: "MyLibraryPage"})
 }
 
-const mybookLists = computed(()=> {
-  return store.mybookLists
-})
 
 
 const mybookCartList = computed(()=> {
   return store.bookCartList
 })
 
-const submitForm = () => {
-  console.log('현재 내 서재 목록: ', mybookLists.value)
-  if (mybookCartList.value.length){
-    mybookCartList.value.forEach((bookcart)=> {
-      const userbook: Book = {
-        ...bookcart,
-        userBookDescription : "",
-        userBookPrice: null,
+const addAPIbook = (bookcartList:Searchbook[]) => {
+  console.log('현재 내 장바구니 목록: ', bookcartList)
+  if (bookcartList.length){
+    console.log("장바구니 목록이 존재함.")
+    axios({
+      headers: {
+        Authorization: `${store.token}`,
+        "Content-Type": "application/json",
+      },
+      method: 'post',
+      url: `${BACK_API_URL}/book/1/library`,
+      data: {
+        "books": bookcartList
       }
-      mybookLists.value.push(userbook)
+    })
+    .then((response)=>{
+      console.log(response.data)
+    })
+    .catch((error)=>{
+      console.error(error)
     })
     store.searchbookLists = []
     store.bookCartList = []
     keyword.value = ""
-  
     router.push({name: "MyLibraryPage"})
   } else {
     alert("담긴 도서가 존재하지 않습니다.")

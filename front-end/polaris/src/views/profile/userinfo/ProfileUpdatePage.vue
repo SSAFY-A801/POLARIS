@@ -1,6 +1,7 @@
 <template>
-  <div class="container mx-auto mt-8 max-w-6xl bg-backgroundgray">
-    <h1 class="text-2xl font-bold">프로필 수정</h1>
+  <RegionModal v-if="isRegionModalOpen" @close="closeRegionModal" @confirm="updateRegion"/> 
+  <div class="container mx-auto mt-28 max-w-6xl bg-backgroundgray">
+    <h1 class="text-2xl font-bold p-4 m-4">프로필 수정</h1>
     <div class="flex justify-end">
       <!-- 제출 및 취소 buttons -->
       <button id="submit-button" @click="updateProfile" type="button">
@@ -38,15 +39,15 @@
           비밀번호 변경
         </button>
         <div class="font-semibold mt-8">닉네임</div>
-        <input type="nickname" v-model="nickname" id="Usernickname" placeholder="user.nickname" class="w-64 mt-2 mb-4 rounded-md border h-8"/>
+        <input type="nickname" v-model="nickname" id="Usernickname"  class="w-64 mt-2 mb-4 rounded-md border h-8"/>
         <div class="font-semibold">나의 위치</div>
-        <input readonly v-model="mylocation" type="location" id="UserLocation" placeholder="user.regcode_id" class="mt-2 mb-4 w-64 rounded-md border h-8"/>
-        <button type="button" id="update-loc-button">
+        <input readonly v-model="mylocation" type="location" id="UserLocation" class="mt-2 mb-4 w-64 rounded-md border h-8"/>
+        <button @click="openRegionModal" type="button" id="update-loc-button">
           <font-awesome-icon icon="fa-solid fa-location-dot" />
           위치찾기
         </button>
         <div class="font-semibold">ABOUT ME</div>
-        <div class="mb-4">
+        <div class="mb-4 pe-4">
           <label for="OrderNotes" class="sr-only">Order notes</label>
           <div
           class=" rounded-lg border border-gray-200 shadow-sm"
@@ -56,7 +57,6 @@
           v-model="introduction"
           class="mt-2 w-full resize-none sm:text-sm"
           rows="5"
-          :placeholder="user.introduction"
           ></textarea>
         </div>
       </div>
@@ -71,14 +71,40 @@
   import axios from 'axios';
   import { useRouter } from 'vue-router'
   import { profileCounterStore } from '@/stores/profilecounter';
+  import RegionModal from '@/components/Auth/RegionModal.vue';
 
   const store = profileCounterStore();
   const router = useRouter();
-  const user = ref(store.user)
+  const user = ref(store.profileUser)
   const imageUrl = ref<string | null>(user.value.profileUrl);
-  const nickname = ref("")
-  const mylocation = ref("")
-  const introduction = ref("")
+  const nickname = ref(user.value.nickname)
+  const mylocation = ref(`${user.value.regcode.si} ${user.value.regcode.gungu} ${user.value.regcode.dong}`)
+  const introduction = ref(`${user.value.introduction}`)
+  const locModal = ref(false)
+  const regionInputName = ref('')
+  const regionInputCode = ref('')
+  const isRegionModalOpen = ref(false)
+  console.log(regionInputName.value)
+
+  const openRegionModal = () => {
+    isRegionModalOpen.value = true
+  }
+
+  const closeRegionModal = () => {
+    isRegionModalOpen.value = false
+  }
+
+  const updateRegion = (newRegion: {name: string, code: string}) => {
+    regionInputName.value = newRegion.name
+    regionInputCode.value = newRegion.code
+    // console.log("메인페이지:", regionInputName.value)
+    closeRegionModal()
+  }
+
+
+  const clickLocbutton = () => {
+    locModal.value = true
+  }
 
   const handleFileChange = (event: Event) => {
     const input = event.target as HTMLInputElement;
@@ -193,7 +219,7 @@ input {
 }
 
 #cancel-button {
-  @apply border border-gray-300 text-maintheme1 m-2 hover:bg-slate-200 m-[3px] px-2.5 py-[5px] rounded-[10px] border-solid 
+  @apply font-bold bg-white border border-maintheme1 text-maintheme1 m-2 hover:bg-slate-200 m-[3px] px-2.5 py-[5px] rounded-[10px] border-solid 
 }
 
 </style>

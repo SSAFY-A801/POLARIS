@@ -1,5 +1,6 @@
 <template>
-  <div class=" bg-gray-100 inline-block rounded-lg px-4 py-1 shadow-sm shadow-stone-400 hover:bg-gray-200">
+  <div 
+  class="bg-gray-100 inline-block rounded-lg px-4 py-1 shadow-sm shadow-stone-400 hover:bg-gray-200">
     <!-- checkbox -->
     <div v-if="deleteBooks == true" class="flex">
       <input id="default-checkbox" 
@@ -36,13 +37,13 @@
         </div>
         <div id="isOpened" class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2   bg-maintheme2">
           <p v-if="bookinfo.isOpened" class="p-1.5 text-lightgray">공개</p>
-          <p v-else  class="p-1.5 text-lightgray">미공개</p>
+          <p v-else  class="p-1.5 text-lightgray">비공개</p>
         </div>
         <!-- 보유 & 공개 일때만 거래 여부 출력 -->
-        <div v-if="bookinfo.userBooktradeType =='PURCHASE'" id="trade"  class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2  bg-red-600"  >
+        <div v-if="bookinfo.userBookTradeType =='PURCHASE'" id="trade"  class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2  bg-red-600"  >
           <p  class="p-1.5 text-lightgray">판매</p>
         </div>
-        <div v-else-if="bookinfo.userBooktradeType == 'EXCHANGE'" id="exchange"   class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2 bg-yellow-500">
+        <div v-else-if="bookinfo.userBookTradeType == 'EXCHANGE'" id="exchange"   class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2 bg-yellow-500">
           <p  class="p-1.5 text-lightgray">교환</p>
         </div>
         <div v-else id="undefined"   class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2 bg-gray-500">
@@ -99,7 +100,9 @@ const emitDeleteState = () => {
 
 const showMybookdetail = () => {
   // params 추가
-  router.push({name: 'BookDetailPage', params: { id: bookinfo.id, isbn: bookinfo.isbn} })
+  // router.push({name: 'BookDetailPage', params: { id: bookinfo.id, isbn: bookinfo.isbn} })
+  router.push({name: 'BookDetailPage', params: { id: 1, isbn: bookinfo.isbn} })
+
 }
 
 watch(deleteBooks,(newValue) => {
