@@ -22,10 +22,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
@@ -60,10 +61,8 @@ public class Essay extends BaseEntity {
 	@ColumnDefault(value = "0")
 	private int hit;
 
-	// TODO : Enum으로 바꾸는게 어떤지?
 	@NotNull
-	@Column(columnDefinition="CHAR(6)")
-	private String isOpened;
+	private boolean isOpened;
 
 	@OneToMany(mappedBy = "essay")
 	private List<Comment> comments = new ArrayList<>();
@@ -77,16 +76,16 @@ public class Essay extends BaseEntity {
 	}
 
 	public void setOpened(){
-		isOpened = "공개";
+		isOpened = true;
 	}
 	public void setClosed(){
-		isOpened = "비공개";
+		isOpened = false;
 	}
 
 	public void updateEssay(EssayRequestDto essayRequestDto) {
 		this.title = essayRequestDto.getTitle();
 		this.content = essayRequestDto.getContent();
-		this.isOpened = essayRequestDto.getIsOpened();
+		this.isOpened = essayRequestDto.isOpened();
 	}
 
 	public void deleteEssay() {

@@ -24,7 +24,7 @@ public class EssayResponseDto {
 	private String title;
 	private String content;
 	private int hit;
-	private String isOpened;
+	private boolean isOpened;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	private LocalDateTime deletedAt;
@@ -44,11 +44,12 @@ public class EssayResponseDto {
 		this.title = essay.getTitle();
 		this.content = essay.getTitle();
 		this.hit = essay.getHit();
-		this.isOpened = essay.getIsOpened();
+		this.isOpened = essay.isOpened();
 		this.createdAt = essay.getCreatedAt();
 		this.updatedAt = essay.getUpdatedAt();
 		this.deletedAt = essay.getDeletedAt();
 		// TODO : 없는 값으로 만들 수 없도록 만들면 null 일 수 없다
+		// test용. join된 데이터가 없는 경우를 처리해주기 위함
 		if (essay.getUserBook() != null) {
 			UserBook userBook = essay.getUserBook();
 			Book book = userBook.getBook();

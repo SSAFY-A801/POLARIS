@@ -17,11 +17,5 @@ public class EssayRequestDto {
 	private long userBookId;
 	private String title;
 	private String content;
-	private String isOpened;
-	// private User user;
-	// private UserBook userBook;
-	// private int hit;
-	// private LocalDateTime createdAt;
-	// private LocalDateTime updatedAt;
-	// private LocalDateTime deletedAt;
+	private boolean isOpened;
 }
