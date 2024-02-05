@@ -19,7 +19,7 @@ import BookRegisterPage from '@/views/profile/mylibrary/BookRegisterPage.vue'
 import MyTradeListPage from '@/views/profile/mytradeinfo/MyTradeListPage.vue'
 import MyExchangeListPage from '@/views/profile/mytradeinfo/MyExchangeListPage.vue'
 import BookDetailPage from '@/views/profile/mylibrary/BookDetailPage.vue'
-
+import BestsellerdetailPage from '@/components/main/BestsellerdetailPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,6 +59,12 @@ const router = createRouter({
       path: '/passwordsearch',
       name: 'passwordsearch',
       component: PasswordSearchPage,
+    },
+    {//베스트셀러 상세 페이지
+      path: '/bestseller/:id',
+      name: 'bestsellerdatail',
+      component: BestsellerdetailPage,
+      props: true
     },
     // Profile
     {
