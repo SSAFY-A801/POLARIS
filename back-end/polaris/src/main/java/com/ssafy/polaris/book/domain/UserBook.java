@@ -25,10 +25,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE user_book SET deleted_at = CURRENT_TIMESTAMP where id = ?")
