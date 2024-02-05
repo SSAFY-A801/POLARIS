@@ -108,7 +108,7 @@ export const profileCounterStore = defineStore('counter', () => {
   // MyPromotionPage
   
   // BookRegisterPage
-  const BACK_API_URL = 'http://i10a801.p.ssafy.io:8082'
+  const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
   
   type searchType = {
     [key: string]: string;
