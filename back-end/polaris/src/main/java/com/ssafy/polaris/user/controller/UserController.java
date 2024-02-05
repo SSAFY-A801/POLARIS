@@ -67,6 +67,7 @@ public class UserController {
 		);
 	}
 
+	// TODO : 컨트롤러에 작업이 너무 많다. 서비스 쪽으로 옮길수 있도록 리팩토링
 	@PostMapping
 	public ResponseEntity<DefaultResponse<UserResponseDto>> join(@RequestBody UserJoinRequestDto userJoinRequestDto) {
 		// TODO: findUserByEmail, Nickname등을 사용하여 중복된다면 거부
