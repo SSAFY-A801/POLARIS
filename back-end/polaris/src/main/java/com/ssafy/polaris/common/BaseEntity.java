@@ -2,6 +2,7 @@ package com.ssafy.polaris.common;
 
 import java.time.LocalDateTime;
 
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,6 +21,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @MappedSuperclass
+@NoArgsConstructor
 public class BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
