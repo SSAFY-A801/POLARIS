@@ -7,10 +7,12 @@ import com.ssafy.polaris.chat.response.DefaultResponse;
 import com.ssafy.polaris.chat.response.StatusCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.polaris.chat.service.ChatRoomService;
+import com.ssafy.polaris.security.SecurityUser;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,12 +53,12 @@ public class ChatRoomController {
 	 * @return 사용자 채팅방 목록
 	 */
 	@GetMapping
-	public ResponseEntity<DefaultResponse<ChatRoomListResponseDto>> getChatRoomList(){
+	public ResponseEntity<DefaultResponse<ChatRoomListResponseDto>> getChatRoomList(@AuthenticationPrincipal SecurityUser securityUser){
 		System.out.println("controller - get chat room list");
 		// 사용자 id가 필요하고, 사용자가 참여중인 채팅방 리스트를 반환한다.
 
 		// TODO: 사용자 ID 빼내기
-		Long senderId = 5L;
+		Long senderId = securityUser.getId();
 		// trade의 user id , recevier id 둘다 확인 해줘야한다. 내가 건, 받은 채팅방 모두 보여야 하니까
 
 		ChatRoomListResponseDto chatRoomListResponseDto = chatRoomService.getChatRoomList(senderId);

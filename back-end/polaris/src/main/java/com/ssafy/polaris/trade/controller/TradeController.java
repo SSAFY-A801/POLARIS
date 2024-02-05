@@ -2,6 +2,7 @@ package com.ssafy.polaris.trade.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ssafy.polaris.security.SecurityUser;
 import com.ssafy.polaris.trade.dto.TradeBookListResponseDto;
 import com.ssafy.polaris.trade.dto.TradeBookSelectRequestDto;
 import com.ssafy.polaris.trade.response.DefaultResponse;
@@ -33,9 +35,9 @@ public class TradeController {
 	 * @return
 	 */
 	@GetMapping(path = "/exchange_books")
-	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getExchangeBookList(){
+	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getExchangeBookList(@AuthenticationPrincipal SecurityUser securityUser){
 		// TODO : userId 토큰에서 가져오기
-		Long userId = 1L;
+		Long userId = securityUser.getId();
 
 		TradeBookListResponseDto tradeBookListResponseDto = tradeService.getExchangeBookList(userId);
 		if (tradeBookListResponseDto.getBooks().isEmpty()){
@@ -57,9 +59,9 @@ public class TradeController {
 	 * @return
 	 */
 	@GetMapping(path = "/purchase_books")
-	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getPurchaseBookList(){
+	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getPurchaseBookList(@AuthenticationPrincipal SecurityUser securityUser){
 		// TODO : userId 토큰에서 가져오기
-		Long userId = 1L;
+		Long userId = securityUser.getId();
 
 		TradeBookListResponseDto tradeBookListResponseDto = tradeService.getPurchaseBookList(userId);
 
