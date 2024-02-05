@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -92,8 +93,10 @@ public class JwtTokenProvider {
 			.signWith(key, SignatureAlgorithm.HS256) // 원하는 방식
 			.compact();
 
-		return Map.of("access", SecurityUtil.getTokenPrefix() + " " + accessToken,
-			"refresh", SecurityUtil.getTokenPrefix() + " " + refreshToken);
+		HashMap<String, String> map = new HashMap<>();
+		map.put("access", SecurityUtil.getTokenPrefix() + " " + accessToken);
+		map.put("refresh", SecurityUtil.getTokenPrefix() + " " + refreshToken);
+		return map;
 	}
 
 

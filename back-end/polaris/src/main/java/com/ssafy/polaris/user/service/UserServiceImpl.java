@@ -78,8 +78,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void resignation(Long id) throws Exception {
-        User user = em.find(User.class, id);
-        user.resignation();
+        userRepository.deleteById(id);
     }
 
     @Override
@@ -108,6 +107,11 @@ public class UserServiceImpl implements UserService{
 
         // TODO: 여기에 DTO가 들어가면 안되는가?? Long으로 만든 id를 Authentication은 가지지 않는다...!!
         Map<String, String> tokenMap = jwtTokenProvider.generateToken(user.getId(), user.getNickname(), authentication);
+
+        tokenMap.put("id", Long.toString(user.getId().longValue()));
+        tokenMap.put("email", user.getEmail());
+        tokenMap.put("profileUrl", user.getProfileUrl());
+        tokenMap.put("nickname", user.getNickname());
 
         // TODO: Redis에 넣어주기
 
