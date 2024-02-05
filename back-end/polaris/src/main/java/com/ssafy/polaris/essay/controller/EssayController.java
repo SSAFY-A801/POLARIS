@@ -161,7 +161,6 @@ public class EssayController {
 		);
 	}
 
-
 	/**
 	 * 에세이를 스크랩한다. 토클된다.
 	 * @param essayId Long
@@ -182,6 +181,27 @@ public class EssayController {
 		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
 			returnStatus
+		);
+	}
+
+	/**
+	 * 조회수를 카운트해준다.
+	 * @param essayId Long 에세이 ID
+	 * @return DefaultResponse
+	 * {
+	 *   "status": Integer,
+	 *   "message": String,
+	 *   "data": Integer
+	 * }
+	 * */
+	@GetMapping("/scrap_count/{essayId}")
+	public ResponseEntity<DefaultResponse<Integer>> getScrapCount(@PathVariable Long essayId) {
+		int scrapCount = essayService.getScrapCount(essayId);
+
+		return DefaultResponse.toResponseEntity(
+			HttpStatus.OK,
+			StatusCode.SCRAP_COUNT_SUCCESS,
+			scrapCount
 		);
 	}
 }

@@ -22,6 +22,9 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 	@Query(value = "insert into scrap (essay_id, user_id) values (:essayId, :userId)", nativeQuery = true)
 	void saveWithEssayIdAndUserId(@Param("essayId") Long essayId, @Param("userId") Long userId);
 
+	@Query("select count(*) from Scrap s where s.isDeleted = false and s.essay.id = :essayId")
+	int getScrapCount(@Param("essayId") Long essayId);
+
 	// @Transactional
 	// @Modifying
 	// @Query(value = "delete from scrap where essay_id = :essayId and user_id = :userId", nativeQuery = true)
