@@ -10,6 +10,8 @@ public interface UserBookService {
     UserBookResponseDto getUserBook(Long userId, String isbn);
     int updateUserBook(Long userId, UserBookUpdateRequestDto data);
     int deleteUserBook(Long userId, UserBookListDeleteRequestDto data);
+
+    SearchUserBookListResponseDto searchAllUserBook();
 }
 
 

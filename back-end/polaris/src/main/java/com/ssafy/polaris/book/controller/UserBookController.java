@@ -104,4 +104,13 @@ public class UserBookController {
         }
         return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_USER_BOOK_DELETE);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<DefaultResponse<SearchUserBookListResponseDto>> searchAllUserBook(){
+        SearchUserBookListResponseDto data = userBookService.searchAllUserBook();
+        if(data == null){
+            return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_SEARCH_USER_BOOK);
+        }
+        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_SEARCH_USER_BOOK, data);
+    }
 }

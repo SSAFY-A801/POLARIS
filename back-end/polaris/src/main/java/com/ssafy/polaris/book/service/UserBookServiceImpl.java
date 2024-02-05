@@ -71,4 +71,10 @@ public class UserBookServiceImpl implements UserBookService{
         }
         return 1;
     }
+
+    @Override
+    public SearchUserBookListResponseDto searchAllUserBook(){
+        SearchUserBookListResponseDto data = new SearchUserBookListResponseDto(userBookRepository.searchAll());
+        return data;
+    }
 }
