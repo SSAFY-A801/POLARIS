@@ -46,4 +46,7 @@ public interface UserBookRepository extends JpaRepository<UserBook, String> {
 					"where ub.user.id = :userId and " +
 					"ub.isOpened = true and ub.isOwned = true and ub.userBookTradeType = :userBookTradeType")
 	List<TradeBookResponseDto> getTradeBookList(@Param("userId") Long userId, @Param("userBookTradeType") UserBookTradeType userBookTradeType);
+
+	@Query("select ub from UserBook ub where ub.book.isbn = :isbn and ub.user.id = :userId")
+	UserBook getUserBookByIdAndIsbn(@Param("userId") Long userId, @Param("isbn") String isbn);
 }

@@ -1,9 +1,10 @@
 package com.ssafy.polaris.profile.service;
 import com.ssafy.polaris.following.dto.FollowListResponseDto;
+import com.ssafy.polaris.following.dto.FollowRequestDto;
 import com.ssafy.polaris.profile.dto.ProfileRequestDto;
 import com.ssafy.polaris.profile.dto.ProfileResponseDto;
-import com.ssafy.polaris.profile.response.DefaultResponse;
-import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface ProfileService {
     public ProfileResponseDto getProfile(Long userId);
@@ -14,6 +15,6 @@ public interface ProfileService {
 
     FollowListResponseDto getFollowingList(Long userId);
 
-    Integer unfollow(Long followerId, Long followingId);
+    Integer unfollow(Long followerId, List<FollowRequestDto> followRequestDtoList);
 }
 

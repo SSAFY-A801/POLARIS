@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ssafy.polaris.book.dto.UserBookUpdateRequestDto;
 import com.ssafy.polaris.user.domain.User;
 
 import com.ssafy.polaris.common.BaseEntity;
@@ -64,5 +65,14 @@ public class UserBook extends BaseEntity {
 
 	public void deleteUserBook(LocalDateTime now) {
 		setDeletedAt(now);
+	}
+
+	// update method
+	public void updateUserBook(UserBookUpdateRequestDto dto){
+		this.userBookDescription = dto.getUserBookDescription();
+		this.userBookPrice = dto.getUserBookPrice();
+		this.isOpened = dto.getIsOpened();
+		this.isOwned = dto.getIsOwned();
+		this.userBookTradeType = dto.getUserBookTradeType();
 	}
 }
