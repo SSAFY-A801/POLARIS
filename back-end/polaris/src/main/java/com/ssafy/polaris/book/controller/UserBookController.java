@@ -4,6 +4,7 @@ import com.ssafy.polaris.book.dto.*;
 import com.ssafy.polaris.book.response.DefaultResponse;
 import com.ssafy.polaris.book.response.StatusCode;
 import com.ssafy.polaris.book.service.UserBookService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,10 +88,16 @@ public class UserBookController {
         return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_USER_BOOK_UPDATE);
     }
 
-    @PatchMapping("/{id}/library/{isbn}")
+    /**
+     * @param userId 사용자 id
+     * @param data 삭제할 사용자 등록 도서의 id들
+     * @return void
+     *
+     * */
+    @DeleteMapping("/{id}/library")
     public ResponseEntity<DefaultResponse<Void>> deleteUserBook(@PathVariable("id") Long userId,
-                                                                @PathVariable("isbn") String isbn){
-        int result = userBookService.deleteUserBook(userId, isbn);
+                                                                @RequestBody UserBookListDeleteRequestDto data){
+        int result = userBookService.deleteUserBook(userId, data);
         if(result == 0){
             // TODO: 삭제하려고 하는 책이 이미 삭제가 된 경우라면? 이런 상황은 발생할 수 없는 것인가?
             return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_USER_BOOK_DELETE);
