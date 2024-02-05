@@ -15,4 +15,5 @@ public class ScrapDto {
 	private Long id;
 	private Long essayId;
 	private Long userId;
+	private Boolean isDeleted;
 }

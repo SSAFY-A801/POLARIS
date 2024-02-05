@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.polaris.common.SearchConditions;
 import com.ssafy.polaris.essay.domain.Essay;
+import com.ssafy.polaris.essay.domain.Scrap;
 import com.ssafy.polaris.essay.dto.EssayRequestDto;
 import com.ssafy.polaris.essay.dto.EssayResponseDto;
 import com.ssafy.polaris.essay.dto.ScrapDto;
@@ -132,13 +133,12 @@ public class EssayServiceImpl implements EssayService{
 	@Override
 	@Transactional
 	public boolean scrapEssay(Long essayId, SecurityUser securityUser) {
-		Optional<Long> id = scrapRepository.findScrapByEssayIdAndUserID(essayId, securityUser.getId());
-		if (id.isEmpty()) {
+		Optional<Scrap> scrap = scrapRepository.findScrapByEssayIdAndUserID(essayId, securityUser.getId());
+		if (scrap.isEmpty()) {
 			scrapRepository.saveWithEssayIdAndUserId(essayId, securityUser.getId());
 			return true;
 		} else {
-			scrapRepository.deleteWithEssayIdAndUserId(essayId, securityUser.getId());
-			return false;
+			return !scrap.get().toggleDeletion();
 		}
 	}
 

@@ -14,16 +14,16 @@ import com.ssafy.polaris.essay.dto.ScrapDto;
 
 @Repository
 public interface ScrapRepository extends JpaRepository<Scrap, Long> {
-	@Query(value = "select s.id from Scrap s where essay_id = :essayId and user_id = :userId", nativeQuery = true)
-	Optional<Long> findScrapByEssayIdAndUserID(@Param("essayId") Long essayId, @Param("userId") Long userId);
+	@Query(value = "select s from Scrap s where s.essay.id = :essayId and s.user.id = :userId")
+	Optional<Scrap> findScrapByEssayIdAndUserID(@Param("essayId") Long essayId, @Param("userId") Long userId);
 
 	@Transactional
 	@Modifying
 	@Query(value = "insert into scrap (essay_id, user_id) values (:essayId, :userId)", nativeQuery = true)
 	void saveWithEssayIdAndUserId(@Param("essayId") Long essayId, @Param("userId") Long userId);
 
-	@Transactional
-	@Modifying
-	@Query(value = "delete from scrap where essay_id = :essayId and user_id = :userId", nativeQuery = true)
-	void deleteWithEssayIdAndUserId(@Param("essayId") Long essayId, @Param("userId") Long userId);
+	// @Transactional
+	// @Modifying
+	// @Query(value = "delete from scrap where essay_id = :essayId and user_id = :userId", nativeQuery = true)
+	// void deleteWithEssayIdAndUserId(@Param("essayId") Long essayId, @Param("userId") Long userId);
 }

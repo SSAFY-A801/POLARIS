@@ -14,7 +14,7 @@ public enum StatusCode {
 	ESSAY_UPDATE_SUCCESS(200, "글을 수정하였습니다."),
 	ESSAY_DELETE_SUCCESS(200, "글을 삭제하였습니다."),
 
-	SCRAP_ADD_SUCCESS(201, "스크랩을 추가했습니다."),
+	SCRAP_ADD_SUCCESS(200, "스크랩을 추가했습니다."),
 	SCRAP_REMOVE_SUCCESS(200, "스크랩을 취소했습니다.")
 	;
 
