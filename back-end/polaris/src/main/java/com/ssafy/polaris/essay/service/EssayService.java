@@ -20,4 +20,6 @@ public interface EssayService {
 	void updateHit(Long essayId);
 
 	boolean scrapEssay(Long essayId, SecurityUser securityUser);
+
+	int getScrapCount(Long essayId);
 }
