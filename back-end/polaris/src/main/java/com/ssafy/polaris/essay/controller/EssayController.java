@@ -36,9 +36,21 @@ public class EssayController {
 
 	private final EssayService essayService;
 
-	/*
-	 * 독후감 글 작성
-	 */
+	/**
+	 * 글 작성
+	 * @param essayRequestDto {
+	 * 	 "title": String,
+	 *   "content": String,
+	 *   "userBookId": Long,
+	 *   "isOpened": boolean
+	 * } 에세이 작성시 필요한 dto
+	 * @return DefaultResponse
+	 * {
+	 *   "status": Integer,
+	 *   "message": String,
+	 *   "data": EssayResponseDto
+	 * }
+	 * */
 	@PostMapping
 	public ResponseEntity<DefaultResponse<EssayResponseDto>> createEssay(
 		@RequestBody EssayRequestDto essayRequestDto,
@@ -54,6 +66,16 @@ public class EssayController {
 		);
 	}
 
+	/**
+	 * 글 조회, 조회수를 자동으로 올린다
+	 * @param essayId Long 에세이 ID
+	 * @return DefaultResponse
+	 * {
+	 *   "status": Integer,
+	 *   "message": String,
+	 *   "data": EssayResponseDto
+	 * }
+	 * */
 	@GetMapping("/{essayId}")
 	public ResponseEntity<DefaultResponse<EssayResponseDto>> getEssay(@PathVariable Long essayId) {
 		EssayResponseDto essayResponseDto = essayService.getEssay(essayId);
@@ -66,8 +88,28 @@ public class EssayController {
 		);
 	}
 
+	/**
+	 * 에세이 목록을 불러온다.
+	 * @param searchConditions
+	 * {
+	 *     "pgno" : int 몇 번째 페이지인지. 1부터 시작,
+	 *     "spp" : int 페이지 당 포스트 수,
+	 *     "key" : String 겁색 조건,
+	 *     "word" : String 검색어
+	 * }
+	 * @return DefaultResponse
+	 * {
+	 *   "status": Integer,
+	 *   "message": String,
+	 *   "data": [
+	 *   	EssayResponseDto1,
+	 *   	EssayResponseDto2,
+	 *   	...
+	 *   ]
+	 * }
+	 * */
 	@GetMapping
-	public  ResponseEntity getEssayList(@ModelAttribute SearchConditions searchConditions) {
+	public  ResponseEntity<DefaultResponse<List<EssayResponseDto>>> getEssayList(@ModelAttribute SearchConditions searchConditions) {
 		List<EssayResponseDto> essayResponseDtoList = essayService.getEssayList(searchConditions);
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
@@ -76,6 +118,20 @@ public class EssayController {
 		);
 	}
 
+	/**
+	 * 에세이를 수정한다.
+	 * @param essayRequestDto {
+	 * 	 "title": String,
+	 *   "content": String,
+	 *   "userBookId": Long,
+	 *   "isOpened": boolean
+	 * } 에세이 작성시 필요한 dto
+	 * @return DefaultResponse
+	 * {
+	 *   "status": Integer,
+	 *   "message": String,
+	 * }
+	 * */
 	@PatchMapping
 	public ResponseEntity<DefaultResponse<EssayResponseDto>> updateEssay(@RequestBody EssayRequestDto essayRequestDto) {
 		essayService.updateEssay(essayRequestDto);
@@ -85,6 +141,17 @@ public class EssayController {
 		);
 	}
 
+	/**
+	 * 에세이를 삭제한다.
+	 * @param essayRequestDto {
+	 *   "id" : int 에세이 ID
+	 * }
+	 * @return DefaultResponse
+	 * {
+	 *   "status": Integer,
+	 *   "message": String,
+	 * }
+	 * */
 	@DeleteMapping
 	public ResponseEntity<DefaultResponse<Void>> deleteEssay(@RequestBody EssayRequestDto essayRequestDto) {
 		essayService.deleteEssay(essayRequestDto.getId());
@@ -94,6 +161,16 @@ public class EssayController {
 		);
 	}
 
+
+	/**
+	 * 에세이를 스크랩한다. 토클된다.
+	 * @param essayId Long
+	 * @return DefaultResponse
+	 * {
+	 *   "status": Integer,
+	 *   "message": String,
+	 * }
+	 * */
 	@PutMapping("/{essayId}")
 	public ResponseEntity<DefaultResponse<Void>> scrapEssay(
 		@PathVariable("essayId") Long essayId,
