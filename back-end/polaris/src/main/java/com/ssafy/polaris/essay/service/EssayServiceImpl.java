@@ -38,7 +38,7 @@ public class EssayServiceImpl implements EssayService{
 			.content(essayRequestDto.getContent())
 			.userId(securityUser.getId())
 			.userBookId(essayRequestDto.getUserBookId())
-			.isOpened(essayRequestDto.getIsOpened())
+			.isOpened(essayRequestDto.isOpened())
 			.build());
 		return essay.getId();
 	}
@@ -50,7 +50,10 @@ public class EssayServiceImpl implements EssayService{
 		Essay essay = essayRepository.findJoinedEssayById(essayId)
 			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
 
-		if (essay.getDeletedAt() != null || "비공개".equals(essay.getIsOpened())) {
+		boolean viewable = !essay.isOpened();
+
+		// TODO: deletedat 없앤다.
+		if (essay.getDeletedAt() != null || viewable) {
 			throw new RuntimeException("해당 게시글이 존재하지 않습니다.");
 		}
 
@@ -89,15 +92,19 @@ public class EssayServiceImpl implements EssayService{
 
 	@Override
 	public List<EssayResponseDto> getEssayList(SearchConditions searchConditions) {
-		searchConditions.setWord(searchConditions.getWord().trim());
+		TypedQuery<Essay> query;
 		String jpql;
-		if (searchConditions.getWord() == null || searchConditions.getWord().equals("")) {
+
+		searchConditions.setWord(searchConditions.getWord().trim());
+		boolean isNotSearch = searchConditions.getWord() == null || searchConditions.getWord().equals("");
+		if (isNotSearch) {
 			jpql = "select e "
 				+ "from Essay e "
 				+ "	join fetch e.user "
 				+ "	left join fetch e.userBook "
 				+ " left join fetch e.userBook.book "
 				+ "where e.deletedAt is null";
+			query = em.createQuery(jpql, Essay.class);
 		} else {
 			jpql = "select e "
 				+ "from Essay e "
@@ -106,15 +113,13 @@ public class EssayServiceImpl implements EssayService{
 				+ " left join fetch e.userBook.book "
 				+ "where e.deletedAt is null "
 				+ "    and e.user.nickname like concat('%', :word,'%')";
-		}
-		TypedQuery<Essay> query = em.createQuery(jpql, Essay.class);
-		if (searchConditions.getWord() == null || searchConditions.getWord().equals("")) {}
-		else {
+			query = em.createQuery(jpql, Essay.class);
 			query
 				// .setParameter("key", searchConditions.getKey())
 				// TODO : 검색 조건에 따른 분기가 필요. (DSL을 쓰지 않는 이상..)
 				.setParameter("word", searchConditions.getWord());
 		}
+
 		List<Essay> essays = query
 			.setFirstResult((searchConditions.getPgno() - 1) * searchConditions.getSpp())
 			.setMaxResults(searchConditions.getSpp())
@@ -126,9 +131,7 @@ public class EssayServiceImpl implements EssayService{
 		return essayResponseDtoList;
 	}
 
-	/*
-	 * 리턴값 true : 추가, false : 삭제
-	 */
+	//리턴값 true : 추가, false : 삭제
 	@Override
 	@Transactional
 	public boolean scrapEssay(Long essayId, SecurityUser securityUser) {
