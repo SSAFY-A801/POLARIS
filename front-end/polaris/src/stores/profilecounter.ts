@@ -19,7 +19,7 @@ export interface Searchbook  {
 }
 
 export interface Book extends Searchbook  {
-  id?: number,
+  id: number,
   userBookDescription : string,
   userBookPrice: number|null,
 }
