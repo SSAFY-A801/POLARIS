@@ -1,12 +1,9 @@
 <template>
-    <nav class="bg-maintheme1 fixed top-0 w-full">
+    <nav class="bg-maintheme1 fixed top-0 w-full z-50">
         <div class="px-12 mx-0 ">
             <div class="flex items-center justify-between h-24">
                 <div class=" flex items-center w-full h-24">
-                    <a class="flex-shrink-0" href="/">
-                        <img class="w-8 h-8" src="" alt="Workflow"/>
-                    </a>
-
+                 
                     <div class="flex items-baseline ml-10 space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8">
                         <router-link :to="{name: 'home'}" class="text-white">Home</router-link>
                         <router-link :to="{name: 'booksearch'}" class="text-white">도서 검색</router-link>
@@ -55,8 +52,7 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 
 const userToken = ref(localStorage.getItem('user_token'))
-// const userToken = ref("Dd")
-// console.log(userToken)
+
 
 const router = useRouter()
 
@@ -79,7 +75,6 @@ const logout = async () => {
   }
   })
   .then(function (response) {
-    // userToken.value = null
     localStorage.removeItem('user_token')
     userToken.value = null
     alert("로그아웃 되었습니다")
@@ -92,5 +87,7 @@ const logout = async () => {
 </script>
 
 <style scoped>
-
+a {
+  text-decoration: none;
+}
 </style>
