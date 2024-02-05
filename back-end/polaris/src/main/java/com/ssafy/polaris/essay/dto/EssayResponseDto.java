@@ -44,7 +44,7 @@ public class EssayResponseDto {
 		this.title = essay.getTitle();
 		this.content = essay.getTitle();
 		this.hit = essay.getHit();
-		this.isOpened = essay.isOpened();
+		this.isOpened = essay.getIsOpened();
 		this.createdAt = essay.getCreatedAt();
 		this.updatedAt = essay.getUpdatedAt();
 		this.deletedAt = essay.getDeletedAt();

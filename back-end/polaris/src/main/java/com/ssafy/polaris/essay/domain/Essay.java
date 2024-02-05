@@ -66,7 +66,7 @@ public class Essay extends BaseEntity {
 	private int hit;
 
 	@NotNull
-	private boolean isOpened;
+	private Boolean isOpened;
 
 	@OneToMany(mappedBy = "essay")
 	private List<Comment> comments = new ArrayList<>();
