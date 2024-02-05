@@ -78,8 +78,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void resignation(Long id) throws Exception {
-        User user = em.find(User.class, id);
-        user.resignation();
+        userRepository.deleteById(id);
     }
 
     @Override

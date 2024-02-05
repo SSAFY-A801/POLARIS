@@ -29,6 +29,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Entity
@@ -36,6 +38,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@SQLDelete(sql = "update users set deleted_at = CURRENT_TIMESTAMP where id = ?")
+@SQLRestriction("deleted_at is NULL")
 public class User extends BaseEntity {
 	// 지역코드
 	@NotNull
@@ -102,9 +106,6 @@ public class User extends BaseEntity {
 		this.profileUrl = profileUrl;
 	}
 
-	public void resignation(){
-		setDeletedAt(LocalDateTime.now());
-	}
 	public void setPassword(String password) {
 		this.password = password;
 	}
