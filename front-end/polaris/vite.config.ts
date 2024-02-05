@@ -15,14 +15,4 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  server: {
-    proxy: {
-      '/p-api': {
-        target: "http://www.aladin.co.kr/ttb",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      },
-
-    },
-  }, 
 })
