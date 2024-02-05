@@ -2,7 +2,7 @@ package com.ssafy.polaris.comment.domain;
 
 import java.time.LocalDateTime;
 
-import com.ssafy.polaris.common.BaseEntity;
+import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.user.domain.User;
 

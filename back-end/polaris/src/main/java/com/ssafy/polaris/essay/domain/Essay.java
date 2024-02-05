@@ -1,6 +1,5 @@
 package com.ssafy.polaris.essay.domain;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import com.ssafy.polaris.common.BaseEntity;
+import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.essay.dto.EssayRequestDto;
 import com.ssafy.polaris.user.domain.User;

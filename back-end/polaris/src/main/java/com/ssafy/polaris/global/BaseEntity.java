@@ -1,4 +1,4 @@
-package com.ssafy.polaris.common;
+package com.ssafy.polaris.global;
 
 import java.time.LocalDateTime;
 

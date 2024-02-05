@@ -1,13 +1,12 @@
 package com.ssafy.polaris.book.domain;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.ssafy.polaris.book.dto.UserBookUpdateRequestDto;
 import com.ssafy.polaris.user.domain.User;
 
-import com.ssafy.polaris.common.BaseEntity;
+import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.connectentity.domain.PromotionUserBook;
 
 import jakarta.persistence.Column;
@@ -20,7 +19,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
