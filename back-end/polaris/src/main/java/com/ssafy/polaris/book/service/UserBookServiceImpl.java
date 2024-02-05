@@ -67,7 +67,7 @@ public class UserBookServiceImpl implements UserBookService{
             if(!em.contains(userBook)){
                 return 0;
             }
-            userBook.deleteUserBook(LocalDateTime.now());
+            userBookRepository.deleteById(userBook.getId());
         }
         return 1;
     }
