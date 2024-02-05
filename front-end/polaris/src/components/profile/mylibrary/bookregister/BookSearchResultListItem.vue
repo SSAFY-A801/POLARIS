@@ -49,8 +49,8 @@ const addBookcart = (searchResult: SearchBookinfo['searchResult']) => {
     emitShowAlert();
     console.log('현재 도서바구니목록: ',store.bookCartList)
   } else {
-    searchResult.isOpened = 0
-    searchResult.isOwned = 0
+    searchResult.isOpened = false
+    searchResult.isOwned = false
     bookCartList.value.push(searchResult);
   }
   console.log(searchResult)
