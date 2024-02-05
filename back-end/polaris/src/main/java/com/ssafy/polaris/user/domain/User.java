@@ -29,6 +29,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -38,6 +41,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
 @SQLDelete(sql = "update users set deleted_at = CURRENT_TIMESTAMP where id = ?")
 @SQLRestriction("deleted_at is NULL")
 public class User extends BaseEntity {
@@ -67,7 +71,7 @@ public class User extends BaseEntity {
 
 	@NotNull
 	@Column(length = 3000)
-	// @ColumnDefault(value = "")
+	@ColumnDefault(value = "기본 프로필 url")
 	private String profileUrl;
 
 	@NotNull

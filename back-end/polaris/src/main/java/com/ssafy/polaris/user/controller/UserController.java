@@ -108,7 +108,7 @@ public class UserController {
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
 			StatusCode.SUCCESS_LOGIN,
-			Map.of("access", tokenMap.get("access"))
+			tokenMap
 		);
 	}
 
