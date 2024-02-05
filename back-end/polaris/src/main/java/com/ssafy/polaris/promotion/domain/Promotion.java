@@ -6,7 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
-import com.ssafy.polaris.common.BaseEntity;
+import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.connectentity.domain.PromotionUserBook;
 import com.ssafy.polaris.user.domain.User;
 

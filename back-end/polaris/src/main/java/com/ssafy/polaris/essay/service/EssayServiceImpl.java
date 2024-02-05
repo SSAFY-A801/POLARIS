@@ -7,12 +7,11 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.polaris.common.SearchConditions;
+import com.ssafy.polaris.global.SearchConditions;
 import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.essay.domain.Scrap;
 import com.ssafy.polaris.essay.dto.EssayRequestDto;
 import com.ssafy.polaris.essay.dto.EssayResponseDto;
-import com.ssafy.polaris.essay.dto.ScrapDto;
 import com.ssafy.polaris.essay.repository.EssayRepository;
 import com.ssafy.polaris.essay.repository.ScrapRepository;
 import com.ssafy.polaris.security.SecurityUser;
