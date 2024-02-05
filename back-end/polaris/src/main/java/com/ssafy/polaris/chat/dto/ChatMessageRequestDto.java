@@ -16,9 +16,8 @@ public class ChatMessageRequestDto {
 	 * MessageType : TEXT, IMAGE
 	 */
 	private MessageType type;
-	private String chatroomId;
+	private Long chatRoomId;
 	private Long userId;
 	private String nickname;
-	private String content;
-
+	private String message;
 }
