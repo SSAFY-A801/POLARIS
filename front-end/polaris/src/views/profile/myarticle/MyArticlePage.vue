@@ -45,9 +45,10 @@
 
 <script setup lang="ts">
   import { profileCounterStore } from '@/stores/profilecounter';
+  import { ref } from 'vue';
   
   const store = profileCounterStore();
-  const user =store.user
+  const user =ref(store.profileUser)
 </script>
 
 <style scoped> 
