@@ -84,8 +84,4 @@ public class Essay extends BaseEntity {
 		this.content = essayRequestDto.getContent();
 		this.isOpened = essayRequestDto.getIsOpened();
 	}
-
-	public void deleteEssay() {
-		setDeletedAt(LocalDateTime.now());
-	}
 }
