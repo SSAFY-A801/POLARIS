@@ -7,6 +7,7 @@ import com.ssafy.polaris.book.repository.BookRepository;
 import com.ssafy.polaris.book.repository.UserBookRepository;
 import com.ssafy.polaris.series.dto.SeriesMapper;
 import com.ssafy.polaris.series.repository.SeriesRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class UserBookServiceImpl implements UserBookService{
     private final UserBookRepository userBookRepository;
     private final BookRepository bookRepository;
     private final SeriesRepository seriesRepository;
+    private final EntityManager em;
 
     @Override
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
@@ -59,12 +61,14 @@ public class UserBookServiceImpl implements UserBookService{
     }
 
     @Override
-    public int deleteUserBook(Long userId, String isbn) {
-        UserBook userBook = userBookRepository.getUserBookByIdAndIsbn(userId, isbn);
-        if(userBook == null){
-            return 0;
+    public int deleteUserBook(Long userId, UserBookListDeleteRequestDto data) {
+        for(UserBookDeleteRequestDto dto : data.getBooks()){
+            UserBook userBook = userBookRepository.getReferenceById(dto.getId());
+            if(!em.contains(userBook)){
+                return 0;
+            }
+            userBookRepository.deleteById(userBook.getId());
         }
-        userBook.deleteUserBook(LocalDateTime.now());
         return 1;
     }
 }

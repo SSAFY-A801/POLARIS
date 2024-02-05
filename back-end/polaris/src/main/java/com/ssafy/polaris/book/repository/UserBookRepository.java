@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserBookRepository extends JpaRepository<UserBook, String> {
+public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 
 	@Query("SELECT NEW com.ssafy.polaris.book.dto.UserBookResponseDto(ub.id, b.cover, b.title, b.author, b.isbn, b.publisher, " +
 			"b.pubDate, b.bookDescription, ub.userBookDescription, b.priceStandard, ub.userBookPrice, ub.isOpened, ub.isOwned, " +

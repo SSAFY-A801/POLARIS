@@ -73,6 +73,7 @@ public class OpenApiController {
                 "&MaxResults=" + "20" +
                 "&start=" + "1" +
                 "&SearchTarget=" + "Book" +
+                "&Cover=" + "Big" +
                 "&output=" + "js" +
                 "&Version=" + "20131101";
 
