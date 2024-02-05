@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class ProfileResponseDto {
+    Long id;
     Regcode regcode;
     String nickname;
     String profileUrl;

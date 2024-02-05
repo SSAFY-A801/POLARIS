@@ -142,4 +142,9 @@ public class EssayServiceImpl implements EssayService{
 		}
 	}
 
+	@Override
+	public int getScrapCount(Long essayId) {
+		return scrapRepository.getScrapCount(essayId);
+	}
+
 }

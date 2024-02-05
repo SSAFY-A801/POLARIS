@@ -31,12 +31,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 @Getter
 @Entity
 @SuperBuilder
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
+@SQLDelete(sql = "update users set deleted_at = CURRENT_TIMESTAMP where id = ?")
+@SQLRestriction("deleted_at is NULL")
 public class User extends BaseEntity {
 	// 지역코드
 	@NotNull
@@ -64,7 +72,7 @@ public class User extends BaseEntity {
 
 	@NotNull
 	@Column(length = 3000)
-	// @ColumnDefault(value = "")
+	@ColumnDefault(value = "기본 프로필 url")
 	private String profileUrl;
 
 	@NotNull
@@ -103,9 +111,6 @@ public class User extends BaseEntity {
 		this.profileUrl = profileUrl;
 	}
 
-	public void resignation(){
-		setDeletedAt(LocalDateTime.now());
-	}
 	public void setPassword(String password) {
 		this.password = password;
 	}
