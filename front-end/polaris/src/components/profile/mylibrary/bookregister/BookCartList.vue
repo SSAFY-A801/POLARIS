@@ -21,7 +21,6 @@
 
   const updateBookStatus = (isbn:string, isOpened:boolean, isOwned:boolean ) => {
     bookcartList.value.forEach((bookinfo)=> {
-      bookinfo.userBooktradeType = 'UNDEFINED';
       if (bookinfo.isbn == isbn){
         if(isOpened == true){
           bookinfo.isOpened = 1;
@@ -33,9 +32,10 @@
         } else {
           bookinfo.isOwned = 0;
         }
-
       }
     })
+    console.log(bookcartList.value)
+
   }
 
 onMounted(()=> {

@@ -1,21 +1,19 @@
 import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios';
-import { convertTypeAcquisitionFromJson } from 'typescript';
 
 export interface Searchbook  {
   isbn: string,
   title: string,
-  // 설정 안한 경우 빈 문자열(string)
   bookDescription: string|null,
-  pubDate : string,
+  pubDate : Date,
   cover: string,
   publisher : string,
   author: string,
-  price_standard: number,
-  isOpened?: number,
-  isOwned?: number,
-  userBooktradeType?: string|null,
+  priceStandard: number,
+  isOpened?: boolean,
+  isOwned?: boolean,
+  userBookTradeType?: string|null,
   seriesId?: number|null,
   seriesName?: string|null,
 }
@@ -34,26 +32,39 @@ export type Regcode = {
 } 
 
 
+export type Following = {
+  followingId: number,
+  nickname: string,
+  profileUrl: string,
+  regcode: Regcode,
+}
+
+
 export type User = {
-  id: number,
+  id?: number,
   profileUrl: string|null,
   nickname: string|null,
   regcode: Regcode,
-  introduction: string,
-  trade_cnt: number,
-  exchange_cnt: number,
-  followings: number,
+  introduction: string|null,
+  tradingCnt: number,
+  exchangeCnt: number,
+  followingsCnt: number,
 }
 
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
+  const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGE0QGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTYsImVtYWlsIjoia2luZ2ppbmhhNEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuPme2DhOu2iOyjvOuoueq5gOuvuOyEnCIsImV4cCI6MTcyNDc1MzQ0NX0.BPYiE7fRj2n1_fssmIFJsgYdj5yTYYGcv5yTmZ8jv20'
   
+
   
   // ProfilePage
-  const user: User = {
+  // 접속자
+  const currentUser = ref<User>();
+  // 프로필 유저
+  const profileUser = ref<User>({
     id: 1,
     profileUrl:"https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2023/07/28/05455ec6-dec5-4016-81b4-97e568c8e249.jpg",
-    nickname: "절대존엄퀸갓상시숭배피겨올타임레전드",
+    nickname: "김연아",
     regcode: {
       id: 2629010700,
       si: "경기도",
@@ -61,10 +72,32 @@ export const profileCounterStore = defineStore('counter', () => {
       dong: "군포2동"
     },
     introduction: "스케이트 저보다 잘타시면 네고 허락해드립니다.",
-    trade_cnt: 132,
-    exchange_cnt: 54,
-    followings: 8,
-  }
+    tradingCnt: 132,
+    exchangeCnt: 54,
+    followingsCnt: 8,
+  });
+
+  const getProfile = () => {
+    axios({
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": 'application/json'
+      },
+        method: 'get',
+        url: `${BACK_API_URL}/profile/1`,
+      })  
+    .then((response) => {
+      const userData = response.data['data']
+      console.log('1번유저정보',userData)
+      profileUser.value = userData
+      })
+      .catch((error)=> {
+        console.error("에러발생: ",error)
+      })
+    }
+
+  
+
   // ProfileUdpatePage
   
   // MyEssayPage
@@ -75,49 +108,49 @@ export const profileCounterStore = defineStore('counter', () => {
   // MyPromotionPage
   
   // BookRegisterPage
-
+  const BACK_API_URL = 'http://i10a801.p.ssafy.io:8082'
+  
   type searchType = {
     [key: string]: string;
   }
   const searchbookLists = ref<Searchbook[]>([]);
   const bookCartList = ref<Searchbook[]>([])
-  const Aladin_API_URL = '/p-api/ItemSearch.aspx'
-  // const TTBKey = process.env.VUE_APP_TTBKEY
-  const TTBKEY='ttbkimsw28261657004'  
 
-  const searchAPIbookList = (Query:string, searchCondition: string|null) => {
-    if (Query == ""){
+  const searchAPIbookList = (query:string, searchCondition: string|null) => {
+    if (query == ""){
       alert('검색어를 입력해주세요.')
     } else {
-      const QueryType = ref<string|null>(null)
+      const queryType = ref<string|null>(null)
       if (searchCondition == null) {
-        QueryType.value = 'Keyword'
+        queryType.value = 'Keyword'
       } else {
         const searchType:searchType = {
           '도서 제목': 'Title',
           '저자': 'Author',
           '출판사': 'Publisher',
         }
-        QueryType.value = searchType[searchCondition]
+        queryType.value = searchType[searchCondition]
       }
+
       axios({
         method: 'get',
-        url: `${Aladin_API_URL}?ttbkey=${TTBKEY}&Query=${Query}&QueryType=${QueryType.value}
-        &MaxResults=20&start=1&SearchTarget=Book&output=js&Version=20131101&Cover=MidBig`,
+        url: `${BACK_API_URL}/api/search?query=${query}&queryType=${queryType.value}`
       })
       .then((response)=>{
+        console.log(response.data)
         const data = response.data['item']
         const searchBooks = ref<Searchbook[]>([])
         data.forEach((book:any)=> {
+          const date = new Date(book.pubDate)
           const searchBook :Searchbook = {
-            isbn: book.isbn,
+            isbn: book.isbn13,
             title: book.title,
             bookDescription: book.description,
-            pubDate : book.pubDate,
+            pubDate : date,
             cover: book.cover,
             publisher : book.publisher,
             author: book.author,
-            price_standard: book.priceStandard,
+            priceStandard: book.priceStandard,
           }
           if(book.seriesInfo){
             searchBook.seriesId = book.seriesInfo.seriesId,
@@ -132,11 +165,9 @@ export const profileCounterStore = defineStore('counter', () => {
       })
     };
   };
+
   
   // MyLibraryPage
-  
-  const BACK_API_URL = 'http://i10a801.p.ssafy.io:8082'
-  const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGE0QGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTYsImVtYWlsIjoia2luZ2ppbmhhNEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuPme2DhOu2iOyjvOuoueq5gOuvuOyEnCIsImV4cCI6MTcyNDc1MzQ0NX0.BPYiE7fRj2n1_fssmIFJsgYdj5yTYYGcv5yTmZ8jv20'
   const deleteBookList = ref<Book[]>([])
   const bookSearchResultList = ref([]);
   const mybookLists = ref<Book[]>([]);
@@ -155,7 +186,7 @@ const getMybookList = ()=> {
     mybookLists.value = res.data['books']
     })
     .catch((error)=> {
-      console.error(error)
+      console.error("에러발생: ",error)
     })
 }
 
@@ -166,7 +197,7 @@ const getMybookList = ()=> {
     deletebuttonState.value = !deletebuttonState.value
   }
   return { 
-    user, 
+    profileUser, getProfile,
     searchAPIbookList, BACK_API_URL, token,
     getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }
 },{persist: true})

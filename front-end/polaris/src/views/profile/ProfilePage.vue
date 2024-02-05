@@ -50,7 +50,7 @@
           <div class="md:col-span-4 col-span-12" >
             <div class="flex justify-center">
               <img v-if="user.profileUrl" :src="user.profileUrl" alt="profile-image" id="profile-image">
-              <img v-else src="@\assets\profile-default.jpg" alt="alternative-image">
+              <img v-else src="@\assets\profile-default.jpg" alt="alternative-image" id="profile-image">
             </div>
               <div v-if="isMe" class="text-maintheme1 font-bold text-center m-3 justify-center p-2">
                 <div id="usernickname" class="font-bold flex items-center justify-center m-2">
@@ -61,10 +61,10 @@
                 <div id="usernickname" class="col-span-2 font-bold flex items-center justify-center m-2">
                   {{ user.nickname }}  
                 </div>
-                <button v-if="myFollwing"  class="col-span-1" id="follow">
+                <button @click="unfollow(user)" v-if="myFollwing"  class="col-span-1" id="follow">
                   언팔로우
                 </button>
-                <button v-else  class="col-span-1" id="follow">
+                <button @click="follow(user)" v-else  class="col-span-1" id="follow">
                   팔로우
                 </button>
               </div>
@@ -72,15 +72,15 @@
             <div class="inline-grid grid-cols-3 gap-4">
               <button @click="gotoTradeList" id="trade" class=" hover:text-deepgray">
                 <div>판매/구매</div>
-                <div>{{ user.trade_cnt }}</div>
+                <div>{{ user.tradingCnt }}</div>
               </button>
               <button @click="gotoExchangeList" id="exchange" class=" hover:text-deepgray">
                 <div >교환</div>
-                <div>{{ user.exchange_cnt }}</div>
+                <div>{{ user.exchangeCnt }}</div>
               </button>
               <button @click="clickModal" id="following" class="hover:text-deepgray">
                 <div>Following</div>
-                <div>{{ user.followings }}</div>
+                <div>{{ user.followingsCnt }}</div>
               </button>
             </div>
           </div>
@@ -172,37 +172,68 @@
   import { useRouter } from 'vue-router'
   import { profileCounterStore } from "@/stores/profilecounter";
   import type { User } from "@/stores/profilecounter";
+  import type { Following } from "@/stores/profilecounter";
+
   import axios from 'axios';
 
-  
   const router = useRouter();
   const store = profileCounterStore();
-  const followings_list = ref<User[]>([])
-  const isMe = ref<boolean>(true)
-  const myFollwing = ref<boolean>(true)
-  const user = ref<User>(store.user)
+  const user = store.profileUser
+  const followings_list = ref<Following[]>([])
+  const isMe = ref<boolean>(false)
+  const myFollwing = ref<boolean>(false)
   const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
-  const unfollow_list = ref<User[]>([])
-  const clickModal = () => {
-    showModal.value = true
-    // followings 명단 호출
+  const unfollow_list = ref<Following[]>([])
+
+
+  const follow = (user: User) => {
     axios({
       headers: {
-        Authorization: `${store.token}`
+        Authorization: `${store.token}`,
+        "Content-Type": 'application/json'
       },
-      method: 'get',
-      url: `${BACK_API_URL}/profile/${user.value.id}/follow`,
+
+      method: 'post',
+      url: `${BACK_API_URL}/profile/7/follow`,
+      data: {
+        followingId: user.id
+      }
     })
-    .then((response)=> {
-      const res = response.data
-      followings_list.value = res.data['followings']
-      console.log(followings_list.value)
+    .then((response) => {
+      console.log(response.data)
+      myFollwing.value = !myFollwing.value
+    })
+    .catch((error)=> {
+      console.error(error)
+    })
+  }
+
+  const unfollow = (user: User) => {
+    axios({
+      headers: {
+        Authorization: `${store.token}`,
+        "Content-Type": 'application/json'
+      },
+
+      method: 'delete',
+      url: `${BACK_API_URL}/profile/1/unfollow`,
+      data: {
+        unfollowings: [{followingsId: user.id}]
+      }
+    })
+    .then((response) => {
+      console.log(response.data)
+      myFollwing.value = !myFollwing.value
 
     })
     .catch((error)=> {
-      console.error('요청실패: ',error)
+      console.error(error)
     })
+  }
+
+  const clickModal = () => {
+    showModal.value = true
   }
   
   const closeModal = () => {
@@ -214,25 +245,25 @@
     showModal.value = false
   }
 
-  const handlefollow = (following: User, follow: boolean) => {
+  const handlefollow = (following: Following, follow: boolean) => {
     if (!follow){
       unfollow_list.value.push(following)
     } else {
-      unfollow_list.value = unfollow_list.value.filter((user)=> user.id != following.id)
+      unfollow_list.value = unfollow_list.value.filter((user)=> user.followingId != following.followingId)
     }
     console.log(unfollow_list.value)
   }
 
   // button 클릭
   const gotoUpdateProfile = () => {
-    router.push({name: "ProfileUpdatePage",params:{id:user.value.id}});
+    router.push({name: "ProfileUpdatePage",params:{id:user.id}});
   }
   const gotoTradeList = () => {
-    router.push({name: "MyTradeListPage",params:{id:user.value.id}});
+    router.push({name: "MyTradeListPage",params:{id:user.id}});
   }
 
   const gotoExchangeList = () => {
-    router.push({name: "MyExchangeListPage",params:{id:user.value.id}});
+    router.push({name: "MyExchangeListPage",params:{id:user.id}});
   }
 
 
@@ -250,22 +281,25 @@
 
   
   onMounted(()=> {
-  //   axios({
-  //     headers: {
-  //       Authorization: ""
-  //     },
-  //     method: 'get',
-  //     url: 'asdf',
-      
+    // // followings 명단 호출
+    axios({
+      headers: {
+        Authorization: `${store.token}`
+      },
+      method: 'get',
+      url: `${BACK_API_URL}/profile/${user.id}/follow`,
+    })
+    .then((response)=> {
+      const res = response.data
+      followings_list.value = res.data['followings']
+      console.log('팔로잉 명단: ',followings_list.value)
 
-  //   })
-  //   .then((response)=> {
-  //     console.log(response.data)
-  //   })
-  //   .catch((error)=> {
-      
-  //     console.error('에러 발생: ',error)
-  //   })
+    })
+    .catch((error)=> {
+      console.error('요청실패: ',error)
+    })
+
+    store.getProfile()
   })
 </script>
 

@@ -52,7 +52,9 @@
       </div>
     </div>
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-      <MyLibraryList :mybookList="selectValue === '전체도서' && !booksearch ? mybookList : filterMybook" />
+      <MyLibraryList 
+      :mybookList="selectValue === '전체도서' && !booksearch ? mybookList : filterMybook"
+      />
     </div>
   </div>
 
@@ -61,6 +63,7 @@
 <script setup lang="ts">
 import MyLibraryList from '@/components/profile/mylibrary/MyLibraryList.vue';
 import { ref, watch, onMounted, computed } from 'vue';
+import axios from 'axios';
 import { profileCounterStore } from '@/stores/profilecounter';
 import { useRouter } from 'vue-router';
 import type { Book } from '@/stores/profilecounter';
@@ -73,11 +76,12 @@ const booksearch = ref(false)
 
 const mybookLists = ref<Book[]>(store.mybookLists)
 const mybookList = computed(()=> {
-  console.log(mybookLists.value)
+  // console.log(mybookLists.value)
   return mybookLists.value
 })
 
 const deleteBookList = computed(()=> {
+  console.log(deleteBookList.value)
   return store.deleteBookList
 })
 
@@ -110,17 +114,17 @@ const filterMybook = ref<Book[]>(mybookLists.value)
 const selectWatch = watch(selectValue, (newValue) => {
   if (newValue != "전체도서"){
     if (newValue == '공개'){
-      filterMybook.value = mybookList.value.filter(item => item.isOpened == 1)
+      filterMybook.value = mybookList.value.filter(item => item.isOpened == true)
     } else if (newValue == '비공개'){
-      filterMybook.value = mybookList.value.filter(item => item.isOpened == 0)
+      filterMybook.value = mybookList.value.filter(item => item.isOpened == false)
     } else if (newValue == '보유'){
-      filterMybook.value = mybookList.value.filter(item => item.isOwned == 1)
+      filterMybook.value = mybookList.value.filter(item => item.isOwned == true)
     } else if (newValue == '미보유'){
-      filterMybook.value = mybookList.value.filter(item => item.isOwned == 0)
+      filterMybook.value = mybookList.value.filter(item => item.isOwned == false)
     } else if (newValue == '판매가능'){
-      filterMybook.value = mybookList.value.filter(item => item.userBooktradeType == "PURCHASE")
+      filterMybook.value = mybookList.value.filter(item => item.userBookTradeType == "PURCHASE")
     } else if (newValue == '교환가능')
-      filterMybook.value = mybookList.value.filter(item => item.userBooktradeType == "EXCHANGE")
+      filterMybook.value = mybookList.value.filter(item => item.userBookTradeType == "EXCHANGE")
     }
   keyword.value=""
 });
@@ -128,18 +132,28 @@ const selectWatch = watch(selectValue, (newValue) => {
 
 
 const deleteBooks = () => {
-  const newbookList = ref<Book[]>([])
-  mybookList.value.forEach((book)=> {
-    if(!deleteBookList.value.includes(book)){
-      newbookList.value.push(book)
+  console.log(deleteBookList.value)
+  axios({
+    headers: {
+      Authorization: `${store.token}`,
+      "Content-Type": 'application/json'
+    },
+    method: 'delete',
+    url: `${store.BACK_API_URL}/book/1/library`,
+    data: {
+      // body를 내놓으세요.
     }
   })
-  store.mybookLists = newbookList.value
-  console.log(store.mybookLists)
+  .then((response)=> [
+    console.log(response.data)
+  ])
+  .catch((error)=> [
+    console.error(error)
+  ])
   store.deleteBookList = []
   selectValue.value = "전체도서"
   // 꼼수
-  alert("도서 삭제를 완료하였습니다.")
+  alert("도서 삭제를 실시합니다.")
   router.go(0);
 }
 
@@ -167,6 +181,8 @@ const deleteState = computed(() => {
 
 onMounted(()=> {
   selectWatch;
+  store.deleteBookList = []
+  store.deletebuttonState = false
   store.getMybookList();
 })
 </script>
