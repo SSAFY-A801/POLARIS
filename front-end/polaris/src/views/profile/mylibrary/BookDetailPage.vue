@@ -211,6 +211,7 @@
 
   // 이후에는 store.ts로 옮겨서 서버에서 데이터를 받아올 예정 
   const bookDetail = ref<Book>({
+    id: 9090,
     isbn: "0000000000000",
     title: "무제",
     bookDescription: null,
