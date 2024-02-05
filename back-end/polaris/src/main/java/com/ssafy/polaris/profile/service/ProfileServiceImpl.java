@@ -40,7 +40,9 @@ public class ProfileServiceImpl implements ProfileService {
         System.out.println(reg.getId());
         int purchaseCnt = userRepository.getTradeCnt(findUser.getId(), TradeStatus.COMPLETED, TradeType.PURCHASE);
         int exchangeCnt = userRepository.getTradeCnt(findUser.getId(), TradeStatus.COMPLETED, TradeType.EXCHANGE);
-        ProfileResponseDto profileResponse = new ProfileResponseDto(reg,
+        ProfileResponseDto profileResponse = new ProfileResponseDto(
+                findUser.getId(),
+                reg,
                 findUser.getNickname(),
                 findUser.getProfileUrl(),
                 findUser.getIntroduction(),
