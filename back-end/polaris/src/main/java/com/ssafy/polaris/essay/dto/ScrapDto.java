@@ -12,7 +12,8 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class ScrapDto {
-	private int id;
-	private Essay essay;
-	private User user;
+	private Long id;
+	private Long essayId;
+	private Long userId;
+	private Boolean isDeleted;
 }

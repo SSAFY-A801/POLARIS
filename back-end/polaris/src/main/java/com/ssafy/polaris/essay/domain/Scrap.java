@@ -1,5 +1,8 @@
 package com.ssafy.polaris.essay.domain;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Entity;
@@ -17,6 +20,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
 public class Scrap {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +35,12 @@ public class Scrap {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+
+	@NotNull
+	@ColumnDefault(value = "false")
+	private Boolean isDeleted;
+
+	public boolean toggleDeletion() {
+		return isDeleted = !isDeleted;
+	}
 }
