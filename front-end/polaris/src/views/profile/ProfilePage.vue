@@ -268,7 +268,7 @@
 
 
   const gotoMychatList = () => {
-    router.push({name: "chat", params:{id:user.value.id}});
+    router.push({name: "chat", params:{id:user.id}});
   }
 
   // const gotoTradechat = () => {
