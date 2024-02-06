@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,21 +36,23 @@ public class PromotionController {
 		@AuthenticationPrincipal SecurityUser securityUser) {
 
 		Long promotionId = promotionService.createPromotion(promotionRequestDto, securityUser);
-		PromotionResponseDto promotionResponseDto = promotionService.getPromotion(promotionId);
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.CREATED,
-			StatusCode.PROMOTION_WRITE_SUCCESS,
-			promotionResponseDto
-		);
+		PromotionResponseDto promotionResponseDto = promotionService.getPromotion(promotionId, false);
+		return DefaultResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.PROMOTION_WRITE_SUCCESS, promotionResponseDto);
 	}
 
 	@GetMapping("/{promotionId}")
-	public ResponseEntity getPromotion(@PathVariable("promotionId") Long promotionId) {
-		PromotionResponseDto promotionResponseDto = promotionService.getPromotion(promotionId);
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.PROMOTION_READ_SUCCESS,
-			promotionResponseDto
-		);
+	public ResponseEntity<DefaultResponse<PromotionResponseDto>> getPromotion(@PathVariable("promotionId") Long promotionId) {
+		PromotionResponseDto promotionResponseDto = promotionService.getPromotion(promotionId, true);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.PROMOTION_READ_SUCCESS, promotionResponseDto);
+	}
+
+	@PatchMapping
+	public ResponseEntity<DefaultResponse<PromotionResponseDto>> updatePromotion(
+		@RequestBody PromotionRequestDto promotionRequestDto,
+		@AuthenticationPrincipal SecurityUser securityUser) {
+
+		Long promotionId = promotionService.updatePromotion(promotionRequestDto, securityUser);
+		PromotionResponseDto promotionResponseDto = promotionService.getPromotion(promotionId, false);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.PROMOTION_UPDATE_SUCCESS, promotionResponseDto);
 	}
 }

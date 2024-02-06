@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.connectentity.domain.PromotionUserBook;
+import com.ssafy.polaris.promotion.dto.PromotionRequestDto;
 import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Column;
@@ -51,6 +52,15 @@ public class Promotion extends BaseEntity {
 
 	public void updateHit(){
 		hit += 1;
+	}
+
+	public void update(PromotionRequestDto promotionRequestDto) {
+		this.title = promotionRequestDto.getTitle();
+		this.content = promotionRequestDto.getContent();
+		this.promotionUserBooks.clear();
+		for (Long userBookIds : promotionRequestDto.getUserBookIds()) {
+			promotionUserBooks.add(new PromotionUserBook(userBookIds, promotionRequestDto.getId()));
+		}
 	}
 
 	/*

@@ -24,14 +24,13 @@ public class PromotionResponseDto {
 	private UserResponseDto user;
 	private List<UserBookSimpleResponseDto> userBooks;
 
-	public PromotionResponseDto(List<PromotionUserBook> userBooksByPromotion) {
-		Promotion promotion = userBooksByPromotion.getFirst().getPromotion();
+	public PromotionResponseDto(Promotion promotion) {
 		this.id = promotion.getId();
 		this.hit = promotion.getHit();
 		this.title = promotion.getTitle();
 		this.content = promotion.getContent();
 		this.user = new UserResponseDto(promotion.getUser());
-		this.userBooks = userBooksByPromotion.stream()
+		this.userBooks = promotion.getPromotionUserBooks().stream()
 			.map(PromotionUserBook::getUserBook)
 			.map(UserBookSimpleResponseDto::new)
 			.collect(Collectors.toList());
