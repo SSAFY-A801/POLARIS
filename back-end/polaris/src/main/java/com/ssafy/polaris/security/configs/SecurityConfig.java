@@ -25,7 +25,6 @@ import com.ssafy.polaris.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
