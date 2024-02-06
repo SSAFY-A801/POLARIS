@@ -16,7 +16,6 @@ import com.ssafy.polaris.security.SecurityUser;
 
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin
 @Controller
 @RequestMapping(value = "/chat")
 @RequiredArgsConstructor

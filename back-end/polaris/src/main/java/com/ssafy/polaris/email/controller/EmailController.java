@@ -19,7 +19,6 @@ import com.ssafy.polaris.email.response.StatusCode;
 import com.ssafy.polaris.email.service.EmailService;
 
 @Slf4j
-@CrossOrigin
 @RequestMapping("/send_mail")
 @RestController
 @RequiredArgsConstructor
