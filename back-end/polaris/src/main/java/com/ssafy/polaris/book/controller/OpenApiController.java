@@ -13,7 +13,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600L)
 @RequestMapping("/api")
 public class OpenApiController {
     @Value("${aladinApiConfig.serviceKey}")
