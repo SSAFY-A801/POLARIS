@@ -54,7 +54,7 @@ public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 
 	// TODO: 쓸모 없는 메서드!
 	@Query("select new com.ssafy.polaris.book.dto.SearchUserBookResponseDto(ub.id, ub.user.id, " +
-			" ub.user.nickname, ub.user.regcode, b.isbn, b.title," +
+			" ub.user.nickname, u.profileUrl, ub.user.regcode, b.isbn, b.title," +
 			"b.author, b.cover, ub.userBookTradeType) " +
 			"from UserBook ub " +
 			"left join Book b on ub.book.isbn = b.isbn " +
