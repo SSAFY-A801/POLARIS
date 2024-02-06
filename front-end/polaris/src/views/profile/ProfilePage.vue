@@ -372,7 +372,7 @@ interface CreateChatroomResponse {
 // 이밴트핸들러에 추가하면 될 것 같아요
 const createChatRoom = async (senderId: number, receiverId: number, tradeType: string) => {
   try {
-    const response = await axios.post<CreateChatroomResponse>('http://i10a801.p.ssafy.io:8082/chat', {
+    const response = await axios.post<CreateChatroomResponse>('https://i10a801.p.ssafy.io:8082/chat', {
       senderId,
       receiverId,
       tradeType,

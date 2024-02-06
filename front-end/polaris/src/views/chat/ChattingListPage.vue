@@ -113,7 +113,7 @@ interface CreateChatroomResponse {
 
 // onMounted(async () => {
 //   try {
-//         const response = await axios.get<ApiResponse>(`http://i10a801.p.ssafy.io:8082/chat`, {
+//         const response = await axios.get<ApiResponse>(`https://i10a801.p.ssafy.io:8082/chat`, {
 //       headers: {
 //         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoamhAZ21haWwuY29tIiwiYXV0aCI6IkFVVEhPUklUWSIsImlkIjo4LCJlbWFpbCI6ImhqaEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iu2CueynhO2VmCIsImV4cCI6MTcyNDY4Nzg5NH0.RGSg_mX4rSNrHAIIBkfHg1AowDKwyAmzhnk2b7X8xaE',
 //       }
