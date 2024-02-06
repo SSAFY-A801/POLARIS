@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="container mx-auto">
     <div id="carouselExample" class="carousel slide" style="width: 90%; margin: auto;">
       <div class="carousel-inner">
@@ -38,7 +38,6 @@
     </div>
   </div>
 </template>
-
 
 
 
@@ -94,4 +93,4 @@ onMounted(async () => {
 .carousel-control-next-icon::before {
   content: '›' !important;
 }
-  </style>
+  </style> -->

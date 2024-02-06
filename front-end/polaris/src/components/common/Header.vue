@@ -51,19 +51,21 @@ import { ref, watchEffect } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
-const userToken = ref(localStorage.getItem('user_token'))
-
-
+// const props = defineProps(['userToken'])
+const userToken = ref(localStorage.getItem('user_token') )
 const router = useRouter()
+
+
 
 
 watchEffect(() => {
     userToken.value = localStorage.getItem('user_token')
     // console.log(localStorage.getItem('user_token'))
     // console.log("watchEffect is running") 
-    // console.log(userToken.value)
+    // console.log("watchEffect",userToken.value)
 
 })
+
 
 
 //로그아웃
