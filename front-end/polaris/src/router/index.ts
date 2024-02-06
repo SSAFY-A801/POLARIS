@@ -3,7 +3,7 @@ import MainPage from '@/views/MainPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
 import BookSearchPage from '@/views/BookSearchPage.vue'
-import EssayListPage from '@/views/EssayListPage.vue'
+import EssayListPage from '@/views/essay/EssayListPage.vue'
 import PromotionListPage from '@/views/PromotionListPage.vue'
 import PasswordSearchPage from '@/views/PasswordSearchPage.vue'
 import ProfilePage from '@/views/profile/ProfilePage.vue'
@@ -19,6 +19,11 @@ import BookRegisterPage from '@/views/profile/mylibrary/BookRegisterPage.vue'
 import MyTradeListPage from '@/views/profile/mytradeinfo/MyTradeListPage.vue'
 import MyExchangeListPage from '@/views/profile/mytradeinfo/MyExchangeListPage.vue'
 import BookDetailPage from '@/views/profile/mylibrary/BookDetailPage.vue'
+import ChattingListPage from '@/views/chat/ChattingListPage.vue'
+import ChattingRoomPage from '@/views/chat/ChattingRoomPage.vue'
+import SellChattingBox from '@/components/chat/SellChattingBox.vue'
+import ChangeChattingBox from '@/components/chat/ChangeChattingBox.vue'
+import ConnectSocket from '@/components/chat/ConnectSocket.vue'
 import BestsellerdetailPage from '@/components/main/BestsellerdetailPage.vue'
 
 const router = createRouter({
@@ -141,7 +146,33 @@ const router = createRouter({
       name: 'BookDetailPage',
       component: BookDetailPage,
 
-    }
+    },
+    // 채팅방 관련 라우터
+    {
+      path: '/:id/chat/',
+      name: 'chat',
+      component: ChattingListPage
+    },
+    {
+      path: '/chat/:userId',
+      name: 'chatting',
+      component: ChattingRoomPage
+    },
+    {
+      path: '/chat/:chatRoomId/sell',
+      name: 'sellchattingbox',
+      component: SellChattingBox
+    },
+    {
+      path: '/chat/:userId/change',
+      name: 'changechattingbox',
+      component: ChangeChattingBox
+    },
+    // {
+    //   path: '/chat/start/:chatRoomId',
+    //   name: 'connectSocket',
+    //   component: ConnectSocket
+    // },
   ]
 })
 
