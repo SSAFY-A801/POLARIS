@@ -180,7 +180,7 @@ const checkNickname = async () => {
  // 입력한 이메일을 서버로 전송
   // 성공시 isEmailVerificationInput.value =true로 바꾸기
 const sendEmail = async () => {
-  await axios.post('https://i10a801.p.ssafy.io:8082/send-mail/email', 
+  await axios.post('http://i10a801.p.ssafy.io:8082/send_mail/email', 
   JSON.stringify({
       email: emailInput.value
     }),
