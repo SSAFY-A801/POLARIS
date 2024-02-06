@@ -23,7 +23,6 @@ import com.ssafy.polaris.trade.service.TradeService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(value = "/trade")
