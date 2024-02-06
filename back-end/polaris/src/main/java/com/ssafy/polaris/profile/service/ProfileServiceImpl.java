@@ -59,7 +59,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     public String updateProfile(Long userId, ProfileRequestDto profileRequest) {
         User findUser = userRepository.getReferenceById(userId);
-        Regcode newRegcode = regcodeRepository.getReferenceById(profileRequest.getRegcode().getId());
+        Regcode newRegcode = regcodeRepository.getReferenceById(profileRequest.getRegcodeId());
         findUser.UpdateProfile(newRegcode,
                 profileRequest.getNickname(),
                 profileRequest.getIntroduction(),
