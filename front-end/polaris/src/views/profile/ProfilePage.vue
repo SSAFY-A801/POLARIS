@@ -237,17 +237,33 @@
 
 
   const gotoMychatList = () => {
-    // router.push({name: "FollowingListPage"});
+    router.push({name: "chat", params:{id:user.value.id}});
   }
 
+  // const gotoTradechat = () => {
+  //   // router.push({name: "FollowingListPage"});
+  // }
+
+  // const gotoExchangechat = () => {
+  //   // router.push({name: "FollowingListPage"});
+  // }
   const gotoTradechat = () => {
-    // router.push({name: "FollowingListPage"});
-  }
+  // // trade 채팅 생성
+  // const senderId = user.value.id;  // 현재 사용자의 ID
+  // const receiverId = /* 받는 사람의 ID를 어떻게 가져올지에 대한 코드 */;  
+  // const tradeType = 'PURCHASE';  // 구매 채팅인 경우
 
-  const gotoExchangechat = () => {
-    // router.push({name: "FollowingListPage"});
-  }
+  // createChatRoom(senderId, receiverId, tradeType);
+};
 
+const gotoExchangechat = () => {
+  // // exchange 채팅 생성
+  // const senderId = user.value.id;  // 현재 사용자의 ID
+  // const receiverId = /* 받는 사람의 ID를 어떻게 가져올지에 대한 코드 */;  
+  // const tradeType = 'EXCHANGE';  // 교환 채팅인 경우
+
+  // createChatRoom(senderId, receiverId, tradeType);
+};
   
   onMounted(()=> {
   //   axios({
@@ -267,6 +283,47 @@
   //     console.error('에러 발생: ',error)
   //   })
   })
+
+  // 채팅방 생성 api post 요청
+  interface CreateChatroom {
+  id: number;
+  senderId: number;
+  receiverId: number;
+  tradeType: string;
+}
+
+interface CreateChatroomResponse {
+  status: number;
+  message: string;
+  data: CreateChatroom;
+}
+
+// 이밴트핸들러에 추가하면 될 것 같아요
+const createChatRoom = async (senderId: number, receiverId: number, tradeType: string) => {
+  try {
+    const response = await axios.post<CreateChatroomResponse>('http://i10a801.p.ssafy.io:8082/chat', {
+      senderId,
+      receiverId,
+      tradeType,
+    }, {
+      headers: {
+        'Authorization': 'Bearer ',
+      }
+    });
+
+    if (response.status === 201) {
+      console.log('채팅방 생성:', response.data);
+      return response.data.data; // 채팅방 정보 반환
+    } else {
+      console.error('API 요청 실패:', response.status);
+      return null;
+    }
+  } catch (error) {
+    console.error('API 요청 중 오류 발생:', error);
+    return null;
+  }
+};
+
 </script>
 
 <style scoped>
