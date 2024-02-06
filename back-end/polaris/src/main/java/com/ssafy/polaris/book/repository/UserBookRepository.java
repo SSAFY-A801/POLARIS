@@ -4,6 +4,7 @@ import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.book.domain.UserBookTradeType;
 import com.ssafy.polaris.book.dto.SearchUserBookResponseDto;
 import com.ssafy.polaris.book.dto.UserBookResponseDto;
+import com.ssafy.polaris.book.dto.WeeklyBooksDto;
 import com.ssafy.polaris.trade.dto.TradeBookResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -51,6 +52,7 @@ public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 	@Query("select ub from UserBook ub where ub.book.isbn = :isbn and ub.user.id = :userId")
 	UserBook getUserBookByIdAndIsbn(@Param("userId") Long userId, @Param("isbn") String isbn);
 
+	// TODO: 쓸모 없는 메서드!
 	@Query("select new com.ssafy.polaris.book.dto.SearchUserBookResponseDto(ub.id, ub.user.id, " +
 			" ub.user.nickname, ub.user.regcode, b.isbn, b.title," +
 			"b.author, b.cover, ub.userBookTradeType) " +
@@ -58,4 +60,14 @@ public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 			"left join Book b on ub.book.isbn = b.isbn " +
 			"left join User u on u.id = ub.user.id ")
 	List<SearchUserBookResponseDto> searchAll();
+
+	// userBookRepo
+	@Query("select new com.ssafy.polaris.book.dto.WeeklyBooksDto(" +
+			"b.isbn, b.cover, b.title, b.author, b.publisher, b.pubDate, b.bookDescription, b.priceStandard) " +
+			"from UserBook ub " +
+			"left join Book b on ub.book.isbn = b.isbn " +
+			"group by b.isbn " +
+			"order by count(*) desc " +
+			"limit 20 ")
+	List<WeeklyBooksDto> getWeeklyBooks();
 }
