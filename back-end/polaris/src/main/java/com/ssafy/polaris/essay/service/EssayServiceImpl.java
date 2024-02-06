@@ -51,6 +51,7 @@ public class EssayServiceImpl implements EssayService{
 			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
 
 		// TODO: deletedat 없앤다.
+		// TODO: hit 올린다.
 		if (essay.getDeletedAt() != null || !essay.getIsOpened()) {
 			throw new RuntimeException("해당 게시글이 존재하지 않습니다.");
 		}
