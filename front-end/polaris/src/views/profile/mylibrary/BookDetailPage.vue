@@ -2,15 +2,26 @@
   <div class="container mx-auto mt-24 max-w-6xl min-w-[700px] bg-backgroundgray p-4">
     <h1 class="text-2xl font-bold">도서 상세보기</h1>
     <div class="flex justify-end">
+      <div>
+        <button @click="goback()" id="save-update" type="button"  class="hover:bg-gray-500" >
+          BACK
+        </button>
+      </div>
       <div v-if="!isMe">
-        <button id="move-library" type="submit"  class="hover:bg-gray-500" >내 서재로 옮기기</button>
+        <button id="move-library" type="button"  class="hover:bg-gray-500" >내 서재로 옮기기</button>
       </div>
       <div v-else>
         <div v-if="updateBook">
-          <button @click="saveBookinfo" id="save-update" type="submit"  class="hover:bg-gray-500" >저장</button>
+          <button @click="saveBookinfo" id="save-update" type="button"  class="hover:bg-gray-500" >
+            <font-awesome-icon icon="fa-solid fa-floppy-disk" />
+            저장
+          </button>
         </div>
         <div v-else>
-          <button @click="updateBookinfo" id="update-info" type="submit"  class="hover:bg-gray-500" >수정</button>
+          <button @click="updateBookinfo" id="update-info" type="button"  class="hover:bg-gray-500" >
+            <font-awesome-icon icon="pen-to-square" />
+            수정
+          </button>
         </div>
       </div>
     </div>
@@ -23,8 +34,8 @@
           <!-- 사용자 정보 -->
           <div class="grid grid-cols-3 justify-center p-4 m-2 shadow-md rounded-xl">
             <div id="userid" class="col-span-2 font-bold flex items-center justify-center m-2">
-                환불받으러옴
-                (userid를 내놓으시죠 제발)
+              <!-- 나중에는 이 정보로 닉네임 불러오기 -->
+                {{ bookDetail.userId }}
               </div>
             <button @click="gotoProfile">
               <img class="col-span-1" id="profile-image" src="@\assets\following-user.jpg" alt="profile-image">
@@ -57,7 +68,7 @@
                 <span v-if="bookDetail.userBookTradeType=='EXCHANGE'" class="bg-yellow-500 py-1 px-2 text-white w-auto text-center border rounded-lg">
                   교환가능
                 </span>
-                <span v-else-if="bookDetail.userBookTradeType=='TRADE'" class="bg-red-600 py-1 px-2 text-white w-auto text-center border rounded-lg">
+                <span v-else-if="bookDetail.userBookTradeType=='PURCHASE'" class="bg-red-600 py-1 px-2 text-white w-auto text-center border rounded-lg">
                   판매가능
                 </span>
                 <span v-else class="bg-gray-600 py-1 px-2 text-white w-auto text-center border rounded-lg">
@@ -66,8 +77,8 @@
               </div>
               <!-- 거래상태 수정 -->
               <div v-if="updateBook"  class="p-4">
-                <button id="trade" class="bg-red-600 hover:bg-red-400 ">
-                  <input class="sr-only" type="radio" id="one" value="TRADE" v-model="bookDetail.userBookTradeType"/>
+                <button id="purchase" class="bg-red-600 hover:bg-red-400 ">
+                  <input class="sr-only" type="radio" id="one" value="PURCHASE" v-model="bookDetail.userBookTradeType"/>
                   <label for="one">판매</label>
                 </button>  
                 <button id="exchange" class="bg-yellow-500 hover:bg-yellow-400">
@@ -124,20 +135,22 @@
               <div class="mb-2">{{ bookDetail.priceStandard }}</div>
             </div>
           </div>
-          <div v-if="bookDetail.userBookTradeType=='TRADE'" id="sell-price" class="container grid grid-cols-6">
+          <div v-if="bookDetail.userBookTradeType=='PURCHASE'" id="sell-price" class="container grid grid-cols-6">
             <div class="text-maintheme1 m-2 font-bold col-span-1">
               <div class="mb-2">판매가</div>
             </div>
             <div class="col-span-4 text-maintheme1 m-2">
                 <div v-if="updateBook">
+                  {{ bookDetail.userBookPrice }}
                 <input
-                type="selling-price"
+                type="number"
                 id="selling-price"
-                placeholder=" 12,000"
-                  class="rounded-md border h-8"/>
+                v-model.number="bookDetail.userBookPrice"
+                placeholder="판매가를 설정해 주세요."
+                  class="rounded-md border h-8 w-56"/>
               </div>
               <div v-else  class="col-span-4 text-maintheme1 m-2">
-                <div class="mb-2">12,000</div>
+                <div class="mb-2">{{ bookDetail.userBookPrice }}</div>
               </div>
             </div>
           </div>
@@ -162,10 +175,12 @@
               <div>비고</div>
             </div>
             <div v-if="updateBook"  class="col-span-4 text-maintheme1 m-2">
+              {{ bookDetail.userBookDescription }}
               <textarea
               id="OrderNotes"
               class="mt-2 mb-4 w-full resize-none sm:text-sm"
               rows="5"
+              v-model="bookDetail.userBookDescription"
               :placeholder="bookDetail.userBookDescription"
               ></textarea>
             </div>
@@ -197,8 +212,8 @@
         </div>
     </div>
   </div>
-
-
+  
+  
 </template>
 
 <script setup lang="ts">
@@ -208,10 +223,17 @@
   import { profileCounterStore } from '@/stores/profilecounter';
   import axios from 'axios';
   const router = useRouter();
-
+  const isMe = ref<boolean>(true)
+  const updateBook = ref<boolean>(false)
+  const existEssay = ref<boolean>(false)
+  const store = profileCounterStore();
+  const route = useRoute();
+  const BACK_API_URL = store.BACK_API_URL
+  
   // 이후에는 store.ts로 옮겨서 서버에서 데이터를 받아올 예정 
   const bookDetail = ref<Book>({
     id: 9090,
+    userId: 190909090909090,
     isbn: "0000000000000",
     title: "무제",
     bookDescription: null,
@@ -226,22 +248,42 @@
     isOwned: false,
   });
 
-  const isMe = ref<boolean>(true)
-  const updateBook = ref<boolean>(false)
-  const existEssay = ref<boolean>(false)
-  const store = profileCounterStore();
-  const route = useRoute();
-  const BACK_API_URL = store.BACK_API_URL
-
+  // 뒤로 가기
+  const goback = () => {
+    window.history.back();
+  }
   // 수정정보 저장
   const saveBookinfo = () => {
     // DB에 저장하는 구문 추가
+    axios({
+      headers: {
+        Authorization: `${store.token}`,
+        "Content-Type": 'application/json'
+      },
+      method: 'patch',
+      url: `${BACK_API_URL}/book/${route.params.id}/library`,
+      data: {
+        "isbn": bookDetail.value.isbn,
+        "userBookDescription": bookDetail.value.userBookDescription,
+        "userBookPrice": bookDetail.value.userBookPrice,
+        "isOpened": Number(bookDetail.value.isOpened),
+        "isOwned": Number(bookDetail.value.isOwned),
+        "userBookTradeType": bookDetail.value.userBookTradeType
+      }
+    })
+    .then((response)=>{
+      console.log(response.data)
+    })
+    .catch((error)=> {
+      console.error(error)
+    })
     updateBook.value = !updateBook.value
 
   }
 
   // 정보수정 버튼
   const updateBookinfo = () => {
+ 
     updateBook.value = !updateBook.value
   }
 
@@ -257,7 +299,7 @@
   // 프로필 이동
   const gotoProfile = () => {
     console.log("사용자의 프로필로 이동합니다.")
-    // router.push({name: ProfilePage , params: userid})
+    router.push({name: "ProfilePage" , params: {id: bookDetail.value.userId}})
   }
 
   onMounted(()=>{
@@ -272,6 +314,7 @@
 
     })
     .then((response)=> {
+      console.log(response.data)
       const bookinfo = response.data['data']
       bookDetail.value = bookinfo
     })
@@ -292,7 +335,7 @@
     @apply w-[240px] h-[320px] ml-10
   }
 
-  #trade,
+  #purchase,
   #exchange,
   #undefined {
     @apply w-auto text-white m-[5px] px-2.5 py-[5px] rounded-[10px];
@@ -300,10 +343,10 @@
   #update-info,
   #save-update,
   #move-library,
-  #trade-chat,
+  #purchase-chat,
   #exchange-chat,
   #read-essay,
   #write-essay {
-      @apply w-auto hover:bg-gray-500 bg-[#323F59] text-white m-[5px] px-2 py-[5px] rounded-[10px];
+      @apply w-auto hover:bg-gray-500 bg-[#323F59] text-white m-[5px] px-3 py-[5px] rounded-[10px];
   }
 </style>

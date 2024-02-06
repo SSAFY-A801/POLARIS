@@ -1,6 +1,7 @@
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, watchEffect } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios';
+import type { LoginInfo } from './authcounter';
 
 export interface Searchbook  {
   isbn: string,
@@ -20,9 +21,17 @@ export interface Searchbook  {
 
 export interface Book extends Searchbook  {
   id: number,
+  userId: number,
   userBookDescription : string,
   userBookPrice: number|null,
 }
+
+
+
+export type DeleteBook = {
+  id: number
+}
+
 
 export type Regcode = {
   id: number,
@@ -41,9 +50,9 @@ export type Following = {
 
 
 export type User = {
-  id?: number,
+  id: number,
   profileUrl: string|null,
-  nickname: string|null,
+  nickname: string,
   regcode: Regcode,
   introduction: string|null,
   tradingCnt: number,
@@ -51,15 +60,21 @@ export type User = {
   followingsCnt: number,
 }
 
+
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
-  const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGE0QGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTYsImVtYWlsIjoia2luZ2ppbmhhNEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuPme2DhOu2iOyjvOuoueq5gOuvuOyEnCIsImV4cCI6MTcyNDc1MzQ0NX0.BPYiE7fRj2n1_fssmIFJsgYdj5yTYYGcv5yTmZ8jv20'
+  const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGEyQGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTQsImVtYWlsIjoia2luZ2ppbmhhMkBnbWFpbC5jb20iLCJleHAiOjE3MjQ2ODc5MjJ9.lzyGKu9Vgq3aBItSvODOKmRzE59WrRwx-win-v4uHKI'
+  const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
   
 
   
   // ProfilePage
   // 접속자
-  const currentUser = ref<User>();
+  const userInfoString = computed(()=> { 
+    return localStorage.getItem('user_info')
+  })
+  const loginUser = ref<LoginInfo|null>(null)
+
   // 프로필 유저
   const profileUser = ref<User>({
     id: 1,
@@ -77,18 +92,22 @@ export const profileCounterStore = defineStore('counter', () => {
     followingsCnt: 8,
   });
 
-  const getProfile = () => {
+  watch(profileUser, (newValue, oldValue) => {
+    // console.log('profileUser changed:', oldValue, '->', newValue);
+  });
+
+  const getProfile = (id: number) => {
     axios({
       headers: {
         Authorization: `${token}`,
         "Content-Type": 'application/json'
       },
         method: 'get',
-        url: `${BACK_API_URL}/profile/1`,
+        url: `${BACK_API_URL}/profile/${id}`,
       })  
     .then((response) => {
       const userData = response.data['data']
-      console.log('1번유저정보',userData)
+      console.log(`${id}번유저정보`,userData)
       profileUser.value = userData
       })
       .catch((error)=> {
@@ -107,9 +126,7 @@ export const profileCounterStore = defineStore('counter', () => {
   // MyFavoritePage
   // MyPromotionPage
   
-  // BookRegisterPage
-  const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
-  
+  // BookRegisterPage  
   type searchType = {
     [key: string]: string;
   }
@@ -168,7 +185,7 @@ export const profileCounterStore = defineStore('counter', () => {
 
   
   // MyLibraryPage
-  const deleteBookList = ref<Book[]>([])
+  const deleteBookList = ref<DeleteBook[]>([])
   const bookSearchResultList = ref([]);
   const mybookLists = ref<Book[]>([]);
 
@@ -197,7 +214,7 @@ const getMybookList = ()=> {
     deletebuttonState.value = !deletebuttonState.value
   }
   return { 
-    profileUser, getProfile,
+    profileUser, getProfile,loginUser,userInfoString,
     searchAPIbookList, BACK_API_URL, token,
     getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }
 },{persist: true})

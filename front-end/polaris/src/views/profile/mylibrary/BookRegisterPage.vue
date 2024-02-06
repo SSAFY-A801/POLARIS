@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router'
 import BookCartList from '@/components/profile/mylibrary/bookregister/BookCartList.vue';
@@ -122,6 +122,7 @@ const addAPIbook = (bookcartList:Searchbook[]) => {
         "Content-Type": "application/json",
       },
       method: 'post',
+      // 접속자 id
       url: `${BACK_API_URL}/book/1/library`,
       data: {
         "books": bookcartList
@@ -136,7 +137,9 @@ const addAPIbook = (bookcartList:Searchbook[]) => {
     store.searchbookLists = []
     store.bookCartList = []
     keyword.value = ""
+    
     router.push({name: "MyLibraryPage"})
+    alert("도서 등록 완료")
   } else {
     alert("담긴 도서가 존재하지 않습니다.")
   }

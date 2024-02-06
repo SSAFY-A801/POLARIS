@@ -65,18 +65,18 @@ import MyLibraryList from '@/components/profile/mylibrary/MyLibraryList.vue';
 import { ref, watch, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { profileCounterStore } from '@/stores/profilecounter';
-import { useRouter } from 'vue-router';
 import type { Book } from '@/stores/profilecounter';
+
 
 const store = profileCounterStore();
 const selectValue = ref("전체도서");
-const router = useRouter();
 const keyword = ref("")
 const booksearch = ref(false)
 
 const mybookLists = ref<Book[]>(store.mybookLists)
+
+
 const mybookList = computed(()=> {
-  // console.log(mybookLists.value)
   return mybookLists.value
 })
 
@@ -85,9 +85,6 @@ const deleteBookList = computed(()=> {
   return store.deleteBookList
 })
 
-// const allCheck = () => {
-
-// }
 
 const keywordSearch = (keyword:string) => {
   booksearch.value = true
@@ -142,6 +139,7 @@ const deleteBooks = () => {
     url: `${store.BACK_API_URL}/book/1/library`,
     data: {
       // body를 내놓으세요.
+      "books": deleteBookList.value
     }
   })
   .then((response)=> [
@@ -152,9 +150,7 @@ const deleteBooks = () => {
   ])
   store.deleteBookList = []
   selectValue.value = "전체도서"
-  // 꼼수
   alert("도서 삭제를 실시합니다.")
-  router.go(0);
 }
 
 const clickbutton = () => { 
@@ -177,13 +173,16 @@ const deleteState = computed(() => {
   return store.deletebuttonState
 })
 
-
+watch(store.mybookLists, (newValue, oldValue) => {
+    console.log('내 서재 목록 변경:', oldValue, '->', newValue);
+  });
 
 onMounted(()=> {
   selectWatch;
   store.deleteBookList = []
   store.deletebuttonState = false
   store.getMybookList();
+
 })
 </script>
 

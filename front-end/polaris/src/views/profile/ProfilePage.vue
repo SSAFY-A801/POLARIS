@@ -69,7 +69,9 @@
                 </button>
               </div>
           <div class="flex justify-center mb-8">
-            <div class="inline-grid grid-cols-3 gap-4">
+            <div 
+            class="inline-grid grid-cols-3 gap-4"
+            :class="{'pointer-events-none cursor-not-allowed': !isMe}">
               <button @click="gotoTradeList" id="trade" class=" hover:text-deepgray">
                 <div>판매/구매</div>
                 <div>{{ user.tradingCnt }}</div>
@@ -168,23 +170,32 @@
 
 <script setup lang="ts">
   import followingListitem from '@/components/profile/following/followingListitem.vue';
-  import { ref, onMounted } from "vue";
-  import { useRouter } from 'vue-router'
+  import { ref, onMounted, computed } from "vue";
+  import { useRouter, useRoute } from 'vue-router'
   import { profileCounterStore } from "@/stores/profilecounter";
-  import type { User } from "@/stores/profilecounter";
-  import type { Following } from "@/stores/profilecounter";
-
+  import { useUserStore } from '@/stores/authcounter';
+  import type { Following, User } from "@/stores/profilecounter";
   import axios from 'axios';
 
+  type Unfollowing = {
+    followingId: number
+  }
   const router = useRouter();
+  const route = useRoute();
   const store = profileCounterStore();
   const user = store.profileUser
   const followings_list = ref<Following[]>([])
-  const isMe = ref<boolean>(false)
-  const myFollwing = ref<boolean>(false)
+  // 현재 접속자와 현재 profileuser의 id 일치 여부
+  const isMe = ref<boolean>(true)
+  // 나의 팔로잉 명단 중에서 profileuser의 id가 있는지 여부
+  const myFollwing = ref<boolean>(true)
   const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
-  const unfollow_list = ref<Following[]>([])
+  const unfollow_list = ref<Unfollowing[]>([])
+
+
+
+
 
 
   const follow = (user: User) => {
@@ -202,6 +213,7 @@
     })
     .then((response) => {
       console.log(response.data)
+      console.log(followings_list.value)
       myFollwing.value = !myFollwing.value
     })
     .catch((error)=> {
@@ -217,9 +229,9 @@
       },
 
       method: 'delete',
-      url: `${BACK_API_URL}/profile/1/unfollow`,
+      url: `${BACK_API_URL}/profile/접속자id/unfollow`,
       data: {
-        unfollowings: [{followingsId: user.id}]
+        "unfollowings": [{followingId: user.id},]
       }
     })
     .then((response) => {
@@ -242,12 +254,33 @@
 
   const updateFollowings = () => {
     // 이후 추가
+    axios({
+      headers: {
+        Authorization: `${store.token}`,
+        "Content-Type": 'application/json'
+      },
+
+      method: 'DELETE',
+      url: `${BACK_API_URL}/profile/1/unfollow`,
+      data: {
+        "unfollowings": unfollow_list.value
+      }
+    })
+    .then((response) => {
+      console.log(response.data)
+      // showModal.value = false
+    })
+    .catch((error)=> {
+      console.error(error)
+    })
     showModal.value = false
   }
 
   const handlefollow = (following: Following, follow: boolean) => {
     if (!follow){
-      unfollow_list.value.push(following)
+      unfollow_list.value.push(
+        {followingId: following.followingId}
+        )
     } else {
       unfollow_list.value = unfollow_list.value.filter((user)=> user.followingId != following.followingId)
     }
@@ -281,6 +314,9 @@
 
   
   onMounted(()=> {
+
+
+    // console.log(currentUser?.nickname)
     // // followings 명단 호출
     axios({
       headers: {
@@ -290,6 +326,7 @@
       url: `${BACK_API_URL}/profile/${user.id}/follow`,
     })
     .then((response)=> {
+      console.log(response.data)
       const res = response.data
       followings_list.value = res.data['followings']
       console.log('팔로잉 명단: ',followings_list.value)
@@ -299,7 +336,7 @@
       console.error('요청실패: ',error)
     })
 
-    store.getProfile()
+    store.getProfile(Number(route.params.id))
   })
 </script>
 
