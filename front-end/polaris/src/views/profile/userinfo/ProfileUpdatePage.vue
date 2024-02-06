@@ -15,6 +15,7 @@
       <div class="col-span-4">
         <div>
           <div class="flex justify-center">
+            <!-- {{ imageUrl }} -->
             <img v-if="imageUrl" id="profile-image" :src="imageUrl" alt="대체 이미지" />
             <img v-else id="profile-image" src="@\assets\profile-default.jpg" alt="">
           </div>
@@ -39,7 +40,13 @@
           비밀번호 변경
         </button>
         <div class="font-semibold mt-8">닉네임</div>
-        <input type="nickname" v-model="nickname" id="Usernickname"  class="w-64 mt-2 mb-4 rounded-md border h-8"/>
+        <!-- {{ isValidNickname }} -->
+        <input type="nickname" v-model="newNickname" id="Usernickname"  class="w-64 mt-2 mb-4 rounded-md border h-8"/>
+        <button @click="nicknameCheck" type="button" id="update-loc-button">
+          <font-awesome-icon icon="fa-solid fa-circle-user" />
+          닉네임 확인
+        </button>
+        <div></div>
         <div class="font-semibold">나의 위치</div>
         <input readonly v-model="mylocation" type="location" id="UserLocation" class="mt-2 mb-4 w-64 rounded-md border h-8"/>
         <button @click="openRegionModal" type="button" id="update-loc-button">
@@ -54,7 +61,7 @@
           >
           <textarea
           id="OrderNotes"
-          v-model="introduction"
+          v-model="user.introduction"
           class="mt-2 w-full resize-none sm:text-sm"
           rows="5"
           ></textarea>
@@ -67,7 +74,7 @@
 
 
 <script setup lang="ts">
-  import { computed, ref } from 'vue';
+  import { computed, ref, watch } from 'vue';
   import axios from 'axios';
   import { useRouter } from 'vue-router'
   import { profileCounterStore } from '@/stores/profilecounter';
@@ -76,15 +83,29 @@
   const store = profileCounterStore();
   const router = useRouter();
   const user = ref(store.profileUser)
+  const usernickname :string = user.value.nickname
+  const newNickname = ref<string>(usernickname)
+  const isValidNickname = ref(newNickname.value==user.value.nickname)
   const imageUrl = ref<string | null>(user.value.profileUrl);
-  const nickname = ref(user.value.nickname)
+ 
   const mylocation = ref(`${user.value.regcode.si} ${user.value.regcode.gungu} ${user.value.regcode.dong}`)
-  const introduction = ref(`${user.value.introduction}`)
-  const locModal = ref(false)
+  const BACK_API_URL = store.BACK_API_URL
   const regionInputName = ref('')
   const regionInputCode = ref('')
   const isRegionModalOpen = ref(false)
-  console.log(regionInputName.value)
+
+  watch(() => newNickname.value, (newNickname, oldNickname) => {
+  console.log(newNickname)
+  if(newNickname == user.value.nickname){
+    isValidNickname.value = true
+  } else {
+    isValidNickname.value = false;
+  }
+  console.log(newNickname == user.value.nickname)
+  console.log(typeof(newNickname))
+  console.log(typeof(user.value.nickname))
+});
+
 
   const openRegionModal = () => {
     isRegionModalOpen.value = true
@@ -101,9 +122,31 @@
     closeRegionModal()
   }
 
+  const nicknameCheck = () => {
+    axios({
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'get',
+      url: `${BACK_API_URL}/user/nickname_check/${newNickname.value}`
 
-  const clickLocbutton = () => {
-    locModal.value = true
+    })
+    .then((response)=> {
+      const res = response.data.data
+      if(!res.isInUse){
+        alert("사용 가능한 닉네임입니다.")
+        isValidNickname.value = true
+      } else {
+        alert("중복된 닉네임입니다. 다른 닉네임을 설정해 주세요.")
+        user.value.nickname = ""
+        
+      }
+
+    })
+    .catch((error)=> {
+      console.error(error)
+    })
+    alert("닉네임이 좀 노잼이다?")
   }
 
   const handleFileChange = (event: Event) => {
@@ -116,7 +159,6 @@
       reader.onload = (e) => {
         imageUrl.value = e.target?.result as string;
       };
-  
       reader.readAsDataURL(file);
       // 파일 업로드 후 파일 이름 비우기
       input.value = '';
@@ -140,46 +182,39 @@
     
     
   function updateProfile(){
-    if (nickname.value ==""){
+    console.log(imageUrl.value)
+    if (newNickname.value ==""){
       alert("닉네임을 입력해주세요.")
+    } else if (!isValidNickname.value) {
+      alert("닉네임 확인이 필요합니다.")
     } else {
-      // 임시 확인 코드
-      user.value.nickname = nickname.value,
-      // user.value.regcode_id = mylocation.value,
-      user.value.introduction = introduction.value,
-      user.value.profileUrl = imageUrl.value,
-    // // axios 요청
-    // axios({
-    //   method: 'put',
-    //   url: `${BACK_API_URL}/profile/${user.value.id}`,
-    //   headers: {
-      
-    //   },
-    //   data: {
-    //     nickname : nickname.value,
-    //     regcode_id : mylocation.value,
-    //     introduction : introduction.value,
-    //     profile_url : imageUrl.value,
-    //   },
-    // })
-    // .then((response) => {
-    //   console.log(response.data)
-    //   alert("프로필이 수정되었습니다.")
-    // })
-    // .catch((error) => {
-    //   console.error(error)
-    // })
+    // axios 요청
+    axios({
+      method: 'patch',
+      url: `${BACK_API_URL}/profile/${user.value.id}`,
+      headers: {
+        Authorization: `${store.token}`,
+        "Content-Type": 'application/json'
+      },
+      data: {
+        nickname: newNickname.value,
+        regcodeId: user.value.regcode.id,
+        introduction: user.value.introduction,
+        imageUrl: imageUrl.value,
+      },
+    })
+    .then((response) => {
+      console.log(response.data)
+      alert("프로필이 수정되었습니다.")
+    })
+    .catch((error) => {
+      console.error(error)
+    })
               
       router.push({name: "ProfilePage"})
     }
   }
   
-  // 닉네임 체크
-  // const nicknamecheck = computed(() => {
-  //   if(nickname.value.length > 20){
-  //   }
-  //   return nickname.value
-  // })
 </script>
 
 <style scoped>

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="container mx-auto">
     <div id="carouselExample" class="carousel slide" style="width: 90%; margin: auto;">
       <div class="carousel-inner">
@@ -39,17 +39,9 @@
   </div>
 </template>
 
-
-
-
-  
-  
 <script setup lang="ts">
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { ref, onMounted } from 'vue';
 import axios from 'axios'
-import { Carousel } from 'bootstrap'
 import { useBestsellerStore } from '@/stores/bestsellercounter';
 
 const store = useBestsellerStore()
@@ -94,4 +86,4 @@ onMounted(async () => {
 .carousel-control-next-icon::before {
   content: '›' !important;
 }
-  </style>
+  </style> -->

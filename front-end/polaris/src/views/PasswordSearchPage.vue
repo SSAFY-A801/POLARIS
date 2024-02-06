@@ -31,7 +31,7 @@ watch(() => passwordSearchEmail.value,  (current) => {
 })
 
 const sendTemporaryPassword =async () => {
-    await axios.post('', {
+    await axios.post('https://i10a801.p.ssafy.io:8082/user/send_mail/password', {
     headers: {
     "Content-Type": "application/json",
   }, body:{
@@ -39,7 +39,7 @@ const sendTemporaryPassword =async () => {
     }
   })
   .then (function (response) {
-        alert(response.data.message)
+        alert('이메일로 임시비밀번호를 전송하였습니다.')
   })
 	  
 .catch(function (error) {

@@ -69,7 +69,9 @@
                 </button>
               </div>
           <div class="flex justify-center mb-8">
-            <div class="inline-grid grid-cols-3 gap-4">
+            <div 
+            class="inline-grid grid-cols-3 gap-4"
+            :class="{'pointer-events-none cursor-not-allowed': !isMe}">
               <button @click="gotoTradeList" id="trade" class=" hover:text-deepgray">
                 <div>판매/구매</div>
                 <div>{{ user.tradingCnt }}</div>
@@ -168,23 +170,32 @@
 
 <script setup lang="ts">
   import followingListitem from '@/components/profile/following/followingListitem.vue';
-  import { ref, onMounted } from "vue";
-  import { useRouter } from 'vue-router'
+  import { ref, onMounted, computed } from "vue";
+  import { useRouter, useRoute } from 'vue-router'
   import { profileCounterStore } from "@/stores/profilecounter";
-  import type { User } from "@/stores/profilecounter";
-  import type { Following } from "@/stores/profilecounter";
-
+  import { useUserStore } from '@/stores/authcounter';
+  import type { Following, User } from "@/stores/profilecounter";
   import axios from 'axios';
 
+  type Unfollowing = {
+    followingId: number
+  }
   const router = useRouter();
+  const route = useRoute();
   const store = profileCounterStore();
   const user = store.profileUser
   const followings_list = ref<Following[]>([])
-  const isMe = ref<boolean>(false)
-  const myFollwing = ref<boolean>(false)
+  // 현재 접속자와 현재 profileuser의 id 일치 여부
+  const isMe = ref<boolean>(true)
+  // 나의 팔로잉 명단 중에서 profileuser의 id가 있는지 여부
+  const myFollwing = ref<boolean>(true)
   const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
-  const unfollow_list = ref<Following[]>([])
+  const unfollow_list = ref<Unfollowing[]>([])
+
+
+
+
 
 
   const follow = (user: User) => {
@@ -202,6 +213,7 @@
     })
     .then((response) => {
       console.log(response.data)
+      console.log(followings_list.value)
       myFollwing.value = !myFollwing.value
     })
     .catch((error)=> {
@@ -217,9 +229,9 @@
       },
 
       method: 'delete',
-      url: `${BACK_API_URL}/profile/1/unfollow`,
+      url: `${BACK_API_URL}/profile/접속자id/unfollow`,
       data: {
-        unfollowings: [{followingsId: user.id}]
+        "unfollowings": [{followingId: user.id},]
       }
     })
     .then((response) => {
@@ -242,12 +254,33 @@
 
   const updateFollowings = () => {
     // 이후 추가
+    axios({
+      headers: {
+        Authorization: `${store.token}`,
+        "Content-Type": 'application/json'
+      },
+
+      method: 'DELETE',
+      url: `${BACK_API_URL}/profile/1/unfollow`,
+      data: {
+        "unfollowings": unfollow_list.value
+      }
+    })
+    .then((response) => {
+      console.log(response.data)
+      // showModal.value = false
+    })
+    .catch((error)=> {
+      console.error(error)
+    })
     showModal.value = false
   }
 
   const handlefollow = (following: Following, follow: boolean) => {
     if (!follow){
-      unfollow_list.value.push(following)
+      unfollow_list.value.push(
+        {followingId: following.followingId}
+        )
     } else {
       unfollow_list.value = unfollow_list.value.filter((user)=> user.followingId != following.followingId)
     }
@@ -268,19 +301,38 @@
 
 
   const gotoMychatList = () => {
-    // router.push({name: "FollowingListPage"});
+    router.push({name: "chat", params:{id:user.id}});
   }
 
+  // const gotoTradechat = () => {
+  //   // router.push({name: "FollowingListPage"});
+  // }
+
+  // const gotoExchangechat = () => {
+  //   // router.push({name: "FollowingListPage"});
+  // }
   const gotoTradechat = () => {
-    // router.push({name: "FollowingListPage"});
-  }
+  // // trade 채팅 생성
+  // const senderId = user.value.id;  // 현재 사용자의 ID
+  // const receiverId = /* 받는 사람의 ID를 어떻게 가져올지에 대한 코드 */;  
+  // const tradeType = 'PURCHASE';  // 구매 채팅인 경우
 
-  const gotoExchangechat = () => {
-    // router.push({name: "FollowingListPage"});
-  }
+  // createChatRoom(senderId, receiverId, tradeType);
+};
 
+const gotoExchangechat = () => {
+  // // exchange 채팅 생성
+  // const senderId = user.value.id;  // 현재 사용자의 ID
+  // const receiverId = /* 받는 사람의 ID를 어떻게 가져올지에 대한 코드 */;  
+  // const tradeType = 'EXCHANGE';  // 교환 채팅인 경우
+
+  // createChatRoom(senderId, receiverId, tradeType);
+};
   
   onMounted(()=> {
+
+
+    // console.log(currentUser?.nickname)
     // // followings 명단 호출
     axios({
       headers: {
@@ -290,6 +342,7 @@
       url: `${BACK_API_URL}/profile/${user.id}/follow`,
     })
     .then((response)=> {
+      console.log(response.data)
       const res = response.data
       followings_list.value = res.data['followings']
       console.log('팔로잉 명단: ',followings_list.value)
@@ -299,8 +352,49 @@
       console.error('요청실패: ',error)
     })
 
-    store.getProfile()
+    store.getProfile(Number(route.params.id))
   })
+
+  // 채팅방 생성 api post 요청
+  interface CreateChatroom {
+  id: number;
+  senderId: number;
+  receiverId: number;
+  tradeType: string;
+}
+
+interface CreateChatroomResponse {
+  status: number;
+  message: string;
+  data: CreateChatroom;
+}
+
+// 이밴트핸들러에 추가하면 될 것 같아요
+const createChatRoom = async (senderId: number, receiverId: number, tradeType: string) => {
+  try {
+    const response = await axios.post<CreateChatroomResponse>('http://i10a801.p.ssafy.io:8082/chat', {
+      senderId,
+      receiverId,
+      tradeType,
+    }, {
+      headers: {
+        'Authorization': 'Bearer ',
+      }
+    });
+
+    if (response.status === 201) {
+      console.log('채팅방 생성:', response.data);
+      return response.data.data; // 채팅방 정보 반환
+    } else {
+      console.error('API 요청 실패:', response.status);
+      return null;
+    }
+  } catch (error) {
+    console.error('API 요청 중 오류 발생:', error);
+    return null;
+  }
+};
+
 </script>
 
 <style scoped>

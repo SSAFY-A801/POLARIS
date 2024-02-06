@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 
-import Bestseller from '@/components/main/Bestseller.vue'
+import Bestseller2 from '@/components/main/Bestseller2.vue'
 
 </script>
 
