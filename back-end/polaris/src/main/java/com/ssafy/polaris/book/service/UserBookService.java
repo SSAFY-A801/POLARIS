@@ -10,7 +10,10 @@ public interface UserBookService {
     UserBookResponseDto getUserBook(Long userId, String isbn);
     int updateUserBook(Long userId, UserBookUpdateRequestDto data);
     int deleteUserBook(Long userId, UserBookListDeleteRequestDto data);
-    SearchUserBookListResponseDto searchByConditionUserBook(String queryType, String keyword);
+    SearchUserBookListResponseDto searchByConditionUserBook(Long regcode, String queryType, String keyword);
+    public void saveWeeklyBooks();
+
+    List<WeeklyBooksDto> getCachedWeeklyBooks();
 }
 
 
