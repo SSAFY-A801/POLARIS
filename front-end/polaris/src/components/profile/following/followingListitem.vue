@@ -1,5 +1,7 @@
 <template>
-  <div class="flex grid grid-cols-12 items-center">
+  <div 
+  class="grid grid-cols-12 items-center"
+  :class="{'bg-gray-200': !follow}">
     <div id="following-image"  class="col-span-2">
       <img v-if="following.profileUrl" :src="following.profileUrl" alt="NO IMAGE" class="profile-image">
       <img v-else src="@\assets\following-user.jpg" alt="NO IMAGE" class="profile-image">
@@ -19,13 +21,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { User } from '@/stores/profilecounter';
+import type { Following } from '@/stores/profilecounter';
   interface FollowingInfo {
-    following: User
+    following: Following
   }
 
   const emit = defineEmits<{
-    (e: 'followToggle', following: User, follow: boolean): void
+    (e: 'followToggle', following: Following, follow: boolean): void
   }>()
 
   const follow = ref(true)
