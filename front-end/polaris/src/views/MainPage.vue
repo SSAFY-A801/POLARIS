@@ -1,7 +1,7 @@
 <template>
   <main>
     <p class="h-24">mainview</p>
-    <Bestseller></Bestseller>
+    <Bestseller2></Bestseller2>
     
     
   </main>
@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 
-import Bestseller from '@/components/main/Bestseller.vue'
+import Bestseller2 from '@/components/main/Bestseller2.vue'
 
 </script>
 

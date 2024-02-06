@@ -51,24 +51,26 @@ import { ref, watchEffect } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
-const userToken = ref(localStorage.getItem('user_token'))
-
-
+// const props = defineProps(['userToken'])
+const userToken = ref(localStorage.getItem('user_token') )
 const router = useRouter()
+
+
 
 
 watchEffect(() => {
     userToken.value = localStorage.getItem('user_token')
     // console.log(localStorage.getItem('user_token'))
     // console.log("watchEffect is running") 
-    // console.log(userToken.value)
+    // console.log("watchEffect",userToken.value)
 
 })
 
 
+
 //로그아웃
 const logout = async () => {
-    await axios.post('http://i10a801.p.ssafy.io:8082/user/logout', {}, {
+    await axios.post('https://i10a801.p.ssafy.io:8082/user/logout', {}, {
     headers: {
     "Authorization" : userToken.value?.replace("\"", ""),
     "Content-Type": "application/json",

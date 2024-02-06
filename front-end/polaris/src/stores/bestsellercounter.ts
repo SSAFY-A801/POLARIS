@@ -31,16 +31,15 @@ type bookItemType = {
   
 type bookListType = {item:bookItemType[] ,itemsPerPage:number , link:string,logo:string,pubDate:string,query:string,searchCategoryId:number,searchCategoryName:string,startIndex:number,title:string,totalResults:number,version:string}
   
-  export const useBestsellerStore = defineStore({
-    id: 'bestseller',
-    state: () => ({
-      booklistItem: null as bookListType | null
-    }),
-    actions: {
-      async fetchBooklistItem() {
-        const response = await axios.get('http://i10a801.p.ssafy.io:8082/api/bestseller')
-        console.log(response.data)
-        this.booklistItem = response.data
-      }
+export const useBestsellerStore = defineStore({
+  id: 'bestseller',
+  state: () => ({
+    booklistItem: null as bookListType | null
+  }),
+  actions: {
+    async fetchBooklistItem() {
+      const response = await axios.get('https://i10a801.p.ssafy.io:8082/api/bestseller')
+      this.booklistItem = response.data
     }
-  })
+  }
+})

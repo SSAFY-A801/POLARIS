@@ -34,12 +34,12 @@
                     </div>
                 </form>
             </div>
-            <div class="flex items-center justify-center mt-2 text-gray-500">
-                <router-link :to="{name:'passwordsearch'}" class="text-gray-500">비밀번호 찾기 </router-link>     
-                            <p class="text-gray-500 ml-2 mt-2"> / </p>
-                <router-link :to="{name:'signup'}" class="text-gray-500 ml-2">회원가입 </router-link>   
+            <div class="flex items-center justify-center mt-2">
+                <router-link :to="{name:'passwordsearch'}">비밀번호 찾기 </router-link>     
+                            <p class="text-gray-500 ml-2"> / </p>
+                <router-link :to="{name:'signup'}" class="ml-2">회원가입 </router-link>   
             </div>
-            <hr class="mt-2 mb-2 border-2 border-gray-400">
+            <hr class="mt-6 mb-2 border-t border-gray-200">
             <button type="submit" class="flex items-center justify-center mt-4 mb-4 py-3 px-4 bg-kakao_yellow text-kakao_brown w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md rounded-lg">
                 <img src="@/assets/styles/kakaosymbol.png" alt="Kakao 로그인 아이콘" class="mr-2">
                 카카오 로그인
@@ -60,7 +60,7 @@ const userPassword = ref('')
 
 const userLogin = async () => {
     if ( userEmail.value && userPassword.value ) {
-    await axios.post('http://i10a801.p.ssafy.io:8082/user/login', 
+    await axios.post('https://i10a801.p.ssafy.io:8082/user/login', 
   JSON.stringify({
     email: userEmail.value,
     password: userPassword.value
@@ -72,10 +72,11 @@ const userLogin = async () => {
 )
 .then(function (response) {
   alert('로그인에 성공하였습니다')
+  console.log(response.data.data)
   localStorage.setItem('user_token',(response.data.data.access))
   const userStore = useUserStore()
   userStore.setLoginInfo(response.data.data)
-
+ 
   router.push({ name: 'home'})
   
   // localStorage.setItem('user_info' , JSON.stringify(response.userInfo))
@@ -95,7 +96,7 @@ const userLogin = async () => {
 <style scoped>
 #logincontainer {
   width: 1200px;
-  height: 600px;
+  height: 550px;
   margin: 150px auto 50px;
   display: flex;
   flex-grow:1;
@@ -108,7 +109,5 @@ const userLogin = async () => {
   flex-grow:1;
 }
 
-a {
-  text-decoration: none;
-}
+
 </style>
