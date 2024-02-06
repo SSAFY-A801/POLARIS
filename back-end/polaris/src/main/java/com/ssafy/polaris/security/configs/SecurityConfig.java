@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -24,6 +25,7 @@ import com.ssafy.polaris.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+@CrossOrigin
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
@@ -57,7 +59,8 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	private CorsConfigurationSource corsConfigurationSource() {
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("http://i10a801.p.ssafy.io", "https://localhost:5173", "https://i10a801.p.ssafy.io"));
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
@@ -66,6 +69,7 @@ public class SecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
+	 // 빈 익스클루드
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {

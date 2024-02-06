@@ -105,12 +105,38 @@ public class UserBookController {
         return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_USER_BOOK_DELETE);
     }
 
+    /**
+     * @param queryType 검색 조건
+     * @param keyword 검색어
+     * @return 조건에 따라 검색된 것들 리턴
+     * */
     @GetMapping("/search")
-    public ResponseEntity<DefaultResponse<SearchUserBookListResponseDto>> searchAllUserBook(){
-        SearchUserBookListResponseDto data = userBookService.searchAllUserBook();
+    public ResponseEntity<DefaultResponse<SearchUserBookListResponseDto>> searchByConditionUserBook(
+            @RequestParam(value = "regcode", required = false) Long regcodeId,
+            @RequestParam(value = "queryType", required = false) String queryType,
+            @RequestParam(value = "keyword", required = false) String keyword
+    ){
+        SearchUserBookListResponseDto data = userBookService.searchByConditionUserBook(regcodeId, queryType, keyword);
         if(data == null){
             return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_SEARCH_USER_BOOK);
         }
         return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_SEARCH_USER_BOOK, data);
+    }
+    @GetMapping("/popular_books")
+    public ResponseEntity<DefaultResponse<List<WeeklyBooksDto>>> getWeeklyUserBook(){
+        return DefaultResponse.toResponseEntity(
+                HttpStatus.OK,
+                StatusCode.SUCCESS_WEEKLY_USER_BOOK_VIEW,
+                userBookService.getCachedWeeklyBooks()
+        );
+    }
+
+    @GetMapping("/popular_books/create")
+    public ResponseEntity<DefaultResponse<Void>> createWeeklyUserBook(){
+        userBookService.saveWeeklyBooks();
+        return DefaultResponse.emptyResponse(
+                HttpStatus.OK,
+                StatusCode.SUCCESS_WEEKLY_USER_BOOK_CREATE
+        );
     }
 }

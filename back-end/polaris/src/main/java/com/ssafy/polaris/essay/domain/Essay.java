@@ -44,10 +44,10 @@ public class Essay extends BaseEntity {
 
 	@NotNull
 	@OneToOne
-	@JoinColumn(name = "user_book_id")
+	@JoinColumn(name = "user_book_id", updatable = false, insertable = false)
 	private UserBook userBook;
 
-	@Column(name = "user_book_id", updatable = false, insertable = false)
+	@Column(name = "user_book_id")
 	private Long userBookId;
 
 	@NotNull
