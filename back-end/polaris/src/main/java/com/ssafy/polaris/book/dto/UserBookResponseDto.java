@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class UserBookResponseDto {
     Long id;
+    Long userId;
     String cover;
     String title;
     String author;

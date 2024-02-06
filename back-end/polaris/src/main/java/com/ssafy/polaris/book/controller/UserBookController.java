@@ -1,13 +1,10 @@
 package com.ssafy.polaris.book.controller;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ssafy.polaris.book.dto.BookListRequestDto;
-import com.ssafy.polaris.book.dto.BookRequestDto;
-import com.ssafy.polaris.book.dto.UserBookListResponseDto;
-import com.ssafy.polaris.book.dto.UserBookResponseDto;
+import com.ssafy.polaris.book.dto.*;
 import com.ssafy.polaris.book.response.DefaultResponse;
 import com.ssafy.polaris.book.response.StatusCode;
 import com.ssafy.polaris.book.service.UserBookService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +51,11 @@ public class UserBookController {
         return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_CREATE_USER_BOOK);
     }
 
+    /**
+     * @param userId 사용자 id
+     * @param isbn 도서 식별 번호
+     * @return 사용자 도서 상세 정보
+     */
     @GetMapping("/{id}/library/{isbn}")
     public ResponseEntity<DefaultResponse<UserBookResponseDto>> getUserBook(@PathVariable("id") Long userId,
                                                                             @PathVariable("isbn") String isbn){
@@ -72,4 +74,43 @@ public class UserBookController {
         );
     }
 
+    /**
+     * @param userId 사용자 id
+     * @param data 변경할 사용자 도서 정보
+     * @return void
+     */
+    @PutMapping("/{id}/library")
+    public ResponseEntity<DefaultResponse<Void>> updateUserBook(@PathVariable("id") Long userId, @RequestBody UserBookUpdateRequestDto data){
+        int result = userBookService.updateUserBook(userId, data);
+        if(result == 0){ // 만약 변경하지 못했을 경우 ServiceImpl 에서 0을 리턴
+            return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_USER_BOOK_UPDATE);
+        }
+        return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_USER_BOOK_UPDATE);
+    }
+
+    /**
+     * @param userId 사용자 id
+     * @param data 삭제할 사용자 등록 도서의 id들
+     * @return void
+     *
+     * */
+    @DeleteMapping("/{id}/library")
+    public ResponseEntity<DefaultResponse<Void>> deleteUserBook(@PathVariable("id") Long userId,
+                                                                @RequestBody UserBookListDeleteRequestDto data){
+        int result = userBookService.deleteUserBook(userId, data);
+        if(result == 0){
+            // TODO: 삭제하려고 하는 책이 이미 삭제가 된 경우라면? 이런 상황은 발생할 수 없는 것인가?
+            return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_USER_BOOK_DELETE);
+        }
+        return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_USER_BOOK_DELETE);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<DefaultResponse<SearchUserBookListResponseDto>> searchAllUserBook(){
+        SearchUserBookListResponseDto data = userBookService.searchAllUserBook();
+        if(data == null){
+            return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_SEARCH_USER_BOOK);
+        }
+        return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_SEARCH_USER_BOOK, data);
+    }
 }

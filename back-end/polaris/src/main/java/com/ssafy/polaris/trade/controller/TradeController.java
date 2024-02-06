@@ -2,19 +2,25 @@ package com.ssafy.polaris.trade.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ssafy.polaris.security.SecurityUser;
 import com.ssafy.polaris.trade.dto.TradeBookListResponseDto;
+import com.ssafy.polaris.trade.dto.TradeBookSelectRequestDto;
 import com.ssafy.polaris.trade.response.DefaultResponse;
 import com.ssafy.polaris.trade.response.StatusCode;
 import com.ssafy.polaris.trade.service.TradeService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @CrossOrigin
@@ -29,14 +35,22 @@ public class TradeController {
 	 * @return
 	 */
 	@GetMapping(path = "/exchange_books")
-	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getExchangeBookList(){
+	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getExchangeBookList(@AuthenticationPrincipal SecurityUser securityUser){
 		// TODO : userId 토큰에서 가져오기
-		Long userId = 1L;
+		Long userId = securityUser.getId();
+
+		TradeBookListResponseDto tradeBookListResponseDto = tradeService.getExchangeBookList(userId);
+		if (tradeBookListResponseDto.getBooks().isEmpty()){
+			return DefaultResponse.emptyResponse(
+				HttpStatus.OK,
+				StatusCode.SUCCESS_VIEW_EMPTY_TRADE_BOOKS
+			);
+		}
 
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
-			StatusCode.SUCCESS_VIEW,
-			tradeService.getExchangeBookList(userId)
+			StatusCode.SUCCESS_VIEW_TRADE_BOOKS,
+			tradeBookListResponseDto
 		);
 	}
 
@@ -45,14 +59,23 @@ public class TradeController {
 	 * @return
 	 */
 	@GetMapping(path = "/purchase_books")
-	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getPurchaseBookList(){
+	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getPurchaseBookList(@AuthenticationPrincipal SecurityUser securityUser){
 		// TODO : userId 토큰에서 가져오기
-		Long userId = 1L;
+		Long userId = securityUser.getId();
+
+		TradeBookListResponseDto tradeBookListResponseDto = tradeService.getPurchaseBookList(userId);
+
+		if (tradeBookListResponseDto.getBooks().isEmpty()){
+			return DefaultResponse.emptyResponse(
+				HttpStatus.OK,
+				StatusCode.SUCCESS_VIEW_EMPTY_TRADE_BOOKS
+			);
+		}
 
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,
-			StatusCode.SUCCESS_VIEW,
-			tradeService.getPurchaseBookList(userId)
+			StatusCode.SUCCESS_VIEW_TRADE_BOOKS,
+			tradeBookListResponseDto
 		);
 	}
 
@@ -76,7 +99,6 @@ public class TradeController {
 	 * @param chatRoomId
 	 * @return
 	 */
-
 	@DeleteMapping("/{chatRoomId}")
 	public ResponseEntity<DefaultResponse<Void>> deleteTrade(@PathVariable("chatRoomId") Long chatRoomId){
 		System.out.println(" controller - delete trade ");
@@ -88,6 +110,23 @@ public class TradeController {
 		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
 			StatusCode.SUCCESS_DELETE_TRADE
+		);
+	}
+
+	/**
+	 * 채팅방에서 사용자가 도서를 고르고 완료를 누릅니다.
+	 * 추가된 도서 리스트와 삭제된 도서 리스트들이 requestDto에 담겨 옵니다.
+	 * @param request
+	 * @return
+	 */
+	@Transactional
+	@PostMapping
+	public ResponseEntity<DefaultResponse<Void>> selectTradeBook(@RequestBody TradeBookSelectRequestDto request){
+		tradeService.selectTradeBooks(request);
+
+		return DefaultResponse.emptyResponse(
+			HttpStatus.OK,
+			StatusCode.SUCCESS_SELECT_TRADE_USER_BOOK
 		);
 	}
 

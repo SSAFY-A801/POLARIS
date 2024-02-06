@@ -1,6 +1,4 @@
-package com.ssafy.polaris.favorite.domain;
-
-import com.ssafy.polaris.promotion.domain.Promotion;
+package com.ssafy.polaris.promotion.domain;
 import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Entity;

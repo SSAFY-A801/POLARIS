@@ -2,6 +2,7 @@ package com.ssafy.polaris.book.repository;
 
 import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.book.domain.UserBookTradeType;
+import com.ssafy.polaris.book.dto.SearchUserBookResponseDto;
 import com.ssafy.polaris.book.dto.UserBookResponseDto;
 import com.ssafy.polaris.trade.dto.TradeBookResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,9 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserBookRepository extends JpaRepository<UserBook, String> {
+public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 
-	@Query("SELECT NEW com.ssafy.polaris.book.dto.UserBookResponseDto(ub.id, b.cover, b.title, b.author, b.isbn, b.publisher, " +
+	@Query("SELECT NEW com.ssafy.polaris.book.dto.UserBookResponseDto(ub.id, ub.user.id, b.cover, b.title, b.author, b.isbn, b.publisher, " +
 			"b.pubDate, b.bookDescription, ub.userBookDescription, b.priceStandard, ub.userBookPrice, ub.isOpened, ub.isOwned, " +
 			"ub.userBookTradeType, b.seriesId, s.name) " +
 			"FROM UserBook ub " +
@@ -23,7 +24,7 @@ public interface UserBookRepository extends JpaRepository<UserBook, String> {
 			"WHERE ub.user.id = :userId")
 	List<UserBookResponseDto> findAllByUserId(@Param("userId") Long userId);
 
-	@Query("SELECT NEW com.ssafy.polaris.book.dto.UserBookResponseDto(ub.id, b.cover, b.title, b.author, b.isbn, b.publisher, " +
+	@Query("SELECT NEW com.ssafy.polaris.book.dto.UserBookResponseDto(ub.id, ub.user.id, b.cover, b.title, b.author, b.isbn, b.publisher, " +
 			"b.pubDate, b.bookDescription, ub.userBookDescription, b.priceStandard, ub.userBookPrice, ub.isOpened, ub.isOwned, " +
 			"ub.userBookTradeType, b.seriesId, s.name) " +
 			"FROM UserBook ub " +
@@ -46,4 +47,15 @@ public interface UserBookRepository extends JpaRepository<UserBook, String> {
 					"where ub.user.id = :userId and " +
 					"ub.isOpened = true and ub.isOwned = true and ub.userBookTradeType = :userBookTradeType")
 	List<TradeBookResponseDto> getTradeBookList(@Param("userId") Long userId, @Param("userBookTradeType") UserBookTradeType userBookTradeType);
+
+	@Query("select ub from UserBook ub where ub.book.isbn = :isbn and ub.user.id = :userId")
+	UserBook getUserBookByIdAndIsbn(@Param("userId") Long userId, @Param("isbn") String isbn);
+
+	@Query("select new com.ssafy.polaris.book.dto.SearchUserBookResponseDto(ub.id, ub.user.id, " +
+			" ub.user.nickname, ub.user.regcode, b.isbn, b.title," +
+			"b.author, b.cover, ub.userBookTradeType) " +
+			"from UserBook ub " +
+			"left join Book b on ub.book.isbn = b.isbn " +
+			"left join User u on u.id = ub.user.id ")
+	List<SearchUserBookResponseDto> searchAll();
 }

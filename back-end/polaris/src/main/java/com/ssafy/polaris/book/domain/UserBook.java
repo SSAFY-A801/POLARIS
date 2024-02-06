@@ -1,13 +1,13 @@
 package com.ssafy.polaris.book.domain;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ssafy.polaris.book.dto.UserBookUpdateRequestDto;
 import com.ssafy.polaris.user.domain.User;
 
-import com.ssafy.polaris.common.BaseEntity;
-import com.ssafy.polaris.connectentity.PromotionUserBook;
+import com.ssafy.polaris.global.BaseEntity;
+import com.ssafy.polaris.connectentity.domain.PromotionUserBook;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,15 +19,19 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE user_book SET deleted_at = CURRENT_TIMESTAMP where id = ?")
+@SQLRestriction("deleted_at is NULL")
 public class UserBook extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
@@ -62,7 +66,12 @@ public class UserBook extends BaseEntity {
 	@OneToMany(mappedBy = "userBook")
 	List<PromotionUserBook> promotionUserBooks = new ArrayList<>();
 
-	public void deleteUserBook(LocalDateTime now) {
-		setDeletedAt(now);
+	// update method
+	public void updateUserBook(UserBookUpdateRequestDto dto){
+		this.userBookDescription = dto.getUserBookDescription();
+		this.userBookPrice = dto.getUserBookPrice();
+		this.isOpened = dto.getIsOpened();
+		this.isOwned = dto.getIsOwned();
+		this.userBookTradeType = dto.getUserBookTradeType();
 	}
 }

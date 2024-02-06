@@ -1,17 +1,19 @@
 package com.ssafy.polaris.following.domain;
 
-import com.ssafy.polaris.common.BaseEntity;
+import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+
 import org.hibernate.Hibernate;
 
 @Getter
 @Entity
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Follow extends BaseEntity {
