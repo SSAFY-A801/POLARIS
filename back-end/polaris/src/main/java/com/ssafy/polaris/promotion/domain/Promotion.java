@@ -29,8 +29,11 @@ import lombok.experimental.SuperBuilder;
 public class Promotion extends BaseEntity {
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", updatable = false, insertable = false)
 	private User user;
+
+	@Column(name = "user_id")
+	private Long userId;
 
 	@OneToMany(mappedBy = "promotion")
 	private List<PromotionUserBook> promotionUserBooks = new ArrayList<>();
@@ -45,7 +48,6 @@ public class Promotion extends BaseEntity {
 	@NotNull
 	@ColumnDefault(value = "0")
 	private int hit;
-	// private int favoritesAmount;
 
 	public void updateHit(){
 		hit += 1;
@@ -54,13 +56,4 @@ public class Promotion extends BaseEntity {
 	/*
 	* hit은 기본을 0으로 하기 때문에 넣어주지 않는다.
 	 */
-
-	// public void increaseFavoritesAmount() {
-	// 	favoritesAmount += 1;
-	// }
-	//
-	// public void decreaseFavoritesAmount() {
-	// 	if (favoritesAmount > 0)
-	// 		favoritesAmount -= 1;
-	// }
 }

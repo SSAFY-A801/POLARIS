@@ -3,6 +3,7 @@ package com.ssafy.polaris.connectentity.domain;
 import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.promotion.domain.Promotion;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,15 +24,21 @@ public class PromotionUserBook {
 	private int id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_book_id")
+	@JoinColumn(name = "user_book_id", updatable = false, insertable = false)
 	private UserBook userBook;
 
+	@Column(name = "user_book_id")
+	private Long userBookId;
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "promotion_id")
+	@JoinColumn(name = "promotion_id", updatable = false, insertable = false)
 	private Promotion promotion;
 
-	public PromotionUserBook(UserBook userBook, Promotion promotion) {
-		this.userBook = userBook;
-		this.promotion = promotion;
+	@Column(name = "promotion_id")
+	private Long promotionId;
+
+	public PromotionUserBook(Long userBookId, Long promotionId) {
+		this.userBookId = userBookId;
+		this.promotionId = promotionId;
 	}
 }

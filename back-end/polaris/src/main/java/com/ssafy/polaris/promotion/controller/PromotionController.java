@@ -1,0 +1,55 @@
+package com.ssafy.polaris.promotion.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.polaris.promotion.dto.PromotionRequestDto;
+import com.ssafy.polaris.promotion.dto.PromotionResponseDto;
+import com.ssafy.polaris.promotion.response.DefaultResponse;
+import com.ssafy.polaris.promotion.response.StatusCode;
+import com.ssafy.polaris.promotion.service.PromotionService;
+import com.ssafy.polaris.security.SecurityUser;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@CrossOrigin
+@RestController
+@RequestMapping("/promotion")
+@RequiredArgsConstructor
+public class PromotionController {
+
+	private final PromotionService promotionService;
+
+	@PostMapping
+	public ResponseEntity<DefaultResponse<PromotionResponseDto>> createPromotion(
+		@RequestBody PromotionRequestDto promotionRequestDto,
+		@AuthenticationPrincipal SecurityUser securityUser) {
+
+		Long promotionId = promotionService.createPromotion(promotionRequestDto, securityUser);
+		PromotionResponseDto promotionResponseDto = promotionService.getPromotion(promotionId);
+		return DefaultResponse.toResponseEntity(
+			HttpStatus.CREATED,
+			StatusCode.PROMOTION_WRITE_SUCCESS,
+			promotionResponseDto
+		);
+	}
+
+	@GetMapping("/{promotionId}")
+	public ResponseEntity getPromotion(@PathVariable("promotionId") Long promotionId) {
+		PromotionResponseDto promotionResponseDto = promotionService.getPromotion(promotionId);
+		return DefaultResponse.toResponseEntity(
+			HttpStatus.OK,
+			StatusCode.PROMOTION_READ_SUCCESS,
+			promotionResponseDto
+		);
+	}
+}
