@@ -57,7 +57,8 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	private CorsConfigurationSource corsConfigurationSource() {
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("http://i10a801.p.ssafy.io", "https://localhost:5173", "https://i10a801.p.ssafy.io"));
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
@@ -66,6 +67,7 @@ public class SecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
+	 // 빈 익스클루드
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
