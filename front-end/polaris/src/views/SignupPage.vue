@@ -10,7 +10,7 @@
             <!-- 닉네임 입력받기 -->
             <div  class="relative flex mb-2">
               <p class="bg-white pt-0 pr-2 pb-0 pl-2 -mt-3 mr-0 mb-0 ml-2 font-medium text-gray-600 absolute">닉네임</p>
-              <div class="flex items-center space-x-2 w-full"><input v-model="nicknameInput"   placeholder="nickname" type="text" class="text-thin border placeholder-gray-400 focus:outline-none focus:border-2 focus:border-maintheme1 w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-2 mb-0 ml-0 text-base block bg-white border-gray-300 rounded-md"/>
+              <div class="flex items-center space-x-2 w-full"><input v-model="nicknameInput"   placeholder="nickname" type="text" class="text-thin border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-2 mb-0 ml-0 text-base block bg-white border-gray-300 rounded-md"/>
               <button @click="checkNickname" id="nicknamecheck" type="button" class="py-2 px-4 bg-white border border-gray-300 hover:border-2 hover:border-maintheme1 hover:text-maintheme1 text-gray-600 transition ease-in duration-200 text-center text-base font-medium  rounded-lg " >
                   확인
               </button></div></div> 
@@ -21,7 +21,7 @@
             <!-- 이메일 입력받기 -->
             <div class="relative flex">
               <p class="bg-white pt-0 pr-2 pb-0 pl-2 -mt-3 mr-0 mb-0 ml-2 font-medium text-gray-600 absolute">이메일</p>
-              <div class="flex items-center space-x-2 w-full"><input :readonly="isEmailVerified" v-model="emailInput" placeholder="polaris@gmail.com" type="text" class="border placeholder-gray-400 focus:outline-none focus:border-2 focus:border-maintheme1 w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-2 ml-0 text-base block bg-white border-gray-300 rounded-md"/>
+              <div class="flex items-center space-x-2 w-full"><input :readonly="isEmailVerified" v-model="emailInput" placeholder="polaris@gmail.com" type="text" class="border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-2 ml-0 text-base block bg-white border-gray-300 rounded-md"/>
               <button @click.prevent="checkEmail" :disabled="!isValidEmail" id="emailcheck" type="button" class="py-2 px-4 bg-white border border-gray-300 hover:border-2 hover:border-maintheme1 hover:text-maintheme1 text-gray-600 transition ease-in duration-200 text-center text-base font-medium  rounded-lg " >
                   인증
               </button></div> 
@@ -31,7 +31,7 @@
             <!-- 인증 버튼 누르면 인증창 등장 -->
             <div v-if="isEmailVerificationInput" class="relative flex">
               <div class="flex items-center space-x-2 w-full">
-                <input class="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-maintheme1" v-model="verificationCode" type="text" placeholder="인증 코드를 입력하세요" />
+                <input class="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" v-model="verificationCode" type="text" placeholder="인증 코드를 입력하세요" />
                 <button class=" border text-gray-600 hover:border-2 hover:border-maintheme1 px-4 py-2 rounded-md" @click.prevent="checkVerifyCode">확인</button>
               </div>
             </div>
@@ -45,11 +45,11 @@
             <!-- 비밀번호 입력받기 -->
             <div class="relative ">
               <p class="bg-white pt-0 pr-2 pb-0 pl-2 -mt-3 mr-0 mb-0 ml-2 font-medium text-gray-600 absolute">비밀번호</p>
-              <input v-model="passwordInput" placeholder="password" type="password" class="border placeholder-gray-400 focus:outline-none focus:border-2 focus:border-maintheme1 w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-0 ml-0 text-base block bg-white border-gray-300 rounded-md"/>
+              <input v-model="passwordInput" placeholder="password" type="password" class="border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-0 ml-0 text-base block bg-white border-gray-300 rounded-md"/>
             </div>
             <div class="relative">
               <p class="bg-white pt-0 pr-2 pb-0 pl-2 -mt-3 mr-0 mb-0 ml-2 font-medium text-gray-600 absolute">비밀번호 확인</p>
-              <input v-model="passwordCheck" @input="checkPassword" placeholder="password" type="password" class="border placeholder-gray-400 focus:outline-none focus:border-2 focus:border-maintheme1 w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-4 ml-0 text-base block bg-white border-gray-300 rounded-md"/>
+              <input v-model="passwordCheck" @input="checkPassword" placeholder="password" type="password" class="border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-4 ml-0 text-base block bg-white border-gray-300 rounded-md"/>
             </div>
             <p v-if="isPasswordVerified" class="text-red-600 text-sm" :style="{ marginLeft: '15px', marginTop: '0' }">비밀번호가 일치하지 않습니다.</p>
           </div>
@@ -180,7 +180,7 @@ const checkNickname = async () => {
  // 입력한 이메일을 서버로 전송
   // 성공시 isEmailVerificationInput.value =true로 바꾸기
 const sendEmail = async () => {
-  await axios.post('https://i10a801.p.ssafy.io:8082/send-mail/email', 
+  await axios.post('https://i10a801.p.ssafy.io:8082/send_mail/email', 
   JSON.stringify({
       email: emailInput.value
     }),
