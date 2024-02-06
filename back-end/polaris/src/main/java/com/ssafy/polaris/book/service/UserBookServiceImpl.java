@@ -83,7 +83,7 @@ public class UserBookServiceImpl implements UserBookService{
     public SearchUserBookListResponseDto searchByConditionUserBook(Long regcodeId, String queryType, String keyword) {
         em.clear();
         String jpql = "select distinct new com.ssafy.polaris.book.dto.SearchUserBookResponseDto(ub.id, ub.user.id, " +
-                "ub.user.nickname, ub.user.regcode, b.isbn, b.title, " +
+                "ub.user.nickname, ub.user.profileUrl, ub.user.regcode, b.isbn, b.title, " +
                 "b.author, b.cover, ub.userBookTradeType) " +
                 "from UserBook ub " +
                 "left join Book b on ub.book.isbn = b.isbn " +

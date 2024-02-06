@@ -14,6 +14,7 @@ public class SearchUserBookResponseDto {
     Long id;
     Long userId;
     String nickname;
+    String profileUrl;
     Regcode regcode;
     String isbn;
     String title;
