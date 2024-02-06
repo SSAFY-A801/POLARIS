@@ -24,6 +24,7 @@ import ChattingRoomPage from '@/views/chat/ChattingRoomPage.vue'
 import SellChattingBox from '@/components/chat/SellChattingBox.vue'
 import ChangeChattingBox from '@/components/chat/ChangeChattingBox.vue'
 import ConnectSocket from '@/components/chat/ConnectSocket.vue'
+import BestsellerdetailPage from '@/components/main/BestsellerdetailPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,6 +64,12 @@ const router = createRouter({
       path: '/passwordsearch',
       name: 'passwordsearch',
       component: PasswordSearchPage,
+    },
+    {//베스트셀러 상세 페이지
+      path: '/bestseller/:id',
+      name: 'bestsellerdatail',
+      component: BestsellerdetailPage,
+      props: true
     },
     // Profile
     {

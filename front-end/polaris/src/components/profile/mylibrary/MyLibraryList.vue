@@ -38,6 +38,7 @@ const deleteBookstate = (bookinfo: Book, deleteBook: boolean) => {
       (book) => book.isbn !== bookinfo.isbn
     );
   }
+  console.log(deleteBookList.value)
   store.deleteBookList = deleteBookList.value
 };
 

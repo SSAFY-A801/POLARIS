@@ -21,21 +21,21 @@
 
   const updateBookStatus = (isbn:string, isOpened:boolean, isOwned:boolean ) => {
     bookcartList.value.forEach((bookinfo)=> {
-      bookinfo.userBooktradeType = 'UNDEFINED';
       if (bookinfo.isbn == isbn){
         if(isOpened == true){
-          bookinfo.isOpened = 1;
+          bookinfo.isOpened = true;
         } else {
-          bookinfo.isOpened = 0;
+          bookinfo.isOpened = false;
         }
         if(isOwned == true){
-          bookinfo.isOwned = 1;
+          bookinfo.isOwned = true;
         } else {
-          bookinfo.isOwned = 0;
+          bookinfo.isOwned = false;
         }
-
       }
     })
+    console.log(bookcartList.value)
+
   }
 
 onMounted(()=> {

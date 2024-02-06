@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <div class="col-span-12 mt-20">
+  <div class="col-span-12 mt-16">
     <RouterView/>
   </div>
   <Footer></Footer>
@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import Header from '@/components/common/Header.vue'
-import Footer from '@/components/common/Footer.vue'
+import Footer from '@/components/common/Footer.vue' 
 
 </script>
 

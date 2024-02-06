@@ -1,12 +1,9 @@
 <template>
-    <nav class="bg-maintheme1 fixed top-0 w-full">
+    <nav class="bg-maintheme1 fixed top-0 w-full z-50">
         <div class="px-12 mx-0 ">
             <div class="flex items-center justify-between h-24">
                 <div class=" flex items-center w-full h-24">
-                    <a class="flex-shrink-0" href="/">
-                        <img class="w-8 h-8" src="" alt="Workflow"/>
-                    </a>
-
+                 
                     <div class="flex items-baseline ml-10 space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8">
                         <router-link :to="{name: 'home'}" class="text-white">Home</router-link>
                         <router-link :to="{name: 'booksearch'}" class="text-white">도서 검색</router-link>
@@ -54,32 +51,32 @@ import { ref, watchEffect } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
-const userToken = ref(localStorage.getItem('user_token'))
-// const userToken = ref("Dd")
-// console.log(userToken)
-
+// const props = defineProps(['userToken'])
+const userToken = ref(localStorage.getItem('user_token') )
 const router = useRouter()
+
+
 
 
 watchEffect(() => {
     userToken.value = localStorage.getItem('user_token')
     // console.log(localStorage.getItem('user_token'))
     // console.log("watchEffect is running") 
-    // console.log(userToken.value)
+    // console.log("watchEffect",userToken.value)
 
 })
 
 
+
 //로그아웃
 const logout = async () => {
-    await axios.post('http://i10a801.p.ssafy.io:8082/user/logout', {}, {
+    await axios.post('https://i10a801.p.ssafy.io:8082/user/logout', {}, {
     headers: {
-    "Authorization" : `${userToken.value}`,
+    "Authorization" : userToken.value?.replace("\"", ""),
     "Content-Type": "application/json",
   }
   })
   .then(function (response) {
-    // userToken.value = null
     localStorage.removeItem('user_token')
     userToken.value = null
     alert("로그아웃 되었습니다")
@@ -92,5 +89,7 @@ const logout = async () => {
 </script>
 
 <style scoped>
-
+a {
+  text-decoration: none;
+}
 </style>

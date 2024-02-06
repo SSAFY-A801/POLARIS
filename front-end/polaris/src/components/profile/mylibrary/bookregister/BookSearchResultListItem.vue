@@ -45,13 +45,15 @@ const addBookcart = (searchResult: SearchBookinfo['searchResult']) => {
   const bookcartIncluded = bookCartList.value.some(item => item.isbn === searchResult.isbn)
   const libraryIncluded = mybookLists.value.some(item => item.isbn === searchResult.isbn)
   const included = libraryIncluded || bookcartIncluded
-  console.log(included)
   if (included) {
     emitShowAlert();
     console.log('현재 도서바구니목록: ',store.bookCartList)
   } else {
+    searchResult.isOpened = false
+    searchResult.isOwned = false
     bookCartList.value.push(searchResult);
   }
+  console.log(searchResult)
 };
 </script>
 
