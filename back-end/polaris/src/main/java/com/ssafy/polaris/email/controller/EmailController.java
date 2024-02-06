@@ -20,7 +20,7 @@ import com.ssafy.polaris.email.service.EmailService;
 
 @Slf4j
 @CrossOrigin
-@RequestMapping("/send-mail")
+@RequestMapping("/send_mail")
 @RestController
 @RequiredArgsConstructor
 public class EmailController {
