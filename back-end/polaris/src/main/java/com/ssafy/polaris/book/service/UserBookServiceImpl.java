@@ -5,9 +5,11 @@ import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.book.dto.*;
 import com.ssafy.polaris.book.repository.BookRepository;
 import com.ssafy.polaris.book.repository.UserBookRepository;
+import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.series.dto.SeriesMapper;
 import com.ssafy.polaris.series.repository.SeriesRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -73,8 +75,33 @@ public class UserBookServiceImpl implements UserBookService{
     }
 
     @Override
-    public SearchUserBookListResponseDto searchAllUserBook(){
-        SearchUserBookListResponseDto data = new SearchUserBookListResponseDto(userBookRepository.searchAll());
-        return data;
+    public SearchUserBookListResponseDto searchByConditionUserBook(String queryType, String keyword){
+        TypedQuery<SearchUserBookResponseDto> query;
+
+        String jpql = "select new com.ssafy.polaris.book.dto.SearchUserBookResponseDto(ub.id, ub.user.id, " +
+                "ub.user.nickname, ub.user.regcode, b.isbn, b.title, " +
+                "b.author, b.cover, ub.userBookTradeType) " +
+                "from UserBook ub " +
+                "left join Book b on ub.book.isbn = b.isbn " +
+                "left join User u on u.id = ub.user.id ";
+        if(queryType != null){
+            if (!queryType.equals("regcode")) {
+                jpql += " where b." + queryType + " like concat('%', :keyword, '%')";
+                System.out.println(jpql);
+            } else {
+                jpql += " where u." + queryType + ".id = :keyword";
+            }
+
+            query = em.createQuery(jpql, SearchUserBookResponseDto.class);
+            query.setParameter("keyword", keyword);
+        } else {
+            query = em.createQuery(jpql, SearchUserBookResponseDto.class);
+        }
+
+        List<SearchUserBookResponseDto> data = query.getResultList();
+        if(data == null){
+            return null;
+        }
+        return new SearchUserBookListResponseDto(data);
     }
 }

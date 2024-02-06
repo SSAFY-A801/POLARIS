@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProfileRequestDto {
     String nickname;
-    Regcode regcode;
+    Long regcodeId;
     String introduction;
     String imageUrl;
 }
