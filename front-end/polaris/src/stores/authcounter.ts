@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-type LoginInfo = {
+export type LoginInfo = {
   profileUrl: string
   access: string
   nickname: string

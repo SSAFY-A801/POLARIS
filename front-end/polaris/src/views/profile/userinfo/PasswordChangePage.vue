@@ -13,7 +13,6 @@
           <div autoComplete="off">
             <div class="flex flex-col mb-8 mx-4">
               <p>현재 비밀번호</p>
-              {{ currentpassword }}
               <div class="flex relative ">
                 <input @click="resetRequest" type="password" v-model="currentpassword" id="current-password" class=" rounded-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent"/>
               </div>
@@ -23,9 +22,11 @@
             </div>
             <div class="flex flex-col mb-8 mx-4 ">
               <p>새 비밀번호</p>
-              {{ newpassword }}
               <div class="flex relative ">
                 <input @click="resetRequest" type="password" v-model="newpassword" id="new-password" placeholder="새 비밀번호 조건" class=" rounded-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-500 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" />
+              </div>
+              <div class="text-red-500 text-sm mt-1">
+                {{ alertMessage }}
               </div>
                 <div v-if="newpassword && currentpassword == newpassword" class="text-red-500 text-sm p-1">
                   현재 비밀번호와 다르게 설정해야 합니다.
@@ -36,7 +37,6 @@
             </div>
             <div class="flex flex-col mb-8 mx-4">
               <p>새 비밀번호 확인</p>
-              {{ newpassword2 }}
               <div class="flex relative">
                 <input @click="resetRequest" type="password" v-model="newpassword2" id="new-password-2" placeholder="새 비밀번호 조건"  class=" rounded-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-500 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" />
               </div>
@@ -63,8 +63,8 @@
 </template>
 
 <script setup lang="ts">
-  import {useRouter} from 'vue-router'
-  import { onMounted, ref } from 'vue';
+  import { useRouter } from 'vue-router'
+  import { onMounted, ref, watch } from 'vue';
 
   const router = useRouter()
   const currentpassword = ref<string>('')
@@ -72,44 +72,64 @@
   const newpassword2 = ref<string>('')
   const isSame = ref(true)
   const requestChange = ref(false)
-
+  const alertMessage = ref<string>("")
   const cancelChangePassword = () => {
     router.push({name: "ProfileUpdatePage"});
   }
   
   const resetRequest = () => {
     requestChange.value = false
-    console.log(requestChange.value)
   }
 
-  const checkNewpassword = () => {
-    // 비밀번호: 8자 이상, 숫자/영어 조합(최소 1개씩), 특수문자 하나 이상 포함
-    
+
+// 비밀번호 검사 함수
+const checkNewpassword = (password:string) => {
+  // 비밀번호 검사 로직
+  if (password.length < 8 || password.length > 20) {
+    alertMessage.value = "비밀번호는 8자에서 최대 20자까지 가능합니다.";
+    return;
   }
 
-  const changePassword = () => {
-    console.log(requestChange.value)
-    if(newpassword.value && newpassword2.value && currentpassword.value){
-      // 1. 현재 비밀번호가 일치하지 않은경우
-      // if(currentpassword != 기존비밀번호 ){
-      //   alert("현재 비밀번호가 올바르지 않습니다.")
-      // }
-      if (currentpassword.value == newpassword.value){
-        alert("새 비밀번호는 현재 비밀번호와 달라야 합니다.")
-      }
-      if(newpassword.value != newpassword2.value){
-        isSame.value = false
-      } else {
-        alert("비밀번호 변경 성공!")
-      }
-    } else {
-      alert('입력을 완료한 후 제출해주세요.')
+  const hasNumber = /\d/.test(password);
+  const hasLetter = /[a-zA-Z]/.test(password);
+  const hasSpecialChar = /[~!@#$%^&*_\-+=`|\\(){}[\]:;"'<>,.?/]/.test(password);
+
+  if (!hasNumber || !hasLetter || !hasSpecialChar) {
+    alertMessage.value = "비밀번호는 숫자, 영어, 특수문자(~!@#$%^&*_-=+`|\\(){}[]:;\"'<>,.?/) 중 최소 1개씩을 포함해야 합니다.";
+  } else {
+    alertMessage.value = "";
+  }
+};
+
+// watch 설정
+watch(newpassword, (newValue) => {
+  checkNewpassword(newValue);
+});
+
+
+const changePassword = () => {
+  console.log(requestChange.value)
+  if(newpassword.value && newpassword2.value && currentpassword.value){
+    // 1. 현재 비밀번호가 일치하지 않은경우
+    // if(currentpassword != 기존비밀번호 ){
+    //   alert("현재 비밀번호가 올바르지 않습니다.")
+    // }
+    if (currentpassword.value == newpassword.value){
+      alert("새 비밀번호는 현재 비밀번호와 달라야 합니다.")
     }
-    requestChange.value = true
-    console.log('현재 비밀번호: ',currentpassword.value)
-    console.log('새 비밀번호: ',newpassword.value)
-    console.log('새 비밀번호 확인: ',newpassword2.value)
+    if(newpassword.value != newpassword2.value){
+      isSame.value = false
+    } else {
+      alert("비밀번호 변경 성공!")
+    }
+  } else {
+    alert('입력을 완료한 후 제출해주세요.')
   }
+  requestChange.value = true
+  console.log('현재 비밀번호: ',currentpassword.value)
+  console.log('새 비밀번호: ',newpassword.value)
+  console.log('새 비밀번호 확인: ',newpassword2.value)
+}
 
 onMounted(()=> {
   currentpassword.value = ''

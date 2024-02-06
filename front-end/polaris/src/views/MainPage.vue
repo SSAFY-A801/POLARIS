@@ -1,7 +1,7 @@
 <template>
   <main>
     <p class="h-24">mainview</p>
-    <Bestseller2></Bestseller2>
+    <Bestseller></Bestseller>
     
     
   </main>
