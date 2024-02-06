@@ -14,7 +14,7 @@ import com.ssafy.polaris.essay.dto.EssayRequestDto;
 import com.ssafy.polaris.essay.dto.EssayResponseDto;
 import com.ssafy.polaris.essay.repository.EssayRepository;
 import com.ssafy.polaris.essay.repository.ScrapRepository;
-import com.ssafy.polaris.security.SecurityUser;
+import com.ssafy.polaris.global.security.SecurityUser;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;

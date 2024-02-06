@@ -1,17 +1,15 @@
-package com.ssafy.polaris.security.filter;
+package com.ssafy.polaris.global.security.filter;
 
 import java.io.IOException;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.GenericFilterBean;
-import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.ssafy.polaris.security.SecurityUser;
-import com.ssafy.polaris.security.provider.JwtTokenProvider;
-import com.ssafy.polaris.security.util.SecurityUtil;
+import com.ssafy.polaris.global.security.SecurityUser;
+import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
+import com.ssafy.polaris.global.security.util.SecurityUtil;
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.repository.UserRepository;
 

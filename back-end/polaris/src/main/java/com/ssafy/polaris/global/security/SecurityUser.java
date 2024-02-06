@@ -1,4 +1,4 @@
-package com.ssafy.polaris.security;
+package com.ssafy.polaris.global.security;
 
 import java.util.Collection;
 import java.util.Collections;

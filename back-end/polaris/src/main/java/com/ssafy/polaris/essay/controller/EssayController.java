@@ -22,7 +22,7 @@ import com.ssafy.polaris.essay.dto.EssayResponseDto;
 import com.ssafy.polaris.essay.response.DefaultResponse;
 import com.ssafy.polaris.essay.response.StatusCode;
 import com.ssafy.polaris.essay.service.EssayService;
-import com.ssafy.polaris.security.SecurityUser;
+import com.ssafy.polaris.global.security.SecurityUser;
 
 import lombok.RequiredArgsConstructor;
 

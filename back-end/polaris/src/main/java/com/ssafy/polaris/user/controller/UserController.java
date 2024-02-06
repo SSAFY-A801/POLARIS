@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.polaris.security.SecurityUser;
-import com.ssafy.polaris.security.util.SecurityUtil;
+import com.ssafy.polaris.global.security.SecurityUser;
+import com.ssafy.polaris.global.security.util.SecurityUtil;
 import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.response.DefaultResponse;
 import com.ssafy.polaris.user.response.StatusCode;
@@ -27,7 +26,6 @@ import com.ssafy.polaris.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/user")

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.polaris.chat.service.ChatRoomService;
-import com.ssafy.polaris.security.SecurityUser;
+import com.ssafy.polaris.global.security.SecurityUser;
 
 import lombok.RequiredArgsConstructor;
 

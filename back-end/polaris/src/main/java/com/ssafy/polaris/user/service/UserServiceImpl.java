@@ -3,18 +3,15 @@ package com.ssafy.polaris.user.service;
 import java.util.Collections;
 import java.util.Map;
 
-import com.ssafy.polaris.security.SecurityUser;
-import com.ssafy.polaris.security.provider.JwtTokenProvider;
+import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 import com.ssafy.polaris.user.repository.UserRepository;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;

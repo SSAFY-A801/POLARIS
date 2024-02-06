@@ -1,4 +1,4 @@
-package com.ssafy.polaris.security.util;
+package com.ssafy.polaris.global.security.util;
 
 import org.springframework.beans.factory.annotation.Value;
 
