@@ -13,6 +13,7 @@ import com.ssafy.polaris.global.exception.exceptions.WrongArgumentException;
 import com.ssafy.polaris.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.polaris.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.polaris.global.exception.exceptions.category.PolarisRuntimeException;
+import com.ssafy.polaris.global.exception.exceptions.UserNotExist;
 import com.ssafy.polaris.global.exception.exceptions.WrongArgumentException;
 import com.ssafy.polaris.global.exception.exceptions.category.PolarisRuntimeException;
 import com.ssafy.polaris.global.exception.exceptions.category.UnAuthorizedException;
