@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EmailServiceImpl implements EmailService{
+public class EmailServiceImpl implements EmailService {
 	private final JavaMailSender javaMailSender;
 	private final SpringTemplateEngine templateEngine;
 	private final EntityManager em;
@@ -33,7 +33,7 @@ public class EmailServiceImpl implements EmailService{
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
 		// TODO: 비밀번호 재설정을 이메일만으로 하면 안될 것 같음
-		log.info("Email Send to "+emailMessage.getTo());
+		log.info("Email Send to " + emailMessage.getTo());
 
 		if ("password".equals(type)) {
 			User userByEmail = null;
@@ -52,7 +52,7 @@ public class EmailServiceImpl implements EmailService{
 			mimeMessageHelper.setText(setContext(authNum, type), true); // 메일 본문 내용, HTML 여부
 			javaMailSender.send(mimeMessage);
 
-			log.info("Email Send to "+emailMessage.getTo()+"Success");
+			log.info("Email Send to " + emailMessage.getTo() + "Success");
 
 			return authNum;
 
@@ -71,9 +71,14 @@ public class EmailServiceImpl implements EmailService{
 			int index = random.nextInt(4);
 
 			switch (index) {
-				case 0: key.append((char) ((int) random.nextInt(26) + 97)); break;
-				case 1: key.append((char) ((int) random.nextInt(26) + 65)); break;
-				default: key.append(random.nextInt(9));
+				case 0:
+					key.append((char)((int)random.nextInt(26) + 97));
+					break;
+				case 1:
+					key.append((char)((int)random.nextInt(26) + 65));
+					break;
+				default:
+					key.append(random.nextInt(9));
 			}
 		}
 		return key.toString();

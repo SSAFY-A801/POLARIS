@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegcodeRequestDto {
-    String sido;
-    String gugun;
-    String dong;
+	String sido;
+	String gugun;
+	String dong;
 }

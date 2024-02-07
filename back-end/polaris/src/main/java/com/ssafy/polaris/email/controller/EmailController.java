@@ -1,22 +1,21 @@
 package com.ssafy.polaris.email.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.polaris.email.dto.EmailResponseDto;
 import com.ssafy.polaris.email.domain.EmailMessage;
 import com.ssafy.polaris.email.dto.EmailPostDto;
+import com.ssafy.polaris.email.dto.EmailResponseDto;
 import com.ssafy.polaris.email.response.DefaultResponse;
 import com.ssafy.polaris.email.response.StatusCode;
 import com.ssafy.polaris.email.service.EmailService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequestMapping("/send_mail")

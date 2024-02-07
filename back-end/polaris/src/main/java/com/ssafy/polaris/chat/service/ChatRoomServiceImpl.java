@@ -2,21 +2,21 @@ package com.ssafy.polaris.chat.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateRequestDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomListResponseDto;
 import com.ssafy.polaris.chat.dto.TradeMapper;
-import com.ssafy.polaris.trade.domain.Trade;
-import org.springframework.stereotype.Service;
-
 import com.ssafy.polaris.chat.repository.TradeRepository;
+import com.ssafy.polaris.trade.domain.Trade;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ChatRoomServiceImpl implements ChatRoomService{
+public class ChatRoomServiceImpl implements ChatRoomService {
 	private final TradeRepository tradeRepository;
 	private final TradeMapper tradeMapper;
 

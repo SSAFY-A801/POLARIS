@@ -50,7 +50,7 @@ public class Promotion extends BaseEntity {
 	@ColumnDefault(value = "0")
 	private int hit;
 
-	public void updateHit(){
+	public void updateHit() {
 		hit += 1;
 	}
 
@@ -64,6 +64,6 @@ public class Promotion extends BaseEntity {
 	}
 
 	/*
-	* hit은 기본을 0으로 하기 때문에 넣어주지 않는다.
+	 * hit은 기본을 0으로 하기 때문에 넣어주지 않는다.
 	 */
 }

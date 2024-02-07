@@ -12,7 +12,6 @@ public class PolarisApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PolarisApplication.class, args);
 
-
 	}
 
 }

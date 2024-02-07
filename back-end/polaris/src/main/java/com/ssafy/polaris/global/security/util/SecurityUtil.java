@@ -1,11 +1,7 @@
-package com.ssafy.polaris.security.util;
-
-import org.springframework.beans.factory.annotation.Value;
+package com.ssafy.polaris.global.security.util;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

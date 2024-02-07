@@ -2,6 +2,7 @@ package com.ssafy.polaris;
 
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.repository.UserRepository;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,20 +17,19 @@ import java.util.Optional;
 @SpringBootTest
 public class RepositoryTest {
 
-    @Autowired
-    UserRepository userRepository;
+	@Autowired
+	UserRepository userRepository;
 
-    @Test
-    @DisplayName("getReferenceId test")
-    public void get() {
-        Long userId = 1L;
+	@Test
+	@DisplayName("getReferenceId test")
+	public void get() {
+		Long userId = 1L;
 
-        User user = userRepository.getReferenceById(userId);
+		User user = userRepository.getReferenceById(userId);
 
-        Optional<User> user2 = userRepository.findById(userId);
+		Optional<User> user2 = userRepository.findById(userId);
 
-        Assertions.assertThat(user.getId()).isEqualTo(user2.get().getId());
+		Assertions.assertThat(user.getId()).isEqualTo(user2.get().getId());
 
-
-    }
+	}
 }
