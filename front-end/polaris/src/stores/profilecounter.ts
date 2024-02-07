@@ -1,4 +1,4 @@
-import { ref, computed, watch, watchEffect } from 'vue'
+import { ref, computed, watch, watchEffect, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios';
 import type { LoginInfo } from './authcounter';
@@ -92,7 +92,7 @@ export const profileCounterStore = defineStore('counter', () => {
   });
 
   watch(profileUser, (newValue, oldValue) => {
-    // console.log('profileUser changed:', oldValue, '->', newValue);
+    return newValue
   });
 
   const getProfile = (id: number) => {

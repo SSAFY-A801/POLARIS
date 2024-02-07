@@ -15,7 +15,6 @@
               <p>현재 비밀번호</p>
               <div class="flex relative ">
                 <input @click="resetRequest" type="password" v-model="currentpassword" id="current-password" class=" rounded-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent"/>
-                <button @click="checkCurrentPassword" id="checkPassword">비밀번호 확인</button>
               </div>
               <div v-if="!currentpassword && requestChange"  class="text-red-500 text-sm p-1">
                 비밀번호를 입력하세요.
@@ -71,15 +70,14 @@
 
   const store = profileCounterStore();
   const BACK_API_URL = store.BACK_API_URL
-  const loginUser = store.loginUser
   const router = useRouter()
-  const confirmCurrentPassword = ref(true)
   const currentpassword = ref<string>('')
   const newpassword = ref<string>('')
   const newpassword2 = ref<string>('')
   const isSame = ref(true)
   const requestChange = ref(false)
   const alertMessage = ref<string>("")
+
   const cancelChangePassword = () => {
     router.push({name: "ProfileUpdatePage"});
   }
@@ -87,35 +85,6 @@
   const resetRequest = () => {
     requestChange.value = false
   }
-
-// 현재 비밀번호 확인
-const checkCurrentPassword = () => {
-  alert("비밀번호 검사 좀 해주세요")
-
-  // axios({
-  //   headers: {
-  //     Authorization: `${store.token}`,
-  //     "Content-Type": 'application/json'
-  //   },
-  //   method: 'patch',
-  //   url: `${BACK_API_URL}/user/password_correction`,
-  //   data: {
-  //     password: currentpassword.value
-  //   } 
-
-  // })
-  // .then((response)=> {
-  //   if (맞다면){
-  //     confirmCurrentPassword.value = true
-  //   } else {
-  //     alert("현재 비밀번호와 일치하지 않습니다. /n 다시 시도해주세요.")
-  //   }
-
-  // })
-  // .catch((error) => {
-  //   console.error(error)
-  // })
-}
 
 
 // 비밀번호 검사 함수
@@ -143,34 +112,25 @@ watch(newpassword, (newValue) => {
 });
 
 
+// 비밀번호 변경 요청
 const changePassword = () => {
-  if(!confirmCurrentPassword.value){
-    alert("현재 본인 비밀번호 확인이 완료되지 않았습니다. \n완료 후 시도하세요.")
-  } else {
-
     if(newpassword.value && newpassword2.value && currentpassword.value){
-      // 1. 현재 비밀번호가 일치하지 않은경우
-      // if(currentpassword != 기존비밀번호 ){
-        //   alert("현재 비밀번호가 올바르지 않습니다.")
-        // }
       if (currentpassword.value == newpassword.value){
         alert("새 비밀번호는 현재 비밀번호와 달라야 합니다.")
       } else if(newpassword.value != newpassword2.value) {
         isSame.value = false
       } else {
         // 비밀번호 변경조건 모두 충족
-        const userInfoString: string = localStorage.getItem('user_info') || ''; // 또는 다른 기본값 사용
-        const userId = JSON.parse(userInfoString).id
-        // 아직 api 구현이 안됐다네요
         axios({
           headers: {
             Authorization: `${store.token}`,
             "Content-Type": 'application/json'
           },
           method: 'patch',
-          url: `${BACK_API_URL}/profile/${userId}/password`,
+          url: `${BACK_API_URL}/user/change_password`,
           data: {
-            password: newpassword.value
+            oldPassword: currentpassword.value,
+            newPassword: newpassword.value,
           }
         })
         .then((response) => {
@@ -180,18 +140,16 @@ const changePassword = () => {
         })
         .catch((error) => {
           console.error(error)
+          alert("현재 비밀번호가 올바르지 않습니다.\n다시 입력해주세요.")
         });
       }
     } else {
       alert('입력을 완료한 후 제출해주세요.')
     }
+    requestChange.value = true
   }
-  requestChange.value = true
-  console.log('현재 비밀번호: ',currentpassword.value)
-  console.log('새 비밀번호: ',newpassword.value)
-  console.log('새 비밀번호 확인: ',newpassword2.value)
 
-}
+
 
 onMounted(()=> {
   currentpassword.value = ''

@@ -74,11 +74,11 @@ const selectValue = ref("전체도서");
 const keyword = ref("")
 const booksearch = ref(false)
 
-const mybookLists = ref<Book[]>(store.mybookLists)
 
 
 const mybookList = computed(()=> {
-  return mybookLists.value
+  console.log('내 서재목록: ',store.mybookLists)
+  return store.mybookLists
 })
 
 const deleteBookList = computed(()=> {
@@ -106,9 +106,10 @@ const keywordSearch = (keyword:string) => {
 };
 
 
-const filterMybook = ref<Book[]>(mybookLists.value)
+const filterMybook = ref<Book[]>(mybookList.value)
 
 // selectValue의 변화를 감지하는 watch 설정
+
 const selectWatch = watch(selectValue, (newValue) => {
   if (newValue != "전체도서"){
     if (newValue == '공개'){
@@ -126,6 +127,8 @@ const selectWatch = watch(selectValue, (newValue) => {
     }
   keyword.value=""
 });
+
+
 
 
 // 도서 삭제 요청
@@ -184,8 +187,7 @@ onMounted(()=> {
   selectWatch;
   store.deleteBookList = []
   store.deletebuttonState = false
-  store.getMybookList(route.params.id[0]);
-  console.log(store.mybookLists)
+  store.getMybookList(route.params.id as string);
 })
 </script>
 
