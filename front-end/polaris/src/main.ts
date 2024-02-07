@@ -8,9 +8,13 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCartShopping, faCircleCheck,
-   faComment, faComments,faImages, faLocationDot, faLock, faMagnifyingGlass, faNoteSticky,
-    faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark } from '@fortawesome/free-solid-svg-icons';
+   faCircleUser,
+   faComment, faComments,faFloppyDisk,faImages, faLocationDot, faLock, faMagnifyingGlass, faNoteSticky,
+    faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark, } from '@fortawesome/free-solid-svg-icons';
 
+
+import SockJS from 'sockjs-client'
+import Stomp from 'stompjs';
 // import VueSweetalert2 from 'vue-sweetalert2';
 // import 'sweetalert2/dist/sweetalert2.min.css';
 
@@ -19,22 +23,25 @@ import router from './router'
 import axios from 'axios'
 // import dotenv from 'dotenv';
 
-library.add(faTwitter, faComment, faComments, faTrashCan, faCalendarDays,faUser, faImages,
-  faXmark, faCircleCheck,faBookOpen, faCartShopping, faUserSecret, faLock, faLocationDot,
+library.add(faTwitter, faComment, faComments, faTrashCan, faCalendarDays,faUser, faImages, faCircleUser,
+  faXmark, faCircleCheck,faBookOpen, faCartShopping, faUserSecret, faLock, faLocationDot, faFloppyDisk,
   faPenToSquare, faPlus, faMagnifyingGlass, faNoteSticky, faBookmark, faArrowRightArrowLeft)
 
 
-// dotenv.config();
 const app = createApp(App)
 const pinia = createPinia()
-pinia.use(piniaPluginPersistedstate)
-
+pinia.use(piniaPluginPersistedstate);
 
 app.use(router)
 app.use(pinia)
 
 app.config.globalProperties.axios = axios;    
 
+const sock = new SockJS("http://localhost:8080")
+const stompClient = Stomp.over(sock);
+
+app.config.globalProperties.$sock = sock;
+app.config.globalProperties.$stomp = stompClient;
 
 app.component('font-awesome-icon',FontAwesomeIcon)
 // app.use(VueSweetalert2)

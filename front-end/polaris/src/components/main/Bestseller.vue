@@ -39,16 +39,9 @@
   </div>
 </template>
 
-
-
-  
-  
 <script setup lang="ts">
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { ref, onMounted } from 'vue';
 import axios from 'axios'
-import { Carousel } from 'bootstrap'
 import { useBestsellerStore } from '@/stores/bestsellercounter';
 
 const store = useBestsellerStore()

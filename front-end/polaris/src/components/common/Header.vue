@@ -25,7 +25,10 @@
                     <div class="ml-auto flex flex-row">
                         <router-link :to="{name: 'login'}" v-if="!userToken" class="text-white mr-5">로그인</router-link>
                         <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-white">회원가입</router-link>
-                        <router-link :to="{name: 'ProfilePage',params:{id: 1}}" v-if="userToken"  class="text-white mr-4">프로필</router-link>
+                        <router-link v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" 
+                                    :to="{ name: 'ProfilePage', params: { id: loginUser.id }}" 
+                                    class="text-white mr-4">프로필</router-link>
+
                         <button v-if="userToken" @click="logout"  class="text-white ml-4 bg-transparent border-none outline-none focus:outline-none cursor-pointer">로그아웃</button>
                     </div>
                     
@@ -47,12 +50,32 @@
 
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { onMounted, ref, watchEffect, computed } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
+
 // const props = defineProps(['userToken'])
-const userToken = ref(localStorage.getItem('user_token') )
+const userToken = ref(localStorage.getItem('user_token'))
+const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
+// 사용자 정보를 나타내는 인터페이스 정의
+interface UserInfo {
+  id?: string | null;
+  // 다른 속성들도 필요에 따라 추가할 수 있습니다.
+}
+
+// userInfoString에서 가져온 값을 파싱하여 UserInfo 타입으로 사용
+let loginUser: UserInfo;
+
+try {
+  loginUser = JSON.parse(userInfoString.value) || {}; // 빈 객체로 기본값 설정
+} catch (error) {
+  console.error("Error parsing user_info:", error);
+  loginUser = {}; // JSON 파싱에 실패한 경우 빈 객체로 기본값 설정
+}
+// loginUser를 사용할 때 loginUser.id를 체크할 때 에러가 발생하지 않습니다.
+
+
 const router = useRouter()
 
 

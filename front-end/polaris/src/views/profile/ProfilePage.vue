@@ -16,15 +16,19 @@
         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
         </div>
         <!-- Modal body -->
-        <div id="following-list" class="overflow-auto max-h-[500px] overflow-y-auto">
+        <div v-if="followings_list.length" id="following-list" class="overflow-auto max-h-[500px] overflow-y-auto">
           <!-- 팔로잉 목록 -->
           <followingListitem 
             v-for="(following,index) in followings_list"
             :key="index"
             :following="following"  
             @follow-toggle="handlefollow"
+            @click-profile="handleModal"
             class="border p-3 min-w-[400] "
           />
+        </div>
+        <div v-else class="text-center text-lg font-bold">
+          현재 팔로우한 유저가 존재하지 않습니다.
         </div>
         <!-- Modal footer -->
         <div class="flex justify-between p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -49,38 +53,40 @@
           <!-- 프로필 상단 - 좌측 -->
           <div class="md:col-span-4 col-span-12" >
             <div class="flex justify-center">
-              <img v-if="user.profileUrl" :src="user.profileUrl" alt="profile-image" id="profile-image">
-              <img v-else src="@\assets\profile-default.jpg" alt="alternative-image" id="profile-image">
+              <img v-if="profileUser.profileUrl" :src="profileUser.profileUrl" alt="profile-image" id="profile-image">
+              <img v-else src="@\assets\profile-man.jpg" alt="alternative-image" id="profile-image">
             </div>
               <div v-if="isMe" class="text-maintheme1 font-bold text-center m-3 justify-center p-2">
                 <div id="usernickname" class="font-bold flex items-center justify-center m-2">
-                  {{ user.nickname }}  
+                  {{ profileUser.nickname }}  
                 </div>
               </div>
               <div v-else class="text-maintheme1 font-bold text-center m-3 grid grid-cols-3 justify-center p-2">
                 <div id="usernickname" class="col-span-2 font-bold flex items-center justify-center m-2">
-                  {{ user.nickname }}  
+                  {{ profileUser.nickname }}  
                 </div>
-                <button @click="unfollow(user)" v-if="myFollwing"  class="col-span-1" id="follow">
+                <button @click="unfollow(profileUser)" v-if="myFollwing"  class="col-span-1" id="follow">
                   언팔로우
                 </button>
-                <button @click="follow(user)" v-else  class="col-span-1" id="follow">
+                <button @click="follow(profileUser)" v-else  class="col-span-1" id="follow">
                   팔로우
                 </button>
               </div>
           <div class="flex justify-center mb-8">
-            <div class="inline-grid grid-cols-3 gap-4">
+            <div 
+            class="inline-grid grid-cols-3 gap-4"
+            :class="{'pointer-events-none cursor-not-allowed': !isMe}">
               <button @click="gotoTradeList" id="trade" class=" hover:text-deepgray">
                 <div>판매/구매</div>
-                <div>{{ user.tradingCnt }}</div>
+                <div>{{ profileUser.tradingCnt }}</div>
               </button>
               <button @click="gotoExchangeList" id="exchange" class=" hover:text-deepgray">
                 <div >교환</div>
-                <div>{{ user.exchangeCnt }}</div>
+                <div>{{ profileUser.exchangeCnt }}</div>
               </button>
               <button @click="clickModal" id="following" class="hover:text-deepgray">
                 <div>Following</div>
-                <div>{{ user.followingsCnt }}</div>
+                <div>{{ profileUser.followingsCnt }}</div>
               </button>
             </div>
           </div>
@@ -92,13 +98,13 @@
                 <div class="mb-2">나의 위치</div>
               </div>
               <div class="col-span-3 text-maintheme1 m-2">
-                <div class="mb-2">{{ user.regcode.si }} {{ user.regcode.gungu }} {{ user.regcode.dong }}</div>
+                <div class="mb-2">{{ profileUser.regcode.si }} {{ profileUser.regcode.gungu }} {{ profileUser.regcode.dong }}</div>
               </div>
               <div class="text-maintheme1 m-2 font-bold">
                 <div class="col-span-2">ABOUT ME</div>
               </div>
               <div class="col-span-3 text-maintheme1 m-2">
-                  {{ user.introduction }}
+                  {{ profileUser.introduction }}
               </div>
             </div>
             <div class="flex justify-end">
@@ -125,7 +131,7 @@
         <div class=" border-gray-200 dark:border-gray-700 bg-maintheme1">
           <nav class="-mb-px flex gap-6">
             <div class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-              <RouterLink :to="{ name: 'MyLibraryPage', params: {id: user.id}}">
+              <RouterLink :to="{ name: 'MyLibraryPage', params: {id: profileUser.id}}">
                 <a
                   class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
                 >
@@ -134,21 +140,21 @@
               </RouterLink>
               <!-- 접속자 == User 인 경우에만 보여주기  -->
               <span v-if="isMe">
-                <RouterLink :to="{ name: 'MyScrapsPage', params: {id: user.id} }">
+                <RouterLink :to="{ name: 'MyScrapsPage', params: {id: profileUser.id} }">
                   <a
                     class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
                   >
                   스크랩한 독후감 
                   </a>
                 </RouterLink>
-                <RouterLink :to="{ name: 'MyFavoritesPage', params: {id: user.id} }">
+                <RouterLink :to="{ name: 'MyFavoritesPage', params: {id: profileUser.id} }">
                   <a
                     class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
                   >
                   찜한 홍보 게시글
                   </a>
                 </RouterLink>
-                <RouterLink :to="{ name: 'MyArticlePage',  params: {id: user.id} }">
+                <RouterLink :to="{ name: 'MyArticlePage',  params: {id: profileUser.id} }">
                   <a
                     class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
                   >
@@ -168,25 +174,33 @@
 
 <script setup lang="ts">
   import followingListitem from '@/components/profile/following/followingListitem.vue';
-  import { ref, onMounted } from "vue";
-  import { useRouter } from 'vue-router'
+  import { ref, onMounted, computed } from "vue";
+  import { useRouter, useRoute } from 'vue-router'
   import { profileCounterStore } from "@/stores/profilecounter";
-  import type { User } from "@/stores/profilecounter";
-  import type { Following } from "@/stores/profilecounter";
-
+  import { useUserStore } from '@/stores/authcounter';
+  import type { Following, User } from "@/stores/profilecounter";
   import axios from 'axios';
 
+  type Unfollowing = {
+    followingId: number
+  }
   const router = useRouter();
+  const route = useRoute();
   const store = profileCounterStore();
-  const user = store.profileUser
+  const profileUser = computed(()=> {
+    return store.profileUser
+  })
   const followings_list = ref<Following[]>([])
-  const isMe = ref<boolean>(false)
-  const myFollwing = ref<boolean>(false)
+  // 현재 접속자와 현재 profileuser의 id 일치 여부
+  // 나의 팔로잉 명단 중에서 profileuser의 id가 있는지 여부
+  const myFollwing = ref<boolean>(true)
   const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
-  const unfollow_list = ref<Following[]>([])
-
-
+  const unfollow_list = ref<Unfollowing[]>([])
+  const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
+  const loginUser = JSON.parse(userInfoString.value)
+  const isMe = ref<boolean>(profileUser.value.id == loginUser.id)
+  
   const follow = (user: User) => {
     axios({
       headers: {
@@ -202,6 +216,7 @@
     })
     .then((response) => {
       console.log(response.data)
+      console.log(followings_list.value)
       myFollwing.value = !myFollwing.value
     })
     .catch((error)=> {
@@ -217,9 +232,9 @@
       },
 
       method: 'delete',
-      url: `${BACK_API_URL}/profile/1/unfollow`,
+      url: `${BACK_API_URL}/profile/${loginUser.id}/unfollow`,
       data: {
-        unfollowings: [{followingsId: user.id}]
+        "unfollowings": [{followingId: profileUser.value.id},]
       }
     })
     .then((response) => {
@@ -235,19 +250,45 @@
   const clickModal = () => {
     showModal.value = true
   }
-  
+
   const closeModal = () => {
+    showModal.value = false
+  }
+
+  const handleModal = () => {
+    isMe.value = false
     showModal.value = false
   }
 
   const updateFollowings = () => {
     // 이후 추가
+    axios({
+      headers: {
+        Authorization: `${store.token}`,
+        "Content-Type": 'application/json'
+      },
+
+      method: 'DELETE',
+      url: `${BACK_API_URL}/profile/1/unfollow`,
+      data: {
+        "unfollowings": unfollow_list.value
+      }
+    })
+    .then((response) => {
+      console.log(response.data)
+      // showModal.value = false
+    })
+    .catch((error)=> {
+      console.error(error)
+    })
     showModal.value = false
   }
 
   const handlefollow = (following: Following, follow: boolean) => {
     if (!follow){
-      unfollow_list.value.push(following)
+      unfollow_list.value.push(
+        {followingId: following.followingId}
+        )
     } else {
       unfollow_list.value = unfollow_list.value.filter((user)=> user.followingId != following.followingId)
     }
@@ -256,29 +297,45 @@
 
   // button 클릭
   const gotoUpdateProfile = () => {
-    router.push({name: "ProfileUpdatePage",params:{id:user.id}});
+    router.push({name: "ProfileUpdatePage",params:{id:profileUser.value.id}});
   }
   const gotoTradeList = () => {
-    router.push({name: "MyTradeListPage",params:{id:user.id}});
+    router.push({name: "MyTradeListPage",params:{id:profileUser.value.id}});
   }
 
   const gotoExchangeList = () => {
-    router.push({name: "MyExchangeListPage",params:{id:user.id}});
+    router.push({name: "MyExchangeListPage",params:{id:profileUser.value.id}});
   }
 
 
   const gotoMychatList = () => {
-    // router.push({name: "FollowingListPage"});
+    router.push({name: "chat", params:{id:profileUser.value.id}});
   }
 
+  // const gotoTradechat = () => {
+  //   // router.push({name: "FollowingListPage"});
+  // }
+
+  // const gotoExchangechat = () => {
+  //   // router.push({name: "FollowingListPage"});
+  // }
   const gotoTradechat = () => {
-    // router.push({name: "FollowingListPage"});
-  }
+  // // trade 채팅 생성
+  // const senderId = user.value.id;  // 현재 사용자의 ID
+  // const receiverId = /* 받는 사람의 ID를 어떻게 가져올지에 대한 코드 */;  
+  // const tradeType = 'PURCHASE';  // 구매 채팅인 경우
 
-  const gotoExchangechat = () => {
-    // router.push({name: "FollowingListPage"});
-  }
+  // createChatRoom(senderId, receiverId, tradeType);
+};
 
+const gotoExchangechat = () => {
+  // // exchange 채팅 생성
+  // const senderId = user.value.id;  // 현재 사용자의 ID
+  // const receiverId = /* 받는 사람의 ID를 어떻게 가져올지에 대한 코드 */;  
+  // const tradeType = 'EXCHANGE';  // 교환 채팅인 경우
+
+  // createChatRoom(senderId, receiverId, tradeType);
+};
   
   onMounted(()=> {
     // // followings 명단 호출
@@ -287,20 +344,61 @@
         Authorization: `${store.token}`
       },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${user.id}/follow`,
+      url: `${BACK_API_URL}/profile/${profileUser.value.id}/follow`,
     })
     .then((response)=> {
+      console.log(response.data)
       const res = response.data
       followings_list.value = res.data['followings']
-      console.log('팔로잉 명단: ',followings_list.value)
 
     })
     .catch((error)=> {
       console.error('요청실패: ',error)
     })
 
-    store.getProfile()
+    store.getProfile(Number(route.params.id))
   })
+
+  // 채팅방 생성 api post 요청
+  interface CreateChatroom {
+  id: number;
+  senderId: number;
+  receiverId: number;
+  tradeType: string;
+}
+
+interface CreateChatroomResponse {
+  status: number;
+  message: string;
+  data: CreateChatroom;
+}
+
+// 이밴트핸들러에 추가하면 될 것 같아요
+const createChatRoom = async (senderId: number, receiverId: number, tradeType: string) => {
+  try {
+    const response = await axios.post<CreateChatroomResponse>('https://i10a801.p.ssafy.io:8082/chat', {
+      senderId,
+      receiverId,
+      tradeType,
+    }, {
+      headers: {
+        'Authorization': 'Bearer ',
+      }
+    });
+
+    if (response.status === 201) {
+      console.log('채팅방 생성:', response.data);
+      return response.data.data; // 채팅방 정보 반환
+    } else {
+      console.error('API 요청 실패:', response.status);
+      return null;
+    }
+  } catch (error) {
+    console.error('API 요청 중 오류 발생:', error);
+    return null;
+  }
+};
+
 </script>
 
 <style scoped>

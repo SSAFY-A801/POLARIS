@@ -71,9 +71,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import axios from 'axios';
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import BookCartList from '@/components/profile/mylibrary/bookregister/BookCartList.vue';
 import BookSearchResultList from '@/components/profile/mylibrary/bookregister/BookSearchResultList.vue';
 import { profileCounterStore } from '@/stores/profilecounter';
@@ -84,6 +84,7 @@ const keyword = ref<string>("")
 const filter = ref<string|null>(null)
 const store = profileCounterStore();
 const router = useRouter()
+const route = useRoute()
 const BACK_API_URL = store.BACK_API_URL
 
 const searchbookLists = computed(()=> {
@@ -95,7 +96,6 @@ const bookcartList = computed(()=> {
 
 const searchAPIbook = (keywordsearch:string, filter: string|null) => {
   store.searchAPIbookList(keywordsearch, filter);
-  keyword.value = ""
 }
 
 
@@ -122,13 +122,15 @@ const addAPIbook = (bookcartList:Searchbook[]) => {
         "Content-Type": "application/json",
       },
       method: 'post',
-      url: `${BACK_API_URL}/book/1/library`,
+      // 접속자 id
+      url: `${BACK_API_URL}/book/${route.params.id}/library`,
       data: {
         "books": bookcartList
       }
     })
     .then((response)=>{
       console.log(response.data)
+      console.log(store.mybookLists)
     })
     .catch((error)=>{
       console.error(error)
@@ -136,7 +138,9 @@ const addAPIbook = (bookcartList:Searchbook[]) => {
     store.searchbookLists = []
     store.bookCartList = []
     keyword.value = ""
+    
     router.push({name: "MyLibraryPage"})
+    alert("도서 등록 완료")
   } else {
     alert("담긴 도서가 존재하지 않습니다.")
   }

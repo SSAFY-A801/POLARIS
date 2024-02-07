@@ -65,19 +65,20 @@ import MyLibraryList from '@/components/profile/mylibrary/MyLibraryList.vue';
 import { ref, watch, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { profileCounterStore } from '@/stores/profilecounter';
-import { useRouter } from 'vue-router';
 import type { Book } from '@/stores/profilecounter';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const store = profileCounterStore();
 const selectValue = ref("전체도서");
-const router = useRouter();
 const keyword = ref("")
 const booksearch = ref(false)
 
-const mybookLists = ref<Book[]>(store.mybookLists)
+
+
 const mybookList = computed(()=> {
-  // console.log(mybookLists.value)
-  return mybookLists.value
+  console.log('내 서재목록: ',store.mybookLists)
+  return store.mybookLists
 })
 
 const deleteBookList = computed(()=> {
@@ -85,10 +86,7 @@ const deleteBookList = computed(()=> {
   return store.deleteBookList
 })
 
-// const allCheck = () => {
-
-// }
-
+// 키워드 검색
 const keywordSearch = (keyword:string) => {
   booksearch.value = true
   if(keyword == ""){
@@ -108,9 +106,10 @@ const keywordSearch = (keyword:string) => {
 };
 
 
-const filterMybook = ref<Book[]>(mybookLists.value)
+const filterMybook = ref<Book[]>(mybookList.value)
 
-// // selectValue의 변화를 감지하는 watch 설정
+// selectValue의 변화를 감지하는 watch 설정
+
 const selectWatch = watch(selectValue, (newValue) => {
   if (newValue != "전체도서"){
     if (newValue == '공개'){
@@ -131,6 +130,8 @@ const selectWatch = watch(selectValue, (newValue) => {
 
 
 
+
+// 도서 삭제 요청
 const deleteBooks = () => {
   console.log(deleteBookList.value)
   axios({
@@ -139,9 +140,9 @@ const deleteBooks = () => {
       "Content-Type": 'application/json'
     },
     method: 'delete',
-    url: `${store.BACK_API_URL}/book/1/library`,
+    url: `${store.BACK_API_URL}/book/${route.params.id}/library`,
     data: {
-      // body를 내놓으세요.
+      "books": deleteBookList.value
     }
   })
   .then((response)=> [
@@ -152,11 +153,10 @@ const deleteBooks = () => {
   ])
   store.deleteBookList = []
   selectValue.value = "전체도서"
-  // 꼼수
   alert("도서 삭제를 실시합니다.")
-  router.go(0);
 }
 
+// 도서 선택 후 삭제 버튼 클릭
 const clickbutton = () => { 
   if(deleteState.value && deleteBookList.value.length == 0){
     alert("도서목록을 선택하세요.")
@@ -168,6 +168,7 @@ const clickbutton = () => {
   }
 }
 
+// 삭제 취소
 const cancelDelete = () => {
   store.deleteBookList = []
   store.toggledeletebutton();
@@ -177,13 +178,16 @@ const deleteState = computed(() => {
   return store.deletebuttonState
 })
 
-
+// 서재 목록 변경 watch
+watch(store.mybookLists, (newValue, oldValue) => {
+    console.log('내 서재 목록 변경:', oldValue, '->', newValue);
+  });
 
 onMounted(()=> {
   selectWatch;
   store.deleteBookList = []
   store.deletebuttonState = false
-  store.getMybookList();
+  store.getMybookList(route.params.id as string);
 })
 </script>
 

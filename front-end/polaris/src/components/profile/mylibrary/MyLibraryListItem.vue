@@ -86,11 +86,11 @@ const store = profileCounterStore();
 const deleteBook = ref<boolean>(false)
 
 const emit = defineEmits<{
-(e: 'deleteBooks', book: Book, deleteBook: boolean): void
+(e: 'deleteBooks', id: number, deleteBook: boolean): void
 }>()
 
 const emitDeleteState = () => {
-  emit('deleteBooks', bookinfo, !deleteBook.value)
+  emit('deleteBooks', bookinfo.id, !deleteBook.value)
 }
 
 
@@ -100,8 +100,7 @@ const emitDeleteState = () => {
 
 const showMybookdetail = () => {
   // params 추가
-  // router.push({name: 'BookDetailPage', params: { id: bookinfo.id, isbn: bookinfo.isbn} })
-  router.push({name: 'BookDetailPage', params: { id: 1, isbn: bookinfo.isbn} })
+  router.push({name: 'BookDetailPage', params: { id: bookinfo.userId, isbn: bookinfo.isbn} })
 
 }
 
