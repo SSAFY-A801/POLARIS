@@ -3,6 +3,7 @@ package com.ssafy.polaris.promotion.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,30 +105,33 @@ public class PromotionServiceImpl implements PromotionService{
 	@Override
 	public List<PromotionListResponseDto> getPromotionList(SearchConditions searchConditions) {
 		TypedQuery<PromotionListResponseDto> query = null;
-		String jpql;
+		String jpql = "select new com.ssafy.polaris.promotion.dto.PromotionListResponseDto("
+			+ "u.id, "
+			+ "u.profileUrl, "
+			+ "u.nickname, "
+			+ "concat(r.si, ' ', r.gungu, ' ', r.dong), "
+			+ "p.id, "
+			+ "p.title, "
+			+ "p.content, "
+			+ "(select sum(pub.userBook.userBookPrice) from PromotionUserBook as pub where pub.promotion = p), "
+			+ "f.isDeleted, "
+			+ "(select count(*) from Favorite as f where f.promotion = p and f.isDeleted is false) "
+			+ ") "
+			+ "from Promotion as p  "
+			+ "    left join User as u on u.id = p.user.id "
+			+ "    left join Favorite as f on f.promotion.id = p.id "
+			+ "	   join Regcode as r on u.regcode.id = r.id ";
 
 		searchConditions.setWord(searchConditions.getWord().trim());
 		boolean isNotSearch = searchConditions.getWord() == null || searchConditions.getWord().equals("");
 		if (isNotSearch) {
-			jpql = "select new com.ssafy.polaris.promotion.dto.PromotionListResponseDto("
-				+ "u.id, "
-				+ "u.profileUrl, "
-				+ "u.nickname, "
-				+ "concat(r.si, ' ', r.gungu, ' ', r.dong), "
-				+ "p.id, "
-				+ "p.title, "
-				+ "p.content, "
-				+ "(select sum(pub.userBook.userBookPrice) from PromotionUserBook as pub where pub.promotion = p), "
-				+ "f.isDeleted, "
-				+ "(select count(*) from Favorite as f where f.promotion = p and f.isDeleted is false) "
-				+ ") "
-				+ "from Promotion as p  "
-				+ "    left join User as u on u.id = p.user.id "
-				+ "    left join Favorite as f on f.promotion.id = p.id "
-				+ "	   join Regcode as r on u.regcode.id = r.id ";
-			query = em.createQuery(jpql, PromotionListResponseDto.class);
 		} else {
-				// TODO : 검색 조건에 따른 분기가 필요. (DSL을 쓰지 않는 이상..)
+			// TODO : 프론트와 조건 이름을 정한다.
+			if (searchConditions.getKey().equals("제목")) {
+				jpql += "where p.title like concat('%', :word, '%') ";
+			} else if (searchConditions.getKey().equals("글쓴이(닉네임)")) {
+				jpql += "where p.user.nickname like concat('%', :word, '%') ";
+			}
 		}
 
 		List<PromotionListResponseDto> promotions = query
@@ -136,7 +140,6 @@ public class PromotionServiceImpl implements PromotionService{
 			.getResultList();
 
 		return promotions;
-		// System.out.println(promotions.get(0).getUser().getRegcode().getDong());
 	}
 
 }
