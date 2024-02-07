@@ -2,7 +2,7 @@
   <div 
   class="grid grid-cols-12 items-center"
   :class="{'bg-gray-200': !follow}">
-    <div id="following-image"  class="col-span-2">
+    <div @click="gotoProfile" id="following-image"  class="col-span-2">
       <img v-if="following.profileUrl" :src="following.profileUrl" alt="NO IMAGE" class="profile-image">
       <img v-else src="@\assets\following-user.jpg" alt="NO IMAGE" class="profile-image">
     </div>
@@ -21,22 +21,30 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import type { Following } from '@/stores/profilecounter';
-  interface FollowingInfo {
-    following: Following
-  }
 
-  const emit = defineEmits<{
-    (e: 'followToggle', following: Following, follow: boolean): void
-  }>()
+interface FollowingInfo {
+  following: Following
+}
 
-  const follow = ref(true)
-  const followchange = () => {
-    follow.value = !follow.value
-    emit('followToggle',following, follow.value)
-  }
+const emit = defineEmits<{
+  (e: 'followToggle', following: Following, follow: boolean): void
+}>()
 
-  const { following } = defineProps<FollowingInfo>();
+const follow = ref(true)
+const router = useRouter();
+
+const followchange = () => {
+  follow.value = !follow.value
+  emit('followToggle',following, follow.value)
+}
+
+const { following } = defineProps<FollowingInfo>();
+
+const gotoProfile = () => {
+  router.push({name: "ProfilePage", params: {id:following.followingId }})
+}
 </script>
 
 <style scoped>

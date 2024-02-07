@@ -25,7 +25,10 @@
                     <div class="ml-auto flex flex-row">
                         <router-link :to="{name: 'login'}" v-if="!userToken" class="text-white mr-5">로그인</router-link>
                         <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-white">회원가입</router-link>
-                        <router-link :to="{name: 'ProfilePage',params:{id: 8}}" v-if="userToken"  class="text-white mr-4">프로필</router-link>
+                        <router-link v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" 
+                                    :to="{ name: 'ProfilePage', params: { id: loginUser.id }}" 
+                                    class="text-white mr-4">프로필</router-link>
+
                         <button v-if="userToken" @click="logout"  class="text-white ml-4 bg-transparent border-none outline-none focus:outline-none cursor-pointer">로그아웃</button>
                     </div>
                     
@@ -53,7 +56,10 @@ import { useRouter } from 'vue-router'
 
 
 // const props = defineProps(['userToken'])
-const userToken = ref(localStorage.getItem('user_token') )
+const userToken = ref(localStorage.getItem('user_token'))
+const userInfoString = ref<string>(localStorage.getItem('user_info'))
+const loginUser = JSON.parse(userInfoString.value)
+
 
 
 const router = useRouter()
