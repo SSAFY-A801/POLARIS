@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 import com.ssafy.polaris.user.dto.UserResponseDto;
+import com.ssafy.polaris.user.dto.UserSetPasswordDto;
 import com.ssafy.polaris.user.response.DefaultResponse;
 import com.ssafy.polaris.user.response.StatusCode;
 import com.ssafy.polaris.user.service.UserService;
@@ -145,6 +147,15 @@ public class UserController {
 			HttpStatus.OK,
 			StatusCode.EMAIL_NOT_IN_USE
 		);
+	}
 
+	@PatchMapping("/change_password")
+	public ResponseEntity passwordCorrectionCheck(
+		@RequestBody UserSetPasswordDto passwords,
+		@AuthenticationPrincipal SecurityUser securityUser) {
+
+		userService.passwordCorrectionCheck(passwords, securityUser);
+		userService.setPassword(securityUser.getId(), passwords.getNewPassword());
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_PASSWORD_SET);
 	}
 }

@@ -5,7 +5,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.ssafy.polaris.global.exception.exceptions.UserNotExist;
 import com.ssafy.polaris.global.exception.exceptions.WrongArgumentException;
+import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
+import com.ssafy.polaris.global.exception.exceptions.category.AuthenticationException;
 import com.ssafy.polaris.global.exception.exceptions.category.PolarisRuntimeException;
 import com.ssafy.polaris.global.exception.response.ErrorCode;
 import com.ssafy.polaris.global.exception.response.ErrorResponse;
@@ -22,6 +25,20 @@ public class GlobalExceptionHandler {
 	public ErrorResponse handlerPolarisRuntimeException(PolarisRuntimeException exception) {
 		log.error(exception.getMessageKey(), exception, exception.getParams());
 		return new ErrorResponse(ErrorCode.WRONG_ARGUMENT);
+	}
+
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(AuthenticationException.class)
+	public ErrorResponse wrongPasswordException(PolarisRuntimeException exception) {
+		log.error(exception.getMessageKey(), exception, exception.getParams());
+		return new ErrorResponse(ErrorCode.WRONG_PASSWORD);
+	}
+
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(UserNotExist.class)
+	public ErrorResponse userNotExistException(PolarisRuntimeException exception) {
+		log.error(exception.getMessageKey(), exception, exception.getParams());
+		return new ErrorResponse(ErrorCode.USER_NOT_EXIST);
 	}
 
 }
