@@ -1,6 +1,5 @@
 package com.ssafy.polaris.global.exception.exceptions;
 
-import com.ssafy.polaris.global.exception.exceptions.category.BadRequestException;
 import com.ssafy.polaris.global.exception.exceptions.category.NotFoundException;
 
 public class UserBookNotExist extends NotFoundException {

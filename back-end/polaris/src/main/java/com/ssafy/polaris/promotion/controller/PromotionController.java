@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.polaris.global.exception.exceptions.category.UnAuthorizedException;
+import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.promotion.dto.PromotionRequestDto;
 import com.ssafy.polaris.promotion.dto.PromotionResponseDto;
 import com.ssafy.polaris.promotion.response.DefaultResponse;
 import com.ssafy.polaris.promotion.response.StatusCode;
 import com.ssafy.polaris.promotion.service.PromotionService;
-import com.ssafy.polaris.security.SecurityUser;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,8 @@ public class PromotionController {
 	public ResponseEntity<DefaultResponse<PromotionResponseDto>> createPromotion(
 		@RequestBody PromotionRequestDto promotionRequestDto,
 		@AuthenticationPrincipal SecurityUser securityUser) {
+		if (securityUser == null)
+			throw new UnAuthorizedException("", PromotionController.class);
 
 		Long promotionId = promotionService.createPromotion(promotionRequestDto, securityUser);
 		PromotionResponseDto promotionResponseDto = promotionService.getPromotion(promotionId, false);
@@ -50,6 +53,8 @@ public class PromotionController {
 	public ResponseEntity<DefaultResponse<PromotionResponseDto>> updatePromotion(
 		@RequestBody PromotionRequestDto promotionRequestDto,
 		@AuthenticationPrincipal SecurityUser securityUser) {
+		if (securityUser == null)
+			throw new UnAuthorizedException("", PromotionController.class);
 
 		Long promotionId = promotionService.updatePromotion(promotionRequestDto, securityUser);
 		PromotionResponseDto promotionResponseDto = promotionService.getPromotion(promotionId, false);

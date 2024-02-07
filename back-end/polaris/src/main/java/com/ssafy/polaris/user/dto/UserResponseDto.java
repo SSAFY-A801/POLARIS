@@ -1,6 +1,5 @@
 package com.ssafy.polaris.user.dto;
 
-import com.ssafy.polaris.security.SecurityUser;
 import com.ssafy.polaris.user.domain.User;
 
 import lombok.AllArgsConstructor;

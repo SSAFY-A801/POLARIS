@@ -12,11 +12,11 @@ import com.ssafy.polaris.global.exception.exceptions.NoBookSelectedException;
 import com.ssafy.polaris.global.exception.exceptions.UserBookNotExist;
 import com.ssafy.polaris.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.polaris.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.promotion.domain.Promotion;
 import com.ssafy.polaris.promotion.dto.PromotionRequestDto;
 import com.ssafy.polaris.promotion.dto.PromotionResponseDto;
 import com.ssafy.polaris.promotion.repository.PromotionRepository;
-import com.ssafy.polaris.security.SecurityUser;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -70,13 +70,19 @@ public class PromotionServiceImpl implements PromotionService{
 	public Long updatePromotion(PromotionRequestDto promotionRequestDto, SecurityUser securityUser) {
 		// Promotion promotion = promotionRepository.getJoinedPromotionById(promotionRequestDto.getId())
 		// 	.orElseThrow(() -> new NotFoundException("글을 찾을 수 없습니다. (홍보글)", PromotionServiceImpl.class));
-		Promotion promotion = promotionRepository.findById(promotionRequestDto.getId())
+		Promotion promotion = promotionRepository.getJoinedPromotionById(promotionRequestDto.getId())
 			.orElseThrow(() -> new NotFoundException("글을 찾을 수 없습니다. (홍보글)", PromotionServiceImpl.class));
 
 		if (!promotion.getUserId().equals(securityUser.getId()))
 			throw new ForbiddenException("금지된 요청입니다. (홍보글 수정)", PromotionServiceImpl.class);
+
+		promotionUserBookRepository.deleteAll(promotion.getPromotionUserBooks());
 		promotion.update(promotionRequestDto);
-		// TODO : 목록 업데이트 되도록 수정
+		try {
+			promotionUserBookRepository.saveAll(promotion.getPromotionUserBooks());
+		} catch (Exception e) {
+			throw new UserBookNotExist("홍보글", PromotionServiceImpl.class);
+		}
 
 		return promotion.getId();
 	}

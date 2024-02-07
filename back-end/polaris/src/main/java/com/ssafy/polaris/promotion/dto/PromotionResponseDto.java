@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import com.ssafy.polaris.book.dto.UserBookSimpleResponseDto;
 import com.ssafy.polaris.connectentity.domain.PromotionUserBook;
 import com.ssafy.polaris.promotion.domain.Promotion;
-import com.ssafy.polaris.security.SecurityUser;
 import com.ssafy.polaris.user.dto.UserResponseDto;
 
 import lombok.Getter;
