@@ -53,25 +53,42 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import router from '@/router';
+import { useUserStore } from '@/stores/authcounter'
+import { profileCounterStore } from '@/stores/profilecounter';
 
 const userEmail = ref('')
 const userPassword = ref('')
+const profileStore = profileCounterStore();
+const loginUser = ref(profileStore.loginUser)
 
 const userLogin = async () => {
     if ( userEmail.value && userPassword.value ) {
-    await axios.post('http://i10a801.p.ssafy.io:8082/user/login', {
-    headers: {
-    "Content-Type": "application/json",
-  }, body:{
-    id: userEmail.value,
+    await axios.post('https://i10a801.p.ssafy.io:8082/user/login', 
+  JSON.stringify({
+    email: userEmail.value,
     password: userPassword.value
-    }
-  }
+    }),
+    {headers: {
+      "Content-Type": "application/json",
+    }}
+  
 )
 .then(function (response) {
   alert('로그인에 성공하였습니다')
-  localStorage.setItem('user_token',JSON.stringify(response.data.accessToken))
+  console.log(response.data.data)
+  localStorage.setItem('user_token',(response.data.data.access))
+  localStorage.setItem('user_info' , JSON.stringify(response.data.data))
+  const userStore = useUserStore()
+  userStore.setLoginInfo(response.data.data)
+  localStorage.setItem('user_info' , JSON.stringify(response.data.data))
   router.push({ name: 'home'})
+
+  if(profileStore.userInfoString){
+    loginUser.value = JSON.parse(profileStore.userInfoString)
+  }
+  if(loginUser.value){
+      console.log('로그인유저:',loginUser.value)
+  }
   // localStorage.setItem('user_info' , JSON.stringify(response.userInfo))
   // const localStorageInfo = JSON.parse(localStorage.getItem('userInfo')) localstorage에서 가져올때
   })
@@ -101,4 +118,6 @@ const userLogin = async () => {
   display: flex;
   flex-grow:1;
 }
+
+
 </style>

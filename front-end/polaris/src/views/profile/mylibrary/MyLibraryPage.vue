@@ -9,29 +9,29 @@
               <font-awesome-icon icon="fa-solid fa-trash-can" style="color: #ffffff;"/>
               삭제
             </div>
-            <div v-else @click="deleteBooks">
+            <div v-else>
               <font-awesome-icon icon="fa-solid fa-trash-can" style="color: #ffffff;"/>
               삭제완료
             </div>
           </button>
-          <button v-if="deleteState == true"
-            @click="cancelDelete"
+          <!-- <button v-if="deleteState"
+            @click="allCheck"
             class="text-white w- py-2 px-4 m-2 bg-maintheme1 hover:bg-gray-500 rounded-lg">
+            전체선택
+          </button> -->
+          <button v-if="deleteState"
+            id="cancel-button"
+            @click="cancelDelete"
+            class="">
             취소
           </button>
         </div>
       </div>
-      <div class="flex items-center">
-        <!-- 1. 키워드 검색 -->
-        <form action="">
-          <input type="text" id="rounded-book" class="w-64 rounded-lg appearance-none border border-gray-500 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="내 도서 검색"/>
-          <button type="submit" class="text-white w-16 py-2 px-4 m-2 bg-maintheme1 hover:bg-gray-500 rounded-lg ">
-            <font-awesome-icon icon="fa-solid fa-magnifying-glass" size="xl"/>
-          </button>
-        </form>
-        <!-- 2. 필터링 -->
-        <div class="relative inline-block">
-          <!-- {{ selectValue }} -->
+      <div v-if="!deleteState" class="flex items-center">
+        <!-- 만약 1과 2를 섞는다면 filterResult 내에서
+        키워드에 해당하는 도서들만 나오게 하면 복합 검색이 가능함 -->
+        <!-- 1. 필터링 -->
+        <div class="relative inline-block mr-2">
           <select v-model="selectValue" id="filter" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option>전체도서</option>
             <option>공개</option>
@@ -42,10 +42,19 @@
             <option>교환가능</option>
           </select>
         </div>
+        <!-- 2. 키워드 검색 -->
+        <div @keyup.enter="keywordSearch(keyword)" action="">
+          <input v-model="keyword" type="text" id="rounded-book" class="w-64 rounded-lg appearance-none border border-gray-500 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="내 도서 검색"/>
+          <button type="button" @click="keywordSearch(keyword)" class="text-white w-16 py-2 px-4 m-2 bg-maintheme1 hover:bg-gray-500 rounded-lg ">
+            <font-awesome-icon icon="fa-solid fa-magnifying-glass" size="xl"/>
+          </button>
+        </div>
       </div>
     </div>
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <MyLibraryList :mybookList="filterResult"/>
+      <MyLibraryList 
+      :mybookList="selectValue === '전체도서' && !booksearch ? mybookList : filterMybook"
+      />
     </div>
   </div>
 
@@ -54,61 +63,113 @@
 <script setup lang="ts">
 import MyLibraryList from '@/components/profile/mylibrary/MyLibraryList.vue';
 import { ref, watch, onMounted, computed } from 'vue';
+import axios from 'axios';
 import { profileCounterStore } from '@/stores/profilecounter';
 import type { Book } from '@/stores/profilecounter';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const store = profileCounterStore();
 const selectValue = ref("전체도서");
-const filterResult = ref(store.filterResult);
-const mybookList = ref(store.mybookLists);
-const deleteBookList = ref(store.deleteBookList);
-const newbookList = ref<Book[]>([])
+const keyword = ref("")
+const booksearch = ref(false)
 
-// selectValue의 변화를 감지하는 watch 설정
-const selectWatch = watch(selectValue, (newValue) => {
-  // 초기화
-  filterResult.value = []
-  // 전체도서
-  if (newValue == "전체도서") {
-    filterResult.value = mybookList.value;
+
+
+const mybookList = computed(()=> {
+  return store.mybookLists
+})
+
+const deleteBookList = computed(()=> {
+  console.log(deleteBookList.value)
+  return store.deleteBookList
+})
+
+// 키워드 검색
+const keywordSearch = (keyword:string) => {
+  booksearch.value = true
+  if(keyword == ""){
+    alert("검색어를 입력해 주세요.")
   } else {
-    mybookList.value.forEach(bookinfo => {
-      if (bookinfo.isOwned == newValue){
-        filterResult.value.push(bookinfo);
-      } else if (bookinfo.isOpened == newValue) {
-        filterResult.value.push(bookinfo);
-      } else {
-        if (newValue == "교환가능" && bookinfo.tradeType == "EXCHANGE"){ 
-          filterResult.value.push(bookinfo);
-        } else if (newValue == "판매가능" && bookinfo.tradeType == "TRADE"){
-          filterResult.value.push(bookinfo);
-        }
-      }
+    // 고민된다..... 만약 검색 후 
+    // 다시 또 검색을 하면 검색대상을 어떻게 해야 할지..
+    // 1. 전체목록으로 다시 초기화한 후에 키워드 검색
+    filterMybook.value = mybookList.value
+    // console.log(filterMybook.value)
+    filterMybook.value = filterMybook.value.filter(book =>{
+     const titleMatch = book.title.includes(keyword);
+     const authorMatch = book.author.includes(keyword);
+      return titleMatch || authorMatch
     });
   }
-  store.filterResult = filterResult.value;
+};
+
+
+const filterMybook = ref<Book[]>(mybookList.value)
+
+// selectValue의 변화를 감지하는 watch 설정
+
+const selectWatch = watch(selectValue, (newValue) => {
+  if (newValue != "전체도서"){
+    if (newValue == '공개'){
+      filterMybook.value = mybookList.value.filter(item => item.isOpened == true)
+    } else if (newValue == '비공개'){
+      filterMybook.value = mybookList.value.filter(item => item.isOpened == false)
+    } else if (newValue == '보유'){
+      filterMybook.value = mybookList.value.filter(item => item.isOwned == true)
+    } else if (newValue == '미보유'){
+      filterMybook.value = mybookList.value.filter(item => item.isOwned == false)
+    } else if (newValue == '판매가능'){
+      filterMybook.value = mybookList.value.filter(item => item.userBookTradeType == "PURCHASE")
+    } else if (newValue == '교환가능')
+      filterMybook.value = mybookList.value.filter(item => item.userBookTradeType == "EXCHANGE")
+    }
+  keyword.value=""
 });
 
 
 
+
+// 도서 삭제 요청
 const deleteBooks = () => {
   console.log(deleteBookList.value)
-  mybookList.value.forEach((book)=> {
-    if(!deleteBookList.value.includes(book.isbn)){
-      newbookList.value.push(book)
+  axios({
+    headers: {
+      Authorization: `${store.token}`,
+      "Content-Type": 'application/json'
+    },
+    method: 'delete',
+    url: `${store.BACK_API_URL}/book/${route.params.id}/library`,
+    data: {
+      "books": deleteBookList.value
     }
   })
-
-  console.log("도서 삭제를 완료하였다.")
-  deleteBookList.value = []
+  .then((response)=> [
+    console.log(response.data)
+  ])
+  .catch((error)=> [
+    console.error(error)
+  ])
+  store.deleteBookList = []
+  selectValue.value = "전체도서"
+  alert("도서 삭제를 실시합니다.")
 }
 
+// 도서 선택 후 삭제 버튼 클릭
 const clickbutton = () => { 
-  store.toggledeletebutton();
+  if(deleteState.value && deleteBookList.value.length == 0){
+    alert("도서목록을 선택하세요.")
+  } else if(deleteState.value && deleteBookList.value.length){
+    deleteBooks();
+    store.toggledeletebutton();
+  } else if(!deleteState.value){
+    store.toggledeletebutton();
+  }
 }
 
-// 얜 이게 끝
+// 삭제 취소
 const cancelDelete = () => {
+  store.deleteBookList = []
   store.toggledeletebutton();
 }
 
@@ -116,13 +177,21 @@ const deleteState = computed(() => {
   return store.deletebuttonState
 })
 
-
+// 서재 목록 변경 watch
+watch(store.mybookLists, (newValue, oldValue) => {
+    console.log('내 서재 목록 변경:', oldValue, '->', newValue);
+  });
 
 onMounted(()=> {
   selectWatch;
+  store.deleteBookList = []
+  store.deletebuttonState = false
+  store.getMybookList(route.params.id as string);
 })
 </script>
 
 <style scoped>
-
+  #cancel-button {
+  @apply border border-gray-300 text-maintheme1  hover:bg-slate-200  border-solid py-2 px-4 m-2 rounded-lg
+}
 </style>

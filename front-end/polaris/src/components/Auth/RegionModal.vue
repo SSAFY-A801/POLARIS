@@ -5,7 +5,7 @@
     </div>
     <div class="form-group col-md-2 mt-8">
       <label class="text-gray-700" for="sido">시/도 선택
-      <select id="sido" v-model="selectedSido" class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500" name="sido">
+      <select id="sido" v-model="selectedSido" class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" name="sido">
         <option value=""  >시/도 정보를 선택하세요</option>
         <option v-for="sido in sidoList" :value="{code:sido.code , name:sido.name}">{{ sido.name }}</option>
       </select></label>
@@ -15,7 +15,7 @@
     
     <div class="form-group col-md-2">     
       <label class="text-gray-700" for="gugun">구/군 선택
-      <select id="gugun" v-model="selectedGugun"  class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"  name="gugun">
+      <select id="gugun" v-model="selectedGugun"  class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent"  name="gugun">
         <option disabled value="">구/군 정보를 선택하세요</option>
         <option v-for="gugun in gugunList" :value="{code:gugun.code , name:gugun.name}">{{ gugun.name }}</option>
       </select></label>
@@ -24,7 +24,7 @@
     
     <div class="form-group col-md-2">     
       <label class="text-gray-700" for="dong">동 선택 
-      <select id="dong" v-model="selectedDong" class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500" name="dong">
+      <select id="dong" v-model="selectedDong" class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" name="dong">
         <option value="">동/동 정보를 선택하세요</option>
         <option v-for="dong in dongList" :value="{code:dong.code , name:dong.name}">{{ dong.name }}</option>
       </select></label>
@@ -72,15 +72,28 @@ const dongList = ref<Region[]>([])
 
 watchEffect(async () => {
   if (selectedSido.value) {
-    const response = await axios.get(`https://fc4c8f31-6e7c-47a0-a894-76295c737c08.mock.pstmn.io/gugun`)
-    gugunList.value = response.data.data.regcodes
+    console.log(selectedSido.value)
+    await axios.get(`https://i10a801.p.ssafy.io:8082/regcode/gugun?sido=${selectedSido.value.name}`, {
+    headers: {
+    "Content-Type": "application/json",
+  }
+  })
+    .then (function(response) {
+      gugunList.value = response.data.data.regcodes
+    })
   }
 })
 
 watchEffect(async () => {
-  if (selectedGugun.value) {
-    const response = await axios.get(`https://fc4c8f31-6e7c-47a0-a894-76295c737c08.mock.pstmn.io/dong`)
-    dongList.value = response.data.data.regcodes
+  if (selectedSido.value && selectedGugun.value) {
+    await axios.get(`https://i10a801.p.ssafy.io:8082/regcode/dong?sido=${selectedSido.value.name}&gugun=${selectedGugun.value.name}`, {
+    headers: {
+    "Content-Type": "application/json",
+  }
+  })
+    .then (function(response) {
+       dongList.value = response.data.data.regcodes
+    })
   }
 })
 
@@ -93,8 +106,14 @@ watchEffect(() => {
 });
 
 (async () => {
-  const response = await axios.get('https://fc4c8f31-6e7c-47a0-a894-76295c737c08.mock.pstmn.io/sido')
-  sidoList.value = response.data.data.regcodes
+  await axios.get('https://i10a801.p.ssafy.io:8082/regcode/sido', {
+    headers: {
+    "Content-Type": "application/json",
+  }
+  })
+  .then (function(response) {
+    sidoList.value = response.data.data.regcodes
+  })
 })()
 
 
@@ -108,7 +127,7 @@ watchEffect(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 350px; /* 원하는 너비로 조절 */
-  height: 55%; /* 원하는 높이로 조절 */
+  height: 500px; /* 원하는 높이로 조절 */
   padding: 20px;
   background-color: white;
   border: 1px solid #ccc;

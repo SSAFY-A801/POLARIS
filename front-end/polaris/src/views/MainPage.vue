@@ -1,67 +1,32 @@
 <template>
   <main>
     <p class="h-24">mainview</p>
-    
-    <div v-if="booklistItem" >
-        <div v-for="bookItem in booklistItem.item" :key="bookItem.itemId">
-          <img :src=  "bookItem.cover"/> 
-          <div>{{  bookItem.title }}</div>
-          <div>{{  bookItem.author }}</div>
-        </div>
+    <div class="m-auto flex justify-center">
+      <div class="mt-24 mb-10 ml-10 w-2/3">
+          <h1 class=" text-3xl font-bold text-maintheme1 mb-10">Bestseller Top 20</h1>      
+      </div>
     </div>
+    <Bestseller></Bestseller>
+    <div class="m-auto flex justify-center">
+      <div class="mt-24 mb-10 ml-10 w-2/3">
+          <h1 class=" text-3xl font-bold text-maintheme1 mb-10">사용자 인기도서 Top 20</h1>      
+      </div>
+    </div>
+    <UserPopularBook></UserPopularBook>
+    
+    
   </main>
 
 
 </template>
 
-<script setup lang="ts" > 
-import { ref , onMounted } from 'vue'
-import axios from 'axios'
-// import { BaseCarousel, BaseCarouselItem } from 'vue-base-carousel'
-// import "vue-base-carousel/style.css"
 
-type bookItemType = {
-  adult: boolean , 
-  author : string , 
-  bestDuration : string , 
-  bestRank :number ,
-  categoryId : number , 
-  categoryName : string ,
-  cover:string , 
-  customerReviewRank:number,
-  description:string,
-  fixedPrice: boolean,
-  isbn : string,
-  isbn13 : string,
-  itemId: number,
-  link: string, 
-  mallType: string,
-  mileage : number,
-  priceSales : number,
-  priceStandard : number,
-  pubDate : string,
-  publisher : string,
-  salesPoint : number,
-  stockStatus : string,
-  subInfo : object,
-  title : string
-}
+<script setup lang="ts">
 
-type bookListType = {item:bookItemType[] ,itemsPerPage:number , link:string,logo:string,pubDate:string,query:string,searchCategoryId:number,searchCategoryName:string,startIndex:number,title:string,totalResults:number,version:string}
-
-const booklistItem = ref<bookListType | null>()
-
-
-onMounted(async () => {
-   await axios.get<bookListType,{data:bookListType}>('/api/ItemList.aspx?ttbkey=ttbkimsw28261657004&Query=aladdin&QueryType=Bestseller&MaxResults=20&start=1&SearchTarget=Book&output=js&Version=20131101')
-   .then((data) => 
-    console.log(booklistItem.value = data.data)
-    
-    )
-
-
-})
-
+import Bestseller from '@/components/main/Bestseller.vue'
+import UserPopularBook from '@/components/main/UserPopularBook.vue'
 </script>
 
+<style scoped>
 
+</style>

@@ -3,7 +3,7 @@ import MainPage from '@/views/MainPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
 import BookSearchPage from '@/views/BookSearchPage.vue'
-import EssayListPage from '@/views/EssayListPage.vue'
+import EssayListPage from '@/views/essay/EssayListPage.vue'
 import PromotionListPage from '@/views/PromotionListPage.vue'
 import PasswordSearchPage from '@/views/PasswordSearchPage.vue'
 import ProfilePage from '@/views/profile/ProfilePage.vue'
@@ -18,9 +18,15 @@ import PasswordChangePage from '@/views/profile/userinfo/PasswordChangePage.vue'
 import BookRegisterPage from '@/views/profile/mylibrary/BookRegisterPage.vue'
 import MyTradeListPage from '@/views/profile/mytradeinfo/MyTradeListPage.vue'
 import MyExchangeListPage from '@/views/profile/mytradeinfo/MyExchangeListPage.vue'
-import FollowingListPage from '@/views/profile/FollowingListPage.vue'
 import BookDetailPage from '@/views/profile/mylibrary/BookDetailPage.vue'
-
+import ChattingListPage from '@/views/chat/ChattingListPage.vue'
+import ChattingRoomPage from '@/views/chat/ChattingRoomPage.vue'
+import SellChattingBox from '@/components/chat/SellChattingBox.vue'
+import ChangeChattingBox from '@/components/chat/ChangeChattingBox.vue'
+import ConnectSocket from '@/components/chat/ConnectSocket.vue'
+import BestsellerdetailPage from '@/components/main/BestsellerdetailPage.vue'
+import UserPopularBookDatailPage from '@/components/main/UserPopularBookDetailPage.vue'
+import TestFirebase from '@/components/chat/TestFirebase.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,10 +67,23 @@ const router = createRouter({
       name: 'passwordsearch',
       component: PasswordSearchPage,
     },
+    {//베스트셀러 상세 페이지
+      path: '/bestseller/:id',
+      name: 'bestsellerdatail',
+      component: BestsellerdetailPage,
+      props: true
+    },
+    {//사용자 인기 도서 상세 페이지
+      path: '/userpopularbook/:id',
+      name: 'userpopularbookdatail',
+      component: UserPopularBookDatailPage,
+      props: true
+    },
     // Profile
     {
-      path: '/profile',
-      redirect: '/profile/library',
+      path: '/profile/:id',
+      redirect: to => {
+        return `/profile/${to.params.id}/library`},
       name: 'ProfilePage',
       component: ProfilePage,
       children: [
@@ -81,7 +100,8 @@ const router = createRouter({
           component: MyFavoritesPage
          },
         { path: 'myarticle',
-          redirect: '/profile/myarticle/myessay',
+          redirect: to => {
+            return `/profile/${to.params.id}/myarticle/myessay`},
           name: 'MyArticlePage', 
           component: MyArticlePage, 
           // 나의독후감, 나의홍보게시글
@@ -100,46 +120,71 @@ const router = createRouter({
     },
     // Profile 수정
     { 
-      path: '/profile/update',
+      path: '/profile/:id/update',
       name: 'ProfileUpdatePage',
       component: ProfileUpdatePage, 
     },
     // Password 변경
     { 
-      path: '/passwordchange',
+      path: '/profile/:id/password',
       name: 'PasswordChangePage',
       component: PasswordChangePage, 
     },
 
     // 서재에 도서등록 => 모달 제작이 되면 없앨 예정
     { 
-      path: '/registerbook',
+      path: '/book/:id/library',
       name: 'BookRegisterPage',
       component: BookRegisterPage,
     },
     // 거래내역 확인
     { 
-      path: '/profile/trade-books',
+      path: '/profile/:id/trade-books',
       name: 'MyTradeListPage',
       component: MyTradeListPage,
     },
     { 
-      path: '/profile/exchange-books',
+      path: '/profile/:id/exchange-books',
       name: 'MyExchangeListPage',
       component: MyExchangeListPage,
     },
-    // 팔로잉 목록 확인
-    { 
-      path: '/profile/follow',
-      name: 'FollowingListPage',
-      component: FollowingListPage,
-    },
     // 사용자 도서 상세 페이지
     {
-      path: '/bookdetail',
+      path: '/profile/:id/libray/:isbn',
       name: 'BookDetailPage',
       component: BookDetailPage,
 
+    },
+    // 채팅방 관련 라우터
+    {
+      path: '/:id/chat/',
+      name: 'chat',
+      component: ChattingListPage
+    },
+    {
+      path: '/chat/:userId',
+      name: 'chatting',
+      component: ChattingRoomPage
+    },
+    {
+      path: '/chat/:chatroomId/sell',
+      name: 'sellchattingbox',
+      component: SellChattingBox
+    },
+    {
+      path: '/chat/:chatroomId/change',
+      name: 'changechattingbox',
+      component: ChangeChattingBox
+    },
+    // {
+    //   path: '/chat/start/:chatRoomId',
+    //   name: 'connectSocket',
+    //   component: ConnectSocket
+    // },
+    {
+      path: '/test',
+      name: 'testfirebase',
+      component: TestFirebase
     }
   ]
 })
