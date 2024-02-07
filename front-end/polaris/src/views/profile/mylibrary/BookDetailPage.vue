@@ -310,6 +310,7 @@
         "Content-Type": 'application/json'
       },
       method: 'get',
+      // url: `${BACK_API_URL}/book/1/library/${route.params.isbn}`,
       url: `${BACK_API_URL}/book/${route.params.id}/library/${route.params.isbn}`
 
     })

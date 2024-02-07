@@ -11,7 +11,7 @@
                         <router-link :to="{name: 'promotionlist'}" class="text-white" >홍보 게시판</router-link>
                     </div>
 
-                    <div class='flex items-center justify-center w-1/2 h-24 bg-maintheme1'>
+                    <!-- <div class='flex items-center justify-center w-1/2 h-24 bg-maintheme1'>
                     <div class="flex w-full mx-10 rounded bg-white">
                         <input class=" w-full border-none bg-transparent px-4 py-1 text-gray-400 outline-none focus:outline-none " type="search" name="search" placeholder="검색어를 입력하세요" />
                         <button type="submit" class="m-2 rounded bg-maintheme1 px-4 py-2 text-white">
@@ -20,7 +20,7 @@
                             </svg>
                         </button>
                     </div>
-                    </div>
+                    </div> -->
 
                     <div class="ml-auto flex flex-row">
                         <router-link :to="{name: 'login'}" v-if="!userToken" class="text-white mr-5">로그인</router-link>

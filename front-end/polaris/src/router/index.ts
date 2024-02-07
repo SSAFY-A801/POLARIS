@@ -25,6 +25,7 @@ import SellChattingBox from '@/components/chat/SellChattingBox.vue'
 import ChangeChattingBox from '@/components/chat/ChangeChattingBox.vue'
 import ConnectSocket from '@/components/chat/ConnectSocket.vue'
 import BestsellerdetailPage from '@/components/main/BestsellerdetailPage.vue'
+import UserPopularBookDatailPage from '@/components/main/UserPopularBookDetailPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -69,6 +70,12 @@ const router = createRouter({
       path: '/bestseller/:id',
       name: 'bestsellerdatail',
       component: BestsellerdetailPage,
+      props: true
+    },
+    {//사용자 인기 도서 상세 페이지
+      path: '/userpopularbook/:id',
+      name: 'userpopularbookdatail',
+      component: UserPopularBookDatailPage,
       props: true
     },
     // Profile

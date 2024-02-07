@@ -1,26 +1,25 @@
-<!-- <template>
-  <div class="container mx-auto">
-    <div id="carouselExample" class="carousel slide" style="width: 90%; margin: auto;">
-      <div class="carousel-inner">
-        <div class="carousel-item" v-for="(n, index) in 4" :key="n" :class="{ active: index === 0 }">
-          <div class="d-flex flex-wrap justify-content-center">
-            <div v-for="bookItem in (store.booklistItem ? store.booklistItem.item.slice((n-1)*5, n*5) : [])" :key="bookItem.itemId" class="p-2">
-              <router-link :to="{ name: 'bestsellerdatail', params: { id: bookItem.bestRank }}" style="text-decoration: none;">
+<template>
+    <div class="wrapper">
+      <button class="carousel-button" @click="handleOnClickPrevButton"><font-awesome-icon icon="fa-solid fa-chevron-left" size="xl" /></button>
+      <div class="carousel-wrapper">
+        <div class="carousel-item-wrapper" :style="{ left: `-${currentIndex * widthPx}px` }">
+          <div v-for="bookItem in booklistItem?.item" :key="bookItem.title" class="book-list-item carousel-item">
+            <router-link :to="{ name: 'bestsellerdatail', params: { id: bookItem.bestRank }}" class="no-underline">
                 <div class="m-auto overflow-hidden rounded-lg shadow-lg cursor-pointer w-48 h-72">
-                  <div class="block w-full h-full">
-                    <div class="font-medium text-maintheme1 font-bold text-md mx-auto text-center mt-2 mb-2">
-                      {{bookItem.bestRank}}위
+                    <div class="block w-full h-full">
+                        <div class="font-medium text-maintheme1 font-bold text-md mx-auto text-center mt-2 mb-2">
+                            {{bookItem.bestRank}}위
+                        </div>
+                        <img :src="bookItem.cover" class="object-cover mx-auto" style="width: 85px;"/> 
+                        <div class="w-full p-4 bg-white dark:bg-gray-800">
+                            <p class="mb-2 text-xs font-medium text-gray-800 ">
+                                {{truncateTitle(bookItem.title)}}
+                            </p>
+                            <p class="font-light text-gray-400  text-xs">
+                                {{truncateTitle(bookItem.author)}}
+                            </p>
+                        </div>
                     </div>
-                    <img :src="bookItem.cover" class="object-cover mx-auto" style="width: 85px;"/> 
-                    <div class="w-full p-4 bg-white dark:bg-gray-800">
-                      <p class="mb-2 text-xs font-medium text-gray-800 ">
-                        {{truncateTitle(bookItem.title)}}
-                      </p>
-                      <p class="font-light text-gray-400  text-xs">
-                        {{truncateTitle(bookItem.author)}}
-                      </p>
-                    </div>
-                  </div>
                 </div>
               </router-link>
             </div>
@@ -39,51 +38,78 @@
   </div>
 </template>
 
+
+
+  
+  
 <script setup lang="ts">
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { ref, onMounted } from 'vue';
 import axios from 'axios'
+import { Carousel } from 'bootstrap'
 import { useBestsellerStore } from '@/stores/bestsellercounter';
 
 const store = useBestsellerStore()
+const booklistItem = ref(store.booklistItem)
 
-onMounted(async () => {
-  await store.fetchBooklistItem()
-})
-  
-  
-  const truncateTitle = (title: string) => {
+const currentIndex = ref(0); // 현재 페이지 index
+
+const maxIndex = ref(3); // 최대 페이지 index
+
+const widthPx = 1000; // 전체 너비 px
+
+
+const truncateTitle = (title: string) => {
     return title.length > 25 ? title.substring(0, 25) + "..." : title;
   };
   
-  
-  
-  onMounted(() => {
-    const myCarousel = document.querySelector('#carouselExample');
-    if (myCarousel) {
-      const carousel = new Carousel(myCarousel, {
-        interval: 2000,
-        wrap: false
-      });
-    }
-  });
-  
-  
-  </script>
-  
-  <style scoped>
-  .carousel-control-prev-icon,
-.carousel-control-next-icon {
-  background-image: none !important;
+onMounted(async () => {
+  await store.fetchBooklistItem()
+  booklistItem.value = store.booklistItem
+  // console.log("onMounted",userToken.value)
+
+})
+
+const handleOnClickNextButton = () => {
+  if (currentIndex.value < maxIndex.value) {
+    currentIndex.value++;
+  }
+};
+
+const handleOnClickPrevButton = () => {
+  if (currentIndex.value > 0) {
+    currentIndex.value--;
+  }
+};
+
+
+</script>
+
+<style scoped>
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px; 
 }
 
-.carousel-control-prev-icon::before,
-.carousel-control-next-icon::before {
-  content: '‹' !important; 
-  color: rgb(50, 63, 89);
-  font-size: 2em;
+.carousel-wrapper {
+  width: 1000px; 
+  overflow: hidden;
+  position: relative;
+  height: 300px;
 }
-
-.carousel-control-next-icon::before {
-  content: '›' !important;
+.carousel-item-wrapper {
+  width: fit-content;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  transition: all 0.8s ease-in-out;
 }
-  </style> -->
+.carousel-item {
+  width: 200px; 
+}
+</style>
