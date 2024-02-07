@@ -97,6 +97,7 @@ public class User extends BaseEntity {
 
 	public void UpdateProfile(Regcode regcode, String nickname, String introduction, String profileUrl){
 		this.regcode = regcode;
+		this.regcodeId = regcode.getId();
 		this.nickname = nickname;
 		this.introduction = introduction;
 		this.profileUrl = profileUrl;
