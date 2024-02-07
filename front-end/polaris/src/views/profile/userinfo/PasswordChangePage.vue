@@ -15,6 +15,7 @@
               <p>현재 비밀번호</p>
               <div class="flex relative ">
                 <input @click="resetRequest" type="password" v-model="currentpassword" id="current-password" class=" rounded-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent"/>
+                <button @click="checkCurrentPassword" id="checkPassword">비밀번호 확인</button>
               </div>
               <div v-if="!currentpassword && requestChange"  class="text-red-500 text-sm p-1">
                 비밀번호를 입력하세요.
@@ -48,7 +49,7 @@
               </div>
             </div>
             <div class="flex items-center my-4">
-              <button @click="changePassword"  id="approveChange" class="py-2 px-4 hover:bg-gray-500 text-white w-64 transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+              <button @click="changePassword"  id="approveChange" class="w-64" >
                 비밀번호 변경
               </button>
                 <button @click="cancelChangePassword" id="cancelChange" type="submit" class="py-2 px-3  text-white w-64 transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
@@ -65,8 +66,14 @@
 <script setup lang="ts">
   import { useRouter } from 'vue-router'
   import { onMounted, ref, watch } from 'vue';
+  import axios from 'axios';
+  import { profileCounterStore } from '@/stores/profilecounter';
 
+  const store = profileCounterStore();
+  const BACK_API_URL = store.BACK_API_URL
+  const loginUser = store.loginUser
   const router = useRouter()
+  const confirmCurrentPassword = ref(true)
   const currentpassword = ref<string>('')
   const newpassword = ref<string>('')
   const newpassword2 = ref<string>('')
@@ -80,6 +87,35 @@
   const resetRequest = () => {
     requestChange.value = false
   }
+
+// 현재 비밀번호 확인
+const checkCurrentPassword = () => {
+  alert("비밀번호 검사 좀 해주세요")
+
+  // axios({
+  //   headers: {
+  //     Authorization: `${store.token}`,
+  //     "Content-Type": 'application/json'
+  //   },
+  //   method: 'patch',
+  //   url: `${BACK_API_URL}/user/password_correction`,
+  //   data: {
+  //     password: currentpassword.value
+  //   } 
+
+  // })
+  // .then((response)=> {
+  //   if (맞다면){
+  //     confirmCurrentPassword.value = true
+  //   } else {
+  //     alert("현재 비밀번호와 일치하지 않습니다. /n 다시 시도해주세요.")
+  //   }
+
+  // })
+  // .catch((error) => {
+  //   console.error(error)
+  // })
+}
 
 
 // 비밀번호 검사 함수
@@ -108,27 +144,53 @@ watch(newpassword, (newValue) => {
 
 
 const changePassword = () => {
-  console.log(requestChange.value)
-  if(newpassword.value && newpassword2.value && currentpassword.value){
-    // 1. 현재 비밀번호가 일치하지 않은경우
-    // if(currentpassword != 기존비밀번호 ){
-    //   alert("현재 비밀번호가 올바르지 않습니다.")
-    // }
-    if (currentpassword.value == newpassword.value){
-      alert("새 비밀번호는 현재 비밀번호와 달라야 합니다.")
-    }
-    if(newpassword.value != newpassword2.value){
-      isSame.value = false
-    } else {
-      alert("비밀번호 변경 성공!")
-    }
+  if(!confirmCurrentPassword.value){
+    alert("현재 본인 비밀번호 확인이 완료되지 않았습니다. \n완료 후 시도하세요.")
   } else {
-    alert('입력을 완료한 후 제출해주세요.')
+
+    if(newpassword.value && newpassword2.value && currentpassword.value){
+      // 1. 현재 비밀번호가 일치하지 않은경우
+      // if(currentpassword != 기존비밀번호 ){
+        //   alert("현재 비밀번호가 올바르지 않습니다.")
+        // }
+      if (currentpassword.value == newpassword.value){
+        alert("새 비밀번호는 현재 비밀번호와 달라야 합니다.")
+      } else if(newpassword.value != newpassword2.value) {
+        isSame.value = false
+      } else {
+        // 비밀번호 변경조건 모두 충족
+        const userInfoString: string = localStorage.getItem('user_info') || ''; // 또는 다른 기본값 사용
+        const userId = JSON.parse(userInfoString).id
+        // 아직 api 구현이 안됐다네요
+        axios({
+          headers: {
+            Authorization: `${store.token}`,
+            "Content-Type": 'application/json'
+          },
+          method: 'patch',
+          url: `${BACK_API_URL}/profile/${userId}/password`,
+          data: {
+            password: newpassword.value
+          }
+        })
+        .then((response) => {
+          console.log(response.data)
+          alert("비밀번호 변경 성공!")
+          router.push({name: "login"})
+        })
+        .catch((error) => {
+          console.error(error)
+        });
+      }
+    } else {
+      alert('입력을 완료한 후 제출해주세요.')
+    }
   }
   requestChange.value = true
   console.log('현재 비밀번호: ',currentpassword.value)
   console.log('새 비밀번호: ',newpassword.value)
   console.log('새 비밀번호 확인: ',newpassword2.value)
+
 }
 
 onMounted(()=> {
@@ -154,11 +216,14 @@ onMounted(()=> {
   @apply py-2 font-semibold
  }
 
+ #checkPassword,
  #approveChange {
     background-color: #323F59;
     color: #ffffff;
     margin: 5px;
+    @apply py-2 px-4 hover:bg-gray-500 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg 
   }
+
 
  #cancelChange {
   @apply border border-gray-300 text-maintheme1 m-2 hover:bg-slate-200

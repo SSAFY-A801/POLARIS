@@ -255,12 +255,15 @@
   // 수정정보 저장
   const saveBookinfo = () => {
     // DB에 저장하는 구문 추가
+    if (bookDetail.value.isOwned && bookDetail.value.isOpened == false){
+      bookDetail.value.userBookTradeType = "UNDEFINED"
+    }
     axios({
       headers: {
         Authorization: `${store.token}`,
         "Content-Type": 'application/json'
       },
-      method: 'patch',
+      method: 'put',
       url: `${BACK_API_URL}/book/${route.params.id}/library`,
       data: {
         "isbn": bookDetail.value.isbn,
@@ -309,8 +312,7 @@
         "Content-Type": 'application/json'
       },
       method: 'get',
-      url: `${BACK_API_URL}/book/1/library/${route.params.isbn}`,
-      // url: `${BACK_API_URL}/book/${route.params.id}/library/${route.params.isbn}`
+      url: `${BACK_API_URL}/book/${route.params.id}/library/${route.params.isbn}`
 
     })
     .then((response)=> {

@@ -63,16 +63,14 @@ export type User = {
 
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
-  const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraW5namluaGEyQGdtYWlsLmNvbSIsImF1dGgiOiJBVVRIT1JJVFkiLCJpZCI6MTQsImVtYWlsIjoia2luZ2ppbmhhMkBnbWFpbC5jb20iLCJleHAiOjE3MjQ2ODc5MjJ9.lzyGKu9Vgq3aBItSvODOKmRzE59WrRwx-win-v4uHKI'
+  const token = localStorage.getItem('user_token')
   const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
   
 
   
   // ProfilePage
   // 접속자
-  const userInfoString = computed(()=> { 
-    return localStorage.getItem('user_info')
-  })
+
   const loginUser = ref<LoginInfo|null>(null)
 
   // 프로필 유저
@@ -189,18 +187,21 @@ export const profileCounterStore = defineStore('counter', () => {
   const bookSearchResultList = ref([]);
   const mybookLists = ref<Book[]>([]);
 
-const getMybookList = ()=> {
+const getMybookList = (id:string)=> {
   axios({
     headers: {
       Authorization: `${token}`
     },
       method: 'get',
-      url: `${BACK_API_URL}/book/1/library`,
+      url: `${BACK_API_URL}/book/${id}/library`,
     })  
   .then((response) => {
-    console.log(response.data)
-    const res = response.data
-    mybookLists.value = res.data['books']
+    const res = response.data.data
+    if(res){
+      mybookLists.value = res['books']
+    } else{
+      mybookLists.value = []
+    }
     })
     .catch((error)=> {
       console.error("에러발생: ",error)
@@ -214,7 +215,7 @@ const getMybookList = ()=> {
     deletebuttonState.value = !deletebuttonState.value
   }
   return { 
-    profileUser, getProfile,loginUser,userInfoString,
+    profileUser, getProfile,loginUser,
     searchAPIbookList, BACK_API_URL, token,
     getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }
 },{persist: true})

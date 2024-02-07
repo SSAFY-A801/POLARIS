@@ -15,9 +15,8 @@
       <div class="col-span-4">
         <div>
           <div class="flex justify-center">
-            <!-- {{ imageUrl }} -->
             <img v-if="imageUrl" id="profile-image" :src="imageUrl" alt="대체 이미지" />
-            <img v-else id="profile-image" src="@\assets\profile-default.jpg" alt="">
+            <img v-else id="profile-image" src="@\assets\profile-man.jpg" alt="">
           </div>
           <div class="text-maintheme1 text-center mt-3">
             <div>
@@ -28,7 +27,7 @@
               </label>
               <input id="update-image" type="file" @change="handleFileChange" class="hidden" />
             </div>
-            <div class="font-bold mt-2">{{ user.nickname }}</div>
+            <div class="font-bold mt-2">{{ loginUser.nickname }}</div>
           </div>
         </div>
       </div>
@@ -41,7 +40,7 @@
         </button>
         <div class="font-semibold mt-8">닉네임</div>
         <!-- {{ isValidNickname }} -->
-        <input type="nickname" v-model="newNickname" id="Usernickname"  class="w-64 mt-2 mb-4 rounded-md border h-8"/>
+        <input type="nickname" v-model="usernickname" id="Usernickname"  class="w-64 mt-2 mb-4 rounded-md border h-8"/>
         <button @click="nicknameCheck" type="button" id="update-loc-button">
           <font-awesome-icon icon="fa-solid fa-circle-user" />
           닉네임 확인
@@ -61,7 +60,7 @@
           >
           <textarea
           id="OrderNotes"
-          v-model="user.introduction"
+          v-model="introduction"
           class="mt-2 w-full resize-none sm:text-sm"
           rows="5"
           ></textarea>
@@ -74,36 +73,36 @@
 
 
 <script setup lang="ts">
-  import { computed, ref, watch } from 'vue';
+  import { computed, onMounted, ref, watch } from 'vue';
   import axios from 'axios';
   import { useRouter } from 'vue-router'
   import { profileCounterStore } from '@/stores/profilecounter';
   import RegionModal from '@/components/Auth/RegionModal.vue';
+  import type { User } from '@/stores/profilecounter';
 
   const store = profileCounterStore();
-  const router = useRouter();
-  const user = ref(store.profileUser)
-  const usernickname :string = user.value.nickname
-  const newNickname = ref<string>(usernickname)
-  const isValidNickname = ref(newNickname.value==user.value.nickname)
-  const imageUrl = ref<string | null>(user.value.profileUrl);
- 
-  const mylocation = ref(`${user.value.regcode.si} ${user.value.regcode.gungu} ${user.value.regcode.dong}`)
   const BACK_API_URL = store.BACK_API_URL
-  const regionInputName = ref('')
-  const regionInputCode = ref('')
+  const router = useRouter();
+  const userInfo = ref<User|null>(null)
+  const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
+  const loginUser = JSON.parse(userInfoString.value)
+  const usernickname = ref<string>(loginUser.nickname)
+  const imageUrl = ref<string | null>(loginUser.profileUrl);
+  const isValidNickname = ref(usernickname.value==loginUser.nickname)
+ 
+  const mylocation = ref("")
+  const mylocationCode = ref<number|null>(null)
+  const introduction = ref<string|null>("")
   const isRegionModalOpen = ref(false)
 
-  watch(() => newNickname.value, (newNickname, oldNickname) => {
+  watch(() => usernickname.value, (newNickname, oldNickname) => {
   console.log(newNickname)
-  if(newNickname == user.value.nickname){
+  if(newNickname == loginUser.nickname){
     isValidNickname.value = true
   } else {
     isValidNickname.value = false;
   }
-  console.log(newNickname == user.value.nickname)
-  console.log(typeof(newNickname))
-  console.log(typeof(user.value.nickname))
+  console.log(newNickname == loginUser.nickname)
 });
 
 
@@ -115,20 +114,21 @@
     isRegionModalOpen.value = false
   }
 
+  // 위치 업데이트
   const updateRegion = (newRegion: {name: string, code: string}) => {
-    regionInputName.value = newRegion.name
-    regionInputCode.value = newRegion.code
-    // console.log("메인페이지:", regionInputName.value)
+    mylocation.value = newRegion.name
+    mylocationCode.value = Number(newRegion.code)
     closeRegionModal()
   }
 
+  // 닉네임 검사
   const nicknameCheck = () => {
     axios({
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'get',
-      url: `${BACK_API_URL}/user/nickname_check/${newNickname.value}`
+      url: `${BACK_API_URL}/user/nickname_check/${usernickname.value}`
 
     })
     .then((response)=> {
@@ -138,7 +138,7 @@
         isValidNickname.value = true
       } else {
         alert("중복된 닉네임입니다. 다른 닉네임을 설정해 주세요.")
-        user.value.nickname = ""
+        usernickname.value = ""
         
       }
 
@@ -146,9 +146,9 @@
     .catch((error)=> {
       console.error(error)
     })
-    alert("닉네임이 좀 노잼이다?")
   }
-
+  
+  // 이미지 파일 변경
   const handleFileChange = (event: Event) => {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -170,7 +170,7 @@
     fileInput.click();
   };
 
-  // button
+  // button 들
   function cancelProfile() {
     router.push({name: "ProfilePage"});
   }
@@ -181,9 +181,8 @@
   
     
     
-  function updateProfile(){
-    console.log(imageUrl.value)
-    if (newNickname.value ==""){
+  const updateProfile = () => {
+    if (usernickname.value ==""){
       alert("닉네임을 입력해주세요.")
     } else if (!isValidNickname.value) {
       alert("닉네임 확인이 필요합니다.")
@@ -191,15 +190,15 @@
     // axios 요청
     axios({
       method: 'patch',
-      url: `${BACK_API_URL}/profile/${user.value.id}`,
+      url: `${BACK_API_URL}/profile/${loginUser.id}`,
       headers: {
         Authorization: `${store.token}`,
         "Content-Type": 'application/json'
       },
       data: {
-        nickname: newNickname.value,
-        regcodeId: user.value.regcode.id,
-        introduction: user.value.introduction,
+        nickname: usernickname.value,
+        regcodeId: mylocationCode.value,
+        introduction: introduction.value,
         imageUrl: imageUrl.value,
       },
     })
@@ -213,8 +212,36 @@
               
       router.push({name: "ProfilePage"})
     }
+  } 
+
+  const getProfile = (id: number) => {
+  axios({
+    headers: {
+      Authorization: `${store.token}`,
+      "Content-Type": 'application/json'
+    },
+      method: 'get',
+      url: `${BACK_API_URL}/profile/${loginUser.id}`,
+    })  
+  .then((response) => {
+    const userData = response.data['data']
+    console.log(`${id}번유저정보`,userData)
+    userInfo.value = userData
+    console.log(userInfo.value)
+      if(userInfo.value){
+        mylocation.value = `${userInfo.value.regcode.si} ${userInfo.value.regcode.gungu} ${userInfo.value.regcode.dong}`
+        mylocationCode.value = userInfo.value.regcode.id
+        introduction.value = userInfo.value.introduction
+      }
+    })
+    .catch((error)=> {
+      console.error("에러발생: ",error)
+    })
   }
   
+  onMounted(()=> {
+    getProfile(loginUser.id)
+  })
 </script>
 
 <style scoped>
