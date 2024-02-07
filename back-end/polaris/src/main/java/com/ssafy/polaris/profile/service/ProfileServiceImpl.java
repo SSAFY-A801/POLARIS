@@ -94,11 +94,13 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	public FollowListResponseDto getFollowingList(Long userId) {
+		System.out.println("userId" + userId);
 		List<FollowResponseDto> follows = followingRepository.getFollowingList(userId);
 
-		if (follows.isEmpty()) {
+		if (follows == null) {
 			return null;
 		}
+
 		FollowListResponseDto followingList = new FollowListResponseDto(follows);
 		return followingList;
 	}
