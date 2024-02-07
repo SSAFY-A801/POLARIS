@@ -21,9 +21,9 @@
           <div class="text-maintheme1 text-center mt-3">
             <div>
               <label for="update-image" class="custom-file-input-label">
-                <button id="update-image-button" @click="triggerFileInput" >
+                <!-- <button id="update-image-button" @click="triggerFileInput" >
                   <font-awesome-icon icon="fa-solid fa-images" />
-                  대표사진 변경</button>
+                  대표사진 변경</button> -->
               </label>
               <input id="update-image" type="file" @change="handleFileChange" class="hidden" />
             </div>
@@ -39,7 +39,6 @@
           비밀번호 변경
         </button>
         <div class="font-semibold mt-8">닉네임</div>
-        <!-- {{ isValidNickname }} -->
         <input type="nickname" v-model="usernickname" id="Usernickname"  class="w-64 mt-2 mb-4 rounded-md border h-8"/>
         <button @click="nicknameCheck" type="button" id="update-loc-button">
           <font-awesome-icon icon="fa-solid fa-circle-user" />
@@ -187,6 +186,8 @@
       alert("닉네임을 입력해주세요.")
     } else if (!isValidNickname.value) {
       alert("닉네임 확인이 필요합니다.")
+    } else if (mylocationCode.value == 0){
+      alert("나의 위치를 등록해야 합니다.")
     } else {
     // axios 요청
     axios({

@@ -21,6 +21,7 @@ export interface Searchbook  {
 
 export interface Book extends Searchbook  {
   id: number,
+  nickname: string,
   userId: number,
   userBookDescription : string,
   userBookPrice: number|null,
@@ -71,9 +72,8 @@ export const profileCounterStore = defineStore('counter', () => {
   
   // ProfilePage
   // 접속자
-
   const loginUser = ref<LoginInfo|null>(null)
-
+  
   // 프로필 유저
   const profileUser = ref<User>({
     id: 1,
@@ -90,34 +90,38 @@ export const profileCounterStore = defineStore('counter', () => {
     exchangeCnt: 54,
     followingsCnt: 8,
   });
-
+  
   watch(profileUser, (newValue, oldValue) => {
     return newValue
   });
-
+  
   const getProfile = (id: number) => {
     axios({
       headers: {
         Authorization: `${token}`,
         "Content-Type": 'application/json'
       },
-        method: 'get',
-        url: `${BACK_API_URL}/profile/${id}`,
-      })  
+      method: 'get',
+      url: `${BACK_API_URL}/profile/${id}`,
+    })  
     .then((response) => {
       const userData = response.data['data']
       console.log(`${id}번유저정보`,userData)
       profileUser.value = userData
-      })
-      .catch((error)=> {
-        console.error("에러발생: ",error)
-      })
-    }
-
+    })
+    .catch((error)=> {
+      console.error("에러발생: ",error)
+    })
+  }
   
-
+  
+  
   // ProfileUdpatePage
-  
+  const isMe = computed(()=> {
+    return profileUser.value.id === Number(loginUser.value?.id)
+  });
+
+
   // MyEssayPage
   // MyTradeListPage
   // MyExchangeListPage
@@ -154,7 +158,6 @@ export const profileCounterStore = defineStore('counter', () => {
       .then((response)=>{
         console.log(response.data)
         const data = response.data['item']
-        console.log(data)
         const searchBooks = ref<Searchbook[]>([])
         if (data.length){
           data.forEach((book:any)=> {
@@ -211,6 +214,8 @@ const getMybookList = (id:string)=> {
     .catch((error)=> {
       console.error("에러발생: ",error)
     })
+
+    return mybookLists.value
 }
 
   const filterResult = mybookLists.value
@@ -220,7 +225,7 @@ const getMybookList = (id:string)=> {
     deletebuttonState.value = !deletebuttonState.value
   }
   return { 
-    profileUser, getProfile,loginUser, userInfoString,
+    profileUser, getProfile,loginUser, userInfoString,isMe,
     searchAPIbookList, BACK_API_URL, token,
     getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }
 },{persist: true})
