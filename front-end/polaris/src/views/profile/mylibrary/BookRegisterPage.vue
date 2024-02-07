@@ -96,7 +96,6 @@ const bookcartList = computed(()=> {
 
 const searchAPIbook = (keywordsearch:string, filter: string|null) => {
   store.searchAPIbookList(keywordsearch, filter);
-  keyword.value = ""
 }
 
 

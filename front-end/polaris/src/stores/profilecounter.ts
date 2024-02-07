@@ -147,7 +147,6 @@ export const profileCounterStore = defineStore('counter', () => {
         }
         queryType.value = searchType[searchCondition]
       }
-
       axios({
         method: 'get',
         url: `${BACK_API_URL}/api/search?query=${query}&queryType=${queryType.value}`
@@ -155,26 +154,31 @@ export const profileCounterStore = defineStore('counter', () => {
       .then((response)=>{
         console.log(response.data)
         const data = response.data['item']
+        console.log(data)
         const searchBooks = ref<Searchbook[]>([])
-        data.forEach((book:any)=> {
-          const date = new Date(book.pubDate)
-          const searchBook :Searchbook = {
-            isbn: book.isbn13,
-            title: book.title,
-            bookDescription: book.description,
-            pubDate : date,
-            cover: book.cover,
-            publisher : book.publisher,
-            author: book.author,
-            priceStandard: book.priceStandard,
-          }
-          if(book.seriesInfo){
-            searchBook.seriesId = book.seriesInfo.seriesId,
-            searchBook.seriesName = book.seriesInfo.seriesName
-          }
-          searchBooks.value.push(searchBook)
-        })
-        searchbookLists.value = searchBooks.value
+        if (data.length){
+          data.forEach((book:any)=> {
+            const date = new Date(book.pubDate)
+            const searchBook :Searchbook = {
+              isbn: book.isbn13,
+              title: book.title,
+              bookDescription: book.description,
+              pubDate : date,
+              cover: book.cover,
+              publisher : book.publisher,
+              author: book.author,
+              priceStandard: book.priceStandard,
+            }
+            if(book.seriesInfo){
+              searchBook.seriesId = book.seriesInfo.seriesId,
+              searchBook.seriesName = book.seriesInfo.seriesName
+            }
+            searchBooks.value.push(searchBook)
+          })
+          searchbookLists.value = searchBooks.value
+        } else {
+          alert("검색목록을 불러올 수 없습니다.\n다른 검색어로 시도하세요.")
+        }
       })
       .catch((error)=>{
         console.error(error)
