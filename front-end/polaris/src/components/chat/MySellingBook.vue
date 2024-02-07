@@ -169,12 +169,12 @@ const totalAmount = computed(() => {
 
 
 const sellingData = ref<ResponseData | null>(null);
-
+const token = ref(localStorage.getItem('user_token'))
 onMounted(async () => {
   try {
         const response = await axios.get<ApiResponse>(`https://i10a801.p.ssafy.io:8082/trade/purchase_books`, {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoamhAZ21haWwuY29tIiwiYXV0aCI6IkFVVEhPUklUWSIsImlkIjo4LCJlbWFpbCI6ImhqaEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iu2CueynhO2VmCIsImV4cCI6MTcyNDY4Nzg5NH0.RGSg_mX4rSNrHAIIBkfHg1AowDKwyAmzhnk2b7X8xaE',
+        'Authorization': token.value?.replace("\"", "")
         // 'Content-Type': 'application/json'
       }
     });
