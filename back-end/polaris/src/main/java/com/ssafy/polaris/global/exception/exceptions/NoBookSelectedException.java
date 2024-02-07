@@ -1,10 +1,12 @@
 package com.ssafy.polaris.global.exception.exceptions;
 
 import com.ssafy.polaris.global.exception.exceptions.category.BadRequestException;
+import com.ssafy.polaris.global.exception.response.ErrorCode;
 
 public class NoBookSelectedException extends BadRequestException {
-	static final String MESSAGE_KEY = "no book has selected";
+	private static final ErrorCode errorCode = ErrorCode.NO_BOOK_SELECTED;
+
 	public NoBookSelectedException(String detailMessageKey, Object... params) {
-		super(MESSAGE_KEY + " : " + detailMessageKey, params);
+		super(errorCode.getMessage() + " : " + detailMessageKey, errorCode, params);
 	}
 }

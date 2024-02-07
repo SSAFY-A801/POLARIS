@@ -3,6 +3,7 @@ package com.ssafy.polaris.user.service;
 import java.util.Collections;
 import java.util.Map;
 
+import com.ssafy.polaris.global.exception.exceptions.WrongEmailOrPasswordException;
 import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
 import com.ssafy.polaris.global.exception.response.ErrorCode;
 import com.ssafy.polaris.global.security.SecurityUser;
@@ -96,19 +97,17 @@ public class UserServiceImpl implements UserService{
         // 1. authentication token을 만들어준다 인증 전에는 auth여부가 false, 완료되면 true가 된 객체를 반환할 수 있도록한다.
         // 2. 실제 검증 : db에 저장된 id, 비번과 같으냐?? -> 검증성공시 실제 auth여부가 true인 Authentication 객체 반환
 
-        // TODO: 에러 정의하기
         User user = userRepository.findUserByEmail(userLoginRequestDto.getEmail())
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+            .orElseThrow(() -> new WrongEmailOrPasswordException("UserServiceImpl"));
         if (!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword())) {
-			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+			throw new WrongPasswordException("UserServiceImpl");
         }
 
-        // TODO: 저장 new로 하고 읽어올때도 new? 자세히 보고 고치자
+        // TODO : 사용자 권한 설정
         Authentication authentication =
             new UsernamePasswordAuthenticationToken(userLoginRequestDto.getEmail(), userLoginRequestDto.getPassword(),
                 Collections.singleton(new SimpleGrantedAuthority("AUTHORITY")));
 
-        // TODO: 여기에 DTO가 들어가면 안되는가?? Long으로 만든 id를 Authentication은 가지지 않는다...!!
         Map<String, String> tokenMap = jwtTokenProvider.generateToken(user.getId(), user.getNickname(), authentication);
 
         tokenMap.put("id", Long.toString(user.getId().longValue()));
@@ -124,7 +123,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void passwordCorrectionCheck(UserSetPasswordDto passwords, SecurityUser securityUser) {
         if (!passwordEncoder.matches(passwords.getOldPassword(), securityUser.getPassword()))
-            throw new WrongPasswordException(ErrorCode.WRONG_PASSWORD, UserServiceImpl.class);
+            throw new WrongPasswordException("UserServiceImpl");
     }
 
 }
