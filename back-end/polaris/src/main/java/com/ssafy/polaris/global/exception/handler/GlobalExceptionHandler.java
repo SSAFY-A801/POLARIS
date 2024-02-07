@@ -6,12 +6,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+<<<<<<< back-end/polaris/src/main/java/com/ssafy/polaris/global/exception/handler/GlobalExceptionHandler.java
 import com.ssafy.polaris.global.exception.exceptions.NoBookSelectedException;
 import com.ssafy.polaris.global.exception.exceptions.UserBookNotExist;
 import com.ssafy.polaris.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.polaris.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.polaris.global.exception.exceptions.category.PolarisRuntimeException;
+=======
+import com.ssafy.polaris.global.exception.exceptions.UserNotExist;
+>>>>>>> back-end/polaris/src/main/java/com/ssafy/polaris/global/exception/handler/GlobalExceptionHandler.java
 import com.ssafy.polaris.global.exception.exceptions.WrongArgumentException;
+import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
+import com.ssafy.polaris.global.exception.exceptions.category.AuthenticationException;
 import com.ssafy.polaris.global.exception.exceptions.category.PolarisRuntimeException;
 import com.ssafy.polaris.global.exception.exceptions.category.UnAuthorizedException;
 import com.ssafy.polaris.global.exception.response.ErrorCode;
@@ -31,7 +37,6 @@ public class GlobalExceptionHandler {
 		// TODO: exception이 ErrorCode를 가지도록 하는 것이 어떤가?
 		return new ErrorResponse(ErrorCode.WRONG_ARGUMENT);
 	}
-
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(NoBookSelectedException.class)
@@ -66,6 +71,19 @@ public class GlobalExceptionHandler {
 	public ErrorResponse forbiddenException(PolarisRuntimeException exception) {
 		log.error(exception.getMessageKey(), exception, exception.getParams());
 		return new ErrorResponse(ErrorCode.FORBIDDEN);
+
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(AuthenticationException.class)
+	public ErrorResponse wrongPasswordException(PolarisRuntimeException exception) {
+		log.error(exception.getMessageKey(), exception, exception.getParams());
+		return new ErrorResponse(ErrorCode.WRONG_PASSWORD);
+	}
+
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(UserNotExist.class)
+	public ErrorResponse userNotExistException(PolarisRuntimeException exception) {
+		log.error(exception.getMessageKey(), exception, exception.getParams());
+		return new ErrorResponse(ErrorCode.USER_NOT_EXIST);
 	}
 
 }

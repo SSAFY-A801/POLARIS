@@ -25,7 +25,11 @@ public enum StatusCode {
 	NICKNAME_IN_USE(200, "사용중인 닉네임입니다."),
 	NICKNAME_NOT_IN_USE(200, "사용중이지 않은 닉네임입니다."),
 
-	SUCCESS_RESIGNATION(200, "회원 탈퇴 성공");
+	SUCCESS_RESIGNATION(200, "회원 탈퇴 성공"),
+
+	SUCCESS_PASSWORD_SET(200, "비밀번호 수정 완료")
+	;
+
 
 	private final int status;
 	private final String message;
