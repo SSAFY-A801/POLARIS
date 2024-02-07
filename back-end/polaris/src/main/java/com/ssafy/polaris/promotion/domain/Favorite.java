@@ -1,5 +1,7 @@
 package com.ssafy.polaris.promotion.domain;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Entity;
@@ -31,4 +33,12 @@ public class Favorite {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+
+	@NotNull
+	@ColumnDefault(value = "false")
+	private Boolean isDeleted;
+
+	public boolean toggleDeletion() {
+		return isDeleted = !isDeleted;
+	}
 }
