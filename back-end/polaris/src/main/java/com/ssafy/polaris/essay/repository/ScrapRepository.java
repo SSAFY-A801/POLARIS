@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.polaris.essay.domain.Scrap;
-import com.ssafy.polaris.essay.dto.ScrapDto;
 
 @Repository
 public interface ScrapRepository extends JpaRepository<Scrap, Long> {

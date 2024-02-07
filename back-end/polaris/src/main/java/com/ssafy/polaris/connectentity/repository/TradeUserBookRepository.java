@@ -11,12 +11,12 @@ public interface TradeUserBookRepository extends JpaRepository<TradeUserBook, Lo
 
 	@Modifying
 	@Query(value =
-		"delete from TradeUserBook "+
-		"where trade.id = :chatRoomId and userBook.id = :bookId")
+		"delete from TradeUserBook " +
+			"where trade.id = :chatRoomId and userBook.id = :bookId")
 	void deleteTradeUserBook(@Param("chatRoomId") Long chatRoomId, @Param("bookId") Long bookId);
 
 	@Modifying
 	@Query(value =
-		"insert into TradeUserBook (trade, userBook) select t, ub from Trade t, UserBook ub where t.id = :chatRoomId and ub.id = :bookId" )
+		"insert into TradeUserBook (trade, userBook) select t, ub from Trade t, UserBook ub where t.id = :chatRoomId and ub.id = :bookId")
 	void addTradeUserBook(@Param("chatRoomId") Long chatRoomId, @Param("bookId") Long bookId);
 }

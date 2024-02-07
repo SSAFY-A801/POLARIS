@@ -2,8 +2,8 @@ package com.ssafy.polaris.comment.domain;
 
 import java.time.LocalDateTime;
 
-import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.essay.domain.Essay;
+import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Column;
@@ -12,7 +12,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Getter

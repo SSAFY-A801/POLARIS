@@ -12,7 +12,8 @@ public class StompChatController {
 
 	@MessageMapping(value = "/chat/message/{chatRoomId}")
 	@SendTo(value = "/sub/chat/room/{chatRoomId}")
-	public ChatMessageRequestDto message(@DestinationVariable(value = "chatRoomId") Long chatRoomId, ChatMessageRequestDto chatMessageRequestDto){
+	public ChatMessageRequestDto message(@DestinationVariable(value = "chatRoomId") Long chatRoomId,
+		ChatMessageRequestDto chatMessageRequestDto) {
 
 		// TODO: 메세지 저장
 		System.out.println(chatMessageRequestDto.getMessage());

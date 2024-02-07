@@ -3,29 +3,35 @@ package com.ssafy.polaris.user.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
+import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.essay.domain.Scrap;
+import com.ssafy.polaris.following.domain.Follow;
+import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.promotion.domain.Promotion;
 import com.ssafy.polaris.regcode.domain.Regcode;
 import com.ssafy.polaris.report.domain.Report;
 import com.ssafy.polaris.token.domain.Token;
 
-import com.ssafy.polaris.global.BaseEntity;
-import com.ssafy.polaris.book.domain.UserBook;
-import com.ssafy.polaris.following.domain.Follow;
-
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Entity
@@ -95,7 +101,7 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "reportedUser")
 	List<Report> reportUserList = new ArrayList<>();
 
-	public void UpdateProfile(Regcode regcode, String nickname, String introduction, String profileUrl){
+	public void UpdateProfile(Regcode regcode, String nickname, String introduction, String profileUrl) {
 		this.regcode = regcode;
 		this.regcodeId = regcode.getId();
 		this.nickname = nickname;

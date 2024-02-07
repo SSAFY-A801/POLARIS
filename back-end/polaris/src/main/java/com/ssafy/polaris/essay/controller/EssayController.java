@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.polaris.global.SearchConditions;
 import com.ssafy.polaris.essay.dto.EssayRequestDto;
 import com.ssafy.polaris.essay.dto.EssayResponseDto;
 import com.ssafy.polaris.essay.response.DefaultResponse;
 import com.ssafy.polaris.essay.response.StatusCode;
 import com.ssafy.polaris.essay.service.EssayService;
-import com.ssafy.polaris.security.SecurityUser;
+import com.ssafy.polaris.global.SearchConditions;
+import com.ssafy.polaris.global.security.SecurityUser;
 
 import lombok.RequiredArgsConstructor;
 
@@ -106,7 +106,8 @@ public class EssayController {
 	 * }
 	 * */
 	@GetMapping
-	public  ResponseEntity<DefaultResponse<List<EssayResponseDto>>> getEssayList(@ModelAttribute SearchConditions searchConditions) {
+	public ResponseEntity<DefaultResponse<List<EssayResponseDto>>> getEssayList(
+		@ModelAttribute SearchConditions searchConditions) {
 		List<EssayResponseDto> essayResponseDtoList = essayService.getEssayList(searchConditions);
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.OK,

@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,19 +14,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.polaris.security.SecurityUser;
-import com.ssafy.polaris.security.util.SecurityUtil;
+import com.ssafy.polaris.global.security.SecurityUser;
+import com.ssafy.polaris.global.security.util.SecurityUtil;
+import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.UserJoinRequestDto;
+import com.ssafy.polaris.user.dto.UserLoginRequestDto;
+import com.ssafy.polaris.user.dto.UserResponseDto;
 import com.ssafy.polaris.user.response.DefaultResponse;
 import com.ssafy.polaris.user.response.StatusCode;
-import com.ssafy.polaris.user.domain.User;
-import com.ssafy.polaris.user.dto.UserResponseDto;
-import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 import com.ssafy.polaris.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/user")
@@ -52,7 +50,8 @@ public class UserController {
 	}
 
 	@GetMapping("/nickname_check/{nickname}")
-	public ResponseEntity<DefaultResponse<Map<String, Boolean>>> nicknameCheck(@PathVariable("nickname") String nickname) {
+	public ResponseEntity<DefaultResponse<Map<String, Boolean>>> nicknameCheck(
+		@PathVariable("nickname") String nickname) {
 		boolean result = userService.nicknameCheck(nickname);
 		StatusCode statusCode = StatusCode.NICKNAME_NOT_IN_USE;
 		if (result)
@@ -81,7 +80,7 @@ public class UserController {
 
 		String encodedPassword = passwordEncoder.encode(userJoinRequestDto.getPassword());
 		userJoinRequestDto.setPassword("");
-		User user =  User.builder()
+		User user = User.builder()
 			.email(userJoinRequestDto.getEmail())
 			.password(encodedPassword)
 			.nickname(userJoinRequestDto.getNickname())
@@ -101,7 +100,8 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<DefaultResponse<Map<String, String>>> login(@RequestBody UserLoginRequestDto userLoginRequestDto) throws Exception {
+	public ResponseEntity<DefaultResponse<Map<String, String>>> login(
+		@RequestBody UserLoginRequestDto userLoginRequestDto) throws Exception {
 		Map<String, String> tokenMap = userService.login(userLoginRequestDto);
 		// TODO: "어떤 토큰"을 "어디에 담아서" 반환할 것인지 정해야 한다.
 		return DefaultResponse.toResponseEntity(
@@ -130,7 +130,8 @@ public class UserController {
 
 	// TODO: 삭제한 회원의 권한 관리 등 처리해주기
 	@DeleteMapping
-	public ResponseEntity<DefaultResponse<Void>> resignation(@AuthenticationPrincipal SecurityUser securityUser) throws Exception {
+	public ResponseEntity<DefaultResponse<Void>> resignation(@AuthenticationPrincipal SecurityUser securityUser) throws
+		Exception {
 		userService.resignation(securityUser.getId());
 		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
