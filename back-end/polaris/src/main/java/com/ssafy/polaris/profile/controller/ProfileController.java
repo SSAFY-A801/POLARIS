@@ -1,5 +1,7 @@
 package com.ssafy.polaris.profile.controller;
 
+import com.ssafy.polaris.essay.dto.EssaySimpleResponseDto;
+import com.ssafy.polaris.essay.service.EssayService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,11 +24,15 @@ import com.ssafy.polaris.profile.service.ProfileService;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/profile")
 @RequiredArgsConstructor
 public class ProfileController {
 	private final ProfileService profileService;
+	private final EssayService essayService;
 	// TODO: ProfileDto Response 만들 때 status, message, data 들어갈 수 있도록 하기!!
 
 	/**
@@ -109,5 +115,23 @@ public class ProfileController {
 			return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.NOT_FOUND_FOLLOWING_USER);
 		}
 		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_UNFOLLOW_USER);
+	}
+
+	/**
+	 * @param userId 사용자 id
+	 * @return 내가 쓴 독후감 리스트들 반환   
+	 * */
+	@GetMapping("/{id}/essay")
+	public ResponseEntity<DefaultResponse<Map<String, List<EssaySimpleResponseDto>>>> getMyEssay(@PathVariable("id") Long userId){
+		List<EssaySimpleResponseDto> data = essayService.getMyEssayView(userId);
+
+		if(data == null){
+			return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_READ_MY_ESSAYS);
+		}
+		return DefaultResponse.toResponseEntity(
+				HttpStatus.OK,
+				StatusCode.SUCCESS_READ_MY_ESSAYS,
+				Map.of("myEssays", data)
+				);
 	}
 }

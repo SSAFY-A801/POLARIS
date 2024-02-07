@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.ssafy.polaris.essay.dto.EssaySimpleResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -146,4 +147,17 @@ public class EssayServiceImpl implements EssayService {
 		return scrapRepository.getScrapCount(essayId);
 	}
 
+	@Override
+	public List<EssaySimpleResponseDto> getMyEssayView(Long userId) {
+		List<EssaySimpleResponseDto> data = essayRepository.getEssayByUserId(userId);
+		if(data == null){
+			return null;
+		}
+		// scrap 수 넣는 과정
+		for(EssaySimpleResponseDto dto : data){
+			dto.setScrapCount(scrapRepository.getScrapCount(dto.getEssayId()));
+		}
+
+		return data;
+	}
 }
