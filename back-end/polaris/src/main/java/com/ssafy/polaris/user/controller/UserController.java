@@ -21,6 +21,7 @@ import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 import com.ssafy.polaris.user.dto.UserResponseDto;
+import com.ssafy.polaris.user.dto.UserSetPasswordDto;
 import com.ssafy.polaris.user.response.DefaultResponse;
 import com.ssafy.polaris.user.response.StatusCode;
 import com.ssafy.polaris.user.service.UserService;
@@ -148,12 +149,13 @@ public class UserController {
 		);
 	}
 
-	@PatchMapping("/password_correction")
+	@PatchMapping("/change_password")
 	public ResponseEntity passwordCorrectionCheck(
-		@RequestBody UserLoginRequestDto password,
+		@RequestBody UserSetPasswordDto passwords,
 		@AuthenticationPrincipal SecurityUser securityUser) {
 
-		userService.passwordCorrectionCheck(password, securityUser);
-		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_PASSWORD_CORRECTION_CHECK);
+		userService.passwordCorrectionCheck(passwords, securityUser);
+		userService.setPassword(securityUser.getId(), passwords.getNewPassword());
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_PASSWORD_SET);
 	}
 }

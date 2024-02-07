@@ -9,13 +9,13 @@ import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
+import com.ssafy.polaris.user.dto.UserSetPasswordDto;
 import com.ssafy.polaris.user.repository.UserRepository;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -85,7 +85,9 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void setPassword(Long id, String password) {
-        User user = em.find(User.class, id);
+        // User user = em.find(User.class, id);
+        User user = userRepository.findById(id)
+            .orElseThrow();
         user.setPassword(passwordEncoder.encode(password));
     }
 
@@ -120,8 +122,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void passwordCorrectionCheck(UserLoginRequestDto password, SecurityUser securityUser) {
-        if (!passwordEncoder.matches(password.getPassword(), securityUser.getPassword()))
+    public void passwordCorrectionCheck(UserSetPasswordDto passwords, SecurityUser securityUser) {
+        if (!passwordEncoder.matches(passwords.getOldPassword(), securityUser.getPassword()))
             throw new WrongPasswordException(ErrorCode.WRONG_PASSWORD, UserServiceImpl.class);
     }
 

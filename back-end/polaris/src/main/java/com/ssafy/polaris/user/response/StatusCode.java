@@ -27,7 +27,7 @@ public enum StatusCode {
 
 	SUCCESS_RESIGNATION(200, "회원 탈퇴 성공"),
 
-	SUCCESS_PASSWORD_CORRECTION_CHECK(200, "비밀번호 검사 완료")
+	SUCCESS_PASSWORD_SET(200, "비밀번호 수정 완료")
 	;
 
 
