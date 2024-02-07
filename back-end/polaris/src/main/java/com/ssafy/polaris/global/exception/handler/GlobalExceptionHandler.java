@@ -13,6 +13,8 @@ import com.ssafy.polaris.global.exception.exceptions.WrongArgumentException;
 import com.ssafy.polaris.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.polaris.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.polaris.global.exception.exceptions.category.PolarisRuntimeException;
+import com.ssafy.polaris.global.exception.exceptions.WrongArgumentException;
+import com.ssafy.polaris.global.exception.exceptions.category.PolarisRuntimeException;
 import com.ssafy.polaris.global.exception.exceptions.category.UnAuthorizedException;
 import com.ssafy.polaris.global.exception.response.ErrorCode;
 import com.ssafy.polaris.global.exception.response.ErrorResponse;
@@ -65,7 +67,6 @@ public class GlobalExceptionHandler {
 	public ErrorResponse forbiddenException(PolarisRuntimeException exception) {
 		log.error(exception.getMessageKey(), exception, exception.getParams());
 		return new ErrorResponse(ErrorCode.FORBIDDEN);
-	}
 
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	@ExceptionHandler(AuthenticationException.class)

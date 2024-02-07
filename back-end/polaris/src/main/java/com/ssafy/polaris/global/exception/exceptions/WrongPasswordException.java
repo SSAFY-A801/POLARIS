@@ -14,4 +14,3 @@ public class WrongPasswordException extends AuthenticationException {
 		super(MESSAGE_KEY + " : " + errorCode.getMessage(), params);
 	}
 }
-

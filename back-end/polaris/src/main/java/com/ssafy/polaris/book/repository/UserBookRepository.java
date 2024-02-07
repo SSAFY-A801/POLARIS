@@ -18,7 +18,7 @@ import com.ssafy.polaris.trade.dto.TradeBookResponseDto;
 public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 
 	@Query(
-		"SELECT NEW com.ssafy.polaris.book.dto.UserBookResponseDto(ub.id, ub.user.id, b.cover, b.title, b.author, b.isbn, b.publisher, "
+		"SELECT NEW com.ssafy.polaris.book.dto.UserBookResponseDto(ub.id, ub.user.id, ub.user.nickname, b.cover, b.title, b.author, b.isbn, b.publisher, "
 			+
 			"b.pubDate, b.bookDescription, ub.userBookDescription, b.priceStandard, ub.userBookPrice, ub.isOpened, ub.isOwned, "
 			+
@@ -30,7 +30,7 @@ public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 	List<UserBookResponseDto> findAllByUserId(@Param("userId") Long userId);
 
 	@Query(
-		"SELECT NEW com.ssafy.polaris.book.dto.UserBookResponseDto(ub.id, ub.user.id, b.cover, b.title, b.author, b.isbn, b.publisher, "
+		"SELECT NEW com.ssafy.polaris.book.dto.UserBookResponseDto(ub.id, ub.user.id, ub.user.nickname, b.cover, b.title, b.author, b.isbn, b.publisher, "
 			+
 			"b.pubDate, b.bookDescription, ub.userBookDescription, b.priceStandard, ub.userBookPrice, ub.isOpened, ub.isOwned, "
 			+
@@ -79,4 +79,6 @@ public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 		"order by count(*) desc " +
 		"limit 20 ")
 	List<WeeklyBooksDto> getWeeklyBooks();
+
+
 }

@@ -8,4 +8,3 @@ public class AuthenticationException extends PolarisRuntimeException{
 		super(MESSAGE_KEY + "." + detailMessageKey, params);
 	}
 }
-

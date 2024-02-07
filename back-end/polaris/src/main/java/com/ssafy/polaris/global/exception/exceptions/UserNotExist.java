@@ -14,4 +14,3 @@ public class UserNotExist extends AuthenticationException {
 		super(MESSAGE_KEY + " : " + ErrorCode.USER_NOT_EXIST.getMessage(), null);
 	}
 }
-
