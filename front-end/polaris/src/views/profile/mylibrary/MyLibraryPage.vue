@@ -77,7 +77,6 @@ const booksearch = ref(false)
 
 
 const mybookList = computed(()=> {
-  console.log('내 서재목록: ',store.mybookLists)
   return store.mybookLists
 })
 

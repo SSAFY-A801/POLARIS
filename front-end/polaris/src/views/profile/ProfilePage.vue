@@ -194,13 +194,13 @@
   const followings_list = ref<Following[]>([])
   // 현재 접속자와 현재 profileuser의 id 일치 여부
   // 나의 팔로잉 명단 중에서 profileuser의 id가 있는지 여부
-  const myFollwing = ref<boolean>(true)
+  const myFollwing = ref<boolean>(false)
   const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
   const unfollow_list = ref<Unfollowing[]>([])
   const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
   const loginUser = JSON.parse(userInfoString.value)
-  const isMe = ref<boolean>(profileUser.value.id == loginUser.id)
+  const isMe = ref(profileUser.value.id == loginUser.id)
   
   const follow = (user: User) => {
     axios({
@@ -210,14 +210,13 @@
       },
 
       method: 'post',
-      url: `${BACK_API_URL}/profile/7/follow`,
+      url: `${BACK_API_URL}/profile/${loginUser.id}/follow`,
       data: {
         followingId: user.id
       }
     })
     .then((response) => {
       console.log(response.data)
-      console.log(followings_list.value)
       myFollwing.value = !myFollwing.value
     })
     .catch((error)=> {
@@ -258,6 +257,7 @@
 
   const handleModal = () => {
     isMe.value = false
+    myFollwing.value = true
     showModal.value = false
   }
 
@@ -270,7 +270,7 @@
       },
 
       method: 'DELETE',
-      url: `${BACK_API_URL}/profile/1/unfollow`,
+      url: `${BACK_API_URL}/profile/${loginUser.id}/unfollow`,
       data: {
         "unfollowings": unfollow_list.value
       }
@@ -310,7 +310,7 @@
 
 
   const gotoMychatList = () => {
-    router.push({name: "chat", params:{id:profileUser.value.id}});
+    router.push({name: "chat", params:{id:loginUser.id}});
   }
 
   const chatStore = useChatStore();
@@ -325,7 +325,6 @@
 
   try {
     userId = JSON.parse(userIdString.value) || {}; // 빈 객체로 기본값 설정
-    console.log(userId.id)
   } catch (error) {
     console.error("Error parsing user_info:", error);
     userId = {}; // JSON 파싱에 실패한 경우 빈 객체로 기본값 설정
@@ -365,19 +364,21 @@
   };
 
   onMounted(()=> {
-    // // followings 명단 호출
+    // // following 명단 호출
     axios({
       headers: {
         Authorization: `${store.token}`
       },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${profileUser.value.id}/follow`,
+      url: `${BACK_API_URL}/profile/${loginUser.id}/follow`,
     })
     .then((response)=> {
       console.log(response.data)
       const res = response.data
       followings_list.value = res.data['followings']
-
+      if(followings_list.value.some((following) => following.followingId == profileUser.value.id )){
+        myFollwing.value = true
+      }
     })
     .catch((error)=> {
       console.error('요청실패: ',error)

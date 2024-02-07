@@ -147,6 +147,8 @@ const addAPIbook = (bookcartList:Searchbook[]) => {
 }
 
 onMounted(()=> {
+  keyword.value = ""
+  store.searchbookLists = []
 })
 </script>
 

@@ -19,6 +19,7 @@ const { mybookList } = defineProps(['mybookList']);
 type DeleteBook = {
   id: number
 }
+
 const router = useRouter();
 const store = profileCounterStore()
 const deleteBookList = ref<DeleteBook[]>(store.deleteBookList)

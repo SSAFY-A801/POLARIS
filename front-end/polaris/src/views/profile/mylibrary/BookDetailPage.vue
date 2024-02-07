@@ -7,8 +7,8 @@
           BACK
         </button>
       </div>
-      <div v-if="!isMe">
-        <button id="move-library" type="button"  class="hover:bg-gray-500" >내 서재로 옮기기</button>
+      <div v-if="!isMybook">
+        <button v-if="!getMybook" @click="moveToMyLibrary" id="move-library" type="button"  class="hover:bg-gray-500" >내 서재로 옮기기</button>
       </div>
       <div v-else>
         <div v-if="updateBook">
@@ -35,13 +35,13 @@
           <div class="grid grid-cols-3 justify-center p-4 m-2 shadow-md rounded-xl">
             <div id="userid" class="col-span-2 font-bold flex items-center justify-center m-2">
               <!-- 나중에는 이 정보로 닉네임 불러오기 -->
-                {{ bookDetail.userId }}
+                {{ bookDetail.nickname }}
               </div>
             <button @click="gotoProfile">
-              <img class="col-span-1" id="profile-image" src="@\assets\following-user.jpg" alt="profile-image">
+              <img class="col-span-1" id="profile-image" src="@\assets\profile-man.jpg" alt="@\assets\profile-default.jpg">
             </button>
           </div>
-          <div class="p-4" :class="{'pointer-events-none cursor-not-allowed': !isMe || !updateBook, 'shadow-lg border rounded-2xl bg-indigo-50': isMe && updateBook }">
+          <div class="p-4" :class="{'pointer-events-none cursor-not-allowed': !isMybook || !updateBook, 'shadow-lg border rounded-2xl bg-indigo-50': isMybook && updateBook }">
             <div v-if="updateBook">
                 <div class="text-rose-400 text-sm font-bold pb-1">
                   원하는 거래옵션으로 변경하세요. 
@@ -188,8 +188,8 @@
           </div>
           <!-- 하단 버튼 -->
           <div class="flex justify-end">
-            <div v-if="!isMe">
-              <button id="trade-chat">
+            <div v-if="!isMybook">
+              <button id="purchase-chat">
                 구매 채팅
               </button>
               <button id="exchange-chat">
@@ -201,7 +201,7 @@
                 독후감 보기
               </button>
             </div>
-            <div v-if="isMe && !existEssay">
+            <div v-if="isMybook && !existEssay">
               <button id="write-essay">
                 독후감 쓰기
               </button>
@@ -215,22 +215,15 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed, watch } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
-  import type { Book } from '@/stores/profilecounter';
+  import type { Book, Searchbook } from '@/stores/profilecounter';
   import { profileCounterStore } from '@/stores/profilecounter';
   import axios from 'axios';
-  const router = useRouter();
-  const isMe = ref<boolean>(true)
-  const updateBook = ref<boolean>(false)
-  const existEssay = ref<boolean>(false)
-  const store = profileCounterStore();
-  const route = useRoute();
-  const BACK_API_URL = store.BACK_API_URL
-  
   // 이후에는 store.ts로 옮겨서 서버에서 데이터를 받아올 예정 
   const bookDetail = ref<Book>({
     id: 9090,
+    nickname: "no name",
     userId: 190909090909090,
     isbn: "0000000000000",
     title: "무제",
@@ -245,6 +238,25 @@
     isOpened: false,
     isOwned: false,
   });
+
+  const store = profileCounterStore();
+  const router = useRouter();
+  const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
+  const loginUser = JSON.parse(userInfoString.value)
+  const isMybook = computed(()=> {
+    return bookDetail.value.userId == Number(loginUser.id)
+  })
+
+  const mybookList = computed(()=> {
+    return store.mybookLists
+  })
+
+  const getMybook = ref(false)
+  const updateBook = ref<boolean>(false)
+  const existEssay = ref<boolean>(false)
+  const route = useRoute();
+  const BACK_API_URL = store.BACK_API_URL
+  
 
   // 뒤로 가기
   const goback = () => {
@@ -303,14 +315,58 @@
     router.push({name: "ProfilePage" , params: {id: bookDetail.value.userId}})
   }
 
+  // 내 서재로 옮기기
+  const moveToMyLibrary = () => {
+    const userbook: Searchbook = {
+      isbn: bookDetail.value.isbn,
+      title: bookDetail.value.title,
+      bookDescription: bookDetail.value.bookDescription,
+      pubDate : bookDetail.value.pubDate,
+      cover: bookDetail.value.cover,
+      publisher : bookDetail.value.publisher,
+      author: bookDetail.value.author,
+      priceStandard: bookDetail.value.priceStandard,
+      isOpened: false,
+      isOwned: false,
+      userBookTradeType: 'UNDEFINED',
+    }
+
+    if(bookDetail.value.seriesId){
+      userbook.seriesId = bookDetail.value.seriesId
+      userbook.seriesName = bookDetail.value.seriesName
+    }
+    // 서재에 추가 요청
+    axios({
+      headers: {
+        Authorization: `${store.token}`,
+        "Content-Type": "application/json",
+      },
+      method: 'post',
+      url: `${BACK_API_URL}/book/${loginUser.id}/library`,
+      data: {
+        "books": [userbook]
+      }
+    })
+    .then((response)=>{
+      console.log(response.data)
+      getMybook.value = true
+      alert("해당 도서를 내 서재로 옮깁니다.")
+    })
+    .catch((error)=>{
+      console.error(error)
+    })
+    
+  }
+
   onMounted(()=>{
+    store.getMybookList(loginUser.id)
+    // 상세 페이지 책 정보 요청
     axios({
       headers: {
         Authorization: `${store.token}`,
         "Content-Type": 'application/json'
       },
       method: 'get',
-      // url: `${BACK_API_URL}/book/1/library/${route.params.isbn}`,
       url: `${BACK_API_URL}/book/${route.params.id}/library/${route.params.isbn}`
 
     })
@@ -318,6 +374,9 @@
       console.log(response.data)
       const bookinfo = response.data['data']
       bookDetail.value = bookinfo
+      if(mybookList.value.some((mybook) => mybook.isbn == bookDetail.value.isbn)){
+        getMybook.value = true
+      }
     })
     .catch((error)=> {
       console.error("요청실패: ",error)
