@@ -90,7 +90,7 @@ public class ProfileController {
 	@GetMapping("/{id}/follow")
 	public ResponseEntity<DefaultResponse<FollowListResponseDto>> getFollowingList(@PathVariable("id") Long userId) {
 		FollowListResponseDto followingList = profileService.getFollowingList(userId);
-		if (followingList.getFollowings().isEmpty()) {
+		if (followingList.getFollowings() == null) {
 			return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_READ_FOLLOWING_LIST);
 		}
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_READ_FOLLOWING_LIST, followingList);
