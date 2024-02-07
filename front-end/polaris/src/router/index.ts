@@ -26,6 +26,7 @@ import ChangeChattingBox from '@/components/chat/ChangeChattingBox.vue'
 import ConnectSocket from '@/components/chat/ConnectSocket.vue'
 import BestsellerdetailPage from '@/components/main/BestsellerdetailPage.vue'
 import UserPopularBookDatailPage from '@/components/main/UserPopularBookDetailPage.vue'
+import TestFirebase from '@/components/chat/TestFirebase.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -166,12 +167,12 @@ const router = createRouter({
       component: ChattingRoomPage
     },
     {
-      path: '/chat/:chatRoomId/sell',
+      path: '/chat/:chatroomId/sell',
       name: 'sellchattingbox',
       component: SellChattingBox
     },
     {
-      path: '/chat/:userId/change',
+      path: '/chat/:chatroomId/change',
       name: 'changechattingbox',
       component: ChangeChattingBox
     },
@@ -180,6 +181,11 @@ const router = createRouter({
     //   name: 'connectSocket',
     //   component: ConnectSocket
     // },
+    {
+      path: '/test',
+      name: 'testfirebase',
+      component: TestFirebase
+    }
   ]
 })
 

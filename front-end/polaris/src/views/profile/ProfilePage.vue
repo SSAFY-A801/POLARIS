@@ -180,6 +180,7 @@
   import { useUserStore } from '@/stores/authcounter';
   import type { Following, User } from "@/stores/profilecounter";
   import axios from 'axios';
+  import { useChatStore } from '@/stores/chatcounter';
 
   type Unfollowing = {
     followingId: number
@@ -312,31 +313,57 @@
     router.push({name: "chat", params:{id:profileUser.value.id}});
   }
 
-  // const gotoTradechat = () => {
-  //   // router.push({name: "FollowingListPage"});
-  // }
+  const chatStore = useChatStore();
+  const userIdString = ref<string>(localStorage.getItem('user_info') ?? "");
+  // 사용자 정보를 나타내는 인터페이스 정의
+  interface UserInfo {
+    id?: string | null;
+  }
 
-  // const gotoExchangechat = () => {
-  //   // router.push({name: "FollowingListPage"});
-  // }
-  const gotoTradechat = () => {
-  // // trade 채팅 생성
-  // const senderId = user.value.id;  // 현재 사용자의 ID
-  // const receiverId = /* 받는 사람의 ID를 어떻게 가져올지에 대한 코드 */;  
-  // const tradeType = 'PURCHASE';  // 구매 채팅인 경우
+  // userInfoString에서 가져온 값을 파싱하여 UserInfo 타입으로 사용
+  let userId: UserInfo;
 
-  // createChatRoom(senderId, receiverId, tradeType);
-};
+  try {
+    userId = JSON.parse(userIdString.value) || {}; // 빈 객체로 기본값 설정
+    console.log(userId.id)
+  } catch (error) {
+    console.error("Error parsing user_info:", error);
+    userId = {}; // JSON 파싱에 실패한 경우 빈 객체로 기본값 설정
+  }
+  const senderId = ref(userId.id);  // 로그인한 사용자의 ID
+  const receiverId = ref(route.params.id);  // 프로필 페이지의 사용자 ID
 
-const gotoExchangechat = () => {
-  // // exchange 채팅 생성
-  // const senderId = user.value.id;  // 현재 사용자의 ID
-  // const receiverId = /* 받는 사람의 ID를 어떻게 가져올지에 대한 코드 */;  
-  // const tradeType = 'EXCHANGE';  // 교환 채팅인 경우
 
-  // createChatRoom(senderId, receiverId, tradeType);
-};
-  
+  const gotoTradechat = async () => {
+    const tradeType = ref('PURCHASE');
+    const chatRoom = await chatStore.createChatRoom(Number(senderId.value), Number(receiverId.value), tradeType.value);
+
+    if (chatRoom) {
+      console.log('채팅방 생성 성공:', chatRoom);
+      console.log(chatRoom.chatroomId)
+      router.push({name: "sellchattingbox", params:{chatroomId: chatRoom.chatroomId}} )
+    } else {
+      console.log('채팅방 생성 실패');
+      console.log(senderId)
+      console.log(receiverId)
+    }
+  };
+
+  const gotoExchangechat = async () => {
+    const tradeType = ref('EXCHANGE');
+    const chatRoom = await chatStore.createChatRoom(Number(senderId.value), Number(receiverId.value), tradeType.value);
+    
+    if (chatRoom) {
+      console.log('채팅방 생성 성공:', chatRoom);
+      console.log(chatRoom.chatroomId)
+      router.push({name: "changechattingbox", params:{chatroomId: chatRoom.chatroomId}} )
+    } else {
+      console.log('채팅방 생성 실패');
+      console.log(senderId)
+      console.log(receiverId)
+    }
+  };
+
   onMounted(()=> {
     // // followings 명단 호출
     axios({
@@ -358,46 +385,6 @@ const gotoExchangechat = () => {
 
     store.getProfile(Number(route.params.id))
   })
-
-  // 채팅방 생성 api post 요청
-  interface CreateChatroom {
-  id: number;
-  senderId: number;
-  receiverId: number;
-  tradeType: string;
-}
-
-interface CreateChatroomResponse {
-  status: number;
-  message: string;
-  data: CreateChatroom;
-}
-
-// 이밴트핸들러에 추가하면 될 것 같아요
-const createChatRoom = async (senderId: number, receiverId: number, tradeType: string) => {
-  try {
-    const response = await axios.post<CreateChatroomResponse>('https://i10a801.p.ssafy.io:8082/chat', {
-      senderId,
-      receiverId,
-      tradeType,
-    }, {
-      headers: {
-        'Authorization': 'Bearer ',
-      }
-    });
-
-    if (response.status === 201) {
-      console.log('채팅방 생성:', response.data);
-      return response.data.data; // 채팅방 정보 반환
-    } else {
-      console.error('API 요청 실패:', response.status);
-      return null;
-    }
-  } catch (error) {
-    console.error('API 요청 중 오류 발생:', error);
-    return null;
-  }
-};
 
 </script>
 
