@@ -117,6 +117,10 @@ public class ProfileController {
 		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_UNFOLLOW_USER);
 	}
 
+	/**
+	 * @param userId 사용자 id
+	 * @return 내가 쓴 독후감 리스트들 반환   
+	 * */
 	@GetMapping("/{id}/essay")
 	public ResponseEntity<DefaultResponse<Map<String, List<EssaySimpleResponseDto>>>> getMyEssay(@PathVariable("id") Long userId){
 		List<EssaySimpleResponseDto> data = essayService.getMyEssayView(userId);
