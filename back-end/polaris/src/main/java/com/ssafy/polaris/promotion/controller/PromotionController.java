@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.polaris.global.SearchConditions;
-import com.ssafy.polaris.global.exception.exceptions.category.UnAuthorizedException;
+import com.ssafy.polaris.global.exception.exceptions.UserNotAuthorizedException;
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.promotion.dto.PromotionListResponseDto;
 import com.ssafy.polaris.promotion.dto.PromotionRequestDto;
@@ -39,7 +39,7 @@ public class PromotionController {
 		@RequestBody PromotionRequestDto promotionRequestDto,
 		@AuthenticationPrincipal SecurityUser securityUser) {
 		if (securityUser == null)
-			throw new UnAuthorizedException("", PromotionController.class);
+			throw new UserNotAuthorizedException("");
 
 		Long promotionId = promotionService.createPromotion(promotionRequestDto, securityUser);
 		PromotionResponseDto promotionResponseDto = promotionService.getPromotion(promotionId, false);
@@ -57,7 +57,7 @@ public class PromotionController {
 		@RequestBody PromotionRequestDto promotionRequestDto,
 		@AuthenticationPrincipal SecurityUser securityUser) {
 		if (securityUser == null)
-			throw new UnAuthorizedException("", PromotionController.class);
+			throw new UserNotAuthorizedException("");
 
 		Long promotionId = promotionService.updatePromotion(promotionRequestDto, securityUser);
 		PromotionResponseDto promotionResponseDto = promotionService.getPromotion(promotionId, false);
@@ -69,7 +69,7 @@ public class PromotionController {
 		@RequestBody PromotionRequestDto promotionRequestDto,
 		@AuthenticationPrincipal SecurityUser securityUser ) {
 		if (securityUser == null)
-			throw new UnAuthorizedException("", PromotionController.class);
+			throw new UserNotAuthorizedException("");
 
 		promotionService.deletePromotion(promotionRequestDto, securityUser);
 		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.PROMOTION_DELETE_SUCCESS);
