@@ -16,6 +16,7 @@ import lombok.Setter;
 public class UserBookResponseDto {
 	Long id;
 	Long userId;
+	String nickname;
 	String cover;
 	String title;
 	String author;
