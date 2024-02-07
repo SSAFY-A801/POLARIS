@@ -57,7 +57,7 @@ import { useRouter } from 'vue-router'
 
 // const props = defineProps(['userToken'])
 const userToken = ref(localStorage.getItem('user_token'))
-const userInfoString = ref<string>(localStorage.getItem('user_info'))
+const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
 const loginUser = JSON.parse(userInfoString.value)
 
 

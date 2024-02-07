@@ -64,6 +64,7 @@ export type User = {
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
   const token = localStorage.getItem('user_token')
+  const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
   const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
   
 
@@ -215,7 +216,7 @@ const getMybookList = (id:string)=> {
     deletebuttonState.value = !deletebuttonState.value
   }
   return { 
-    profileUser, getProfile,loginUser,
+    profileUser, getProfile,loginUser, userInfoString,
     searchAPIbookList, BACK_API_URL, token,
     getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }
 },{persist: true})
