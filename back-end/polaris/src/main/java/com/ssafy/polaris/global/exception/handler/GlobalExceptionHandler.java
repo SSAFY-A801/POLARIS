@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.ssafy.polaris.global.exception.exceptions.NoBookSelectedException;
 import com.ssafy.polaris.global.exception.exceptions.UserBookNotExist;
+import com.ssafy.polaris.global.exception.exceptions.UserNotExist;
+import com.ssafy.polaris.global.exception.exceptions.WrongArgumentException;
 import com.ssafy.polaris.global.exception.exceptions.category.ForbiddenException;
 import com.ssafy.polaris.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.polaris.global.exception.exceptions.category.PolarisRuntimeException;
 import com.ssafy.polaris.global.exception.exceptions.UserNotExist;
 import com.ssafy.polaris.global.exception.exceptions.WrongArgumentException;
-import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
-import com.ssafy.polaris.global.exception.exceptions.category.AuthenticationException;
 import com.ssafy.polaris.global.exception.exceptions.category.PolarisRuntimeException;
 import com.ssafy.polaris.global.exception.exceptions.category.UnAuthorizedException;
 import com.ssafy.polaris.global.exception.response.ErrorCode;
@@ -85,3 +85,4 @@ public class GlobalExceptionHandler {
 	}
 
 }
+
