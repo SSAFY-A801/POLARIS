@@ -68,8 +68,6 @@ public class PromotionServiceImpl implements PromotionService{
 	@Override
 	@Transactional
 	public Long updatePromotion(PromotionRequestDto promotionRequestDto, SecurityUser securityUser) {
-		// Promotion promotion = promotionRepository.getJoinedPromotionById(promotionRequestDto.getId())
-		// 	.orElseThrow(() -> new NotFoundException("글을 찾을 수 없습니다. (홍보글)", PromotionServiceImpl.class));
 		Promotion promotion = promotionRepository.getJoinedPromotionById(promotionRequestDto.getId())
 			.orElseThrow(() -> new NotFoundException("글을 찾을 수 없습니다. (홍보글)", PromotionServiceImpl.class));
 
@@ -85,5 +83,18 @@ public class PromotionServiceImpl implements PromotionService{
 		}
 
 		return promotion.getId();
+	}
+
+	@Override
+	@Transactional
+	public void deletePromotion(PromotionRequestDto promotionRequestDto, SecurityUser securityUser) {
+		Promotion promotion = promotionRepository.getJoinedPromotionById(promotionRequestDto.getId())
+			.orElseThrow(() -> new NotFoundException("글을 찾을 수 없습니다. (홍보글)", PromotionServiceImpl.class));
+
+		if (!promotion.getUserId().equals(securityUser.getId()))
+			throw new ForbiddenException("금지된 요청입니다. (홍보글 수정)", PromotionServiceImpl.class);
+
+		promotionUserBookRepository.deleteAll(promotion.getPromotionUserBooks());
+		promotionRepository.deleteById(promotion.getId());
 	}
 }

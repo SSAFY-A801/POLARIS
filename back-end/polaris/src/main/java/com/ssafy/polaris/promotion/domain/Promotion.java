@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.connectentity.domain.PromotionUserBook;
@@ -27,6 +29,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
+@SQLDelete(sql = "update promotion set deleted_at = CURRENT_TIMESTAMP where id = ?")
+@SQLRestriction("deleted_at is NULL")
 public class Promotion extends BaseEntity {
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)

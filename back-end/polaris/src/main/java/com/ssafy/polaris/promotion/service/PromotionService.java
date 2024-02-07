@@ -13,4 +13,6 @@ public interface PromotionService {
 	PromotionResponseDto getPromotion(Long promotionId, boolean updateHit);
 
 	Long updatePromotion(PromotionRequestDto promotionRequestDto, SecurityUser securityUser);
+
+	void deletePromotion(PromotionRequestDto promotionRequestDto, SecurityUser securityUser);
 }
