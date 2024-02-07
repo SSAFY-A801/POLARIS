@@ -21,7 +21,7 @@ public class TradeBookSelectRequestDto {
 	@Setter
 	@Builder
 	@AllArgsConstructor
-	public static class BookDto{
+	public static class BookDto {
 		private Long id;
 		private String bookIsbn;
 	}

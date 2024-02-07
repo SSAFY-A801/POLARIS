@@ -1,17 +1,12 @@
 package com.ssafy.polaris.essay.dto;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Objects;
 
 import com.ssafy.polaris.book.domain.Book;
 import com.ssafy.polaris.book.domain.UserBook;
 import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.user.domain.User;
-import com.ssafy.polaris.user.dto.UserResponseDto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

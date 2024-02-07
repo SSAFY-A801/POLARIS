@@ -3,11 +3,13 @@ package com.ssafy.polaris.book.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ssafy.polaris.book.dto.UserBookUpdateRequestDto;
-import com.ssafy.polaris.user.domain.User;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
-import com.ssafy.polaris.global.BaseEntity;
+import com.ssafy.polaris.book.dto.UserBookUpdateRequestDto;
 import com.ssafy.polaris.connectentity.domain.PromotionUserBook;
+import com.ssafy.polaris.global.BaseEntity;
+import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,8 +23,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 import lombok.experimental.SuperBuilder;
 
 @Getter
@@ -51,15 +51,15 @@ public class UserBook extends BaseEntity {
 	private Integer userBookPrice; // nullable한 경우 참조형 Wrapper class!
 
 	@NotNull
-	@Column(columnDefinition="tinyint(1)")
+	@Column(columnDefinition = "tinyint(1)")
 	private Boolean isOpened;
 
 	@NotNull
-	@Column(columnDefinition="tinyint(1)")
+	@Column(columnDefinition = "tinyint(1)")
 	private Boolean isOwned;
 
 	@NotNull
-	@Column(columnDefinition="VARCHAR(10)")
+	@Column(columnDefinition = "VARCHAR(10)")
 	@Enumerated(EnumType.STRING)
 	private UserBookTradeType userBookTradeType;
 
@@ -67,7 +67,7 @@ public class UserBook extends BaseEntity {
 	List<PromotionUserBook> promotionUserBooks = new ArrayList<>();
 
 	// update method
-	public void updateUserBook(UserBookUpdateRequestDto dto){
+	public void updateUserBook(UserBookUpdateRequestDto dto) {
 		this.userBookDescription = dto.getUserBookDescription();
 		this.userBookPrice = dto.getUserBookPrice();
 		this.isOpened = dto.getIsOpened();

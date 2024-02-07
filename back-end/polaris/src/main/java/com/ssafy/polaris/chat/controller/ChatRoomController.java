@@ -1,16 +1,20 @@
 package com.ssafy.polaris.chat.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.ssafy.polaris.chat.dto.ChatRoomCreateRequestDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomListResponseDto;
 import com.ssafy.polaris.chat.response.DefaultResponse;
 import com.ssafy.polaris.chat.response.StatusCode;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
 import com.ssafy.polaris.chat.service.ChatRoomService;
 import com.ssafy.polaris.global.security.SecurityUser;
 
@@ -26,14 +30,15 @@ public class ChatRoomController {
 	 * 유저가 새로운 채팅방을 생성하고, 채팅방이 열립니다.
 	 */
 	@PostMapping
-	public ResponseEntity<DefaultResponse<ChatRoomCreateResponseDto>> createChatRoom(@RequestBody ChatRoomCreateRequestDto request){
+	public ResponseEntity<DefaultResponse<ChatRoomCreateResponseDto>> createChatRoom(
+		@RequestBody ChatRoomCreateRequestDto request) {
 		// trade 테이블에 등록하기 -> userid, receiverid, tradeType이 온다.
 		System.out.println("create chat room");
 		ChatRoomCreateResponseDto chatroom = chatRoomService.createChatRoom(request);
 		return DefaultResponse.toResponseEntity(
-				HttpStatus.CREATED,
-				StatusCode.CREATED_CHATROOM_TRADE,
-				chatroom
+			HttpStatus.CREATED,
+			StatusCode.CREATED_CHATROOM_TRADE,
+			chatroom
 		);
 	}
 
@@ -42,8 +47,8 @@ public class ChatRoomController {
 	 * 채팅방 id로 채팅방의 정보를 조회합니다 - 상대방 데이터, 거래 도서 정보
 	 * @param chatRoomId
 	 */
-	@GetMapping(path="/{chatRoomId}")
-	public void getChatRoom(@PathVariable("chatRoomId") Long chatRoomId){
+	@GetMapping(path = "/{chatRoomId}")
+	public void getChatRoom(@PathVariable("chatRoomId") Long chatRoomId) {
 		System.out.println("Controller - getChatRoom");
 	}
 
@@ -52,7 +57,8 @@ public class ChatRoomController {
 	 * @return 사용자 채팅방 목록
 	 */
 	@GetMapping
-	public ResponseEntity<DefaultResponse<ChatRoomListResponseDto>> getChatRoomList(@AuthenticationPrincipal SecurityUser securityUser){
+	public ResponseEntity<DefaultResponse<ChatRoomListResponseDto>> getChatRoomList(
+		@AuthenticationPrincipal SecurityUser securityUser) {
 		System.out.println("controller - get chat room list");
 		// 사용자 id가 필요하고, 사용자가 참여중인 채팅방 리스트를 반환한다.
 
@@ -63,7 +69,7 @@ public class ChatRoomController {
 		ChatRoomListResponseDto chatRoomListResponseDto = chatRoomService.getChatRoomList(senderId);
 
 		// 사용자의 채팅방이 없을 때
-		if (chatRoomListResponseDto.getChatRoomList().isEmpty()){
+		if (chatRoomListResponseDto.getChatRoomList().isEmpty()) {
 			return DefaultResponse.emptyResponse(
 				HttpStatus.OK,
 				StatusCode.SUCCESS_READ_EMPTY_CHATROOM_LIST

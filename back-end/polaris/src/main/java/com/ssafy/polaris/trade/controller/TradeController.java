@@ -33,12 +33,13 @@ public class TradeController {
 	 * @return
 	 */
 	@GetMapping(path = "/exchange_books")
-	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getExchangeBookList(@AuthenticationPrincipal SecurityUser securityUser){
+	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getExchangeBookList(
+		@AuthenticationPrincipal SecurityUser securityUser) {
 		// TODO : userId 토큰에서 가져오기
 		Long userId = securityUser.getId();
 
 		TradeBookListResponseDto tradeBookListResponseDto = tradeService.getExchangeBookList(userId);
-		if (tradeBookListResponseDto.getBooks().isEmpty()){
+		if (tradeBookListResponseDto.getBooks().isEmpty()) {
 			return DefaultResponse.emptyResponse(
 				HttpStatus.OK,
 				StatusCode.SUCCESS_VIEW_EMPTY_TRADE_BOOKS
@@ -57,13 +58,14 @@ public class TradeController {
 	 * @return
 	 */
 	@GetMapping(path = "/purchase_books")
-	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getPurchaseBookList(@AuthenticationPrincipal SecurityUser securityUser){
+	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getPurchaseBookList(
+		@AuthenticationPrincipal SecurityUser securityUser) {
 		// TODO : userId 토큰에서 가져오기
 		Long userId = securityUser.getId();
 
 		TradeBookListResponseDto tradeBookListResponseDto = tradeService.getPurchaseBookList(userId);
 
-		if (tradeBookListResponseDto.getBooks().isEmpty()){
+		if (tradeBookListResponseDto.getBooks().isEmpty()) {
 			return DefaultResponse.emptyResponse(
 				HttpStatus.OK,
 				StatusCode.SUCCESS_VIEW_EMPTY_TRADE_BOOKS
@@ -83,7 +85,7 @@ public class TradeController {
 	 * @return
 	 */
 	@PatchMapping("/{chatRoomId}")
-	public ResponseEntity<DefaultResponse<Void>> completeTrade(@PathVariable("chatRoomId") Long chatRoomId){
+	public ResponseEntity<DefaultResponse<Void>> completeTrade(@PathVariable("chatRoomId") Long chatRoomId) {
 		System.out.println(" controller - complete trade ");
 		tradeService.completeTrade(chatRoomId);
 		return DefaultResponse.emptyResponse(
@@ -98,7 +100,7 @@ public class TradeController {
 	 * @return
 	 */
 	@DeleteMapping("/{chatRoomId}")
-	public ResponseEntity<DefaultResponse<Void>> deleteTrade(@PathVariable("chatRoomId") Long chatRoomId){
+	public ResponseEntity<DefaultResponse<Void>> deleteTrade(@PathVariable("chatRoomId") Long chatRoomId) {
 		System.out.println(" controller - delete trade ");
 
 		tradeService.deleteTrade(chatRoomId);
@@ -119,7 +121,7 @@ public class TradeController {
 	 */
 	@Transactional
 	@PostMapping
-	public ResponseEntity<DefaultResponse<Void>> selectTradeBook(@RequestBody TradeBookSelectRequestDto request){
+	public ResponseEntity<DefaultResponse<Void>> selectTradeBook(@RequestBody TradeBookSelectRequestDto request) {
 		tradeService.selectTradeBooks(request);
 
 		return DefaultResponse.emptyResponse(

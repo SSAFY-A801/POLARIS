@@ -1,7 +1,5 @@
 package com.ssafy.polaris.global.exception.response;
 
-import org.springframework.http.HttpStatus;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -22,6 +20,6 @@ public class ErrorResponse {
 	 */
 	public ErrorResponse(ErrorCode errorCode) {
 		this.status = errorCode.getStatus();
-		this.message= errorCode.getMessage();
+		this.message = errorCode.getMessage();
 	}
 }

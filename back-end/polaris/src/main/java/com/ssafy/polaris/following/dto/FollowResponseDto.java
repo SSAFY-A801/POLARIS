@@ -1,6 +1,7 @@
 package com.ssafy.polaris.following.dto;
 
 import com.ssafy.polaris.regcode.domain.Regcode;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FollowResponseDto {
-    Long followingId;
-    String profileUrl;
-    String nickname;
-    Regcode regcode;
+	Long followingId;
+	String profileUrl;
+	String nickname;
+	Regcode regcode;
 }

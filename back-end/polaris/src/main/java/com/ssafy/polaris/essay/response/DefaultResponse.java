@@ -1,6 +1,5 @@
 package com.ssafy.polaris.essay.response;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -27,7 +26,7 @@ public class DefaultResponse<T> {
 	 * @return StatusCode 의 정보를 담아 ResponseEntity 를 반환
 	 */
 	public static <T> ResponseEntity<DefaultResponse<T>> toResponseEntity(HttpStatus httpStatus,
-		StatusCode statusCode,T data) {
+		StatusCode statusCode, T data) {
 		return ResponseEntity
 			.status(httpStatus)
 			.body(DefaultResponse.<T>builder()

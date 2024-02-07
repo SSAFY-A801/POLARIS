@@ -1,12 +1,12 @@
 package com.ssafy.polaris.book.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
 public class UserBookListResponseDto {
-    List<UserBookResponseDto> books;
+	List<UserBookResponseDto> books;
 }

@@ -17,8 +17,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.ssafy.polaris.global.security.SecurityUser;
-import com.ssafy.polaris.global.security.util.SecurityUtil;
 import com.ssafy.polaris.global.security.service.CustomUserDetailsService;
+import com.ssafy.polaris.global.security.util.SecurityUtil;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -59,8 +59,8 @@ public class JwtTokenProvider {
 		// SecurityUser securityUser = (SecurityUser)authentication.getPrincipal();
 		SecurityUser securityUser = new SecurityUser(
 			id,
-			(String) authentication.getPrincipal(),
-			(String) authentication.getCredentials(),
+			(String)authentication.getPrincipal(),
+			(String)authentication.getCredentials(),
 			nickName
 		);
 		String authorities = securityUser.getAuthorities().stream()
@@ -96,7 +96,6 @@ public class JwtTokenProvider {
 		return map;
 	}
 
-
 	// 복호화
 	public Authentication getAuthentication(String token) {
 		// 토큰 복호화
@@ -116,8 +115,6 @@ public class JwtTokenProvider {
 		// TODO: Authentication 타입 찾아서 맞는 것 쓰기
 		return new UsernamePasswordAuthenticationToken(securityUser, "", authorities);
 	}
-
-
 
 	// 검증
 	public boolean validateToken(String token) {

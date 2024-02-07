@@ -2,13 +2,14 @@ package com.ssafy.polaris.chat.repository;
 
 import java.util.List;
 
-import com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto;
-import com.ssafy.polaris.trade.domain.Trade;
-import com.ssafy.polaris.trade.domain.TradeStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto;
+import com.ssafy.polaris.trade.domain.Trade;
+import com.ssafy.polaris.trade.domain.TradeStatus;
 
 public interface TradeRepository extends JpaRepository<Trade, Long> {
 	// 나의 채팅방 목록
@@ -32,11 +33,11 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 	@Modifying
 	@Query(value =
 		"update Trade " +
-		"set finishedAt = CURRENT_TIMESTAMP, " +
-		"status = :tradeStatus " +
-		"where id = :chatRoomId"
+			"set finishedAt = CURRENT_TIMESTAMP, " +
+			"status = :tradeStatus " +
+			"where id = :chatRoomId"
 	)
-	void completeTrade(@Param("chatRoomId") Long chatRoomId , @Param("tradeStatus") TradeStatus tradeStatus);
+	void completeTrade(@Param("chatRoomId") Long chatRoomId, @Param("tradeStatus") TradeStatus tradeStatus);
 
 	// @Query(value =
 	// 	"select new com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto( " +

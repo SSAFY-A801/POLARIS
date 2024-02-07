@@ -47,12 +47,12 @@ public class Promotion extends BaseEntity {
 	private int hit;
 	// private int favoritesAmount;
 
-	public void updateHit(){
+	public void updateHit() {
 		hit += 1;
 	}
 
 	/*
-	* hit은 기본을 0으로 하기 때문에 넣어주지 않는다.
+	 * hit은 기본을 0으로 하기 때문에 넣어주지 않는다.
 	 */
 
 	// public void increaseFavoritesAmount() {

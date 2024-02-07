@@ -17,8 +17,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.global.security.filter.JwtAuthenticationFilter;
+import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -44,11 +44,11 @@ public class SecurityConfig {
 				authorize
 					.requestMatchers("/**").permitAll()
 					.anyRequest().authenticated())
-					// .requestMatchers("/user", "/user/login").permitAll()
-					// .requestMatchers("/user/email_check/**", "/user/nickname_check/**").permitAll()
-					// .requestMatchers("/user/email_cert").permitAll()
-					// .requestMatchers("/send-mail/**").permitAll()
-					// .anyRequest().authenticated())
+			// .requestMatchers("/user", "/user/login").permitAll()
+			// .requestMatchers("/user/email_check/**", "/user/nickname_check/**").permitAll()
+			// .requestMatchers("/user/email_cert").permitAll()
+			// .requestMatchers("/send-mail/**").permitAll()
+			// .anyRequest().authenticated())
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userRepository),
 				UsernamePasswordAuthenticationFilter.class);
 
@@ -58,14 +58,15 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("*", "http://i10a801.p.ssafy.io", "https://localhost:5173", "https://i10a801.p.ssafy.io"));
+		configuration.setAllowedOrigins(
+			Arrays.asList("*", "http://i10a801.p.ssafy.io", "https://localhost:5173", "https://i10a801.p.ssafy.io"));
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 		configuration.setAllowedHeaders(Arrays.asList("*"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-	 // 빈 익스클루드
+	// 빈 익스클루드
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {

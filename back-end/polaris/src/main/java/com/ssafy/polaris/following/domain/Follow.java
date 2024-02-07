@@ -1,15 +1,21 @@
 package com.ssafy.polaris.following.domain;
 
+import org.hibernate.Hibernate;
+
 import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.user.domain.User;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import org.hibernate.Hibernate;
 
 @Getter
 @Entity
@@ -29,10 +35,10 @@ public class Follow extends BaseEntity {
 	private User following;
 
 	@Transactional
-	public void setFollow(User me, User otherPerson){
+	public void setFollow(User me, User otherPerson) {
 		this.follower = me;
 		this.following = otherPerson;
-		
+
 		// 강제 초기화
 		Hibernate.initialize(me);
 		Hibernate.initialize(otherPerson);

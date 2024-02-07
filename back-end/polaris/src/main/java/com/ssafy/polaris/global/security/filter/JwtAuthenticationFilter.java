@@ -27,8 +27,11 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserRepository userRepository;
+
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
+		IOException,
+		ServletException {
 		// 1. 토큰 추출
 		String accessToken = SecurityUtil.getAccessToken((HttpServletRequest)request);
 
@@ -36,7 +39,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 		if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
 			// TODO : 레디스에 넣기
 			// ObjectUtils.isEmpty() // 로그아웃 된 토큰 검사
-
 
 			// TODO: Authentication 객체 조사
 			// 토큰이 유효할 경우 토큰에서 authentication 객체(사용자 정보)를 받아온다.

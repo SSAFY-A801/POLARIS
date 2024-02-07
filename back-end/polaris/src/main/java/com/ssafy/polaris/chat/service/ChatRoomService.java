@@ -6,5 +6,6 @@ import com.ssafy.polaris.chat.dto.ChatRoomListResponseDto;
 
 public interface ChatRoomService {
 	ChatRoomCreateResponseDto createChatRoom(ChatRoomCreateRequestDto request);
+
 	ChatRoomListResponseDto getChatRoomList(Long senderId);
 }
