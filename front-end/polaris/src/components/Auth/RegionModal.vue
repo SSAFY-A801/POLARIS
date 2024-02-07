@@ -5,7 +5,7 @@
     </div>
     <div class="form-group col-md-2 mt-8">
       <label class="text-gray-700" for="sido">시/도 선택
-      <select id="sido" v-model="selectedSido" class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500" name="sido">
+      <select id="sido" v-model="selectedSido" class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" name="sido">
         <option value=""  >시/도 정보를 선택하세요</option>
         <option v-for="sido in sidoList" :value="{code:sido.code , name:sido.name}">{{ sido.name }}</option>
       </select></label>
@@ -15,7 +15,7 @@
     
     <div class="form-group col-md-2">     
       <label class="text-gray-700" for="gugun">구/군 선택
-      <select id="gugun" v-model="selectedGugun"  class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"  name="gugun">
+      <select id="gugun" v-model="selectedGugun"  class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent"  name="gugun">
         <option disabled value="">구/군 정보를 선택하세요</option>
         <option v-for="gugun in gugunList" :value="{code:gugun.code , name:gugun.name}">{{ gugun.name }}</option>
       </select></label>
@@ -24,7 +24,7 @@
     
     <div class="form-group col-md-2">     
       <label class="text-gray-700" for="dong">동 선택 
-      <select id="dong" v-model="selectedDong" class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500" name="dong">
+      <select id="dong" v-model="selectedDong" class="block px-3 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" name="dong">
         <option value="">동/동 정보를 선택하세요</option>
         <option v-for="dong in dongList" :value="{code:dong.code , name:dong.name}">{{ dong.name }}</option>
       </select></label>

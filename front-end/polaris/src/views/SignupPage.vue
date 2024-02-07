@@ -288,10 +288,10 @@ const submitUserSignup = async () => {
   }) 
 } else {
   alert('정보를 모두 입력해주세요')
-  console.log('닉네임:', isNicknameVerified.value)
-  console.log('이메일:', isEmailVerified.value)
-  console.log('비밀번호:', isPasswordVerified.value)
-  console.log('지역:', regionInputCode.value)
+  // console.log('닉네임:', isNicknameVerified.value)
+  // console.log('이메일:', isEmailVerified.value)
+  // console.log('비밀번호:', isPasswordVerified.value)
+  // console.log('지역:', regionInputCode.value)
 }
 }
 
