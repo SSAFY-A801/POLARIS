@@ -52,7 +52,7 @@
         </div>
         <div class='flex items-center justify-start w-2/3 h-24 bg-white'>
             <div class="flex w-3/4 mx-10 rounded bg-white">
-                <input v-model="keyword" class=" mt-4 h-16 w-full border-1 border-gray-400 bg-transparent rounded-md px-4 py-1 text-black focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent " type="search" name="search" placeholder="검색어를 입력하세요" />
+                <input v-model="keyword" class=" mt-4 h-16 w-full border border-gray-400 bg-transparent rounded-md px-4 py-1 text-black focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent " type="search" name="search" placeholder="검색어를 입력하세요" />
                 <button @click.prevent=bookSearch type="submit" class="ml-10 m-4 h-16 rounded bg-maintheme1 px-4 py-4 text-white">
                     <p class="text-white w-14">검색</p>
                 </button>

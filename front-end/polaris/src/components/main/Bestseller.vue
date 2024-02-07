@@ -21,32 +21,21 @@
                         </div>
                     </div>
                 </div>
-              </router-link>
-            </div>
+            </router-link>
           </div>
         </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" style="left: -50px;">
-        <span class="carousel-control-prev-icon" aria-hidden="true" style="color: rgb(50, 63, 89);"></span>
-        <span class="visually-hidden" style="color: rgb(50, 63, 89); ">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" style="right: -50px; ">
-        <span class="carousel-control-next-icon" aria-hidden="true" style="color:rgb(50, 63, 89)"></span>
-        <span class="visually-hidden" style="color: rgb(50, 63, 89)">Next</span>
-      </button>
-  </div>
+      </div>
+      <button class="carousel-button" @click="handleOnClickNextButton"><font-awesome-icon icon="fa-solid fa-chevron-right" size="xl"/></button>
+    </div>
+
+
 </template>
 
-
-
-  
   
 <script setup lang="ts">
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { ref, onMounted } from 'vue';
-import axios from 'axios'
-import { Carousel } from 'bootstrap'
-import { useBestsellerStore } from '@/stores/bestsellercounter';
+import { ref, onMounted } from 'vue'
+import { useBestsellerStore } from '@/stores/bestsellercounter'
+
 
 const store = useBestsellerStore()
 const booklistItem = ref(store.booklistItem)
