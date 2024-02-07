@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -145,6 +146,14 @@ public class UserController {
 			HttpStatus.OK,
 			StatusCode.EMAIL_NOT_IN_USE
 		);
+	}
 
+	@PatchMapping("/password_correction")
+	public ResponseEntity passwordCorrectionCheck(
+		@RequestBody UserLoginRequestDto password,
+		@AuthenticationPrincipal SecurityUser securityUser) {
+
+		userService.passwordCorrectionCheck(password, securityUser);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_PASSWORD_CORRECTION_CHECK);
 	}
 }
