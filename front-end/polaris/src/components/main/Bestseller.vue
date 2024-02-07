@@ -25,7 +25,6 @@
             </div>
           </div>
         </div>
-      </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" style="left: -50px;">
         <span class="carousel-control-prev-icon" aria-hidden="true" style="color: rgb(50, 63, 89);"></span>
         <span class="visually-hidden" style="color: rgb(50, 63, 89); ">Previous</span>
@@ -34,7 +33,6 @@
         <span class="carousel-control-next-icon" aria-hidden="true" style="color:rgb(50, 63, 89)"></span>
         <span class="visually-hidden" style="color: rgb(50, 63, 89)">Next</span>
       </button>
-    </div>
   </div>
 </template>
 
