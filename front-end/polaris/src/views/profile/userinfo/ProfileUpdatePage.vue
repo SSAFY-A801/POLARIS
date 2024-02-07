@@ -75,7 +75,7 @@
 <script setup lang="ts">
   import { computed, onMounted, ref, watch } from 'vue';
   import axios from 'axios';
-  import { useRouter } from 'vue-router'
+  import { useRouter, useRoute } from 'vue-router'
   import { profileCounterStore } from '@/stores/profilecounter';
   import RegionModal from '@/components/Auth/RegionModal.vue';
   import type { User } from '@/stores/profilecounter';
@@ -83,6 +83,7 @@
   const store = profileCounterStore();
   const BACK_API_URL = store.BACK_API_URL
   const router = useRouter();
+  const route = useRoute();
   const userInfo = ref<User|null>(null)
   const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
   const loginUser = JSON.parse(userInfoString.value)
@@ -205,6 +206,7 @@
     .then((response) => {
       console.log(response.data)
       alert("프로필이 수정되었습니다.")
+      store.getProfile(Number(route.params.id))
     })
     .catch((error) => {
       console.error(error)
@@ -227,7 +229,6 @@
     const userData = response.data['data']
     console.log(`${id}번유저정보`,userData)
     userInfo.value = userData
-    console.log(userInfo.value)
       if(userInfo.value){
         mylocation.value = `${userInfo.value.regcode.si} ${userInfo.value.regcode.gungu} ${userInfo.value.regcode.dong}`
         mylocationCode.value = userInfo.value.regcode.id

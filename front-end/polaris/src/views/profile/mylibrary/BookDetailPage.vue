@@ -141,7 +141,6 @@
             </div>
             <div class="col-span-4 text-maintheme1 m-2">
                 <div v-if="updateBook">
-                  {{ bookDetail.userBookPrice }}
                 <input
                 type="number"
                 id="selling-price"
@@ -175,7 +174,6 @@
               <div>비고</div>
             </div>
             <div v-if="updateBook"  class="col-span-4 text-maintheme1 m-2">
-              {{ bookDetail.userBookDescription }}
               <textarea
               id="OrderNotes"
               class="mt-2 mb-4 w-full resize-none sm:text-sm"

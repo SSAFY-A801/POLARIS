@@ -16,15 +16,19 @@
         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
         </div>
         <!-- Modal body -->
-        <div id="following-list" class="overflow-auto max-h-[500px] overflow-y-auto">
+        <div v-if="followings_list.length" id="following-list" class="overflow-auto max-h-[500px] overflow-y-auto">
           <!-- 팔로잉 목록 -->
           <followingListitem 
             v-for="(following,index) in followings_list"
             :key="index"
             :following="following"  
             @follow-toggle="handlefollow"
+            @click-profile="handleModal"
             class="border p-3 min-w-[400] "
           />
+        </div>
+        <div v-else class="text-center text-lg font-bold">
+          현재 팔로우한 유저가 존재하지 않습니다.
         </div>
         <!-- Modal footer -->
         <div class="flex justify-between p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -183,7 +187,9 @@
   const router = useRouter();
   const route = useRoute();
   const store = profileCounterStore();
-  const profileUser = store.profileUser
+  const profileUser = computed(()=> {
+    return store.profileUser
+  })
   const followings_list = ref<Following[]>([])
   // 현재 접속자와 현재 profileuser의 id 일치 여부
   // 나의 팔로잉 명단 중에서 profileuser의 id가 있는지 여부
@@ -193,7 +199,7 @@
   const unfollow_list = ref<Unfollowing[]>([])
   const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
   const loginUser = JSON.parse(userInfoString.value)
-  const isMe = ref<boolean>(profileUser.id == loginUser.id)
+  const isMe = ref<boolean>(profileUser.value.id == loginUser.id)
   
   const follow = (user: User) => {
     axios({
@@ -228,7 +234,7 @@
       method: 'delete',
       url: `${BACK_API_URL}/profile/${loginUser.id}/unfollow`,
       data: {
-        "unfollowings": [{followingId: profileUser.id},]
+        "unfollowings": [{followingId: profileUser.value.id},]
       }
     })
     .then((response) => {
@@ -244,8 +250,13 @@
   const clickModal = () => {
     showModal.value = true
   }
-  
+
   const closeModal = () => {
+    showModal.value = false
+  }
+
+  const handleModal = () => {
+    isMe.value = false
     showModal.value = false
   }
 
@@ -286,19 +297,19 @@
 
   // button 클릭
   const gotoUpdateProfile = () => {
-    router.push({name: "ProfileUpdatePage",params:{id:profileUser.id}});
+    router.push({name: "ProfileUpdatePage",params:{id:profileUser.value.id}});
   }
   const gotoTradeList = () => {
-    router.push({name: "MyTradeListPage",params:{id:profileUser.id}});
+    router.push({name: "MyTradeListPage",params:{id:profileUser.value.id}});
   }
 
   const gotoExchangeList = () => {
-    router.push({name: "MyExchangeListPage",params:{id:profileUser.id}});
+    router.push({name: "MyExchangeListPage",params:{id:profileUser.value.id}});
   }
 
 
   const gotoMychatList = () => {
-    router.push({name: "chat", params:{id:profileUser.id}});
+    router.push({name: "chat", params:{id:profileUser.value.id}});
   }
 
   // const gotoTradechat = () => {
@@ -333,13 +344,12 @@ const gotoExchangechat = () => {
         Authorization: `${store.token}`
       },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${profileUser.id}/follow`,
+      url: `${BACK_API_URL}/profile/${profileUser.value.id}/follow`,
     })
     .then((response)=> {
       console.log(response.data)
       const res = response.data
       followings_list.value = res.data['followings']
-      console.log('팔로잉 명단: ',followings_list.value)
 
     })
     .catch((error)=> {

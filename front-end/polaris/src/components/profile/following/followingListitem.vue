@@ -1,8 +1,9 @@
 <template>
   <div 
-  class="grid grid-cols-12 items-center"
+  @click="gotoProfile"
+  class="grid grid-cols-12 items-center hover:bg-indigo-100"
   :class="{'bg-gray-200': !follow}">
-    <div @click="gotoProfile" id="following-image"  class="col-span-2">
+    <div  id="following-image"  class="col-span-2">
       <img v-if="following.profileUrl" :src="following.profileUrl" alt="NO IMAGE" class="profile-image">
       <img v-else src="@\assets\following-user.jpg" alt="NO IMAGE" class="profile-image">
     </div>
@@ -20,9 +21,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Following } from '@/stores/profilecounter';
+import { profileCounterStore } from '@/stores/profilecounter';
 
 interface FollowingInfo {
   following: Following
@@ -30,10 +32,13 @@ interface FollowingInfo {
 
 const emit = defineEmits<{
   (e: 'followToggle', following: Following, follow: boolean): void
+  (e: 'clickProfile',clickProfile: boolean): void
 }>()
 
 const follow = ref(true)
 const router = useRouter();
+const store = profileCounterStore();
+const clickProfile = ref(false)
 
 const followchange = () => {
   follow.value = !follow.value
@@ -43,7 +48,11 @@ const followchange = () => {
 const { following } = defineProps<FollowingInfo>();
 
 const gotoProfile = () => {
+  alert(`${following.nickname} 님의 프로필로 이동합니다.`)
+  clickProfile.value = true
+  emit('clickProfile', clickProfile.value)
   router.push({name: "ProfilePage", params: {id:following.followingId }})
+  store.getProfile(following.followingId)
 }
 </script>
 
