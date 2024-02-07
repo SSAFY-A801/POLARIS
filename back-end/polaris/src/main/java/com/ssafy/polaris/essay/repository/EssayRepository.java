@@ -1,6 +1,5 @@
 package com.ssafy.polaris.essay.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,8 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.polaris.essay.domain.Essay;
-import com.ssafy.polaris.essay.dto.EssayRequestDto;
-import com.ssafy.polaris.essay.dto.EssayResponseDto;
 
 @Repository
 public interface EssayRepository extends JpaRepository<Essay, Long> {

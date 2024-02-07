@@ -20,6 +20,7 @@ import com.ssafy.polaris.global.exception.exceptions.category.BadRequestExceptio
  */
 public class WrongArgumentException extends BadRequestException {
 	static final String MESSAGE_KEY = "wrong-argument";
+
 	public WrongArgumentException(String detailMessageKey, Object[] params) {
 		super(MESSAGE_KEY + " : " + detailMessageKey, params);
 	}

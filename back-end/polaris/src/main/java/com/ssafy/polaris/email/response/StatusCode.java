@@ -13,8 +13,7 @@ public enum StatusCode {
 	CERTIFICATION_EMAIL_SEND_SUCCEEDED(200, "이메일이 송신되었습니다"),
 	CERTIFICATION_EMAIL_CERTIFICATED(200, "이메일 인증이 완료되었습니다"),
 	CERTIFICATION_EMAIL_NOT_CERTIFICATED(401, "이메일 인증에 실패하였습니다"),
-	CERTIFICATION_EMAIL_TIME_OUT(408, "요청한 시간이 초과되었습니다")
-	;
+	CERTIFICATION_EMAIL_TIME_OUT(408, "요청한 시간이 초과되었습니다");
 
 	private final int status;
 	private final String message;

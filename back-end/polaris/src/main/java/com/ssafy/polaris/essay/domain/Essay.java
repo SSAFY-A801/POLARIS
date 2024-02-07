@@ -3,26 +3,29 @@ package com.ssafy.polaris.essay.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.FetchType;
-import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.book.domain.UserBook;
-import com.ssafy.polaris.essay.dto.EssayRequestDto;
-import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.comment.domain.Comment;
+import com.ssafy.polaris.essay.dto.EssayRequestDto;
+import com.ssafy.polaris.global.BaseEntity;
+import com.ssafy.polaris.user.domain.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Getter
@@ -73,8 +76,7 @@ public class Essay extends BaseEntity {
 	@OneToMany(mappedBy = "essay")
 	private List<Scrap> scraps = new ArrayList<>();
 
-
-	public void updateHit(){
+	public void updateHit() {
 		hit += 1;
 	}
 

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SeriesServiceImpl implements SeriesService {
 	private final SeriesRepository seriesRepository;
+
 	@Override
 	public Optional<Series> getSeriesById(Long seriesId) {
 		return seriesRepository.findById(seriesId);

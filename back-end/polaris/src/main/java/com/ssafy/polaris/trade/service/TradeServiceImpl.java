@@ -3,6 +3,7 @@ package com.ssafy.polaris.trade.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
 import com.ssafy.polaris.book.domain.UserBookTradeType;
 import com.ssafy.polaris.book.repository.UserBookRepository;
 import com.ssafy.polaris.chat.repository.TradeRepository;
@@ -17,20 +18,23 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class TradeServiceImpl implements TradeService{
+public class TradeServiceImpl implements TradeService {
 	private final UserBookRepository userBookRepository;
 	private final TradeRepository tradeRepository;
 	private final TradeUserBookRepository tradeUserBookRepository;
+
 	@Override
 	public TradeBookListResponseDto getPurchaseBookList(Long userId) {
-		List<TradeBookResponseDto> purchaseBookResponseDtoList = userBookRepository.getTradeBookList(userId, UserBookTradeType.PURCHASE);
+		List<TradeBookResponseDto> purchaseBookResponseDtoList = userBookRepository.getTradeBookList(userId,
+			UserBookTradeType.PURCHASE);
 
 		return new TradeBookListResponseDto(userId, purchaseBookResponseDtoList);
 	}
 
 	@Override
 	public TradeBookListResponseDto getExchangeBookList(Long userId) {
-		List<TradeBookResponseDto> exchangeBookResponseDtoList = userBookRepository.getTradeBookList(userId, UserBookTradeType.EXCHANGE);
+		List<TradeBookResponseDto> exchangeBookResponseDtoList = userBookRepository.getTradeBookList(userId,
+			UserBookTradeType.EXCHANGE);
 
 		return new TradeBookListResponseDto(userId, exchangeBookResponseDtoList);
 	}
@@ -56,11 +60,11 @@ public class TradeServiceImpl implements TradeService{
 		List<TradeBookSelectRequestDto.BookDto> deletedBooks = requestDto.getDeletedBooks();
 
 		// 추가
-		for ( TradeBookSelectRequestDto.BookDto bookDto : addedBooks ){
+		for (TradeBookSelectRequestDto.BookDto bookDto : addedBooks) {
 			tradeUserBookRepository.addTradeUserBook(requestDto.getChatRoomId(), bookDto.getId());
 		}
 
-		for ( TradeBookSelectRequestDto.BookDto bookDto : deletedBooks ){
+		for (TradeBookSelectRequestDto.BookDto bookDto : deletedBooks) {
 			tradeUserBookRepository.deleteTradeUserBook(requestDto.getChatRoomId(), bookDto.getId());
 		}
 	}
