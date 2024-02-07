@@ -68,6 +68,7 @@ public class GlobalExceptionHandler {
 	public ErrorResponse forbiddenException(PolarisRuntimeException exception) {
 		log.error(exception.getMessageKey(), exception, exception.getParams());
 		return new ErrorResponse(ErrorCode.FORBIDDEN);
+	}
 
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	@ExceptionHandler(AuthenticationException.class)
