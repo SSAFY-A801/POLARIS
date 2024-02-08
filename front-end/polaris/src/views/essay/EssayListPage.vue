@@ -47,6 +47,7 @@ const essaySearch = (keyword: string) => {
 
 <style scoped>
 
+
 #go-to-detail,
 #write-essay {
     @apply bg-[#323F59] border text-white m-[5px] px-5 py-[10px] rounded-[10px]  hover:bg-gray-500;
