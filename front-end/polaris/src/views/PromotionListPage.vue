@@ -1,6 +1,6 @@
 <template>
     <div>
-
+        홍보게시판
     </div>
 </template>
 

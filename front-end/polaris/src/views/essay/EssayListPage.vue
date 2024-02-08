@@ -1,160 +1,54 @@
 <template>
-  <div class="first-container">
-    <div class="content">
-      <div>독후감 게시판</div>
-    <!-- component -->
-<!-- This is an example component -->
-<section class="flex flex-row flex-wrap mx-auto">
-<!-- Card Component -->
-  <div
-    class="card transition-all duration-150 flex w-full px-4 py-6 md:w-1/2 lg:w-1/3"
-  >
-    <div
-      class="flex flex-col items-stretch min-h-full pb-4 mb-6 transition-all duration-150 bg-white rounded-lg shadow-lg hover:shadow-2xl"
-    >
-      <div class="md:flex-shrink-0">
-        <img
-          src="https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder-1024x512.png"
-          alt="Blog Cover"
-          class="object-fill w-full rounded-lg rounded-b-none md:h-56"
-        />
+  <div class="mt-16 flex justify-center">
+    <div class="container w-full mt-8 max-w-6xl bg-backgroundgray p-4">
+      <!-- 최상단 -->
+      <div class="flex justify-between items-center p-2 m-2 border-b  border-black">
+        <div class="text-2xl font-bold">독후감 게시판</div>
+        <button id="write-essay">독후감 작성하러 가기</button>
       </div>
-      <div class="flex items-center justify-between px-4 py-2 overflow-hidden">
-        <span class="text-xs font-medium text-blue-600 uppercase">
-          독후감
-        </span>
-        <div class="flex flex-row items-center">
-          <div
-            class="text-xs font-medium text-gray-500 flex flex-row items-center mr-2"
-          >
-            <svg
-              class="w-4 h-4 mr-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              ></path>
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-              ></path>
-            </svg>
-            <span>1.5k</span>
-          </div>
-
-          <div
-            class="text-xs font-medium text-gray-500 flex flex-row items-center mr-2"
-          >
-            <svg
-              class="w-4 h-4 mr-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-              ></path>
-            </svg>
-            <span>25</span>
-          </div>
-
-          <div
-            class="text-xs font-medium text-gray-500 flex flex-row items-center"
-          >
-            <svg
-              class="w-4 h-4 mr-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
-              ></path>
-            </svg>
-            <span>7</span>
-          </div>
+      <!-- 검색바 -->
+      <div class="flex flex-wrap flex-col md:flex-row justify-end border-b-2 pb-4 mb-8">
+        <div class="relative inline-block">
+          <!-- md:hidden: 화면이 중간(medium) 크기 이하일 때(select 엘리먼트가 hidden 됨) -->
+          <!-- {{  filter }} -->
+          <select v-model="filter" id="search-filter" class="m-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>도서 제목</option>
+            <option>독후감 제목</option>
+            <option>작성자</option>
+          </select>
+        </div>
+        <div>
+          <input @keyup.enter="essaySearch(keyword)" v-model="keyword" type="text" id="book"  class="w-96 rounded-lg appearance-none border border-gray-500 py-2 px-4 m-2 bg-gray-50 text-maintheme1 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="독후감 검색"/>
+          <button @click="essaySearch(keyword)" type="button" class="w-16 text-white mx-2 md:mr-2 md:w-16 py-1 px-3 my-2 md:my-0 bg-maintheme1 hover:bg-gray-500 rounded-lg">
+            <font-awesome-icon icon="fa-solid fa-magnifying-glass"/>
+          </button>
         </div>
       </div>
-      <hr class="border-gray-300" />
-      <div class="flex flex-wrap items-center flex-1 px-4 py-1 text-center mx-auto">
-        <a href="#" class="hover:underline">
-          <h2 class="text-2xl font-bold tracking-normal text-gray-800">
-            독후감제목
-          </h2>
-        </a>
+      <div class="grid grid-cols-2 gap-8 sm:grid-cols-3">
+        <EssayList/>
       </div>
-      <hr class="border-gray-300" />
-      <p
-        class="flex flex-row flex-wrap w-full px-4 py-2 overflow-hidden text-sm text-justify text-gray-700"
-      >
-        독후감 내용 일부 or 도서소개?
-      </p>
-      <hr class="border-gray-300" />
-      <section class="px-4 py-2 mt-2">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center flex-1">
-            <img
-              class="object-cover h-10 rounded-full"
-              src="https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-icon-eps-file-easy-to-edit-default-avatar-photo-placeholder-profile-icon-124557887.jpg"
-              alt="Avatar"
-            />
-            <div class="flex flex-col mx-2">
-              <a href="" class="font-semibold text-gray-700 hover:underline">
-                독후감 작성자 닉네임
-              </a>
-              <span class="mx-1 text-xs text-gray-600">작성일자</span>
-            </div>
-          </div>
-          <p class="mt-1 text-xs text-gray-600">조회수</p>
-        </div>
-      </section>
-    </div>
-  </div>
-  <!-- Card Component -->
-  <!-- Card Component -->
-  <!-- Card Component -->
-  
-</section>
-    
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import EssayList from '../../components/essay/EssayList.vue';
+
+const router = useRouter();
+const filter = ref("")
+const keyword = ref("")
+const essaySearch = (keyword: string) => {
+
+}
 
 </script>
 
 <style scoped>
-  .first-container {
-    padding-top: 50px;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    /* height: 100vh; */
-    align-items: start;
-    /* align-items: center; */
-  }
-  .content {
-    grid-column: 2;
-  }
 
-  .card {
-    min-width: 300px;
-    height: 500px
-  }
+#go-to-detail,
+#write-essay {
+    @apply bg-[#323F59] border text-white m-[5px] px-5 py-[10px] rounded-[10px]  hover:bg-gray-500;
+}
 </style>

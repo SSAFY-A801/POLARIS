@@ -16,7 +16,6 @@
         <!-- 도서 검색 -->
         <div id="register-book" class="col-span-6 border border-gray-400 rounded-xl">
           <!-- 검색 바 -->
-          <!-- <p>{{  keyword }}</p> -->
           <div  class="flex flex-wrap flex-col md:flex-row justify-end border-b-2">
             <div class="flex items-center mt-4 md:mt-0">
               <div class="relative inline-block">

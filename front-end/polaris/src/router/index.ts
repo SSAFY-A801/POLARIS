@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+// 메인 기능
 import MainPage from '@/views/MainPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
@@ -6,6 +7,7 @@ import BookSearchPage from '@/views/BookSearchPage.vue'
 import EssayListPage from '@/views/essay/EssayListPage.vue'
 import PromotionListPage from '@/views/PromotionListPage.vue'
 import PasswordSearchPage from '@/views/PasswordSearchPage.vue'
+// 프로필
 import ProfilePage from '@/views/profile/ProfilePage.vue'
 import MyLibraryPage from '@/views/profile/mylibrary/MyLibraryPage.vue'
 import MyScrapsPage from '@/views/profile/like/MyScrapsPage.vue'
@@ -18,6 +20,7 @@ import PasswordChangePage from '@/views/profile/userinfo/PasswordChangePage.vue'
 import BookRegisterPage from '@/views/profile/mylibrary/BookRegisterPage.vue'
 import MyTradeListPage from '@/views/profile/mytradeinfo/MyTradeListPage.vue'
 import MyExchangeListPage from '@/views/profile/mytradeinfo/MyExchangeListPage.vue'
+// 채팅
 import BookDetailPage from '@/views/profile/mylibrary/BookDetailPage.vue'
 import ChattingListPage from '@/views/chat/ChattingListPage.vue'
 import ChattingRoomPage from '@/views/chat/ChattingRoomPage.vue'
@@ -27,6 +30,9 @@ import ConnectSocket from '@/components/chat/ConnectSocket.vue'
 import BestsellerdetailPage from '@/components/main/BestsellerdetailPage.vue'
 import UserPopularBookDatailPage from '@/components/main/UserPopularBookDetailPage.vue'
 import TestFirebase from '@/components/chat/TestFirebase.vue'
+// 독후감
+import EssayDetailPage from '@/views/essay/EssayDetailPage.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,11 +58,6 @@ const router = createRouter({
       name: 'booksearch',
       component: BookSearchPage,
     },
-    {//독후감 게시판 페이지
-      path: '/essaylist',
-      name: 'essaylist',
-      component: EssayListPage,
-    },
     {//홍보 게시판 페이지
       path: '/promotionlist',
       name: 'promotionlist',
@@ -79,7 +80,7 @@ const router = createRouter({
       component: UserPopularBookDatailPage,
       props: true
     },
-    // Profile
+    // 프로필
     {
       path: '/profile/:id',
       redirect: to => {
@@ -185,6 +186,18 @@ const router = createRouter({
       path: '/test',
       name: 'testfirebase',
       component: TestFirebase
+    },
+    
+    // 독후감
+    {
+      path: '/essaylist',
+      name: 'essaylist',
+      component: EssayListPage,
+    },
+    {
+      path: '/essaylist/essayId',
+      name: 'essaydetail',
+      component: EssayDetailPage
     }
   ]
 })
