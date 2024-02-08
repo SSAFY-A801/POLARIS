@@ -27,7 +27,7 @@
               </label>
               <input id="update-image" type="file" @change="handleFileChange" class="hidden" />
             </div>
-            <div class="font-bold mt-2">{{ loginUser.nickname }}</div>
+            <div class="font-bold mt-2">{{ profileUser.nickname }}</div>
           </div>
         </div>
       </div>
@@ -39,7 +39,7 @@
           비밀번호 변경
         </button>
         <div class="font-semibold mt-8">닉네임</div>
-        <input type="nickname" v-model="usernickname" id="Usernickname"  class="w-64 mt-2 mb-4 rounded-md border h-8"/>
+        <input type="nickname" v-model="newnickname" id="newnickname"  class="w-64 mt-2 mb-4 rounded-md border h-8"/>
         <button @click="nicknameCheck" type="button" id="update-loc-button">
           <font-awesome-icon icon="fa-solid fa-circle-user" />
           닉네임 확인
@@ -84,25 +84,23 @@
   const router = useRouter();
   const route = useRoute();
   const userInfo = ref<User|null>(null)
-  const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
-  const loginUser = JSON.parse(userInfoString.value)
-  const usernickname = ref<string>(loginUser.nickname)
-  const imageUrl = ref<string | null>(loginUser.profileUrl);
-  const isValidNickname = ref(usernickname.value==loginUser.nickname)
+  const profileUser = ref(store.profileUser)
+  const newnickname = ref<string>(profileUser.value.nickname)
+  const imageUrl = ref<string | null>(profileUser.value.profileUrl);
+  const isValidNickname = ref(true)
  
   const mylocation = ref("")
   const mylocationCode = ref<number|null>(null)
   const introduction = ref<string|null>("")
   const isRegionModalOpen = ref(false)
 
-  watch(() => usernickname.value, (newNickname, oldNickname) => {
-  console.log(newNickname)
-  if(newNickname == loginUser.nickname){
+  watch(() => newnickname.value, (newNickname, oldNickname) => {
+  if(newNickname == profileUser.value.nickname){
     isValidNickname.value = true
   } else {
     isValidNickname.value = false;
   }
-  console.log(newNickname == loginUser.nickname)
+  console.log(newNickname == profileUser.value.nickname)
 });
 
 
@@ -128,7 +126,7 @@
         'Content-Type': 'application/json'
       },
       method: 'get',
-      url: `${BACK_API_URL}/user/nickname_check/${usernickname.value}`
+      url: `${BACK_API_URL}/user/nickname_check/${newnickname.value}`
 
     })
     .then((response)=> {
@@ -138,7 +136,7 @@
         isValidNickname.value = true
       } else {
         alert("중복된 닉네임입니다. 다른 닉네임을 설정해 주세요.")
-        usernickname.value = ""
+        newnickname.value = ""
         
       }
 
@@ -182,7 +180,7 @@
     
     
   const updateProfile = () => {
-    if (usernickname.value ==""){
+    if (newnickname.value ==""){
       alert("닉네임을 입력해주세요.")
     } else if (!isValidNickname.value) {
       alert("닉네임 확인이 필요합니다.")
@@ -192,13 +190,13 @@
     // axios 요청
     axios({
       method: 'patch',
-      url: `${BACK_API_URL}/profile/${loginUser.id}`,
+      url: `${BACK_API_URL}/profile/${profileUser.value.id}`,
       headers: {
         Authorization: `${store.token}`,
         "Content-Type": 'application/json'
       },
       data: {
-        nickname: usernickname.value,
+        nickname: newnickname.value,
         regcodeId: mylocationCode.value,
         introduction: introduction.value,
         imageUrl: imageUrl.value,
@@ -224,7 +222,7 @@
       "Content-Type": 'application/json'
     },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${loginUser.id}`,
+      url: `${BACK_API_URL}/profile/${profileUser.value.id}`,
     })  
   .then((response) => {
     const userData = response.data['data']
@@ -242,7 +240,7 @@
   }
   
   onMounted(()=> {
-    getProfile(loginUser.id)
+    getProfile(profileUser.value.id)
   })
 </script>
 

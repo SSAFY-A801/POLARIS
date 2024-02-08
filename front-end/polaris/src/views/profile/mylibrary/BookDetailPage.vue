@@ -318,7 +318,7 @@
   // 내 서재로 옮기기
   const moveToMyLibrary = () => {
     const userbook: Searchbook = {
-      isbn: bookDetail.value.isbn,
+      isbn: bookDetail.value.isbn ,
       title: bookDetail.value.title,
       bookDescription: bookDetail.value.bookDescription,
       pubDate : bookDetail.value.pubDate,
@@ -330,7 +330,10 @@
       isOwned: false,
       userBookTradeType: 'UNDEFINED',
     }
-
+    if(bookDetail.value.isbn == "" && bookDetail.value.seriesId){
+      userbook.isbn = String(bookDetail.value.seriesId)
+    }
+    
     if(bookDetail.value.seriesId){
       userbook.seriesId = bookDetail.value.seriesId
       userbook.seriesName = bookDetail.value.seriesName

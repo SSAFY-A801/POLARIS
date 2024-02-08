@@ -1,7 +1,10 @@
 <template>
   <div>
-    <div class="relative m-2 flex justify-between">
-      <div>
+    <div class="flex justify-between m-2">
+      <div class="text-center text-xl m-4">
+        담고 싶은 도서를 내 서재에 담아보세요! (시험용 문구)
+      </div>
+      <div v-if="isMe">
         <div>
           <button @click="clickbutton" 
           class="text-white w- py-2 px-4 m-2 bg-maintheme1 hover:bg-gray-500 rounded-lg">
@@ -27,6 +30,8 @@
           </button>
         </div>
       </div>
+    </div>
+    <div class="relative m-2 flex justify-end">
       <div v-if="!deleteState" class="flex items-center">
         <!-- 만약 1과 2를 섞는다면 filterResult 내에서
         키워드에 해당하는 도서들만 나오게 하면 복합 검색이 가능함 -->
@@ -54,6 +59,7 @@
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
       <MyLibraryList 
       :mybookList="selectValue === '전체도서' && !booksearch ? mybookList : filterMybook"
+      :isMe="isMe"
       />
     </div>
   </div>
@@ -67,23 +73,45 @@ import axios from 'axios';
 import { profileCounterStore } from '@/stores/profilecounter';
 import type { Book } from '@/stores/profilecounter';
 import { useRoute } from 'vue-router';
+import router from '@/router';
 
 const route = useRoute();
 const store = profileCounterStore();
 const selectValue = ref("전체도서");
 const keyword = ref("")
 const booksearch = ref(false)
-
-
+const profileUser = computed(()=> {
+    return store.profileUser
+  })
+const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
+const loginUser = JSON.parse(userInfoString.value)
+const isMe = computed(() => {
+  return profileUser.value.id == loginUser.id
+})
 
 const mybookList = computed(()=> {
   return store.mybookLists
 })
 
+const filterMybook = ref<Book[]>([]);
+
+// mybookList가 변경될 때마다 filterMybook 업데이트
+watch(mybookList, (newValue) => {
+  // 키워드 검색 로직에 따라서 filterMybook 업데이트
+  if (!booksearch.value) {
+    filterMybook.value = newValue;
+  } else {
+    // 예시로 키워드 검색이 들어갈 로직을 추가하세요
+    // filterMybook.value = ... 
+  }
+});
+
+
 const deleteBookList = computed(()=> {
   console.log(deleteBookList.value)
   return store.deleteBookList
 })
+
 
 // 키워드 검색
 const keywordSearch = (keyword:string) => {
@@ -105,10 +133,8 @@ const keywordSearch = (keyword:string) => {
 };
 
 
-const filterMybook = ref<Book[]>(mybookList.value)
 
 // selectValue의 변화를 감지하는 watch 설정
-
 const selectWatch = watch(selectValue, (newValue) => {
   if (newValue != "전체도서"){
     if (newValue == '공개'){
@@ -126,7 +152,6 @@ const selectWatch = watch(selectValue, (newValue) => {
     }
   keyword.value=""
 });
-
 
 
 
@@ -153,6 +178,7 @@ const deleteBooks = () => {
   store.deleteBookList = []
   selectValue.value = "전체도서"
   alert("도서 삭제를 실시합니다.")
+  router.go(0)
 }
 
 // 도서 선택 후 삭제 버튼 클릭
@@ -184,9 +210,11 @@ watch(store.mybookLists, (newValue, oldValue) => {
 
 onMounted(()=> {
   selectWatch;
+  filterMybook.value = mybookList.value;
   store.deleteBookList = []
   store.deletebuttonState = false
   store.getMybookList(route.params.id as string);
+  console.log(mybookList.value)
 })
 </script>
 
