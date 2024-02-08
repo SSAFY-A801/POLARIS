@@ -7,7 +7,6 @@
 </template>
 
 <script setup lang="ts">
-  import EssayListItem from "./EssayListItem.vue";
   const EssayList = 4;
 </script>
 
