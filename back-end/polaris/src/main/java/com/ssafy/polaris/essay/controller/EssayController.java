@@ -206,7 +206,7 @@ public class EssayController {
 	/**
 	 * @return 가장 많이 스크랩된 에세이를 반환
 	 * */
-	@GetMapping("/most_scrapped_essay")
+	@GetMapping("/most_scrapped")
 	public ResponseEntity<DefaultResponse<MostScrappedEssayResponseDto>> getMostScrappedEssay(){
 		MostScrappedEssayResponseDto data = essayService.getMostScrappedEssay();
 		if(data == null){
