@@ -7,14 +7,14 @@
                            <span class="text-base font-normal text-gray-500">상대방에게 빌려줄 도서를 선택하여 추가해주세요</span>
                         </div>
                         <div class="flex-shrink-0">
-                          <button v-if="selectedBooks.length > 0" class="button text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg p-2" @click="toggleModal">제거</button>
+                          <button v-if="selectedBooks.length > 0" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg p-2" @click="toggleModal">제거</button>
                           <button v-else class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg p-2" @click="toggleModal">추가</button>
                           </div>
                      </div>
                      <div class="flex flex-col mt-8">
                         <div class="overflow-x-auto rounded-lg">
                            <div class="align-middle inline-block min-w-full">
-                              <div class="shadow overflow-y-auto h-96 sm:rounded-lg" style="height: 205px;">
+                              <div class="shadow overflow-y-auto h-96 sm:rounded-lg max-h-[208px]">
                                  <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                        <tr>
@@ -121,6 +121,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import axios from 'axios';
 // import type { traceDeprecation } from 'process';
 
@@ -132,9 +133,6 @@ const toggleModal = () => {
   modalOpen.value = !modalOpen.value;
 };
 
-const saveHistory = () => {
-  // 판매도서 목록을 저장해서 백엔드로 보낸다.
-}
 
 // 재작성
 const selectedBooks = ref<Book[]>([]);
@@ -167,13 +165,13 @@ const sendSelectedBooks = () => {
 
 
 const changingData = ref<ResponseData | null>(null);
-
+  const token = ref(localStorage.getItem('user_token'))
 
 onMounted(async () => {
 try {
       const response = await axios.get<ApiResponse>(`https://i10a801.p.ssafy.io:8082/trade/exchange_books`, {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoamhAZ21haWwuY29tIiwiYXV0aCI6IkFVVEhPUklUWSIsImlkIjo4LCJlbWFpbCI6ImhqaEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iu2CueynhO2VmCIsImV4cCI6MTcyNDY4Nzg5NH0.RGSg_mX4rSNrHAIIBkfHg1AowDKwyAmzhnk2b7X8xaE',
+        'Authorization': token.value?.replace("\"", ""),
         // 'Content-Type': 'application/json'
       }
     });
@@ -230,8 +228,29 @@ const editClick = () => {
 const completeClick = () => {
   tradeStatus.value = 'completed';
   light.value = 'defalut'
-}
+  completeChange(chatroomId);
 
+}
+const route = useRoute();
+const chatroomId = Number(route.params.chatroomId); 
+
+const completeChange = async (chatroomId: number) => {
+  try {
+      const response = await axios.patch(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
+      if (response.status === 200) {
+        console.log('거래가 완료되었습니다:', response.data);
+        alert('교환이 완료되었습니다. \n프로필에서 교환내역을 확인할 수 있습니다.')
+      } else {
+        console.error('API 요청 실패:', response.status);
+      }
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+      console.log(chatroomId)
+      console.log(route.params.chatroomId);
+
+    }
+    
+};
 </script>
 
 

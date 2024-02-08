@@ -55,7 +55,7 @@
                      </div>
                      <div class="flex justify-between">
                       <div class="text-lg font-semibold mt-6">총 판매금액 : {{ totalAmount }}원</div>
-                     <button @click="saveHistory" class="w-2/5 mt-6 bg-maintheme1 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans">판매완료</button>
+                      <button @click="completeSell(chatroomId)" class="w-2/5 mt-6 bg-maintheme1 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans">판매완료</button>
                     </div>
                   </div>
                   <div>
@@ -120,6 +120,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import axios from 'axios';
 
 
@@ -130,9 +132,33 @@ const toggleModal = () => {
   modalOpen.value = !modalOpen.value;
 };
 
-const saveHistory = () => {
-  // 판매도서 목록을 저장해서 백엔드로 보낸다.
-}
+
+const router = useRouter();
+
+const route = useRoute();
+const chatroomId = Number(route.params.chatroomId); 
+
+const completeSell = async (chatroomId: number) => {
+  try {
+      const response = await axios.patch(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
+  
+      if (response.status === 200) {
+        console.log('거래가 완료되었습니다:', response.data);
+        alert('판매가 완료되었습니다. \n프로필에서 판매내역을 확인할 수 있습니다.')
+      } else {
+        console.error('API 요청 실패:', response.status);
+      }
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+      console.log(chatroomId)
+      console.log(route.params.chatroomId);
+
+    }
+    
+};
+
+  
+
 
 // 재작성
 const selectedBooks = ref<Book[]>([]);
