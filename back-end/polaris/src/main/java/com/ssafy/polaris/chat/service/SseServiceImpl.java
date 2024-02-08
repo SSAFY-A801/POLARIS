@@ -19,7 +19,7 @@ public class SseServiceImpl implements SseService{
 
 	@Override
 	public SseEmitter connection(Long chatRoomId, HttpServletResponse response) {
-		SseEmitter emitter = emitterRepository.save(chatRoomId, new SseEmitter(Long.MAX_VALUE));
+		SseEmitter emitter = emitterRepository.save(chatRoomId, new SseEmitter(60*60*1000L));
 		response.setHeader("X-Accel-Buffering", "no");
 
 		// emitter.onCompletion(() -> emitterRepository.deleteAllStartByWithId(id));
