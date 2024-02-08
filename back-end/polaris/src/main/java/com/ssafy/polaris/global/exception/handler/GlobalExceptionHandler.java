@@ -5,12 +5,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.ssafy.polaris.global.exception.exceptions.UserNotExist;
-import com.ssafy.polaris.global.exception.exceptions.WrongArgumentException;
-import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
-import com.ssafy.polaris.global.exception.exceptions.category.AuthenticationException;
+import com.ssafy.polaris.global.exception.exceptions.category.BadRequestException;
+import com.ssafy.polaris.global.exception.exceptions.category.ConflictException;
+import com.ssafy.polaris.global.exception.exceptions.category.ForbiddenException;
+import com.ssafy.polaris.global.exception.exceptions.category.IAmATeapotException;
+import com.ssafy.polaris.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.polaris.global.exception.exceptions.category.PolarisRuntimeException;
-import com.ssafy.polaris.global.exception.response.ErrorCode;
+import com.ssafy.polaris.global.exception.exceptions.category.UnAuthorizedException;
+import com.ssafy.polaris.global.exception.exceptions.category.UnsupportedMediaTypeException;
 import com.ssafy.polaris.global.exception.response.ErrorResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -21,24 +23,51 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(WrongArgumentException.class)
-	public ErrorResponse handlerPolarisRuntimeException(PolarisRuntimeException exception) {
-		log.error(exception.getMessageKey(), exception, exception.getParams());
-		return new ErrorResponse(ErrorCode.WRONG_ARGUMENT);
-	}
+	@ExceptionHandler(BadRequestException.class)
+	public ErrorResponse badRequestHandler(PolarisRuntimeException exception) {
+		log.error((exception.getMessageKey()), exception, exception.getParams());
+		return new ErrorResponse(exception.getErrorCode());
+	} // 400
 
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	@ExceptionHandler(AuthenticationException.class)
-	public ErrorResponse wrongPasswordException(PolarisRuntimeException exception) {
-		log.error(exception.getMessageKey(), exception, exception.getParams());
-		return new ErrorResponse(ErrorCode.WRONG_PASSWORD);
-	}
+	@ExceptionHandler(UnAuthorizedException.class)
+	public ErrorResponse unAuthorizedHandler(PolarisRuntimeException exception) {
+		log.error((exception.getMessageKey()), exception, exception.getParams());
+		return new ErrorResponse(exception.getErrorCode());
+	} // 401
+
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@ExceptionHandler(ForbiddenException.class)
+	public ErrorResponse forbiddenHandler(PolarisRuntimeException exception) {
+		log.error((exception.getMessageKey()), exception, exception.getParams());
+		return new ErrorResponse(exception.getErrorCode());
+	} // 403
 
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	@ExceptionHandler(UserNotExist.class)
-	public ErrorResponse userNotExistException(PolarisRuntimeException exception) {
-		log.error(exception.getMessageKey(), exception, exception.getParams());
-		return new ErrorResponse(ErrorCode.USER_NOT_EXIST);
-	}
+	@ExceptionHandler(NotFoundException.class)
+	public ErrorResponse notFoundHandler(PolarisRuntimeException exception) {
+		log.error((exception.getMessageKey()), exception, exception.getParams());
+		return new ErrorResponse(exception.getErrorCode());
+	} // 404
 
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ExceptionHandler(ConflictException.class)
+	public ErrorResponse conflictHandler(PolarisRuntimeException exception) {
+		log.error((exception.getMessageKey()), exception, exception.getParams());
+		return new ErrorResponse(exception.getErrorCode());
+	} // 409
+
+	@ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+	@ExceptionHandler(UnsupportedMediaTypeException.class)
+	public ErrorResponse unsupportedMediaTypeHandler(PolarisRuntimeException exception) {
+		log.error((exception.getMessageKey()), exception, exception.getParams());
+		return new ErrorResponse(exception.getErrorCode());
+	} // 415
+
+	@ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
+	@ExceptionHandler(IAmATeapotException.class)
+	public ErrorResponse iAmATeapotHandler(PolarisRuntimeException exception) {
+		log.error((exception.getMessageKey()), exception, exception.getParams());
+		return new ErrorResponse(exception.getErrorCode());
+	} // 418
 }

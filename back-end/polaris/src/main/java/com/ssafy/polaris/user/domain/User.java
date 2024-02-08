@@ -43,7 +43,6 @@ import lombok.experimental.SuperBuilder;
 @SQLDelete(sql = "update users set deleted_at = CURRENT_TIMESTAMP where id = ?")
 @SQLRestriction("deleted_at is NULL")
 public class User extends BaseEntity {
-	// 지역코드
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "regcode_id", updatable = false, insertable = false)
@@ -97,7 +96,6 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "reporter")
 	private List<Report> reporters = new ArrayList<>();
 
-	// TODO: 나는 다른 유저 여러 명을 신고할 수 있다. 재귀적인 관계를 어떻게 풀 것인가?
 	@OneToMany(mappedBy = "reportedUser")
 	List<Report> reportUserList = new ArrayList<>();
 
