@@ -28,10 +28,8 @@
                         <router-link v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" 
                                     :to="{ name: 'ProfilePage', params: { id: loginUser.id }}" 
                                     class="text-white mr-4">프로필</router-link>
-
                         <button v-if="userToken" @click="logout"  class="text-white ml-4 bg-transparent border-none outline-none focus:outline-none cursor-pointer">로그아웃</button>
                     </div>
-                    
                 </div>
 
                 <div class="flex -mr-2 md:hidden">
@@ -53,9 +51,11 @@
 import { onMounted, ref, watchEffect, computed } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { profileCounterStore } from '@/stores/profilecounter'
 
 
 // const props = defineProps(['userToken'])
+const router = useRouter();
 const userToken = ref(localStorage.getItem('user_token'))
 const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
 // 사용자 정보를 나타내는 인터페이스 정의
@@ -74,10 +74,6 @@ try {
   loginUser = {}; // JSON 파싱에 실패한 경우 빈 객체로 기본값 설정
 }
 // loginUser를 사용할 때 loginUser.id를 체크할 때 에러가 발생하지 않습니다.
-
-
-const router = useRouter()
-
 
 
 

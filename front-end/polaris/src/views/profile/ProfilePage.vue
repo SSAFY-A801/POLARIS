@@ -4,12 +4,12 @@
     id="default-modal"
     tabindex="-1"
     aria-hidden="true"
-    class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl max-h-full p-2 bg-white rounded-lg shadow dark:bg-gray-700">
+    class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl max-h-full bg-white  shadow dark:bg-gray-700">
     <div class="relative w-full max-w-2xl max-h-full">
         <!-- Modal content -->
         <!-- Modal header -->
-        <div class="flex justify-between rounded-t-lg bg-maintheme1 text-white p-2">
-          <h3 class="text-xl text-white">
+        <div class="flex justify-between bg-maintheme1 text-white">
+          <h3 class="text-xl text-white m-3">
               Following 목록
           </h3>
         </div>
@@ -32,8 +32,8 @@
         </div>
         <!-- Modal footer -->
         <div class="flex justify-between p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-            <button id="updateFollowings" @click="updateFollowings" data-modal-hide="default-modal" type="button" class="w-full">확인</button>
-            <button id="closeModal" @click="closeModal" data-modal-hide="default-modal" type="button" class="w-full">취소</button>
+            <button id="updateFollowings" @click="updateFollowings" data-modal-hide="default-modal" type="button" class="w-full text-xl">확 인</button>
+            <button id="closeModal" @click="closeModal" data-modal-hide="default-modal" type="button" class="w-full text-xl">취 소</button>
         </div>
     </div>
 </div>
@@ -200,8 +200,10 @@
   const unfollow_list = ref<Unfollowing[]>([])
   const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
   const loginUser = JSON.parse(userInfoString.value)
-  const isMe = ref(profileUser.value.id == loginUser.id)
-  
+  const isMe = computed(() => {
+  return profileUser.value.id == loginUser.id
+})
+
   const follow = (user: User) => {
     axios({
       headers: {
@@ -256,7 +258,6 @@
   }
 
   const handleModal = () => {
-    isMe.value = false
     myFollwing.value = true
     showModal.value = false
   }
@@ -277,7 +278,8 @@
     })
     .then((response) => {
       console.log(response.data)
-      // showModal.value = false
+      alert("팔로잉 상태 수정 완료!")
+      router.go(0)
     })
     .catch((error)=> {
       console.error(error)
@@ -395,13 +397,16 @@
 }
 
 #updateFollowings,
-#closeModal,
 #tradechat,
 #exchangechat,
 #mychat,
 #follow,
 #profile-update {
-    @apply bg-[#323F59] border text-white m-[5px] px-2.5 py-[5px] rounded-[10px]  hover:bg-gray-500;
+    @apply bg-[#323F59] border text-white m-[5px] px-2.5 py-2 rounded-[10px]  hover:bg-gray-500;
+}
+
+#closeModal {
+    @apply bg-[#ffffff] border border-maintheme1 text-maintheme1 m-[5px] px-2.5 py-2 rounded-[10px]  hover:bg-gray-200;
 }
 
 #follow-toggle {

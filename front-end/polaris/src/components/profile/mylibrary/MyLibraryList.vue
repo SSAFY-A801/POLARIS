@@ -1,8 +1,8 @@
 <template>
-  <button v-if="!deleteState"  @click="registerBook" id="Book-register" class="shadow hover:bg-gray-100 border border-dashed rounded-md border-deepgray p-2">
+  <button v-if="!deleteState && isMe"  @click="registerBook" id="Book-register" class="shadow hover:bg-gray-100 border border-dashed rounded-md border-deepgray p-2">
     <font-awesome-icon icon="fa-solid fa-plus" size="8x" style="color: #323F59;" />  </button>
   <MyLibraryListItem
-  v-for="(mybook, index) in mybookList"
+  v-for="(mybook, index) in props.mybookList"
   :key = "index"
   :bookinfo = "mybook"
   @delete-books="deleteBookstate" 
@@ -14,7 +14,8 @@ import MyLibraryListItem from './MyLibraryListItem.vue';
 import { profileCounterStore } from '@/stores/profilecounter';
 import { ref, computed, onMounted } from 'vue'; 
 import { useRouter } from 'vue-router'
-const { mybookList } = defineProps(['mybookList']);
+
+const props = defineProps(['mybookList','isMe']);
 
 type DeleteBook = {
   id: number
