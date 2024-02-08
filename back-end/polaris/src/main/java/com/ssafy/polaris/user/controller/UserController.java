@@ -44,11 +44,7 @@ public class UserController {
 		if (result)
 			statusCode = StatusCode.EMAIL_IN_USE;
 
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			statusCode,
-			Map.of("isInUse", result)
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, statusCode, Map.of("isInUse", result));
 	}
 
 	@GetMapping("/nickname_check/{nickname}")
@@ -59,11 +55,7 @@ public class UserController {
 		if (result)
 			statusCode = StatusCode.NICKNAME_IN_USE;
 
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			statusCode,
-			Map.of("isInUse", result)
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, statusCode, Map.of("isInUse", result));
 	}
 
 	// TODO : 컨트롤러에 작업이 너무 많다. 서비스 쪽으로 옮길수 있도록 리팩토링
@@ -89,16 +81,13 @@ public class UserController {
 			.regcodeId(userJoinRequestDto.getRegion()).build();
 		userService.join(user);
 
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.CREATED,
-			StatusCode.CREATED_USER,
+		return DefaultResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.CREATED_USER,
 			UserResponseDto.builder()
 				.id(user.getId())
 				.email(user.getEmail())
 				.region(user.getRegcodeId())
 				.nickname(user.getNickname())
-				.build()
-		);
+				.build());
 	}
 
 	@PostMapping("/login")
@@ -106,11 +95,7 @@ public class UserController {
 		@RequestBody UserLoginRequestDto userLoginRequestDto) throws Exception {
 		Map<String, String> tokenMap = userService.login(userLoginRequestDto);
 		// TODO: "어떤 토큰"을 "어디에 담아서" 반환할 것인지 정해야 한다.
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.SUCCESS_LOGIN,
-			tokenMap
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_LOGIN, tokenMap);
 	}
 
 	@PostMapping("/logout")
@@ -124,10 +109,7 @@ public class UserController {
 		}
 		// TODO : 검증이 되면 Redis에 저장되어 있던 Email(key)과 Refresh Token(value)을 삭제한다.
 		// TODO : Access Token을 key “logout” 문자열을 value로 Redis에 저장하여 해당 토큰을 Black List 처리한다.
-		return DefaultResponse.emptyResponse(
-			HttpStatus.OK,
-			StatusCode.SUCCESS_LOGOUT
-		);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_LOGOUT);
 	}
 
 	// TODO: 삭제한 회원의 권한 관리 등 처리해주기
@@ -135,22 +117,16 @@ public class UserController {
 	public ResponseEntity<DefaultResponse<Void>> resignation(@AuthenticationPrincipal SecurityUser securityUser) throws
 		Exception {
 		userService.resignation(securityUser.getId());
-		return DefaultResponse.emptyResponse(
-			HttpStatus.OK,
-			StatusCode.SUCCESS_RESIGNATION
-		);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_RESIGNATION);
 	}
 
 	@PostMapping("/email_cert")
 	public ResponseEntity<DefaultResponse<Void>> emailCertification(@RequestBody Map<String, String> body) {
-		return DefaultResponse.emptyResponse(
-			HttpStatus.OK,
-			StatusCode.EMAIL_NOT_IN_USE
-		);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.EMAIL_NOT_IN_USE);
 	}
 
 	@PatchMapping("/change_password")
-	public ResponseEntity passwordCorrectionCheck(
+	public ResponseEntity<DefaultResponse<Void>> passwordCorrectionCheck(
 		@RequestBody UserSetPasswordDto passwords,
 		@AuthenticationPrincipal SecurityUser securityUser) {
 

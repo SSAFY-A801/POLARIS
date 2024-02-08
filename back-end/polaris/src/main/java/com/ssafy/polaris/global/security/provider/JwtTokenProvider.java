@@ -34,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtTokenProvider {
 
-	// TODO: yml로 빼고싶다...
 	private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L * 10000; // 30분 * 10000
 	// private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L; // 30분
 	private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;
@@ -69,7 +68,6 @@ public class JwtTokenProvider {
 		// Long id = securityUser.getId();
 
 		long now = (new Date()).getTime();
-		// 액세스토큰 오타남
 		Date accessTokenExpireIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
 		String accessToken = Jwts.builder()
 			.setSubject(authentication.getName())

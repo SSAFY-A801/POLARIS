@@ -36,7 +36,6 @@ public class SecurityConfig {
 		http
 			.httpBasic(HttpBasicConfigurer::disable)
 			.csrf(CsrfConfigurer::disable)
-			// .cors(Customizer.withDefaults())
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.sessionManagement(configurer ->
 				configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -66,7 +65,6 @@ public class SecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-	// 빈 익스클루드
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
