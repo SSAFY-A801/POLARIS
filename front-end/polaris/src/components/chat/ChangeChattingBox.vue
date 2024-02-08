@@ -22,7 +22,7 @@
   </div>
 </div>
 
-<div class="list-container ml-10">
+<div class="list-container ml-10 max-w-[500px]">
   <div class="container">
     <div class="book-list bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
       <div class="book-list-header mb-4 flex items-center justify-between">
