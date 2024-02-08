@@ -1,8 +1,10 @@
 package com.ssafy.polaris.essay.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ssafy.polaris.essay.dto.MostScrappedEssayResponseDto;
+import com.ssafy.polaris.essay.dto.ScrappedEssayByUserResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -219,6 +221,29 @@ public class EssayController {
 				HttpStatus.OK,
 				StatusCode.ESSAY_READ_MOST_SCRAPPED_SUCCESS,
 				data
+		);
+	}
+
+	/**
+	 * @param userId 사용자 id
+	 * @return
+	 * 	만약 비어있다면 empty response 반환,
+	 * 	그게 아니라면 스크랩된 리스트를 반환
+	 */
+	@GetMapping("/{id}/scraps")
+	public ResponseEntity<DefaultResponse<Map<String, List<ScrappedEssayByUserResponseDto>>>> getScrappedEssayList(
+			@PathVariable("id") Long userId){
+		List<ScrappedEssayByUserResponseDto> data = essayService.getScrappedEssayByUser(userId);
+		if(data == null){
+			return DefaultResponse.emptyResponse(
+					HttpStatus.OK,
+					StatusCode.ESSAY_READ_EMPTY_SCRAPPED_SUCCESS
+			);
+		}
+		return DefaultResponse.toResponseEntity(
+				HttpStatus.OK,
+				StatusCode.ESSAY_READ_SCRAPPED_SUCCESS,
+				Map.of("scrapPosts", data)
 		);
 	}
 }
