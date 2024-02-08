@@ -13,7 +13,6 @@ import com.ssafy.polaris.promotion.dto.PromotionResponseDto;
 public interface PromotionService {
 	Long createPromotion(PromotionRequestDto promotionRequestDto, SecurityUser securityUser);
 
-	@Transactional
 	PromotionResponseDto getPromotion(Long promotionId, boolean updateHit);
 
 	Long updatePromotion(PromotionRequestDto promotionRequestDto, SecurityUser securityUser);
@@ -21,4 +20,8 @@ public interface PromotionService {
 	void deletePromotion(PromotionRequestDto promotionRequestDto, SecurityUser securityUser);
 
 	List<PromotionListResponseDto> getPromotionList(SearchConditions searchConditions);
+
+	boolean favoritePromotion(Long promotionId, SecurityUser securityUser);
+
+	int getFavoriteCount(Long promotionId);
 }
