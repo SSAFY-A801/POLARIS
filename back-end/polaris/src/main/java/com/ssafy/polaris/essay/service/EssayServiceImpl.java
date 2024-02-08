@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.ssafy.polaris.essay.dto.EssaySimpleResponseDto;
+import com.ssafy.polaris.essay.dto.MostScrappedEssayResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +30,6 @@ public class EssayServiceImpl implements EssayService {
 	private final EssayRepository essayRepository;
 	private final ScrapRepository scrapRepository;
 	private final EntityManager em;
-
 	@Override
 	@Transactional
 	public Long writeEssay(EssayRequestDto essayRequestDto, SecurityUser securityUser) {
@@ -159,6 +159,16 @@ public class EssayServiceImpl implements EssayService {
 			dto.setScrapCount(scrapRepository.getScrapCount(dto.getEssayId()));
 		}
 
+		return data;
+	}
+
+	@Override
+	public MostScrappedEssayResponseDto getMostScrappedEssay() {
+		MostScrappedEssayResponseDto data = essayRepository.getMostScrappedEssay();
+		if(data == null){
+			return null;
+		}
+		data.setScrapCount(scrapRepository.getScrapCount(data.getEssayId()));
 		return data;
 	}
 }

@@ -2,6 +2,7 @@ package com.ssafy.polaris.essay.controller;
 
 import java.util.List;
 
+import com.ssafy.polaris.essay.dto.MostScrappedEssayResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -200,6 +201,24 @@ public class EssayController {
 			HttpStatus.OK,
 			StatusCode.SCRAP_COUNT_SUCCESS,
 			scrapCount
+		);
+	}
+	/**
+	 * @return 가장 많이 스크랩된 에세이를 반환
+	 * */
+	@GetMapping("/most_scrapped_essay")
+	public ResponseEntity<DefaultResponse<MostScrappedEssayResponseDto>> getMostScrappedEssay(){
+		MostScrappedEssayResponseDto data = essayService.getMostScrappedEssay();
+		if(data == null){
+			return DefaultResponse.emptyResponse(
+					HttpStatus.OK,
+					StatusCode.ESSAY_READ_MOST_SCRAPPED_FAIL
+			);
+		}
+		return DefaultResponse.toResponseEntity(
+				HttpStatus.OK,
+				StatusCode.ESSAY_READ_MOST_SCRAPPED_SUCCESS,
+				data
 		);
 	}
 }
