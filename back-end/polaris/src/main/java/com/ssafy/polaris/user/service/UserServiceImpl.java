@@ -8,6 +8,8 @@ import com.ssafy.polaris.global.exception.exceptions.WrongEmailOrPasswordExcepti
 import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
+import com.ssafy.polaris.regcode.domain.Regcode;
+import com.ssafy.polaris.regcode.repository.RegcodeRepository;
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
@@ -29,8 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
-    private final EntityManager em;
+    // private final EntityManager em;
     private final UserRepository userRepository;
+    private final RegcodeRepository regcodeRepository;
+
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     @Override
@@ -62,12 +66,15 @@ public class UserServiceImpl implements UserService{
         String encodedPassword = passwordEncoder.encode(userJoinRequestDto.getPassword());
         userJoinRequestDto.setPassword("");
 
-        // TODO : Regcode 시군구 가져오도록 바꾸기
+        Regcode regcode = regcodeRepository.getReferenceById(userJoinRequestDto.getRegion());
+
         User user = User.builder()
             .email(userJoinRequestDto.getEmail())
             .password(encodedPassword)
             .nickname(userJoinRequestDto.getNickname())
-            .regcodeId(userJoinRequestDto.getRegion()).build();
+            .regcode(regcode)
+            .regcodeId(regcode.getId())
+            .build();
 
         user = userRepository.save(user);
         return new UserResponseDto(user);
@@ -94,7 +101,6 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void setPassword(Long id, String password) {
-        // User user = em.find(User.class, id);
         User user = userRepository.findById(id)
             .orElseThrow();
         user.setPassword(passwordEncoder.encode(password));
@@ -118,7 +124,7 @@ public class UserServiceImpl implements UserService{
 
         Map<String, String> tokenMap = jwtTokenProvider.generateToken(user.getId(), user.getNickname(), authentication);
 
-        tokenMap.put("id", Long.toString(user.getId().longValue()));
+        tokenMap.put("id", Long.toString(user.getId()));
         tokenMap.put("email", user.getEmail());
         tokenMap.put("profileUrl", user.getProfileUrl());
         tokenMap.put("nickname", user.getNickname());
