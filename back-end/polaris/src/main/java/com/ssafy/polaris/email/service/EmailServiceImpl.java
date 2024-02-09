@@ -32,7 +32,6 @@ public class EmailServiceImpl implements EmailService {
 
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
-		// TODO: 비밀번호 재설정을 이메일만으로 하면 안될 것 같음
 		log.info("Email Send to " + emailMessage.getTo());
 
 		if ("password".equals(type)) {

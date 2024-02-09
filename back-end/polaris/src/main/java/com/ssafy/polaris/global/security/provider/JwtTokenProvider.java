@@ -34,9 +34,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtTokenProvider {
 
-	private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L * 10000; // 30분 * 10000
+	private final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L * 10000; // 30분 * 10000
 	// private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L; // 30분
-	private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;
+	private final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;
 
 	private Key key;
 
@@ -138,5 +138,13 @@ public class JwtTokenProvider {
 		} catch (ExpiredJwtException e) {
 			return e.getClaims();
 		}
+	}
+
+	public long getACCESS_TOKEN_EXPIRE_TIME() {
+		return ACCESS_TOKEN_EXPIRE_TIME;
+	}
+
+	public long getREFRESH_TOKEN_EXPIRE_TIME() {
+		return REFRESH_TOKEN_EXPIRE_TIME;
 	}
 }

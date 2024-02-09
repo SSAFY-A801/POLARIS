@@ -65,13 +65,9 @@ public class UserController {
 	}
 
 	@PostMapping("/logout")
-	public ResponseEntity<DefaultResponse<Void>> logout(HttpServletRequest request) {
+	public ResponseEntity<DefaultResponse<Void>> logout(HttpServletRequest request, @AuthenticationPrincipal SecurityUser securityUser) {
 		String accessToken = SecurityUtil.getAccessToken(request);
-		if (accessToken == null) {
-			return DefaultResponse.emptyResponse(HttpStatus.UNAUTHORIZED, StatusCode.NO_ACCESS_TOKEN);
-		}
-		// TODO : 검증이 되면 Redis에 저장되어 있던 Email(key)과 Refresh Token(value)을 삭제한다.
-		// TODO : Access Token을 key “logout” 문자열을 value로 Redis에 저장하여 해당 토큰을 Black List 처리한다.
+		userService.logout(accessToken, securityUser);
 		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_LOGOUT);
 	}
 

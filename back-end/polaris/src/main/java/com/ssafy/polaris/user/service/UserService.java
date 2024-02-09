@@ -29,4 +29,6 @@ public interface UserService {
 	void setPassword(Long id, String password);
 
 	void passwordCorrectionCheck(UserSetPasswordDto passwords, SecurityUser securityUser);
+
+	void logout(String accessToken, SecurityUser securityUser);
 }
