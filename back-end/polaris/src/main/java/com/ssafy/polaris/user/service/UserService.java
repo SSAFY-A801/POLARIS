@@ -6,6 +6,7 @@ import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
+import com.ssafy.polaris.user.dto.UserResponseDto;
 import com.ssafy.polaris.user.dto.UserSetPasswordDto;
 
 public interface UserService {
@@ -17,8 +18,7 @@ public interface UserService {
 
 	Map<String, String> login(UserLoginRequestDto userLoginRequestDto) throws Exception;
 
-	void join(User user);
-	void joining(UserJoinRequestDto userJoinRequestDto);
+	UserResponseDto join(UserJoinRequestDto userJoinRequestDto);
 
 	Boolean emailCheck(String email);
 

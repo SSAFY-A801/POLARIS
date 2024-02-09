@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.global.security.util.SecurityUtil;
-import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 import com.ssafy.polaris.user.dto.UserResponseDto;
@@ -27,7 +26,6 @@ import com.ssafy.polaris.user.response.StatusCode;
 import com.ssafy.polaris.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -57,30 +55,8 @@ public class UserController {
 	// TODO : 컨트롤러에 작업이 너무 많다. 서비스 쪽으로 옮길수 있도록 리팩토링
 	@PostMapping
 	public ResponseEntity<DefaultResponse<UserResponseDto>> join(@RequestBody UserJoinRequestDto userJoinRequestDto) {
-		// TODO: findUserByEmail, Nickname등을 사용하여 중복된다면 거부
-		boolean isEmailInUse = userService.emailCheck(userJoinRequestDto.getEmail());
-		boolean isNicknameInUse = userService.nicknameCheck(userJoinRequestDto.getNickname());
-
-		if (isEmailInUse || isNicknameInUse) {
-			return DefaultResponse.emptyResponse(HttpStatus.CONFLICT, StatusCode.USER_EMAIL_OR_NICKNAME_CONFLICT);
-		}
-
-		String encodedPassword = passwordEncoder.encode(userJoinRequestDto.getPassword());
-		userJoinRequestDto.setPassword("");
-		User user = User.builder()
-			.email(userJoinRequestDto.getEmail())
-			.password(encodedPassword)
-			.nickname(userJoinRequestDto.getNickname())
-			.regcodeId(userJoinRequestDto.getRegion()).build();
-		userService.join(user);
-
-		return DefaultResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.CREATED_USER,
-			UserResponseDto.builder()
-				.id(user.getId())
-				.email(user.getEmail())
-				.region(user.getRegcodeId())
-				.nickname(user.getNickname())
-				.build());
+		UserResponseDto userResponseDto = userService.join(userJoinRequestDto);
+		return DefaultResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.CREATED_USER, userResponseDto);
 	}
 
 	@PostMapping("/login")

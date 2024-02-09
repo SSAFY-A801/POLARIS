@@ -6,13 +6,14 @@ import java.util.Map;
 import com.ssafy.polaris.global.exception.exceptions.UserNotFoundException;
 import com.ssafy.polaris.global.exception.exceptions.WrongEmailOrPasswordException;
 import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
-import com.ssafy.polaris.global.exception.response.ErrorCode;
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
+import com.ssafy.polaris.user.dto.UserResponseDto;
 import com.ssafy.polaris.user.dto.UserSetPasswordDto;
+import com.ssafy.polaris.user.exception.UserConflictException;
 import com.ssafy.polaris.user.repository.UserRepository;
 
 import jakarta.persistence.EntityManager;
@@ -52,12 +53,24 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void join(User user) {
-        userRepository.save(user);
-    }
+    public UserResponseDto join(UserJoinRequestDto userJoinRequestDto) {
+        boolean isEmailInUse = emailCheck(userJoinRequestDto.getEmail());
+        boolean isNicknameInUse = emailCheck(userJoinRequestDto.getEmail());
 
-    @Override
-    public void joining(UserJoinRequestDto userJoinRequestDto) {
+        if (isEmailInUse || isNicknameInUse)
+            throw new UserConflictException("");
+        String encodedPassword = passwordEncoder.encode(userJoinRequestDto.getPassword());
+        userJoinRequestDto.setPassword("");
+
+        // TODO : Regcode 시군구 가져오도록 바꾸기
+        User user = User.builder()
+            .email(userJoinRequestDto.getEmail())
+            .password(encodedPassword)
+            .nickname(userJoinRequestDto.getNickname())
+            .regcodeId(userJoinRequestDto.getRegion()).build();
+
+        user = userRepository.save(user);
+        return new UserResponseDto(user);
     }
 
     @Override

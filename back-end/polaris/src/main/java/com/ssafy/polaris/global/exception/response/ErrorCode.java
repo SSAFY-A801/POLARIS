@@ -20,7 +20,9 @@ public enum ErrorCode {
 	USER_NOT_FOUND(404, "존재하지 않는 사용자입니다."),
 	USER_BOOK_NOT_FOUND(404, "존재하지 않는 사용자 도서입니다."),
 	PROMOTION_NOT_FOUND(404, "존재하지 않는 홍보 글입니다."),
-	NOT_FOUND(404, "리소스를 찾을 수 없습니다.")
+	NOT_FOUND(404, "리소스를 찾을 수 없습니다."),
+
+	USER_EMAIL_OR_NICKNAME_CONFLICT(409, "사용자 이메일 혹은 닉네임이 중복됩니다.");
 	;
 
 	private final int status;
