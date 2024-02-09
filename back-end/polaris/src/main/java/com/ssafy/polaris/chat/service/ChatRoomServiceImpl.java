@@ -8,6 +8,7 @@ import com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateRequestDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomListResponseDto;
+import com.ssafy.polaris.chat.dto.ChatRoomParticipantsResponseDto;
 import com.ssafy.polaris.chat.dto.TradeMapper;
 import com.ssafy.polaris.chat.repository.TradeRepository;
 import com.ssafy.polaris.trade.domain.Trade;
@@ -44,5 +45,16 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 		System.out.println("get chat room list - service ");
 		List<BasicChatRoomResponseDto> basicChatRoomResponseDtoList = tradeRepository.getChatRoomList(senderId);
 		return new ChatRoomListResponseDto(senderId, basicChatRoomResponseDtoList);
+	}
+
+	/**
+	 * 채팅방 - 상대의 정보 반환하는 API
+	 * @param chatRoomId
+	 * @param userId
+	 * @return chatroomId, 사용자 ID, 상대방의 정보
+	 */
+	@Override
+	public ChatRoomParticipantsResponseDto getChatRoomParticipants(Long chatRoomId, Long userId) {
+		return tradeRepository.getChatRoomParticipants(chatRoomId,userId);
 	}
 }
