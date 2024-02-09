@@ -14,6 +14,10 @@ public enum ErrorCode {
 	WRONG_PASSWORD(401, "잘못된 비밀번호 입니다."),
 	WRONG_EMAIL_OR_PASSWORD(401, "잘못된 이메일/비밀번호 입니다."),
 	USER_NOT_AUTHORIZED(401, "로그인 된 사용자가 없습니다."),
+	TOKEN_NOT_VALID(401, "토큰이 유효하지 않습니다."),
+	MALFORMED_JWT(401, "토큰이 유효하지 않습니다."),
+	EXPIRED_JWT(401, "토큰이 만료되었습니다. 다시 로그인해주세요."),
+
 
 	FORBIDDEN(403, "접근할 수 없습니다."),
 
