@@ -10,6 +10,7 @@ import com.ssafy.polaris.global.exception.response.ErrorCode;
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.user.domain.User;
+import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 import com.ssafy.polaris.user.dto.UserSetPasswordDto;
 import com.ssafy.polaris.user.repository.UserRepository;
@@ -33,27 +34,31 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     @Override
     public User getUserById(Long userId) {
-        return userRepository.getReferenceById(userId);
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException(""));
     }
 
     @Override
-    public User getUserByEmail(String email) throws Exception {
-        // TODO: 에러 정의
+    public User getUserByEmail(String email) {
         return userRepository.findUserByEmail(email)
-            .orElseThrow(() -> new Exception());
+            .orElseThrow(() -> new UserNotFoundException(""));
     }
 
     @Override
-    public User getUserByNickname(String nickname) throws Exception {
-        // TODO: 에러 정의
+    public User getUserByNickname(String nickname) {
         return userRepository.findUserByNickname(nickname)
-            .orElseThrow(() -> new Exception());
+            .orElseThrow(() -> new UserNotFoundException(""));
     }
 
     @Override
     @Transactional
     public void join(User user) {
         userRepository.save(user);
+    }
+
+    @Override
+    public void joining(UserJoinRequestDto userJoinRequestDto) {
+
     }
 
     @Override

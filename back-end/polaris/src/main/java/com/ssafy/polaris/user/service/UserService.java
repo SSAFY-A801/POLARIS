@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.user.domain.User;
+import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 import com.ssafy.polaris.user.dto.UserSetPasswordDto;
 
@@ -14,10 +15,10 @@ public interface UserService {
 
 	User getUserByNickname(String nickname) throws Exception;
 
-	// TODO: 토큰 2개 반환하는 response dto 필요
 	Map<String, String> login(UserLoginRequestDto userLoginRequestDto) throws Exception;
 
 	void join(User user);
+	void joining(UserJoinRequestDto userJoinRequestDto);
 
 	Boolean emailCheck(String email);
 
