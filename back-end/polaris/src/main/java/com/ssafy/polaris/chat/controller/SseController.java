@@ -22,7 +22,7 @@ public class SseController {
 		this.sseService = sseService;
 	}
 
-	@GetMapping(value = "/connect/{chatRoomId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	@GetMapping(value = "/chat/connect/{chatRoomId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public ResponseEntity<SseEmitter> connect(@PathVariable(value = "chatRoomId") Long chatRoomId , HttpServletResponse response) {
 		// SseEmitter emitter = new SseEmitter(30*60*1000L); // 30분 으로 설정 - 통신 객체를 만든다.
 		// 서버에 저장하고 있기
@@ -40,7 +40,7 @@ public class SseController {
 		return ResponseEntity.ok(connection);
 	}
 
-	@PostMapping("/send-message")
+	@PostMapping("/chat/send_message")
 	public ResponseEntity<Void> sendMessage(@RequestBody ChatMessageSaveDto chatMessageSaveDto){
 		Long chatRoomId = chatMessageSaveDto.getChatRoomId();
 
