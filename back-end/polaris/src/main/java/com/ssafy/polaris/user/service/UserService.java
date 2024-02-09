@@ -23,7 +23,7 @@ public interface UserService {
 
 	Boolean nicknameCheck(String nickname);
 
-	void resignation(Long id) throws Exception;
+	void resignation(Long id);
 
 	void setPassword(Long id, String password);
 

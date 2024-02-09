@@ -27,6 +27,7 @@ import com.ssafy.polaris.user.response.StatusCode;
 import com.ssafy.polaris.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -40,10 +41,7 @@ public class UserController {
 	@GetMapping("/email_check/{email}")
 	public ResponseEntity<DefaultResponse<Map<String, Boolean>>> emailCheck(@PathVariable("email") String email) {
 		boolean result = userService.emailCheck(email);
-		StatusCode statusCode = StatusCode.EMAIL_NOT_IN_USE;
-		if (result)
-			statusCode = StatusCode.EMAIL_IN_USE;
-
+		StatusCode statusCode = result? StatusCode.EMAIL_IN_USE : StatusCode.EMAIL_NOT_IN_USE;
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, statusCode, Map.of("isInUse", result));
 	}
 
@@ -51,9 +49,7 @@ public class UserController {
 	public ResponseEntity<DefaultResponse<Map<String, Boolean>>> nicknameCheck(
 		@PathVariable("nickname") String nickname) {
 		boolean result = userService.nicknameCheck(nickname);
-		StatusCode statusCode = StatusCode.NICKNAME_NOT_IN_USE;
-		if (result)
-			statusCode = StatusCode.NICKNAME_IN_USE;
+		StatusCode statusCode = result? StatusCode.NICKNAME_IN_USE : StatusCode.NICKNAME_NOT_IN_USE;
 
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, statusCode, Map.of("isInUse", result));
 	}
@@ -106,10 +102,8 @@ public class UserController {
 		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_LOGOUT);
 	}
 
-	// TODO: 삭제한 회원의 권한 관리 등 처리해주기
 	@DeleteMapping
-	public ResponseEntity<DefaultResponse<Void>> resignation(@AuthenticationPrincipal SecurityUser securityUser) throws
-		Exception {
+	public ResponseEntity<DefaultResponse<Void>> resignation(@AuthenticationPrincipal SecurityUser securityUser) {
 		userService.resignation(securityUser.getId());
 		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_RESIGNATION);
 	}

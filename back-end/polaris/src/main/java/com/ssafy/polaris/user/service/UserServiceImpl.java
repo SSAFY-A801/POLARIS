@@ -3,6 +3,7 @@ package com.ssafy.polaris.user.service;
 import java.util.Collections;
 import java.util.Map;
 
+import com.ssafy.polaris.global.exception.exceptions.UserNotFoundException;
 import com.ssafy.polaris.global.exception.exceptions.WrongEmailOrPasswordException;
 import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
 import com.ssafy.polaris.global.exception.response.ErrorCode;
@@ -79,8 +80,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void resignation(Long id) throws Exception {
-        userRepository.deleteById(id);
+    public void resignation(Long id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException(""));
+        userRepository.delete(user);
     }
 
     @Override
