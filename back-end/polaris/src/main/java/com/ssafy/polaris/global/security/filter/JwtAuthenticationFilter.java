@@ -42,22 +42,24 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
 		// 2. 유효성 검사
 		if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
-			if (redisTemplate.hasKey("blackList:"+accessToken).booleanValue())
-				throw new UserNotAuthorizedException("만료된 토큰입니다.");
-				
-			Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+			if (accessToken.length() > 200) {
+				if (redisTemplate.hasKey("blackList:" + accessToken).booleanValue())
+					throw new UserNotAuthorizedException("만료된 토큰입니다.");
 
-			User user = userRepository.findUserByEmail(authentication.getName())
-				.orElseThrow(() -> new UserNotFoundException(""));
+				Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
-			SecurityUser securityUser = new SecurityUser(user);
+				User user = userRepository.findUserByEmail(authentication.getName())
+					.orElseThrow(() -> new UserNotFoundException(""));
 
-			Authentication customAuthentication = new UsernamePasswordAuthenticationToken(
-				securityUser, "", securityUser.getAuthorities()
-			);
+				SecurityUser securityUser = new SecurityUser(user);
 
-			// securityContext에 전역 저장
-			SecurityContextHolder.getContext().setAuthentication(customAuthentication);
+				Authentication customAuthentication = new UsernamePasswordAuthenticationToken(
+					securityUser, "", securityUser.getAuthorities()
+				);
+
+				// securityContext에 전역 저장
+				SecurityContextHolder.getContext().setAuthentication(customAuthentication);
+			}
 		}
 		chain.doFilter(request, response);
 	}
