@@ -32,9 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-
 	private final UserService userService;
-	private final PasswordEncoder passwordEncoder;
 
 	@GetMapping("/email_check/{email}")
 	public ResponseEntity<DefaultResponse<Map<String, Boolean>>> emailCheck(@PathVariable("email") String email) {
@@ -52,7 +50,6 @@ public class UserController {
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, statusCode, Map.of("isInUse", result));
 	}
 
-	// TODO : 컨트롤러에 작업이 너무 많다. 서비스 쪽으로 옮길수 있도록 리팩토링
 	@PostMapping
 	public ResponseEntity<DefaultResponse<UserResponseDto>> join(@RequestBody UserJoinRequestDto userJoinRequestDto) {
 		UserResponseDto userResponseDto = userService.join(userJoinRequestDto);
