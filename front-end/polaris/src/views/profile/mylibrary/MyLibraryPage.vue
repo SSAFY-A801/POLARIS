@@ -49,7 +49,7 @@
         </div>
         <!-- 2. 키워드 검색 -->
         <div @keyup.enter="keywordSearch(keyword)" action="">
-          <input v-model="keyword" type="text" id="rounded-book" class="w-64 rounded-lg appearance-none border border-gray-500 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="내 도서 검색"/>
+          <input v-model="keyword" type="text" id="rounded-book" class="w-64 rounded-lg appearance-none border border-gray-500 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="도서 검색"/>
           <button type="button" @click="keywordSearch(keyword)" class="text-white w-16 py-2 px-4 m-2 bg-maintheme1 hover:bg-gray-500 rounded-lg ">
             <font-awesome-icon icon="fa-solid fa-magnifying-glass" size="xl"/>
           </button>

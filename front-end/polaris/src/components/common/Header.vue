@@ -4,11 +4,11 @@
             <div class="flex items-center justify-between h-24">
                 <div class=" flex items-center w-full h-24">
                  
-                    <div class="flex items-baseline ml-10 space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8">
-                        <router-link :to="{name: 'home'}" class="text-white">Home</router-link>
-                        <router-link :to="{name: 'booksearch'}" class="text-white">도서 검색</router-link>
-                        <router-link :to="{name: 'essaylist'}" class="text-white" >독후감 게시판</router-link>
-                        <router-link :to="{name: 'promotionlist'}" class="text-white" >홍보 게시판</router-link>
+                    <div class="flex items-center ml-10 space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8">
+                        <router-link :to="{name: 'home'}" class="text-white"><img id="logo" src="@\assets\POLARIS-logo-long.png" alt=""></router-link>
+                        <router-link :to="{name: 'booksearch'}" class="text-maintheme3">도서 검색</router-link>
+                        <router-link :to="{name: 'essaylist'}" class="text-maintheme3" >독후감 게시판</router-link>
+                        <!-- <router-link :to="{name: 'promotionlist'}" class="text-white" >홍보 게시판</router-link> -->
                     </div>
 
                     <!-- <div class='flex items-center justify-center w-1/2 h-24 bg-maintheme1'>
@@ -23,12 +23,12 @@
                     </div> -->
 
                     <div class="ml-auto flex flex-row">
-                        <router-link :to="{name: 'login'}" v-if="!userToken" class="text-white mr-5">로그인</router-link>
-                        <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-white">회원가입</router-link>
+                        <router-link :to="{name: 'login'}" v-if="!userToken" class="text-maintheme3 mr-5">로그인</router-link>
+                        <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-maintheme3">회원가입</router-link>
                         <router-link v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" 
                                     :to="{ name: 'ProfilePage', params: { id: loginUser.id }}" 
-                                    class="text-white mr-4">프로필</router-link>
-                        <button v-if="userToken" @click="logout"  class="text-white ml-4 bg-transparent border-none outline-none focus:outline-none cursor-pointer">로그아웃</button>
+                                    class="text-maintheme3 mr-4">프로필</router-link>
+                        <button v-if="userToken" @click="logout"  class="text-maintheme3 mx-4 bg-transparent border-none outline-none focus:outline-none cursor-pointer">로그아웃<font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="xl" style="color: #f9e385;" class="ml-4"/></button>
                     </div>
                 </div>
 
@@ -110,5 +110,9 @@ const logout = async () => {
 <style scoped>
 a {
   text-decoration: none;
+}
+
+#logo {
+    height: 80px;
 }
 </style>
