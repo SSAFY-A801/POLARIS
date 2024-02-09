@@ -8,6 +8,7 @@ import com.ssafy.polaris.book.domain.UserBookTradeType;
 import com.ssafy.polaris.book.repository.UserBookRepository;
 import com.ssafy.polaris.chat.repository.TradeRepository;
 import com.ssafy.polaris.connectentity.repository.TradeUserBookRepository;
+import com.ssafy.polaris.trade.domain.Trade;
 import com.ssafy.polaris.trade.domain.TradeStatus;
 import com.ssafy.polaris.trade.dto.TradeBookListResponseDto;
 import com.ssafy.polaris.trade.dto.TradeBookResponseDto;
@@ -22,6 +23,11 @@ public class TradeServiceImpl implements TradeService {
 	private final UserBookRepository userBookRepository;
 	private final TradeRepository tradeRepository;
 	private final TradeUserBookRepository tradeUserBookRepository;
+
+	@Override
+	public Trade getTradeById(Long chatRoomId) {
+		return tradeRepository.getReferenceById(chatRoomId);
+	}
 
 	@Override
 	public TradeBookListResponseDto getPurchaseBookList(Long userId) {

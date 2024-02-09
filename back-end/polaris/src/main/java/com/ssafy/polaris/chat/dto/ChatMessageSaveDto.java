@@ -1,6 +1,8 @@
 package com.ssafy.polaris.chat.dto;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import com.ssafy.polaris.chat.domain.MessageType;
 
 import lombok.AllArgsConstructor;
@@ -24,4 +26,14 @@ public class ChatMessageSaveDto implements Serializable {
 	private String nickname;
 	private String createdAt;
 	private String message;
+
+	public ChatMessageSaveDto(MessageType type, Long chatRoomId, Long userId, String nickname, LocalDateTime createdAt,
+		String message) {
+		this.type = type;
+		this.chatRoomId = chatRoomId;
+		this.userId = userId;
+		this.nickname = nickname;
+		this.createdAt = String.valueOf(createdAt);
+		this.message = message;
+	}
 }

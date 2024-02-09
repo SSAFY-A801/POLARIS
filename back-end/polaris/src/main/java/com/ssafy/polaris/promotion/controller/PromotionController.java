@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.polaris.global.SearchConditions;
-import com.ssafy.polaris.global.exception.exceptions.UserNotAuthorizedException;
+import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.promotion.dto.PromotionListResponseDto;
 import com.ssafy.polaris.promotion.dto.PromotionRequestDto;
