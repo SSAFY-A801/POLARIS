@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.ssafy.polaris.global.exception.exceptions.UserNotAuthorizedException;
-import com.ssafy.polaris.global.exception.exceptions.UserNotFoundException;
+import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
+import com.ssafy.polaris.user.exception.UserNotFoundException;
 import com.ssafy.polaris.user.exception.WrongEmailOrPasswordException;
 import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
 import com.ssafy.polaris.global.security.SecurityUser;
