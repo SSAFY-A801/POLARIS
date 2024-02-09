@@ -2,19 +2,18 @@ package com.ssafy.polaris.global.security.filter;
 
 import java.io.IOException;
 
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.ssafy.polaris.global.exception.exceptions.UserNotAuthorizedException;
-import com.ssafy.polaris.global.exception.exceptions.UserNotFoundException;
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.global.security.util.SecurityUtil;
 import com.ssafy.polaris.user.domain.User;
+import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
+import com.ssafy.polaris.user.exception.UserNotFoundException;
 import com.ssafy.polaris.user.repository.UserRepository;
 
 import jakarta.servlet.FilterChain;

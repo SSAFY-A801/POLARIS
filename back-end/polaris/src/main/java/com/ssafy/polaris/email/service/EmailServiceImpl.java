@@ -1,7 +1,9 @@
 package com.ssafy.polaris.email.service;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -24,25 +26,16 @@ import lombok.extern.slf4j.Slf4j;
 public class EmailServiceImpl implements EmailService {
 	private final JavaMailSender javaMailSender;
 	private final SpringTemplateEngine templateEngine;
-	private final EntityManager em;
 	private final UserService userService;
+	private final StringRedisTemplate redisTemplate;
 
-	public String sendMail(EmailMessage emailMessage, String type) {
+	public void sendMail(EmailMessage emailMessage, String type) {
 		String authNum = createCode();
 
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
 		log.info("Email Send to " + emailMessage.getTo());
 
-		if ("password".equals(type)) {
-			User userByEmail = null;
-			try {
-				userByEmail = userService.getUserByEmail(emailMessage.getTo());
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-			userService.setPassword(userByEmail.getId(), authNum);
-		}
 
 		try {
 			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
@@ -53,11 +46,20 @@ public class EmailServiceImpl implements EmailService {
 
 			log.info("Email Send to " + emailMessage.getTo() + "Success");
 
-			return authNum;
+			if ("password".equals(type)) {
+				User userByEmail = userService.getUserByEmail(emailMessage.getTo());
+				userService.setPassword(userByEmail.getId(), authNum);
+			}
+			else {
+				// TODO: 검사시간 3분. front에게 알리기!
+				redisTemplate.opsForValue().set("emailCode:"+emailMessage.getTo(), authNum, 3 * 60 * 1000L, TimeUnit.MILLISECONDS);
+			}
 
 		} catch (MessagingException e) {
 			log.info("fail");
 			throw new RuntimeException(e);
+		} catch (Exception e) {
+			throw e;
 		}
 	}
 

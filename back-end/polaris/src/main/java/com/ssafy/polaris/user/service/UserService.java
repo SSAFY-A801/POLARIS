@@ -12,11 +12,11 @@ import com.ssafy.polaris.user.dto.UserSetPasswordDto;
 public interface UserService {
 	User getUserById(Long userId);
 
-	User getUserByEmail(String email) throws Exception;
+	User getUserByEmail(String email);
 
-	User getUserByNickname(String nickname) throws Exception;
+	User getUserByNickname(String nickname);
 
-	Map<String, String> login(UserLoginRequestDto userLoginRequestDto) throws Exception;
+	Map<String, String> login(UserLoginRequestDto userLoginRequestDto);
 
 	UserResponseDto join(UserJoinRequestDto userJoinRequestDto);
 

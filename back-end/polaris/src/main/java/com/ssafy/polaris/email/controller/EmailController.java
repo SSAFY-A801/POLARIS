@@ -35,16 +35,12 @@ public class EmailController {
 
 		emailServiceImpl.sendMail(emailMessage, "password");
 
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.PASSWORD_EMAIL_SUCCEEDED,
-			null
-		);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.PASSWORD_EMAIL_SUCCEEDED);
 	}
 
 	// 회원가입 이메일 인증 - 요청 시 body로 인증번호 반환하도록 작성하였음
 	@PostMapping("/email")
-	public ResponseEntity sendJoinMail(@RequestBody EmailPostDto emailPostDto) {
+	public ResponseEntity<DefaultResponse<Void>> sendJoinMail(@RequestBody EmailPostDto emailPostDto) {
 		log.info("email : " + emailPostDto.getEmail());
 		EmailMessage emailMessage = EmailMessage.builder()
 			.to(emailPostDto.getEmail())
@@ -52,17 +48,8 @@ public class EmailController {
 			.build();
 		log.info("emailMessage.email : " + emailMessage.getTo());
 
-		String code = emailServiceImpl.sendMail(emailMessage, "email");
+		emailServiceImpl.sendMail(emailMessage, "email");
 
-		EmailResponseDto emailResponseDto = new EmailResponseDto();
-		emailResponseDto.setCode(code);
-
-		// TODO : redis 등에 저장하여 시간 내로 검사하는 로직 추가 필요
-
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.CERTIFICATION_EMAIL_SEND_SUCCEEDED,
-			null
-		);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.CERTIFICATION_EMAIL_SEND_SUCCEEDED);
 	}
 }
