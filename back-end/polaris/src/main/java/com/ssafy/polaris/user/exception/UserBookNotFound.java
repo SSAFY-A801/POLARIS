@@ -1,4 +1,4 @@
-package com.ssafy.polaris.global.exception.exceptions;
+package com.ssafy.polaris.user.exception;
 
 import com.ssafy.polaris.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.polaris.global.exception.response.ErrorCode;
