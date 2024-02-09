@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.polaris.global.exception.exceptions.WrongEmailOrPasswordException;
+import com.ssafy.polaris.user.exception.WrongEmailOrPasswordException;
 
 @RestController
 @RequestMapping("/exception")

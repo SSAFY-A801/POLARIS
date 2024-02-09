@@ -3,9 +3,8 @@ package com.ssafy.polaris.user.service;
 import java.util.Collections;
 import java.util.Map;
 
-import com.ssafy.polaris.global.exception.exceptions.WrongEmailOrPasswordException;
+import com.ssafy.polaris.user.exception.WrongEmailOrPasswordException;
 import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
-import com.ssafy.polaris.global.exception.response.ErrorCode;
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.user.domain.User;
