@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Map<String, String> reissuance(String refreshToken, String email) {
+    public Map<String, String> reissue(String refreshToken, String email) {
         User user = userRepository.findUserByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("reissuance"));
 

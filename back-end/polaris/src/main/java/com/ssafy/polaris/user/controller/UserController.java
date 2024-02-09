@@ -5,7 +5,6 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -64,10 +63,10 @@ public class UserController {
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_LOGIN, tokenMap);
 	}
 
-	@PostMapping("/reissuance")
-	public ResponseEntity reissuance(HttpServletRequest request, @RequestBody UserLoginRequestDto userLoginRequestDto) {
+	@PostMapping("/reissue")
+	public ResponseEntity<DefaultResponse<Map<String, String>>> reissue(HttpServletRequest request, @RequestBody UserLoginRequestDto userLoginRequestDto) {
 		String refreshToken = SecurityUtil.getAccessToken(request);
-		Map<String, String> tokenMap = userService.reissuance(refreshToken, userLoginRequestDto.getEmail());
+		Map<String, String> tokenMap = userService.reissue(refreshToken, userLoginRequestDto.getEmail());
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_REISSUE, tokenMap);
 	}
 

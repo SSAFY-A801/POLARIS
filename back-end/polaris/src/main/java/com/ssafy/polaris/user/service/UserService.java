@@ -32,5 +32,5 @@ public interface UserService {
 
 	void logout(String accessToken, SecurityUser securityUser);
 
-	Map<String, String> reissuance(String refreshToken, String email);
+	Map<String, String> reissue(String refreshToken, String email);
 }
