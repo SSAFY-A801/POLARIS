@@ -1,5 +1,7 @@
 package com.ssafy.polaris.chat.domain;
 
+import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
 import com.ssafy.polaris.trade.domain.Trade;
 import com.ssafy.polaris.user.domain.User;
 
@@ -38,6 +40,10 @@ public class ChatMessage {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private MessageType type;
+
+	@NotNull
+	@CreationTimestamp
+	private LocalDateTime createdAt;
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
