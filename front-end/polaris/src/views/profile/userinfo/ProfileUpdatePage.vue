@@ -21,9 +21,9 @@
           <div class="text-maintheme1 text-center mt-3">
             <div>
               <label for="update-image" class="custom-file-input-label">
-                <!-- <button id="update-image-button" @click="triggerFileInput" >
+                <button id="update-image-button" @click="triggerFileInput" >
                   <font-awesome-icon icon="fa-solid fa-images" />
-                  대표사진 변경</button> -->
+                  대표사진 변경</button>
               </label>
               <input id="update-image" type="file" @change="handleFileChange" class="hidden" />
             </div>
