@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ssafy.polaris.chat.dto.ChatMessageListResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateRequestDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomListResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomParticipantsResponseDto;
 import com.ssafy.polaris.chat.response.DefaultResponse;
 import com.ssafy.polaris.chat.response.StatusCode;
+import com.ssafy.polaris.chat.service.ChatSaveServiceImpl;
 import com.ssafy.polaris.chat.service.ChatRoomService;
 import com.ssafy.polaris.global.security.SecurityUser;
 
@@ -26,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChatRoomController {
 	private final ChatRoomService chatRoomService;
+	private final ChatSaveServiceImpl chatSaveService;
 
 	/**
 	 * 유저가 새로운 채팅방을 생성하고, 채팅방이 열립니다.
@@ -99,6 +102,27 @@ public class ChatRoomController {
 			HttpStatus.OK,
 			StatusCode.SUCCESS_READ_CHATROOM_PARTICIPANT,
 			chatRoomParticipantsResponseDto
+		);
+	}
+
+	// 채팅 메세지 db에서 가져오기
+	@GetMapping("/message/{chatRoomId}")
+	public ResponseEntity<DefaultResponse<ChatMessageListResponseDto>> getChatMessageList(@PathVariable(value = "chatRoomId") Long chatRoomId){
+		// List<ChatMessageSaveDto> chatMessageSaveDtos = chatSaveService.loadMessage(chatRoomId);
+		ChatMessageListResponseDto chatMessageListResponseDto = chatSaveService.loadMessage(chatRoomId);
+		
+		// 저장된 메세지가 없는 경우
+		if(chatMessageListResponseDto.getChatMessageList().isEmpty()){
+			return DefaultResponse.emptyResponse(
+				HttpStatus.OK,
+				StatusCode.SUCCESS_READ_EMPTY_CHAT_MESSAGES
+			);
+		}
+		
+		return DefaultResponse.toResponseEntity(
+			HttpStatus.OK,
+			StatusCode.SUCCESS_READ_CHAT_MESSAGES,
+			chatMessageListResponseDto
 		);
 	}
 }
