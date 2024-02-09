@@ -20,6 +20,18 @@ public class EmitterRepositoryImpl implements EmitterRepository{
 
 	@Override
 	public SseEmitter findById(Long chatRoomId) {
+		// TODO: 채팅방 ID에 대한 emitters가 없는 경우에 대한 오류 처리 필요
+		if (emitters.get(chatRoomId) == null){
+			this.save(chatRoomId, new SseEmitter(60*60*1000L));
+		}
 		return emitters.get(chatRoomId);
 	}
+
+	@Override
+	public void deleteByWithId(Long chatRoomId) {
+		emitters.forEach((key, emitter) -> {
+			emitters.remove(key);
+		});
+	}
+
 }
