@@ -6,9 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.ssafy.polaris.global.exception.exceptions.UserNotAuthorizedException;
 import com.ssafy.polaris.global.exception.exceptions.UserNotFoundException;
-import com.ssafy.polaris.global.exception.exceptions.WrongEmailOrPasswordException;
+import com.ssafy.polaris.user.exception.WrongEmailOrPasswordException;
 import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
-import com.ssafy.polaris.global.exception.exceptions.category.UnAuthorizedException;
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.regcode.domain.Regcode;
@@ -20,16 +19,10 @@ import com.ssafy.polaris.user.dto.UserResponseDto;
 import com.ssafy.polaris.user.dto.UserSetPasswordDto;
 import com.ssafy.polaris.user.exception.UserConflictException;
 import com.ssafy.polaris.user.repository.UserRepository;
-import com.ssafy.polaris.user.response.DefaultResponse;
-import com.ssafy.polaris.user.response.StatusCode;
 
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
