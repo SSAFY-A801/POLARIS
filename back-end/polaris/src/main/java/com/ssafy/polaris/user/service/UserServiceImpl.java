@@ -58,29 +58,16 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void joining(UserJoinRequestDto userJoinRequestDto) {
-
     }
 
     @Override
     public Boolean emailCheck(String email) {
-        try {
-            getUserByEmail(email);
-            return true;
-            // TODO: 2개의 값이 반환될 때도 exception을 반환하긴 한다.
-        } catch (Exception e) {
-            return false;
-        }
+        return userRepository.existsByEmail(email);
     }
 
     @Override
     public Boolean nicknameCheck(String nickname) {
-        try {
-            getUserByNickname(nickname);
-            return true;
-            // TODO: 2개의 값이 반환될 때도 exception을 반환하긴 한다.
-        } catch (Exception e) {
-            return false;
-        }
+        return userRepository.existsByNickname(nickname);
     }
 
     @Override
