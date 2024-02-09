@@ -60,11 +60,19 @@ public class UserController {
 	public ResponseEntity<DefaultResponse<Map<String, String>>> login(
 		@RequestBody UserLoginRequestDto userLoginRequestDto) throws Exception {
 		Map<String, String> tokenMap = userService.login(userLoginRequestDto);
-		// TODO: "어떤 토큰"을 "어디에 담아서" 반환할 것인지 정해야 한다.
+		// header에 담아서 주는 것이 더 안전하다.
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_LOGIN, tokenMap);
 	}
 
-	@PostMapping("/logout")
+	@PostMapping("/reissuance")
+	public ResponseEntity reissuance(HttpServletRequest request, @RequestBody UserLoginRequestDto userLoginRequestDto) {
+		String refreshToken = SecurityUtil.getAccessToken(request);
+		Map<String, String> tokenMap = userService.reissuance(refreshToken, userLoginRequestDto.getEmail());
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_REISSUE, tokenMap);
+	}
+
+	// TODO : 로그아웃 get으로 바꾸기. front에게도 전달
+	@GetMapping("/logout")
 	public ResponseEntity<DefaultResponse<Void>> logout(HttpServletRequest request, @AuthenticationPrincipal SecurityUser securityUser) {
 		String accessToken = SecurityUtil.getAccessToken(request);
 		userService.logout(accessToken, securityUser);

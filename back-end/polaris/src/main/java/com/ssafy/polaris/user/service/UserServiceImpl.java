@@ -2,6 +2,7 @@ package com.ssafy.polaris.user.service;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.ssafy.polaris.global.exception.exceptions.UserNotAuthorizedException;
 import com.ssafy.polaris.global.exception.exceptions.UserNotFoundException;
@@ -139,7 +140,7 @@ public class UserServiceImpl implements UserService{
         tokenMap.put("nickname", user.getNickname());
 
         // redis에 저장
-        redisTemplate.opsForValue().set("refresh:"+user.getEmail(), tokenMap.get("refresh"), jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME());
+        redisTemplate.opsForValue().set("refresh:"+user.getEmail(), tokenMap.get("refresh"), jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME(), TimeUnit.MILLISECONDS);
 
         return tokenMap;
     }
@@ -154,17 +155,37 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void logout(String accessToken, SecurityUser securityUser) {
         if (accessToken == null) {
-            throw new UserNotAuthorizedException("");
+            throw new UserNotAuthorizedException("logout");
         }
 
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            throw new UserNotAuthorizedException("");
+            throw new UserNotAuthorizedException("logout");
         }
 
-        // TODO : 검증이 되면 Redis에 저장되어 있던 Email(key)과 Refresh Token(value)을 삭제한다.
-        // TODO : Access Token을 key “logout” 문자열을 value로 Redis에 저장하여 해당 토큰을 Black List 처리한다.
         redisTemplate.delete("refresh:"+securityUser.getEmail());
         redisTemplate.opsForValue().set("blackList:"+accessToken, "logout", jwtTokenProvider.getACCESS_TOKEN_EXPIRE_TIME());
+    }
+
+    @Override
+    public Map<String, String> reissuance(String refreshToken, String email) {
+        User user = userRepository.findUserByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("reissuance"));
+
+        Authentication authentication =
+            new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(),
+                Collections.singleton(new SimpleGrantedAuthority("AUTHORITY")));
+
+        Map<String, String> tokenMap = jwtTokenProvider.generateToken(user.getId(), user.getNickname(), authentication);
+
+        tokenMap.put("id", Long.toString(user.getId()));
+        tokenMap.put("email", user.getEmail());
+        tokenMap.put("profileUrl", user.getProfileUrl());
+        tokenMap.put("nickname", user.getNickname());
+
+        // redis에 저장
+        redisTemplate.opsForValue().set("refresh:"+user.getEmail(), tokenMap.get("refresh"), jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME(), TimeUnit.MILLISECONDS);
+
+        return tokenMap;
     }
 
 }

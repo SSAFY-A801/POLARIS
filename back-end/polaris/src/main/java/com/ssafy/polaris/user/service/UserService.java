@@ -31,4 +31,6 @@ public interface UserService {
 	void passwordCorrectionCheck(UserSetPasswordDto passwords, SecurityUser securityUser);
 
 	void logout(String accessToken, SecurityUser securityUser);
+
+	Map<String, String> reissuance(String refreshToken, String email);
 }
