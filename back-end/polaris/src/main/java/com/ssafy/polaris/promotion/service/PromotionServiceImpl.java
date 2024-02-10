@@ -127,24 +127,26 @@ public class PromotionServiceImpl implements PromotionService{
 			+ "    left join User as u on u.id = p.user.id "
 			+ "    left join Favorite as f on f.promotion.id = p.id "
 			+ "	   join Regcode as r on u.regcode.id = r.id "
-			+ "where f.isDeleted is not true ";
+			+ "where f.isDeleted is not true " ;
 
 		searchConditions.setWord(searchConditions.getWord().trim());
 		boolean isNotSearch = searchConditions.getWord() == null || searchConditions.getWord().equals("");
 		if (isNotSearch) {
+			query = em.createQuery(jpql, PromotionListResponseDto.class);
 		} else {
 			if (searchConditions.getKey().equals("title")) {
-				jpql += "where p.title like concat('%', :word, '%') ";
+				jpql += " and p.title like concat('%', :word, '%') ";
 			} else if (searchConditions.getKey().equals("user")) {
-				jpql += "where p.user.nickname like concat('%', :word, '%') ";
+				jpql += " and p.user.nickname like concat('%', :word, '%') ";
 			} else if (searchConditions.getKey().equals("bookTitle")) {
-
+				jpql += " and p.book.title like concat('%', :word, '%') ";
 			} else {
 				throw new WrongSearchKeyException("");
 			}
+			query = em.createQuery(jpql, PromotionListResponseDto.class);
+			query.setParameter("word", searchConditions.getWord());
 		}
 
-		query = em.createQuery(jpql, PromotionListResponseDto.class);
 
 		List<PromotionListResponseDto> promotions = query
 			.setFirstResult((searchConditions.getPgno() - 1) * searchConditions.getSpp())
