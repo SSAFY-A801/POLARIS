@@ -33,4 +33,6 @@ public interface UserService {
 	void logout(String accessToken, SecurityUser securityUser);
 
 	Map<String, String> reissue(String refreshToken, String email);
+
+	void emilCertification(Map<String, String> body);
 }

@@ -1,6 +1,5 @@
 package com.ssafy.polaris.global.exception.handler;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,6 +11,7 @@ import com.ssafy.polaris.global.exception.exceptions.category.ForbiddenException
 import com.ssafy.polaris.global.exception.exceptions.category.IAmATeapotException;
 import com.ssafy.polaris.global.exception.exceptions.category.NotFoundException;
 import com.ssafy.polaris.global.exception.exceptions.category.PolarisRuntimeException;
+import com.ssafy.polaris.global.exception.exceptions.category.TimeOutException;
 import com.ssafy.polaris.global.exception.exceptions.category.UnAuthorizedException;
 import com.ssafy.polaris.global.exception.exceptions.category.UnsupportedMediaTypeException;
 import com.ssafy.polaris.global.exception.response.ErrorCode;
@@ -54,6 +54,13 @@ public class GlobalExceptionHandler {
 		log.error(exception.getMessageKey(), exception, exception.getParams());
 		return new ErrorResponse(exception.getErrorCode());
 	} // 404
+
+	@ResponseStatus(HttpStatus.REQUEST_TIMEOUT)
+	@ExceptionHandler(TimeOutException.class)
+	public ErrorResponse timeoutHandler(PolarisRuntimeException exception) {
+		log.error(exception.getMessageKey(), exception, exception.getParams());
+		return new ErrorResponse(exception.getErrorCode());
+	} // 408
 
 	@ResponseStatus(HttpStatus.CONFLICT)
 	@ExceptionHandler(ConflictException.class)

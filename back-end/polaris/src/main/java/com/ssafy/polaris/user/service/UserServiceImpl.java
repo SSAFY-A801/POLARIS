@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import com.ssafy.polaris.user.exception.CertCodeExpiredException;
+import com.ssafy.polaris.user.exception.CertCodeNotMatch;
 import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
 import com.ssafy.polaris.user.exception.UserNotFoundException;
 import com.ssafy.polaris.user.exception.WrongEmailOrPasswordException;
@@ -179,6 +181,17 @@ public class UserServiceImpl implements UserService{
         redisTemplate.opsForValue().set("refresh:"+user.getEmail(), tokenMap.get("refresh"), jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME(), TimeUnit.MILLISECONDS);
 
         return tokenMap;
+    }
+
+    @Override
+    public void emilCertification(Map<String, String> body) {
+        String code = redisTemplate.opsForValue().get("emailCode:" + body.get("email"));
+        if (code == null) { // 토큰 만료 예외
+            throw new CertCodeExpiredException("");
+        }
+        if (!code.equals(body.get("code"))) { // 코드가 다르면 에러
+            throw new CertCodeNotMatch("");
+        }
     }
 
 }

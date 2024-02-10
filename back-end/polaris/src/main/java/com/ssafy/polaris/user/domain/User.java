@@ -97,7 +97,6 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "reporter")
 	private List<Report> reporters = new ArrayList<>();
 
-	// TODO: 나는 다른 유저 여러 명을 신고할 수 있다. 재귀적인 관계를 어떻게 풀 것인가?
 	@OneToMany(mappedBy = "reportedUser")
 	List<Report> reportUserList = new ArrayList<>();
 

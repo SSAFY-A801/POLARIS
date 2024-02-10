@@ -86,7 +86,8 @@ public class UserController {
 
 	@PostMapping("/email_cert")
 	public ResponseEntity<DefaultResponse<Void>> emailCertification(@RequestBody Map<String, String> body) {
-		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.EMAIL_NOT_IN_USE);
+		userService.emilCertification(body);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.EMAIL_CERT_SUCCESS);
 	}
 
 	@PatchMapping("/change_password")
