@@ -15,6 +15,7 @@ import com.ssafy.polaris.essay.repository.ScrapRepository;
 import com.ssafy.polaris.global.SearchConditions;
 import com.ssafy.polaris.global.exception.exceptions.WrongSearchConditionException;
 import com.ssafy.polaris.global.security.SecurityUser;
+import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -67,22 +68,23 @@ public class EssayServiceImpl implements EssayService {
 
 	@Override
 	@Transactional
-	public void updateEssay(EssayRequestDto essayRequestDto) {
+	public void updateEssay(EssayRequestDto essayRequestDto, SecurityUser securityUser) {
 		Essay essay = essayRepository.findById(essayRequestDto.getId())
 			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
-
-		if (essay.getDeletedAt() != null) {
-			throw new RuntimeException("해당 게시글이 존재하지 않습니다.");
+		if (!essay.getUser().getId().equals(securityUser.getId())) {
+			throw new UserNotAuthorizedException("에세이 수정 권한 없음");
 		}
-
 		essay.updateEssay(essayRequestDto);
 	}
 
 	@Override
 	@Transactional
-	public void deleteEssay(Long essayId) {
-		// Essay essay = essayRepository.findById(essayId)
-		// 	.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
+	public void deleteEssay(Long essayId, SecurityUser securityUser) {
+		Essay essay = essayRepository.findById(essayId)
+			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
+		if (!essay.getUser().getId().equals(securityUser.getId())) {
+			throw new UserNotAuthorizedException("에세이 삭제 권한 없음");
+		}
 		essayRepository.deleteById(essayId);
 	}
 

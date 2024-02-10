@@ -122,8 +122,9 @@ public class EssayController {
 	 * }
 	 * */
 	@PatchMapping
-	public ResponseEntity<DefaultResponse<EssayResponseDto>> updateEssay(@RequestBody EssayRequestDto essayRequestDto) {
-		essayService.updateEssay(essayRequestDto);
+	public ResponseEntity<DefaultResponse<EssayResponseDto>> updateEssay(@RequestBody EssayRequestDto essayRequestDto,
+		@AuthenticationPrincipal SecurityUser securityUser) {
+		essayService.updateEssay(essayRequestDto, securityUser);
 		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.ESSAY_UPDATE_SUCCESS);
 	}
 
@@ -139,8 +140,9 @@ public class EssayController {
 	 * }
 	 * */
 	@DeleteMapping
-	public ResponseEntity<DefaultResponse<Void>> deleteEssay(@RequestBody EssayRequestDto essayRequestDto) {
-		essayService.deleteEssay(essayRequestDto.getId());
+	public ResponseEntity<DefaultResponse<Void>> deleteEssay(@RequestBody EssayRequestDto essayRequestDto,
+		@AuthenticationPrincipal SecurityUser securityUser) {
+		essayService.deleteEssay(essayRequestDto.getId(), securityUser);
 		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.ESSAY_DELETE_SUCCESS);
 	}
 
