@@ -15,6 +15,7 @@ import com.ssafy.polaris.essay.repository.ScrapRepository;
 import com.ssafy.polaris.global.SearchConditions;
 import com.ssafy.polaris.global.exception.exceptions.WrongSearchConditionException;
 import com.ssafy.polaris.global.security.SecurityUser;
+import com.ssafy.polaris.user.exception.UserForbiddenException;
 import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
 
 import jakarta.persistence.EntityManager;
@@ -72,7 +73,7 @@ public class EssayServiceImpl implements EssayService {
 		Essay essay = essayRepository.findById(essayRequestDto.getId())
 			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
 		if (!essay.getUser().getId().equals(securityUser.getId())) {
-			throw new UserNotAuthorizedException("에세이 수정 권한 없음");
+			throw new UserForbiddenException("에세이 수정 권한 없음");
 		}
 		essay.updateEssay(essayRequestDto);
 	}
@@ -83,7 +84,7 @@ public class EssayServiceImpl implements EssayService {
 		Essay essay = essayRepository.findById(essayId)
 			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
 		if (!essay.getUser().getId().equals(securityUser.getId())) {
-			throw new UserNotAuthorizedException("에세이 삭제 권한 없음");
+			throw new UserForbiddenException("에세이 삭제 권한 없음");
 		}
 		essayRepository.deleteById(essayId);
 	}
