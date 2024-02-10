@@ -25,6 +25,7 @@ export interface Book extends Searchbook  {
   userId: number,
   userBookDescription : string,
   userBookPrice: number|null,
+  profileUrl: string,
 }
 
 
