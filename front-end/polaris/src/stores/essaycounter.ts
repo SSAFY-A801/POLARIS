@@ -11,7 +11,6 @@ export type Essay = {
   isOpened: string,
   createdAt: Date,
   updatedAt: Date,
-  // 삭제 안한 경우 null인지 아니면 아예 존재하지 않는지?
   deletedAt: Date|null,
   userId: number,
   nickname: string,
@@ -24,7 +23,12 @@ export type Essay = {
   // 그러면 여기에 댓글 목록도 줘야 하지 않을까요?
 }
 
-export const essayCounterStore = defineStore('counter', () => {
+export const essayStore = defineStore('counter', () => {
+  const token = localStorage.getItem('user_token')
+  const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
+  const loginUser = JSON.parse(userInfoString.value)
+  const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
 
-  return { }
+
+  return { token, userInfoString, BACK_API_URL, loginUser }
 },{persist: true})

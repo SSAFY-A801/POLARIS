@@ -1,13 +1,14 @@
 <template>
-  <EssayListItem
-  v-for="(essay, index) in EssayList"
+  <CommentListItem
+  v-for="(comment, index) in CommentList"
   :key = "index"
-  :essayInfo = "essay"
+  :commentInfo = "comment"
   />
 </template>
 
 <script setup lang="ts">
-  const EssayList = 4;
+import CommentListItem from './CommentListItem.vue';
+  const CommentList = 4;
 </script>
 
 <style scoped>

@@ -67,12 +67,12 @@ export const profileCounterStore = defineStore('counter', () => {
   const token = localStorage.getItem('user_token')
   const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
   const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
-  
+  const loginUser = JSON.parse(userInfoString.value)
+
 
   
   // ProfilePage
   // 접속자
-  const loginUser = ref<LoginInfo|null>(null)
   
   // 프로필 유저
   const profileUser = ref<User>({

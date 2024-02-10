@@ -4,7 +4,6 @@ import MainPage from '@/views/MainPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
 import BookSearchPage from '@/views/BookSearchPage.vue'
-import EssayListPage from '@/views/essay/EssayListPage.vue'
 import PromotionListPage from '@/views/PromotionListPage.vue'
 import PasswordSearchPage from '@/views/PasswordSearchPage.vue'
 // 프로필
@@ -13,8 +12,6 @@ import MyLibraryPage from '@/views/profile/mylibrary/MyLibraryPage.vue'
 import MyScrapsPage from '@/views/profile/like/MyScrapsPage.vue'
 import MyFavoritesPage from '@/views/profile/like/MyFavoritesPage.vue'
 import MyEssayPage from '@/views/profile/myarticle/MyEssayPage.vue'
-import MyPromotionPage from '@/views/profile/myarticle/MyPromotionPage.vue'
-import MyArticlePage from '@/views/profile/myarticle/MyArticlePage.vue'
 import ProfileUpdatePage from '@/views/profile/userinfo/ProfileUpdatePage.vue'
 import PasswordChangePage from '@/views/profile/userinfo/PasswordChangePage.vue'
 import BookRegisterPage from '@/views/profile/mylibrary/BookRegisterPage.vue'
@@ -31,8 +28,10 @@ import BestsellerdetailPage from '@/components/main/BestsellerdetailPage.vue'
 import UserPopularBookDatailPage from '@/components/main/UserPopularBookDetailPage.vue'
 import TestFirebase from '@/components/chat/TestFirebase.vue'
 // 독후감
+import EssayListPage from '@/views/essay/EssayListPage.vue'
 import EssayDetailPage from '@/views/essay/EssayDetailPage.vue'
-
+import EssayCreatePage from '@/views/essay/EssayCreatePage.vue'
+import EssayEditPage from '@/views/essay/EssayEditPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -100,23 +99,10 @@ const router = createRouter({
           name: 'MyFavoritesPage',
           component: MyFavoritesPage
          },
-        { path: 'myarticle',
-          redirect: to => {
-            return `/profile/${to.params.id}/myarticle/myessay`},
-          name: 'MyArticlePage', 
-          component: MyArticlePage, 
-          // 나의독후감, 나의홍보게시글
-          children: [
-            { path: 'myessay',
-            name: 'MyEssayPage',
-            component: MyEssayPage 
-          },
-          { path: 'myscraps',
-            name: 'MyPromotionPage',
-            component: MyPromotionPage 
-          },
-          ]
-        },
+        { path: 'myessay',
+          name: 'MyEssayPage',
+          component: MyEssayPage 
+        }
       ],
     },
     // Profile 수정
@@ -195,10 +181,20 @@ const router = createRouter({
       component: EssayListPage,
     },
     {
-      path: '/essaylist/essayId',
+      path: '/essaylist/:essayId',
       name: 'essaydetail',
       component: EssayDetailPage
-    }
+    },
+    {
+      path: '/essaylist/create',
+      name: 'essaycreate',
+      component: EssayCreatePage
+    },
+    {
+      path: '/essaylist/:essayId/edit',
+      name: 'essayedit',
+      component: EssayEditPage
+    },
   ]
 })
 

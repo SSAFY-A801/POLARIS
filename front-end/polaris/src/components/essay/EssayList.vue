@@ -1,6 +1,6 @@
 <template>
   <EssayListItem
-  v-for="(essay, index) in EssayList"
+  v-for="(essay, index) in props.essayList"
   :key = "index"
   :essayInfo = "essay"
   />
@@ -8,7 +8,8 @@
 
 <script setup lang="ts">
   import EssayListItem from "./EssayListItem.vue";
-  const EssayList = 4;
+  
+  const props = defineProps(['essayList']);
 </script>
 
 <style scoped>

@@ -38,7 +38,7 @@
                 {{ bookDetail.nickname }}
               </div>
             <button @click="gotoProfile">
-              <img class="col-span-1" id="profile-image" src="@\assets\profile-man.jpg" alt="@\assets\profile-default.jpg">
+              <img class="col-span-1 object-cover" id="profile-image" src="@\assets\profile-man.jpg" alt="@\assets\profile-default.jpg">
             </button>
           </div>
           <div class="p-4" :class="{'pointer-events-none cursor-not-allowed': !isMybook || !updateBook, 'shadow-lg border rounded-2xl bg-indigo-50': isMybook && updateBook }">
