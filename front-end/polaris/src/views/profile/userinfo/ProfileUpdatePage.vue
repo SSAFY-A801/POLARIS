@@ -1,10 +1,10 @@
 <template>
   <RegionModal v-if="isRegionModalOpen" @close="closeRegionModal" @confirm="updateRegion"/> 
-  <div class="container mx-auto mt-28 max-w-6xl bg-backgroundgray">
+  <div class="container mx-auto mt-24 max-w-6xl p-4 bg-backgroundgray">
     <h1 class="text-2xl font-bold p-4 m-4">프로필 수정</h1>
     <div class="flex justify-end">
       <!-- 제출 및 취소 buttons -->
-      <button id="submit-button" @click="updateProfile" type="button">
+      <button @click="updateProfile" id="submit-button" type="submit">
         <i class="fa-regular fa-square-check fa-lg"></i>
         수정 완료
       </button>
@@ -88,11 +88,31 @@
   const newnickname = ref<string>(profileUser.value.nickname)
   const imageUrl = ref<string | null>(profileUser.value.profileUrl);
   const isValidNickname = ref(true)
- 
   const mylocation = ref("")
   const mylocationCode = ref<number|null>(null)
   const introduction = ref<string|null>("")
   const isRegionModalOpen = ref(false)
+
+  const handleFileChange = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+
+  if (file) {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      imageUrl.value = e.target?.result as string; // 주석 처리 또는 제거
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+  
+  const triggerFileInput = () => {
+    const fileInput = document.getElementById('update-image') as HTMLInputElement;
+    fileInput.click();
+  };
+
 
   watch(() => newnickname.value, (newNickname, oldNickname) => {
   if(newNickname == profileUser.value.nickname){
@@ -145,29 +165,7 @@
       console.error(error)
     })
   }
-  
-  // 이미지 파일 변경
-  const handleFileChange = (event: Event) => {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-  
-    if (file) {
-      const reader = new FileReader();
-  
-      reader.onload = (e) => {
-        imageUrl.value = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
-      // 파일 업로드 후 파일 이름 비우기
-      input.value = '';
-    }
-  };
-  
-  const triggerFileInput = () => {
-    const fileInput = document.getElementById('update-image') as HTMLInputElement;
-    fileInput.click();
-  };
-
+ 
   // button 들
   function cancelProfile() {
     router.push({name: "ProfilePage"});
@@ -188,19 +186,22 @@
       alert("나의 위치를 등록해야 합니다.")
     } else {
     // axios 요청
+    const profileData = new FormData();
+    profileData.append("nickname", newnickname.value);
+    if(mylocationCode.value){
+      profileData.append("regcodeId", mylocationCode.value.toString());
+    }
+    profileData.append("introduction", introduction.value || ""); // Add introduction if it exists
+    profileData.append("image", document.getElementById('update-image')?.files?.[0] || ""); // Add imageFile
+
     axios({
       method: 'patch',
       url: `${BACK_API_URL}/profile/${profileUser.value.id}`,
       headers: {
         Authorization: `${store.token}`,
-        "Content-Type": 'application/json'
+        "Content-Type": 'multipart/form-data'
       },
-      data: {
-        nickname: newnickname.value,
-        regcodeId: mylocationCode.value,
-        introduction: introduction.value,
-        imageUrl: imageUrl.value,
-      },
+      data: profileData,
     })
     .then((response) => {
       console.log(response.data)
@@ -226,7 +227,6 @@
     })  
   .then((response) => {
     const userData = response.data['data']
-    console.log(`${id}번유저정보`,userData)
     userInfo.value = userData
       if(userInfo.value){
         mylocation.value = `${userInfo.value.regcode.si} ${userInfo.value.regcode.gungu} ${userInfo.value.regcode.dong}`

@@ -1,12 +1,12 @@
 <template>
   <button v-if="!deleteState && isMe"  @click="registerBook" id="Book-register" class="shadow hover:bg-gray-100 border border-dashed rounded-md border-deepgray p-2">
-    <font-awesome-icon icon="fa-solid fa-plus" size="8x" style="color: #323F59;" />  </button>
-  <MyLibraryListItem
-  v-for="(mybook, index) in props.mybookList"
-  :key = "index"
-  :bookinfo = "mybook"
-  @delete-books="deleteBookstate" 
-  />
+    <font-awesome-icon icon="fa-solid fa-plus" size="8x" style="color: #323F59;" /> </button>
+      <MyLibraryListItem
+      v-for="(mybook, index) in props.mybookList"
+      :key = "index"
+      :bookinfo = "mybook"
+      @delete-books="deleteBookstate" 
+      />
 </template>
 
 <script setup lang="ts">
