@@ -14,6 +14,7 @@ import com.ssafy.polaris.connectentity.repository.PromotionUserBookRepository;
 import com.ssafy.polaris.global.SearchConditions;
 import com.ssafy.polaris.global.exception.exceptions.NoBookSelectedException;
 import com.ssafy.polaris.promotion.exception.PromotionNotFoundException;
+import com.ssafy.polaris.promotion.exception.WrongSearchKeyException;
 import com.ssafy.polaris.user.exception.UserBookNotFound;
 import com.ssafy.polaris.user.exception.UserForbiddenException;
 import com.ssafy.polaris.global.security.SecurityUser;
@@ -132,11 +133,14 @@ public class PromotionServiceImpl implements PromotionService{
 		boolean isNotSearch = searchConditions.getWord() == null || searchConditions.getWord().equals("");
 		if (isNotSearch) {
 		} else {
-			// TODO : 프론트와 조건 이름을 정한다.
-			if (searchConditions.getKey().equals("제목")) {
+			if (searchConditions.getKey().equals("title")) {
 				jpql += "where p.title like concat('%', :word, '%') ";
-			} else if (searchConditions.getKey().equals("글쓴이(닉네임)")) {
+			} else if (searchConditions.getKey().equals("user")) {
 				jpql += "where p.user.nickname like concat('%', :word, '%') ";
+			} else if (searchConditions.getKey().equals("bookTitle")) {
+
+			} else {
+				throw new WrongSearchKeyException("");
 			}
 		}
 
