@@ -98,8 +98,7 @@ public class EssayServiceImpl implements EssayService {
 				+ "	join fetch e.user "
 				+ "	left join fetch e.userBook "
 				+ " left join fetch e.userBook.book "
-				+ "where e.deletedAt is null "
-				+ " and e.isOpened is true ";
+				+ "where e.isOpened is true ";
 			query = em.createQuery(jpql, Essay.class);
 		} else {
 			jpql = "select e "
@@ -107,8 +106,7 @@ public class EssayServiceImpl implements EssayService {
 				+ "	join fetch e.user "
 				+ "	left join fetch e.userBook "
 				+ " left join fetch e.userBook.book "
-				+ "where e.deletedAt is null "
-				+ " and e.isOpened is true "
+				+ "where e.isOpened is true "
 				+ " and e.user.nickname like concat('%', :word,'%')";
 			query = em.createQuery(jpql, Essay.class);
 			query
