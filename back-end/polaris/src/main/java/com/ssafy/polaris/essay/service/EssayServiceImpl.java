@@ -13,6 +13,7 @@ import com.ssafy.polaris.essay.domain.Scrap;
 import com.ssafy.polaris.essay.repository.EssayRepository;
 import com.ssafy.polaris.essay.repository.ScrapRepository;
 import com.ssafy.polaris.global.SearchConditions;
+import com.ssafy.polaris.global.exception.exceptions.WrongSearchConditionException;
 import com.ssafy.polaris.global.security.SecurityUser;
 
 import jakarta.persistence.EntityManager;
@@ -88,31 +89,29 @@ public class EssayServiceImpl implements EssayService {
 	@Override
 	public List<EssayResponseDto> getEssayList(SearchConditions searchConditions) {
 		TypedQuery<Essay> query;
-		String jpql;
+		String jpql = "select e "
+			+ "from Essay e "
+			+ "	join fetch e.user "
+			+ "	left join fetch e.userBook "
+			+ " left join fetch e.userBook.book "
+			+ "where e.isOpened is true ";
 
 		searchConditions.setWord(searchConditions.getWord().trim());
 		boolean isNotSearch = searchConditions.getWord() == null || searchConditions.getWord().equals("");
 		if (isNotSearch) {
-			jpql = "select e "
-				+ "from Essay e "
-				+ "	join fetch e.user "
-				+ "	left join fetch e.userBook "
-				+ " left join fetch e.userBook.book "
-				+ "where e.isOpened is true ";
 			query = em.createQuery(jpql, Essay.class);
 		} else {
-			jpql = "select e "
-				+ "from Essay e "
-				+ "	join fetch e.user "
-				+ "	left join fetch e.userBook "
-				+ " left join fetch e.userBook.book "
-				+ "where e.isOpened is true "
-				+ " and e.user.nickname like concat('%', :word,'%')";
+			if (searchConditions.getKey().equals("title")) {
+				jpql += " and e.title like concat('%', :word, '%') ";
+			} else if (searchConditions.getKey().equals("user")) {
+				jpql += " and e.user.nickname like concat('%', :word, '%') ";
+			} else if (searchConditions.getKey().equals("bookTitle")) {
+				jpql += " and e.userBook.book.title like concat('%', :word, '%') ";
+			} else {
+				throw new WrongSearchConditionException("");
+			}
 			query = em.createQuery(jpql, Essay.class);
-			query
-				// .setParameter("key", searchConditions.getKey())
-				// TODO : 검색 조건에 따른 분기가 필요. (DSL을 쓰지 않는 이상..)
-				.setParameter("word", searchConditions.getWord());
+			query.setParameter("word", searchConditions.getWord());
 		}
 
 		List<Essay> essays = query
