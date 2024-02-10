@@ -17,7 +17,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	Optional<User> findUserByNickname(String email);
 
-	User getReferenceById(long userId);
+	boolean existsByEmail(String email);
+
+	boolean existsByNickname(String nickname);
 
 	@Query("select count(u) from User u inner join Trade t on u.id = t.sender.id " +
 		"where t.finishedAt is not null " +

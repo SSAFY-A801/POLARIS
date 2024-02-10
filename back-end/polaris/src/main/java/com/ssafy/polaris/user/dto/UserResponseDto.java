@@ -12,14 +12,10 @@ import lombok.Data;
 public class UserResponseDto {
 	private Long id;
 	private String email;
-	// TODO : 패스워드 반환할 일은 없을 듯? 테스트 후 삭제
-	// private String password;
 	private Long region;
 	private String regionString;
 	private String nickname;
 
-	// public UserResponseDto() {
-	// }
 
 	public UserResponseDto(User user) {
 		this.id = user.getId();
@@ -31,10 +27,4 @@ public class UserResponseDto {
 			+ user.getRegcode().getDong();
 		this.nickname = user.getNickname();
 	}
-
-	// public UserResponseDto(SecurityUser securityUser) {
-	// 	this.id = securityUser.getId();
-	// 	this.email = securityUser.getEmail();
-	// 	this.nickname = securityUser.getNickname();
-	// }
 }
