@@ -4,14 +4,7 @@ import com.ssafy.polaris.essay.dto.EssaySimpleResponseDto;
 import com.ssafy.polaris.essay.service.EssayService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.polaris.following.dto.FollowListRequestDto;
 import com.ssafy.polaris.following.dto.FollowListResponseDto;
@@ -23,7 +16,9 @@ import com.ssafy.polaris.profile.response.StatusCode;
 import com.ssafy.polaris.profile.service.ProfileService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -55,17 +50,20 @@ public class ProfileController {
 
 	/**
 	 * @param userId 사용자 id,
-	 * @param reqDto 업데이트할 사용자 정보
-	 *     String nickname
-	 *     Regcode regcode
-	 *     String introduction
-	 *     String imageUrl
+	 * @param nickname
+	 * @param regcodeId
+	 * @param introduction
+	 * @param image Multipart file 로서, 사진을 file 형태로 받는다.
 	 * */
 	@PatchMapping("/{id}")
-	public ResponseEntity<DefaultResponse<Void>> updateProfile(@PathVariable(name = "id") Long userId,
-		@RequestBody ProfileRequestDto reqDto) {
+	public ResponseEntity<DefaultResponse<Void>> updateProfile(
+			@PathVariable(name = "id") Long userId,
+			@RequestParam("nickname") String nickname,
+			@RequestParam("regcodeId") Long regcodeId,
+			@RequestParam("introduction") String introduction,
+			@RequestPart("image")MultipartFile image) throws IOException {
 
-		String retVal = profileService.updateProfile(userId, reqDto);
+		String retVal = profileService.updateProfile(userId, new ProfileRequestDto(nickname, regcodeId, introduction, image));
 		System.out.println("update profile hi!!");
 		if (retVal == null) {
 			return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_USER_UPDATE);

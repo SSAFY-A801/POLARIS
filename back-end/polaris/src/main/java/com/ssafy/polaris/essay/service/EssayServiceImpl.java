@@ -4,14 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.ssafy.polaris.essay.dto.EssaySimpleResponseDto;
+import com.ssafy.polaris.essay.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.essay.domain.Scrap;
-import com.ssafy.polaris.essay.dto.EssayRequestDto;
-import com.ssafy.polaris.essay.dto.EssayResponseDto;
 import com.ssafy.polaris.essay.repository.EssayRepository;
 import com.ssafy.polaris.essay.repository.ScrapRepository;
 import com.ssafy.polaris.global.SearchConditions;
@@ -29,7 +27,6 @@ public class EssayServiceImpl implements EssayService {
 	private final EssayRepository essayRepository;
 	private final ScrapRepository scrapRepository;
 	private final EntityManager em;
-
 	@Override
 	@Transactional
 	public Long writeEssay(EssayRequestDto essayRequestDto, SecurityUser securityUser) {
@@ -159,6 +156,26 @@ public class EssayServiceImpl implements EssayService {
 			dto.setScrapCount(scrapRepository.getScrapCount(dto.getEssayId()));
 		}
 
+		return data;
+	}
+
+	@Override
+	public MostScrappedEssayResponseDto getMostScrappedEssay() {
+		MostScrappedEssayResponseDto data = essayRepository.getMostScrappedEssay();
+		if(data == null){
+			return null;
+		}
+		data.setScrapCount(scrapRepository.getScrapCount(data.getEssayId()));
+		return data;
+	}
+
+	@Override
+	public List<ScrappedEssayByUserResponseDto> getScrappedEssayByUser(Long userId) {
+		List<ScrappedEssayByUserResponseDto> data = scrapRepository.getUserScrappedList(userId);
+		System.out.println(data);
+		if(data.isEmpty()){
+			return null;
+		}
 		return data;
 	}
 }

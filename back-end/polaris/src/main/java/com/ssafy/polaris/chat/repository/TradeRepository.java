@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto;
+import com.ssafy.polaris.chat.dto.ChatRoomParticipantsResponseDto;
 import com.ssafy.polaris.trade.domain.Trade;
 import com.ssafy.polaris.trade.domain.TradeStatus;
 
@@ -38,6 +39,33 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 			"where id = :chatRoomId"
 	)
 	void completeTrade(@Param("chatRoomId") Long chatRoomId, @Param("tradeStatus") TradeStatus tradeStatus);
+
+	@Query( value =
+	"SELECT " +
+		"new com.ssafy.polaris.chat.dto.ChatRoomParticipantsResponseDto( " +
+		"t.id AS chatRoomId, "+
+		":userId AS senderId, "+
+		"u.id AS receiverId, "+
+		"u.nickname AS receiverNickname, "+
+		"u.profileUrl AS receiverProfileUrl ) "+
+		"FROM Trade t "+
+		"JOIN User u ON t.sender.id = u.id "+
+		"WHERE t.id = :chatRoomId AND t.receiver.id = :userId "+
+
+		"UNION "+
+
+		"SELECT " +
+		"new com.ssafy.polaris.chat.dto.ChatRoomParticipantsResponseDto( " +
+		"t.id AS chatRoomId, "+
+		":userId AS senderId, "+
+		"u.id AS receiverId, "+
+		"u.nickname AS receiverNickname, "+
+		"u.profileUrl AS receiverProfileUrl ) "+
+		"FROM Trade t "+
+		"JOIN User u ON t.receiver.id = u.id "+
+		"WHERE t.id = :chatRoomId AND t.sender.id = :userId "
+	)
+	ChatRoomParticipantsResponseDto getChatRoomParticipants(@Param(value = "chatRoomId") Long chatRoomId, @Param(value = "userId") Long userId);
 
 	// @Query(value =
 	// 	"select new com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto( " +

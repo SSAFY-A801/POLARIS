@@ -19,9 +19,6 @@ public class SecurityUtil {
 
 	public static String getAccessToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AUTH_PARAM_NAME);
-		// TODO : 테스트가 끝나면 해당 라인은 지운다.
-		log.info("SecurityUtil::getAccessToken : bearerToken : " + bearerToken);
-		// TODO : 토큰 키 값에 bearer로 시작하는 지를 검사해야 한다.
 		if (StringUtils.isNotEmpty(bearerToken) && StringUtils.isNotBlank(bearerToken)
 			&& bearerToken.startsWith(TOKEN_PREFIX)) {
 			return bearerToken.substring(7);

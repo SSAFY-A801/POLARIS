@@ -43,6 +43,7 @@ import lombok.experimental.SuperBuilder;
 @SQLDelete(sql = "update users set deleted_at = CURRENT_TIMESTAMP where id = ?")
 @SQLRestriction("deleted_at is NULL")
 public class User extends BaseEntity {
+	// 지역코드
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "regcode_id", updatable = false, insertable = false)
