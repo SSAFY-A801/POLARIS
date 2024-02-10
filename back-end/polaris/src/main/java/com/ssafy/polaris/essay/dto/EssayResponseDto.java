@@ -37,7 +37,7 @@ public class EssayResponseDto {
 	public EssayResponseDto(Essay essay) {
 		this.id = essay.getId();
 		this.title = essay.getTitle();
-		this.content = essay.getTitle();
+		this.content = essay.getContent();
 		this.hit = essay.getHit();
 		this.isOpened = essay.getIsOpened();
 		this.createdAt = essay.getCreatedAt();

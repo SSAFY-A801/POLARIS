@@ -48,7 +48,6 @@ public class EssayServiceImpl implements EssayService {
 		Essay essay = essayRepository.findJoinedEssayById(essayId)
 			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
 
-		// TODO: deletedat 없앤다.
 		// TODO: hit 올린다.
 		if (essay.getDeletedAt() != null || !essay.getIsOpened()) {
 			throw new RuntimeException("해당 게시글이 존재하지 않습니다.");
@@ -99,7 +98,7 @@ public class EssayServiceImpl implements EssayService {
 				+ "	join fetch e.user "
 				+ "	left join fetch e.userBook "
 				+ " left join fetch e.userBook.book "
-				+ "where e.deletedAt is null";
+				+ "where e.isOpened is true ";
 			query = em.createQuery(jpql, Essay.class);
 		} else {
 			jpql = "select e "
@@ -107,8 +106,8 @@ public class EssayServiceImpl implements EssayService {
 				+ "	join fetch e.user "
 				+ "	left join fetch e.userBook "
 				+ " left join fetch e.userBook.book "
-				+ "where e.deletedAt is null "
-				+ "    and e.user.nickname like concat('%', :word,'%')";
+				+ "where e.isOpened is true "
+				+ " and e.user.nickname like concat('%', :word,'%')";
 			query = em.createQuery(jpql, Essay.class);
 			query
 				// .setParameter("key", searchConditions.getKey())

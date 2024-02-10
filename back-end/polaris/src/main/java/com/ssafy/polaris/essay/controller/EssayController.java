@@ -59,11 +59,7 @@ public class EssayController {
 		Long essayId = essayService.writeEssay(essayRequestDto, securityUser);
 		EssayResponseDto essayResponseDto = essayService.getEssay(essayId);
 
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.ESSAY_WRITE_SUCCESS,
-			essayResponseDto
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.ESSAY_WRITE_SUCCESS, essayResponseDto);
 	}
 
 	/**
@@ -81,11 +77,7 @@ public class EssayController {
 		EssayResponseDto essayResponseDto = essayService.getEssay(essayId);
 		essayService.updateHit(essayId);
 
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.ESSAY_READ_SUCCESS,
-			essayResponseDto
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.ESSAY_READ_SUCCESS, essayResponseDto);
 	}
 
 	/**
@@ -112,11 +104,7 @@ public class EssayController {
 	public ResponseEntity<DefaultResponse<List<EssayResponseDto>>> getEssayList(
 		@ModelAttribute SearchConditions searchConditions) {
 		List<EssayResponseDto> essayResponseDtoList = essayService.getEssayList(searchConditions);
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.ESSAY_READ_LIST_SUCCESS,
-			essayResponseDtoList
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.ESSAY_READ_LIST_SUCCESS, essayResponseDtoList);
 	}
 
 	/**
@@ -136,10 +124,7 @@ public class EssayController {
 	@PatchMapping
 	public ResponseEntity<DefaultResponse<EssayResponseDto>> updateEssay(@RequestBody EssayRequestDto essayRequestDto) {
 		essayService.updateEssay(essayRequestDto);
-		return DefaultResponse.emptyResponse(
-			HttpStatus.OK,
-			StatusCode.ESSAY_UPDATE_SUCCESS
-		);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.ESSAY_UPDATE_SUCCESS);
 	}
 
 	/**
@@ -156,10 +141,7 @@ public class EssayController {
 	@DeleteMapping
 	public ResponseEntity<DefaultResponse<Void>> deleteEssay(@RequestBody EssayRequestDto essayRequestDto) {
 		essayService.deleteEssay(essayRequestDto.getId());
-		return DefaultResponse.emptyResponse(
-			HttpStatus.OK,
-			StatusCode.ESSAY_DELETE_SUCCESS
-		);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.ESSAY_DELETE_SUCCESS);
 	}
 
 	/**
@@ -179,10 +161,7 @@ public class EssayController {
 		boolean isScrapped = essayService.scrapEssay(essayId, securityUser);
 		StatusCode returnStatus = isScrapped ? StatusCode.SCRAP_ADD_SUCCESS : StatusCode.SCRAP_REMOVE_SUCCESS;
 
-		return DefaultResponse.emptyResponse(
-			HttpStatus.OK,
-			returnStatus
-		);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, returnStatus);
 	}
 
 	/**
@@ -199,11 +178,7 @@ public class EssayController {
 	public ResponseEntity<DefaultResponse<Integer>> getScrapCount(@PathVariable Long essayId) {
 		int scrapCount = essayService.getScrapCount(essayId);
 
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.SCRAP_COUNT_SUCCESS,
-			scrapCount
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SCRAP_COUNT_SUCCESS, scrapCount);
 	}
 	/**
 	 * @return 가장 많이 스크랩된 에세이를 반환
@@ -212,16 +187,9 @@ public class EssayController {
 	public ResponseEntity<DefaultResponse<MostScrappedEssayResponseDto>> getMostScrappedEssay(){
 		MostScrappedEssayResponseDto data = essayService.getMostScrappedEssay();
 		if(data == null){
-			return DefaultResponse.emptyResponse(
-					HttpStatus.OK,
-					StatusCode.ESSAY_READ_MOST_SCRAPPED_FAIL
-			);
+			return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.ESSAY_READ_MOST_SCRAPPED_FAIL);
 		}
-		return DefaultResponse.toResponseEntity(
-				HttpStatus.OK,
-				StatusCode.ESSAY_READ_MOST_SCRAPPED_SUCCESS,
-				data
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.ESSAY_READ_MOST_SCRAPPED_SUCCESS, data);
 	}
 
 	/**
@@ -235,15 +203,8 @@ public class EssayController {
 			@PathVariable("id") Long userId){
 		List<ScrappedEssayByUserResponseDto> data = essayService.getScrappedEssayByUser(userId);
 		if(data == null){
-			return DefaultResponse.emptyResponse(
-					HttpStatus.OK,
-					StatusCode.ESSAY_READ_EMPTY_SCRAPPED_SUCCESS
-			);
+			return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.ESSAY_READ_EMPTY_SCRAPPED_SUCCESS);
 		}
-		return DefaultResponse.toResponseEntity(
-				HttpStatus.OK,
-				StatusCode.ESSAY_READ_SCRAPPED_SUCCESS,
-				Map.of("scrapPosts", data)
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.ESSAY_READ_SCRAPPED_SUCCESS, Map.of("scrapPosts", data));
 	}
 }
