@@ -110,6 +110,7 @@
   
   const triggerFileInput = () => {
     const fileInput = document.getElementById('update-image') as HTMLInputElement;
+    
     fileInput.click();
   };
 
@@ -192,7 +193,8 @@
       profileData.append("regcodeId", mylocationCode.value.toString());
     }
     profileData.append("introduction", introduction.value || ""); // Add introduction if it exists
-    profileData.append("image", document.getElementById('update-image')?.files?.[0] || ""); // Add imageFile
+    const fileInput = document.getElementById('update-image') as HTMLInputElement;
+    profileData.append("image", fileInput.files?.[0] || "");
 
     axios({
       method: 'patch',
