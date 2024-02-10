@@ -128,12 +128,12 @@
       </div>
       <!-- tabs -->
       <div class="hidden sm:block">
-        <div class=" border-gray-200 dark:border-gray-700 bg-maintheme1">
+        <div class=" border-gray-200 dark:border-gray-700 bg-maintheme1 shadow-md">
           <nav class="-mb-px flex gap-6">
             <div class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
               <RouterLink :to="{ name: 'MyLibraryPage', params: {id: profileUser.id}}">
                 <a
-                  class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
+                  class="shrink-0 border border-transparent px-6 py-3  font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
                 >
                 나의 서재 
                 </a>
@@ -142,23 +142,16 @@
               <span v-if="isMe">
                 <RouterLink :to="{ name: 'MyScrapsPage', params: {id: profileUser.id} }">
                   <a
-                    class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
+                    class="shrink-0 border border-transparent px-6 py-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
                   >
                   스크랩한 독후감 
                   </a>
                 </RouterLink>
-                <RouterLink :to="{ name: 'MyFavoritesPage', params: {id: profileUser.id} }">
+                <RouterLink :to="{ name: 'MyEssayPage',  params: {id: profileUser.id} }">
                   <a
-                    class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
+                    class="shrink-0 border border-transparent px-6 py-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
                   >
-                  찜한 홍보 게시글
-                  </a>
-                </RouterLink>
-                <RouterLink :to="{ name: 'MyArticlePage',  params: {id: profileUser.id} }">
-                  <a
-                    class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-200"
-                  >
-                    나의 게시글
+                    나의 독후감
                   </a>
                 </RouterLink>
               </span>
@@ -199,9 +192,8 @@
   const showModal = ref(false) 
   const unfollow_list = ref<Unfollowing[]>([])
   const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
-  const loginUser = JSON.parse(userInfoString.value)
   const isMe = computed(() => {
-  return profileUser.value.id == loginUser.id
+      return profileUser.value.id == store.loginUser.id
 })
 
   const follow = (user: User) => {
@@ -212,7 +204,7 @@
       },
 
       method: 'post',
-      url: `${BACK_API_URL}/profile/${loginUser.id}/follow`,
+      url: `${BACK_API_URL}/profile/${store.loginUser.id}/follow`,
       data: {
         followingId: user.id
       }
@@ -234,7 +226,7 @@
       },
 
       method: 'delete',
-      url: `${BACK_API_URL}/profile/${loginUser.id}/unfollow`,
+      url: `${BACK_API_URL}/profile/${store.loginUser.id}/unfollow`,
       data: {
         "unfollowings": [{followingId: profileUser.value.id},]
       }
@@ -271,7 +263,7 @@
       },
 
       method: 'DELETE',
-      url: `${BACK_API_URL}/profile/${loginUser.id}/unfollow`,
+      url: `${BACK_API_URL}/profile/${store.loginUser.id}/unfollow`,
       data: {
         "unfollowings": unfollow_list.value
       }
@@ -312,7 +304,7 @@
 
 
   const gotoMychatList = () => {
-    router.push({name: "chat", params:{id:loginUser.id}});
+    router.push({name: "chat", params:{id:store.loginUser.id}});
   }
 
   const chatStore = useChatStore();
@@ -372,7 +364,7 @@
         Authorization: `${store.token}`
       },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${loginUser.id}/follow`,
+      url: `${BACK_API_URL}/profile/${store.loginUser.id}/follow`,
     })
     .then((response)=> {
       console.log(response.data)

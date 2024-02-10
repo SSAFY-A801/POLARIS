@@ -10,7 +10,17 @@ import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCartShopping, faCircleCheck, faCircleUser,
    faComment, faComments,faFloppyDisk, faImages, faLocationDot, faLock, faMagnifyingGlass, faNoteSticky,
     faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark,  faChevronLeft, faChevronRight,
-    faArrowRightFromBracket, } from '@fortawesome/free-solid-svg-icons';
+    faArrowRightFromBracket,
+    faBold,
+    faItalic,
+    faStrikethrough,
+    faList,
+    faListOl,
+    faRotateLeft,
+    faRotateRight,
+    faCode,
+    faQuoteRight,
+    faArrowsDownToLine, } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -25,7 +35,7 @@ import axios from 'axios'
 // import dotenv from 'dotenv';
 
 library.add(faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCartShopping, faCircleCheck, faCircleUser,
-  faComment, faComments,faFloppyDisk, faImages, faLocationDot, faLock, faMagnifyingGlass, faNoteSticky,
+  faComment,faRotateLeft, faArrowsDownToLine, faCode, faQuoteRight, faRotateRight, faBold, faItalic, faStrikethrough, faList, faListOl, faComments,faFloppyDisk, faImages, faLocationDot, faLock, faMagnifyingGlass, faNoteSticky,
    faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark,  faChevronLeft, faChevronRight, faArrowRightFromBracket )
 
 
