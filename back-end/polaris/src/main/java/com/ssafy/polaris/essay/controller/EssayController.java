@@ -3,6 +3,8 @@ package com.ssafy.polaris.essay.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.ssafy.polaris.comment.dto.CommentReponseDto;
+import com.ssafy.polaris.comment.service.CommentService;
 import com.ssafy.polaris.essay.dto.MostScrappedEssayResponseDto;
 import com.ssafy.polaris.essay.dto.ScrappedEssayByUserResponseDto;
 import org.springframework.http.HttpStatus;
@@ -35,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class EssayController {
 
 	private final EssayService essayService;
+	private final CommentService commentService;
 
 	/**
 	 * 글 작성
@@ -75,6 +78,9 @@ public class EssayController {
 	@GetMapping("/{essayId}")
 	public ResponseEntity<DefaultResponse<EssayResponseDto>> getEssay(@PathVariable Long essayId) {
 		EssayResponseDto essayResponseDto = essayService.getEssay(essayId);
+		List<CommentReponseDto> commentList = commentService.getCommentList(essayId);
+		essayResponseDto.setComments(commentList);
+
 		essayService.updateHit(essayId);
 
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.ESSAY_READ_SUCCESS, essayResponseDto);
