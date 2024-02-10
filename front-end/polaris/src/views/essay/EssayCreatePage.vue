@@ -24,7 +24,6 @@
           <Editor v-model="content"/>
         </div>
         <div class="col-span-2 text-lg font-semibold">공개 여부</div>
-        <!-- {{ isOpened }} -->
         <div class="mt-1">
           <label class="relative items-center cursor-pointer">
                   <input @click="toggleOpened" type="checkbox" v-model="isOpened" class="sr-only peer">
@@ -36,10 +35,6 @@
         <font-awesome-icon icon="pen-to-square" />
         독후감 작성
       </button>
-      <div class="content">
-        <h3>Content</h3>
-        <div v-html="content"></div>
-      </div>
     </div>
   </div>
 </template>
@@ -64,8 +59,6 @@ const router = useRouter();
 const selectedBook = ref<Book|null>(null)
 const content = ref(``)
 const writeEssay = () => {
-  console.log(title.value)
-  console.log(content.value, typeof(content.value))
   axios({
     headers: {
       Authorization: `${profileStore.token}`,
@@ -83,7 +76,9 @@ const writeEssay = () => {
   })
   .then((response) => {
     console.log(response.data)
+    const essaydetail = response.data.data
     alert("독후감 게시!")
+    router.push({name: 'essaydetail', params:{essayId: essaydetail.id}})
   })
   .catch((error) => {
     console.error(error)
@@ -118,71 +113,59 @@ onMounted(()=> {
 #create-essay {
   @apply bg-maintheme1 text-white  shadow-lg rounded-md font-semibold
 }
+.tiptap {
+  > * + * {
+    margin-top: 0.75em;
+  }
 
-// .ProseMirror {
-//   height: 100%;
-//   border: 1px solid black;
-//   border-radius: 10px;
-//   padding: 6px;
-//   overflow: scroll;
-// }
-//   > * + * {
-//     margin-top: 0.75em;
-//   }
+  ul,
+  ol {
+    padding: 0 1rem;
+  }
 
-//   .tiptap {
-//   > * + * {
-//     margin-top: 0.75em;
-//   }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.1;
+  }
 
-//   ul,
-//   ol {
-//     padding: 0 1rem;
-//   }
+  code {
+    background-color: rgba(#616161, 0.1);
+    color: #616161;
+  }
 
-//   h1,
-//   h2,
-//   h3,
-//   h4,
-//   h5,
-//   h6 {
-//     line-height: 1.1;
-//   }
+  pre {
+    background: #0D0D0D;
+    color: #FFF;
+    font-family: 'JetBrainsMono', monospace;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
 
-//   code {
-//     background-color: rgba(#616161, 0.1);
-//     color: #616161;
-//   }
+    code {
+      color: inherit;
+      padding: 0;
+      background: none;
+      font-size: 0.8rem;
+    }
+  }
 
-//   pre {
-//     background: #0D0D0D;
-//     color: #FFF;
-//     font-family: 'JetBrainsMono', monospace;
-//     padding: 0.75rem 1rem;
-//     border-radius: 0.5rem;
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 
-//     code {
-//       color: inherit;
-//       padding: 0;
-//       background: none;
-//       font-size: 0.8rem;
-//     }
-//   }
+  blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid rgba(#0D0D0D, 0.1);
+  }
 
-//   img {
-//     max-width: 100%;
-//     height: auto;
-//   }
-
-//   blockquote {
-//     padding-left: 1rem;
-//     border-left: 2px solid rgba(#0D0D0D, 0.1);
-//   }
-
-//   hr {
-//     border: none;
-//     border-top: 2px solid rgba(#0D0D0D, 0.1);
-//     margin: 2rem 0;
-//   }
-// }
+  hr {
+    border: none;
+    border-top: 2px solid rgba(#0D0D0D, 0.1);
+    margin: 2rem 0;
+  }
+}
 </style>

@@ -8,15 +8,14 @@
         <div class="text-xl font-semibold">{{ essay?.title }}</div>
       </div>
       <div class="flex items-center">
-        <button id="profile-image"><img :src="essay?.profileUrl" alt=""> </button>
-        <div>{{ essay?.nickname }}</div>
+        <button><img id="profile-image" :src="essay?.profileUrl" alt=""></button>
+        <div id="nickname">{{ essay?.nickname }}</div>
       </div>
     </div>
-    
     <!-- 독후감 정보 -->
     <div class="p-10">
       <!-- 도서 정보 -->
-      <div class="grid grid-cols-12 gap-4 shadow-slate-500 shadow-md rounded-xl p-3">
+      <div class="relative grid grid-cols-12 gap-4 shadow-slate-500 shadow-md rounded-xl p-3">
         <div class="col-span-3 flex justify-center">
           <img id="book-image" :src="essay?.bookCoverUrl" alt="">
         </div>
@@ -26,7 +25,7 @@
             저자 {{ essay?.bookAuthor }}
           </div>
           <!-- 조회수 & 스크랩 & 작성일 -->
-          <div class="flex justify-end gap-5 p-3">
+          <div class="absolute bottom-1 right-2 flex justify-end gap-5 p-3">
             <div>조회수 {{ essay?.hit }}</div>
             <div>스크랩 {{ scraps }}</div>
             <div>{{ essay?.createdAt.toString().split('T')[0] }}</div>
@@ -34,8 +33,7 @@
         </div>
       </div>
       <!-- 독후감 내용 -->
-      <div v-html="essay?.content" class="mt-10">
-       </div>
+      <div v-html="essay?.content" class="mt-10 prose"></div>
       <div class="flex justify-end border-b border-gray-400 mb-4">
         <div v-if="isMe">
           <button @click="deleteEssay" id="delete-essay">삭제</button>
@@ -48,7 +46,7 @@
       <!-- 댓글 작성 -->
       <div class="flex items-center">
         <div class="font-bold mr-4">4개의 댓글</div>
-        <input v-model="comment" type="text" id="book"  class="w-2/3 rounded-lg appearance-none border border-gray-500 py-4 px-4 m-2 bg-gray-50 text-maintheme1 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="댓글 추가"/>
+        <input v-model="comment" type="text" id="book"  class="w-2/3 rounded-lg appearance-none border border-gray-500 py-2 px-4 m-2 bg-gray-50 text-maintheme1 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="댓글 추가"/>
         <button id="add-comment" @click="addComment(comment)" type="button" class=" text-white bg-maintheme1 hover:bg-gray-500 py-2  px-6 ml-4 font-bold rounded-md">
           등록
         </button>
@@ -67,6 +65,7 @@
   import axios from 'axios';
   import type { Essay } from '@/stores/essaycounter';
   import { essayStore } from '@/stores/essaycounter';
+  import Editor from '@/components/essay/TiptapEditor.vue';
 
   const scraps = ref<number>(0)
   const store = essayStore();
@@ -88,6 +87,7 @@
   }
   
   const deleteEssay = () => {
+    alert("정말 삭제하실건가요?")
     axios({
     headers: {
       Authorization: `${store.token}`,
@@ -105,7 +105,7 @@
   .catch((error)=> {
     console.error(error)
   })
-    alert("지워버렷!")
+    alert("독후감을 삭제합니다.")
     router.push({name: 'essaylist'})
   }
 
@@ -151,8 +151,12 @@ onMounted(()=> {
 </script>
 
 <style scoped>
+  #nickname {
+    @apply font-bold text-lg
+  }
+
   #profile-image {
-    @apply mx-2
+    @apply w-[60px] h-[60px] object-cover mx-3 shadow-md justify-items-center rounded-[70%] border;
   }
 
   #book-image {
@@ -161,7 +165,7 @@ onMounted(()=> {
 
 
   #delete-essay {
-  @apply bg-red-600 text-white border-2 border-gray-600 px-2 py-1 m-2 rounded-lg hover:bg-red-700
+  @apply bg-red-600 text-white border-2 border-red-800 px-2 py-1 m-2 rounded-lg hover:bg-red-700
 }
 
   #edit-essay,
@@ -176,6 +180,5 @@ onMounted(()=> {
   #editor-button {
   @apply m-1 px-2 py-1 border-2 border-maintheme1 rounded-md font-bold
 }
-
 
 </style>
