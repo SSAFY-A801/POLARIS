@@ -1,8 +1,14 @@
 <template>
   <div>
     <div class="flex justify-between m-2">
-      <div class="text-center text-xl m-4">
-        담고 싶은 도서를 내 서재에 담아보세요! (시험용 문구)
+      <div v-if="mybookList.length == 0" class="text-center text-xl m-4">
+        <div>
+          현재 서재에 도서가 존재하지 않습니다.
+        </div>
+        <div>
+          원하는 도서를 내 서재에 담아보세요.
+        </div>
+        
       </div>
       <div v-if="isMe">
         <div>
@@ -57,7 +63,7 @@
       </div>
     </div>
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-      <MyLibraryList 
+      <MyLibraryList
       :mybookList="selectValue === '전체도서' && !booksearch ? mybookList : filterMybook"
       :isMe="isMe"
       />

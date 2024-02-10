@@ -265,9 +265,10 @@
   // 수정정보 저장
   const saveBookinfo = () => {
     // DB에 저장하는 구문 추가
-    if (bookDetail.value.isOwned && bookDetail.value.isOpened == false){
+    if (!(bookDetail.value.isOwned && bookDetail.value.isOpened)){
       bookDetail.value.userBookTradeType = "UNDEFINED"
     }
+    console.log(bookDetail.value.userBookTradeType)
     axios({
       headers: {
         Authorization: `${store.token}`,
