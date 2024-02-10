@@ -15,6 +15,7 @@ public class UserResponseDto {
 	private Long region;
 	private String regionString;
 	private String nickname;
+	private String profileUrl;
 
 
 	public UserResponseDto(User user) {
@@ -26,5 +27,6 @@ public class UserResponseDto {
 			+ user.getRegcode().getGungu() + " "
 			+ user.getRegcode().getDong();
 		this.nickname = user.getNickname();
+		this.profileUrl = user.getProfileUrl();
 	}
 }
