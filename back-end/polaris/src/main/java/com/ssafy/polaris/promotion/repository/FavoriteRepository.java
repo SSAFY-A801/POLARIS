@@ -19,7 +19,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 	@Query(value = "select f from Favorite f where f.promotion.id = :promotionId and f.user.id = :userId")
 	Optional<Favorite> findFavoriteByPromotionIdAndUserId(@Param("promotionId") Long promotionId, @Param("userId") Long userId);
 
-	@Transactional
 	@Modifying
 	@Query(value = "insert into favorite (promotion_id, user_id) values (:promotionId, :userId)", nativeQuery = true)
 	void saveWithPromotionIdAndUserId(@Param("promotionId") Long promotionId, @Param("userId") Long userId);
