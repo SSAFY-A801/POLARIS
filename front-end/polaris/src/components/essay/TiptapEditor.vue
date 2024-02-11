@@ -4,46 +4,43 @@
     <button id="editor-button"
       @click="editor.chain().focus().toggleBold().run()"
       :disabled="!editor.can().chain().focus().toggleBold().run()"
-      :class="{ 'is-active': editor.isActive('bold') }"
+      :class="{ 'is-active  bg-gray-200': editor.isActive('bold') }"
     ><font-awesome-icon icon="fa-solid fa-bold" />
     </button>
     <button id="editor-button"
       @click="editor.chain().focus().toggleItalic().run()"
       :disabled="!editor.can().chain().focus().toggleItalic().run()"
-      :class="{ 'is-active': editor.isActive('italic') }"
+      :class="{ 'is-active  bg-gray-200': editor.isActive('italic') }"
     ><font-awesome-icon icon="fa-solid fa-italic" />
     </button>
     <button id="editor-button"
       @click="editor.chain().focus().toggleStrike().run()"
       :disabled="!editor.can().chain().focus().toggleStrike().run()"
-      :class="{ 'is-active': editor.isActive('strike') }"
+      :class="{ 'is-active bg-gray-200': editor.isActive('strike') }"
     ><font-awesome-icon icon="fa-solid fa-strikethrough" />
     </button>
-    <!-- <button  id="editor-button" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
-      H1
-    </button> -->
-    <button  id="editor-button" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
+    <button  id="editor-button" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active bg-gray-200': editor.isActive('heading', { level: 1 }) }">
       H1
     </button>
-    <button  id="editor-button" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
+    <button  id="editor-button" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'is-active  bg-gray-200': editor.isActive('heading', { level: 2 }) }">
       H2
     </button>
-    <button  id="editor-button" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }">
+    <button  id="editor-button" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'is-active  bg-gray-200': editor.isActive('heading', { level: 3 }) }">
       H3
     </button>
-    <button id="editor-button"  @click="editor.chain().focus().toggleHeading({ level: 4 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }">
+    <button id="editor-button"  @click="editor.chain().focus().toggleHeading({ level: 4 }).run()" :class="{ 'is-active  bg-gray-200': editor.isActive('heading', { level: 4 }) }">
       H4
     </button>
-    <button id="editor-button"  @click="editor.chain().focus().toggleHeading({ level: 5 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }">
+    <button id="editor-button"  @click="editor.chain().focus().toggleHeading({ level: 5 }).run()" :class="{ 'is-active  bg-gray-200': editor.isActive('heading', { level: 5 }) }">
       H5
     </button>
-    <button id="editor-button" @click="editor.chain().focus().toggleHeading({ level: 6 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }">
+    <button id="editor-button" @click="editor.chain().focus().toggleHeading({ level: 6 }).run()" :class="{ 'is-active  bg-gray-200': editor.isActive('heading', { level: 6 }) }">
       H6
     </button>
-    <button id="editor-button" @click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': editor.isActive('bulletList') }">
+    <button id="editor-button" @click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active  bg-gray-200': editor.isActive('bulletList') }">
       <font-awesome-icon icon="fa-solid fa-list" />
     </button>
-    <button id="editor-button" @click="editor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': editor.isActive('orderedList') }">
+    <button id="editor-button" @click="editor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active  bg-gray-200': editor.isActive('orderedList') }">
       <font-awesome-icon icon="fa-solid fa-list-ol" />
     </button>
     <button id="editor-button"
@@ -57,11 +54,11 @@
       <font-awesome-icon icon="fa-solid fa-rotate-right" />
     </button>
     <button id="editor-button"
-    @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('codeBlock') }">
+    @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active  bg-gray-200': editor.isActive('codeBlock') }">
       <font-awesome-icon icon="fa-solid fa-code" />
     </button>
     <button id="editor-button" 
-    @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': editor.isActive('blockquote') }">
+    @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active  bg-gray-200': editor.isActive('blockquote') }">
     <font-awesome-icon icon="fa-solid fa-quote-right" />
     </button>
     <button id="editor-button" 
@@ -141,6 +138,10 @@ onBeforeUnmount(() => {
   .tiptap {
   > * + * {
     margin-top: 0.75em;
+  }
+
+  p {
+    margin: 5px;
   }
 
   ul,

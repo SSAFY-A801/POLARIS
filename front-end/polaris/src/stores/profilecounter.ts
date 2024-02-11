@@ -68,7 +68,7 @@ export const profileCounterStore = defineStore('counter', () => {
   const token = localStorage.getItem('user_token')
   const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
   const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
-  const loginUser = JSON.parse(userInfoString.value)
+  const loginUserId = ref<string>("")
 
 
   
@@ -107,7 +107,6 @@ export const profileCounterStore = defineStore('counter', () => {
     })  
     .then((response) => {
       const userData = response.data['data']
-      console.log(`${id}번유저정보`,userData)
       profileUser.value = userData
     })
     .catch((error)=> {
@@ -119,7 +118,7 @@ export const profileCounterStore = defineStore('counter', () => {
   
   // ProfileUdpatePage
   const isMe = computed(()=> {
-    return profileUser.value.id === Number(loginUser.value?.id)
+    return profileUser.value.id == Number(loginUserId.value)
   });
 
 
@@ -226,7 +225,7 @@ const getMybookList = (id:string)=> {
     deletebuttonState.value = !deletebuttonState.value
   }
   return { 
-    profileUser, getProfile,loginUser, userInfoString,isMe,
+    profileUser, getProfile,loginUserId, userInfoString,isMe,
     searchAPIbookList, BACK_API_URL, token,
     getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }
 },{persist: true})
