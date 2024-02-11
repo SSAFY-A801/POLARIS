@@ -1,5 +1,6 @@
 <template>
-  <div class="container border mx-auto mt-24 max-w-6xl min-w-[700px] bg-backgroundgray p-5">
+  <Navvar></Navvar>
+  <div class="container border mx-auto mt-64 max-w-6xl min-w-[700px] bg-backgroundgray p-5">
     <button id="back" @click="goback()" >BACK</button>
     <!-- 최상단 : 독후감 제목 & 프로필 -->
     <div class="flex justify-between items-center p-5 m-1 border-b  border-black">
@@ -73,6 +74,7 @@
 </template>
 
 <script setup lang="ts">
+  import Navvar from '@/components/common/Navvar.vue'
   import { computed, onMounted, ref, watch } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import axios from 'axios';

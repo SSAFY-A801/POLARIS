@@ -1,4 +1,5 @@
 <template>
+  <Navvar></Navvar>
   <div id="signupcontainer" class="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow sm:px-6 md:px-8 lg:px-10 border-2" >
     <div class="self-center mt-4 mb-4 text-xl font-bold text-maintheme1 sm:text-2xl">
         회원가입
@@ -93,6 +94,7 @@
 </template>
 
 <script setup lang="ts">
+import Navvar from '@/components/common/Navvar.vue'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import RegionModal from '@/components/Auth/RegionModal.vue'
@@ -304,7 +306,7 @@ const submitUserSignup = async () => {
 #signupcontainer {
   width: 1200px;
   height: 750px;
-  margin: 150px auto 50px;
+  margin: 220px auto 50px;
   display: flex;
   flex-grow:1;
 }

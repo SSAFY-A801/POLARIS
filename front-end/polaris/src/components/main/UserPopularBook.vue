@@ -1,21 +1,22 @@
 <template>
     <div class="wrapper">
-      <button class="carousel-button" @click="handleOnClickPrevButton"><font-awesome-icon icon="fa-solid fa-chevron-left" size="xl" /></button>
+      <button class="carousel-button" @click="handleOnClickPrevButton"><font-awesome-icon icon="fa-solid fa-chevron-left" style="color: #ffffff;" size="2xl" /></button>
       <div class="carousel-wrapper">
         <div class="carousel-item-wrapper" :style="{ left: `-${currentIndex * widthPx}px` }">
           <div v-for="(userPopularBook, index) in userPopularBookList"  class="book-list-item carousel-item">
             <router-link :to="{ name: 'userpopularbookdatail', params: { id: index+1 }}" class="no-underline">
-                <div class="m-auto overflow-hidden rounded-lg shadow-lg cursor-pointer w-48 h-72">
+                <div class="m-auto overflow-hidden  cursor-pointer w-60 h-100">
                     <div class="block w-full h-full">
-                        <div class="font-medium text-maintheme1 font-bold text-md mx-auto text-center mt-2 mb-2">
+                        
+                        <img :src="userPopularBook.cover" class="object-cover mx-auto" style="height: 220px;"/> 
+                        <div class="font-xl text-white font-bold text-lg mx-auto text-center mt-4">
                             {{index+1}}위
                         </div>
-                        <img :src="userPopularBook.cover" class="object-cover mx-auto" style="width: 85px;"/> 
-                        <div class="w-full p-4 bg-white dark:bg-gray-800">
-                            <p class="mb-2 text-xs font-medium text-gray-800 ">
+                        <div class="w-full px-10 py-6 bg-maintheme1 dark:bg-gray-800" style="height: 200px; text-align: center;">
+                            <p class="mb-2 text-md font-xl text-white ">
                                 {{truncateTitle(userPopularBook.title)}}
                             </p>
-                            <p class="font-light text-gray-400  text-xs">
+                            <p class="font-light text-gray-300  text-xs">
                                 {{truncateTitle(userPopularBook.author)}}
                             </p>
                         </div>
@@ -25,7 +26,7 @@
           </div>
         </div>
       </div>
-      <button class="carousel-button" @click="handleOnClickNextButton"><font-awesome-icon icon="fa-solid fa-chevron-right" size="xl" /></button>
+      <button class="carousel-button" @click="handleOnClickNextButton"><font-awesome-icon icon="fa-solid fa-chevron-right" style="color: #ffffff;" size="2xl" /></button>
     </div>
   </template>
   
@@ -47,7 +48,7 @@ const widthPx = 1000; // 전체 너비 px
 
 const truncateTitle = (title: string) => {
     if (!title) return "";
-    return title.length > 25 ? title.substring(0, 25) + "..." : title;
+    return title.length > 30 ? title.substring(0, 30) + "..." : title;
   };
   
 // onMounted(async () => {
@@ -90,13 +91,15 @@ const handleOnClickPrevButton = () => {
   justify-content: center;
   align-items: center;
   gap: 32px; 
+  height: 600px;
+  background: #323F59;
 }
 
 .carousel-wrapper {
   width: 1000px; 
   overflow: hidden;
   position: relative;
-  height: 300px;
+  height: 400px;
 }
 .carousel-item-wrapper {
   width: fit-content;
@@ -109,5 +112,6 @@ const handleOnClickPrevButton = () => {
 }
 .carousel-item {
   width: 200px; 
+  height: 450px;
 }
 </style>

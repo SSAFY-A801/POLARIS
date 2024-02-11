@@ -1,6 +1,7 @@
 import { ref, computed, watch, watchEffect, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios';
+import axiosInstance from '@/services/axios'
 import type { LoginInfo } from './authcounter';
 
 export interface Searchbook  {
@@ -97,7 +98,7 @@ export const profileCounterStore = defineStore('counter', () => {
   });
   
   const getProfile = (id: number) => {
-    axios({
+    axiosInstance.value({
       headers: {
         Authorization: `${token}`,
         "Content-Type": 'application/json'
@@ -196,7 +197,7 @@ export const profileCounterStore = defineStore('counter', () => {
   const mybookLists = ref<Book[]>([]);
 
 const getMybookList = (id:string)=> {
-  axios({
+  axiosInstance.value({
     headers: {
       Authorization: `${token}`
     },

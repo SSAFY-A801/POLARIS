@@ -1,6 +1,7 @@
 <template>
+  <Navvar></Navvar>
 
-    <div id="passwordsearchcontainer" class="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow sm:px-6 md:px-8 lg:px-10 border-2">
+    <div id="passwordsearchcontainer" class="mt-40 flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow sm:px-6 md:px-8 lg:px-10 border-2">
         <div class="self-center mt-4 mb-14 text-xl font-bold text-maintheme1 sm:text-2xl">
             비밀번호 찾기
         </div>
@@ -17,6 +18,7 @@
 
 
 <script setup lang="ts">
+import Navvar from '@/components/common/Navvar.vue'
 import { ref, watch } from 'vue'
 import axios from 'axios'
 

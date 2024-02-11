@@ -1,5 +1,6 @@
 <template>
-  <div class="first-container">
+  <Navvar></Navvar>
+  <div class="first-container mt-40">
     <div class="content">
   <div class="text-2xl m-3 font-semibold">나의 채팅방 목록</div>
 <div>
@@ -46,6 +47,7 @@
 
 
 <script setup lang="ts">
+import Navvar from '@/components/common/Navvar.vue'
 import { useRouter } from 'vue-router';
 import { onMounted, ref, computed } from 'vue';
 import axios from 'axios';

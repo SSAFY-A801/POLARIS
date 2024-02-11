@@ -20,7 +20,8 @@ import { faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCartSh
     faRotateRight,
     faCode,
     faQuoteRight,
-    faArrowsDownToLine, } from '@fortawesome/free-solid-svg-icons';
+    faArrowsDownToLine,
+    faUserPlus, faArrowRightToBracket, faCrown, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -36,7 +37,10 @@ import axios from 'axios'
 
 library.add(faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCartShopping, faCircleCheck, faCircleUser,
   faComment,faRotateLeft, faArrowsDownToLine, faCode, faQuoteRight, faRotateRight, faBold, faItalic, faStrikethrough, faList, faListOl, faComments,faFloppyDisk, faImages, faLocationDot, faLock, faMagnifyingGlass, faNoteSticky,
-   faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark,  faChevronLeft, faChevronRight, faArrowRightFromBracket )
+   faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark,  faChevronLeft, faChevronRight, faArrowRightFromBracket,
+  faComment, faComments,faFloppyDisk, faImages, faLocationDot, faLock, faMagnifyingGlass, faNoteSticky,
+   faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark,  faChevronLeft, faChevronRight, faArrowRightFromBracket, faUserPlus, faArrowRightToBracket, faCrown, faPenToSquare,
+   faHeart )
 
 
 // firebase 사용을 위한 초기화

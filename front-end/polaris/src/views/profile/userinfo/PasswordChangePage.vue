@@ -1,5 +1,6 @@
 <template>
-  <div class="container mt-28">
+  <Navvar></Navvar>
+  <div class="container mt-60">
     <div class="flex justify-center">
       <div class="max-w-md w-full m-8 px-4  bg-white rounded-2xl shadow  border border-gray-300">
         <div class="py-4 px-4 rounded-t-2xl mb-4 border-b-2">
@@ -63,6 +64,7 @@
 </template>
 
 <script setup lang="ts">
+  import Navvar from '@/components/common/Navvar.vue'
   import { useRouter } from 'vue-router'
   import { onMounted, ref, watch } from 'vue';
   import axios from 'axios';

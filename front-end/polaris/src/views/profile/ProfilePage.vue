@@ -1,4 +1,6 @@
 <template>
+  <Navvar></Navvar>
+  <div class="mt-40">
 <!-- Main modal -->
 <div v-if="showModal" 
     id="default-modal"
@@ -161,11 +163,12 @@
       </div>
       <!-- 하위 페이지 -->
       <RouterView></RouterView>
-    </div>
+    </div></div>
   </div>
 </template>
 
 <script setup lang="ts">
+  import Navvar from '@/components/common/Navvar.vue'
   import followingListitem from '@/components/profile/following/followingListitem.vue';
   import { ref, onMounted, computed } from "vue";
   import { useRouter, useRoute } from 'vue-router'

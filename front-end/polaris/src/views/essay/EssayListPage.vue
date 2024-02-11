@@ -1,5 +1,6 @@
 <template>
-  <div class="mt-16 flex justify-center">
+  <Navvar></Navvar>
+  <div class="mt-60 flex justify-center">
     <div class="container w-full mt-8 max-w-6xl bg-backgroundgray p-4">
       <!-- 최상단 -->
       <div class="flex justify-between items-center p-2 m-2 border-b  border-black">
@@ -59,6 +60,7 @@
 </template>
 
 <script setup lang="ts">
+import Navvar from '@/components/common/Navvar.vue'
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import EssayList from '../../components/essay/EssayList.vue';

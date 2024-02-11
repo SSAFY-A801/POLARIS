@@ -1,5 +1,6 @@
 <template>
-  <div class="max-w-screen-lg mx-auto">
+  <Navvar></Navvar>
+  <div class="max-w-screen-lg mx-auto mt-40">
     <table class="table">
       <thead>
         <tr>
@@ -21,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+import Navvar from '@/components/common/Navvar.vue'
 import MyExchangeListItem from './MyExchangeListItem.vue';
 const items = 11;
 </script>
