@@ -82,7 +82,6 @@ const writeEssay = () => {
   })
   .catch((error) => {
     console.error(error)
-    alert("이미 같은 도서의 독후감을 작성하셨습니다.")
   })
 
 }

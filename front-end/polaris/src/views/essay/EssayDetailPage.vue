@@ -40,12 +40,19 @@
           <button @click="editEssay" id="edit-essay">수정</button>
         </div>
         <div v-else>
-          <button id="scrap-essay">스크랩</button>
+          <button id="scrap-essay" @click="scrapEssay">
+            <font-awesome-icon icon="fa-solid fa-bookmark" style="color: #323f59;" />
+            스크랩
+          </button>
+          <button id="scrap-essay" @click="scrapEssay">
+            <font-awesome-icon icon="fa-solid fa-bookmark" style="color: #323f59;" />
+            스크랩 취소 
+          </button>
         </div>
       </div>
       <!-- 댓글 작성 -->
       <div class="flex items-center">
-        <div class="font-bold mr-4">4개의 댓글</div>
+        <div class="font-bold mr-4">{{essay?.comments.length || 0 }} 개의 댓글</div>
         <input v-model="comment" type="text" id="book"  class="w-2/3 rounded-lg appearance-none border border-gray-500 py-2 px-4 m-2 bg-gray-50 text-maintheme1 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="댓글 추가"/>
         <button id="add-comment" @click="addComment(comment)" type="button" class=" text-white bg-maintheme1 hover:bg-gray-500 py-2  px-6 ml-4 font-bold rounded-md">
           등록
@@ -53,48 +60,122 @@
       </div>
       <!-- 댓글 목록 -->
       <div>
-        이런저런 댓글들 CommentList
+        <CommentListItem
+        v-for="(comment, index) in essay?.comments"
+        :key="index"
+        :comment="comment"
+        @edit-comment="getEssayInfo()"
+        @delete-comment="getEssayInfo()"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { computed, onMounted, ref } from 'vue';
+  import { computed, onMounted, ref, watch } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import axios from 'axios';
   import type { Essay } from '@/stores/essaycounter';
-  import { essayStore } from '@/stores/essaycounter';
-  import Editor from '@/components/essay/TiptapEditor.vue';
-
+  import { profileCounterStore } from '@/stores/profilecounter';
+  import CommentListItem from '@/components/essay/comment/CommentListItem.vue'; 
   const scraps = ref<number>(0)
-  const store = essayStore();
+  const profileStore = profileCounterStore();
   const essay = ref<Essay|null>(null)
   const route = useRoute();
   const router  = useRouter();
+  const scrap = ref(false)
   const comment = ref("")
   const isMe = computed(()=> {
-    return essay.value?.userId ==  Number(store.loginUser.id)
+    return essay.value?.userId ==  Number(profileStore.loginUserId)
   })
+
+  watch(() => essay.value?.comments, (newComments) => {
+  // 댓글이 변경될 때마다 수행할 로직 작성
+  console.log("댓글이 변경되었습니다:", newComments);
+});
+
+  // 댓글추가
   const addComment = (comment:string) => {
-    alert("댓글 작성")
+    if (essay.value && comment.length){
+      axios({
+        headers: {
+          Authorization: `${profileStore.token}`,
+          "Content-Type": 'application/json'
+        },
+        method: 'post',
+        url: `${profileStore.BACK_API_URL}/comment`,
+        data: {
+          essayId: essay.value.id,
+          content: comment
+        }
+      })
+      .then((response) => {
+        console.log(response.data)
+        alert("작성 완료")
+        // 독후감 정보 갱신
+        axios({
+          headers: {
+            Authorization: `${profileStore.token}`,
+            "Content-Type": 'application/json'
+          },
+          method: 'get',
+          url: `${profileStore.BACK_API_URL}/essay/${route.params.essayId}`
+        })
+        .then((response)=> {
+          essay.value = response.data.data
+        })
+        .catch((error)=> {
+          console.error(error);
+          
+        })
+      })
+      .catch((error) => {
+        console.error(error);
+        
+      })
+    } else {
+      alert('내용을 작성해 주세요.')
+    }
   }
 
+  // 스크랩
+  const scrapEssay = () => {
+    if(essay.value){
+      axios({
+        headers: {
+          Authorization: `${profileStore.token}`,
+          "Content-Type": 'application/json'
+        },
+        method: 'put',
+        url: `${profileStore.BACK_API_URL}/essay/${essay.value.id}`
+      })
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+    }
+  }
+
+  // 독후감 수정
   const editEssay = () => {
     if(essay.value){
       router.push({name: 'essayedit', params:{essayId: essay.value.id} })
     }
   }
   
+  // 독후감 삭제
   const deleteEssay = () => {
     alert("정말 삭제하실건가요?")
     axios({
     headers: {
-      Authorization: `${store.token}`,
+      Authorization: `${profileStore.token}`,
       "Content-Type": 'application/json'
     },
     method: 'delete',
-    url: `${store.BACK_API_URL}/essay`,
+    url: `${profileStore.BACK_API_URL}/essay`,
     data: {
       id: essay.value?.id
     }
@@ -113,15 +194,14 @@
   router.push({name: 'essaylist'})
 }
 
-onMounted(()=> {
-  console.log(isMe.value)
+const getEssayInfo = () => {
   axios({
     headers: {
-      Authorization: `${store.token}`,
+      Authorization: `${profileStore.token}`,
       "Content-Type": 'application/json'
     },
     method: 'get',
-    url: `${store.BACK_API_URL}/essay/${route.params.essayId}`
+    url: `${profileStore.BACK_API_URL}/essay/${route.params.essayId}`
   })
   .then((response)=> {
     console.log(response.data)
@@ -131,13 +211,17 @@ onMounted(()=> {
     console.error(error);
     
   })
+}
+
+onMounted(()=> {
+  getEssayInfo();
   // 스크랩 수 조회
   axios({
       headers: {
         "Content-Type": 'application/json'
       },
       method: 'get',
-      url: `${store.BACK_API_URL}/essay/scrap_count/${route.params.essayId}`
+      url: `${profileStore.BACK_API_URL}/essay/scrap_count/${route.params.essayId}`
     })
     .then((response)=> {
       console.log(response.data)

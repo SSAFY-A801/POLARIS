@@ -24,26 +24,137 @@
           </button>
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-8 sm:grid-cols-4">
-        <EssayList :essayList="essayList" />
+        <div class="grid grid-cols-2 gap-8 sm:grid-cols-4">
+          <EssayList :essayList="showingList" />
+        </div>
+        <ul class="pagination">
+        </ul>
+        <div v-if="essayList.length" class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+          <div class="flex flex-1 justify-between sm:hidden">
+            <li class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" :class="{'disabled' : isBtnPrev}"><a class="page-link" href="#" @click.prevent="pageArrow('prev')">Previous</a></li>
+            <li class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" :class="{'disabled' : isBtnNext}"><a class="page-link" href="#" @click.prevent="pageArrow('next')">Next</a></li>
+          </div>
+          <div class="hidden sm:flex sm:flex-1 justify-center">
+            <div>
+              <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+              <li class="relative inline-flex items-center rounded-s-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" :class="{'disabled' : isBtnFirst}">
+                <a class="page-link" href="#" @click.prevent="pageArrow('first')">First</a>
+              </li>
+              <li class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" :class="{'disabled' : isBtnPrev}">
+                <a class="page-link" href="#" @click.prevent="pageArrow('prev')">Previous</a>
+              </li>
+              <template v-for="(item, index) in pageList" :key="`list-${index}`">
+                <li class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 "
+                 :class="{'active' : item == currentPage}">
+                  <a class="page-link" href="#" @click.prevent="page(item)">{{item+1}}</a></li>
+              </template>
+              <li class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" :class="{'disabled' : isBtnNext}"><a class="page-link" href="#" @click.prevent="pageArrow('next')">Next</a></li>
+              <li class="relative inline-flex items-center rounded-e-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" :class="{'disabled' : isBtnLast}"><a class="page-link" href="#" @click.prevent="pageArrow('last')">Last</a></li>
+            </nav>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import EssayList from '../../components/essay/EssayList.vue';
 import axios from 'axios';
 import { essayStore } from '@/stores/essaycounter';
 import type { Essay } from '@/stores/essaycounter';
 
+
 const router = useRouter();
 const filter = ref("")
 const keyword = ref("")
 const store = essayStore();
+
+// 보여지는 리스트
+const showingList = ref<Essay[]>([])
 const essayList = ref<Essay[]>([])
+
+// 페이지 당 보여줄 게시글 개수
+const listCnt = ref(20)
+let currentPage = ref(0) // 현재 페이지
+let pageNum = 10 // 페이지 개수
+const pageList = ref<number[]>([]) // 보여지는 페이지 리스트
+let totalPage = ref(0); // 페이지 숫자
+
+let isBtnFirst = ref(true)
+let isBtnPrev = ref(true)
+let isBtnNext = ref(true)
+let isBtnLast = ref(true)
+
+const page = (e:number) => {
+  console.log(e)
+  currentPage.value = e
+  essaySearch(keyword.value, filter.value);
+}
+
+watch(listCnt,(after, before) => {
+  currentPage.value = 0
+  essaySearch(keyword.value, filter.value);
+
+})
+
+const pageBtnCheck = () => {
+  isBtnFirst.value = currentPage.value == 0 ? true : false
+  isBtnPrev.value = currentPage.value == 0 ? true : false
+  
+  isBtnNext.value = currentPage.value == totalPage.value ? true : false
+  isBtnLast.value = currentPage.value == totalPage.value ? true : false
+}
+
+watch(currentPage, (after, before) => {
+  pageBtnCheck()
+})
+
+const pageArrow = (e:string) => {
+  let movePage = currentPage.value
+  if(e == 'first'){
+    movePage = 0 // 처음으로
+  }else if(e == 'last'){    //마지막
+    movePage = totalPage.value
+  } else if(e == 'prev'){    //이전  
+    movePage = currentPageListStart() - 1    
+    movePage < 0 ? movePage = 0 : ''
+  } else{//다음
+    movePage = currentPageListStart() + 10
+    movePage >= totalPage.value ? movePage = totalPage.value : ''
+  }
+  page(movePage)
+}
+
+
+const currentPageListStart = () => {
+  return Math.floor(currentPage.value / pageNum)* pageNum
+}
+
+// 페이징
+const paging = () => {
+  pageList.value = [];
+
+  if (essayList.value.length % listCnt.value == 0){
+    totalPage.value  = (essayList.value.length / listCnt.value) - 1
+  } else {
+    totalPage.value = Math.ceil(essayList.value.length / listCnt.value) - 1
+  }
+
+  // 현재 페이지 기준으로 페이징 숫자를 넣는다.
+  let pageListStart: number = currentPageListStart()
+  for(let i = 0; i < pageNum; i++){
+    if(totalPage.value >= pageListStart){
+      pageList.value.push(pageListStart)
+      pageListStart ++;
+    }
+  }
+}
+
+
+
 
 const writeEssay = () => {
   router.push({name: 'essaycreate'})
@@ -75,15 +186,24 @@ const essaySearch = (keyword: string, filter: string) => {
 
   })
   .then((response) => {
-    // console.log(response.data)
+    console.log(response.data)
     const res = response.data.data
     essayList.value = res
-    console.log(essayList.value)
+    showingList.value = []
+    let listIdx = (listCnt.value * (currentPage.value)); // 보여질 게시물 index
+    for (let i=0; i < listCnt.value; i++){
+      if(essayList.value.length > listIdx){
+        showingList.value.push(essayList.value[listIdx])
+        listIdx ++;
+      }
+    }
+    console.log("현재 페이지:", showingList.value)
+    paging()
+    pageBtnCheck()
   })
   .catch((error)=> {
     console.error(error)
   })
-
 }
 
 onMounted(()=> {
@@ -93,8 +213,9 @@ onMounted(()=> {
 </script>
 
 <style scoped>
-
-
+.active {
+  @apply relative z-10 bg-blue-800 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900
+}
 #write-essay {
     @apply bg-[#323F59] border text-white font-bold m-[5px] px-5 py-[10px] rounded-[10px]  hover:bg-gray-500;
 }

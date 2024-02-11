@@ -66,7 +66,12 @@ const editEssay = () => {
       console.error(error)
     })
     alert("독후감 수정!")
-    router.push({name: 'essaydetail', params: {essayId: essay.value.id}})
+    if(!essay.value.isOpened){
+      alert("독후감이 비공개로 전환됩니다.")
+      router.push({name: 'essaylist'})
+    } else{
+      router.push({name: 'essaydetail', params: {essayId: essay.value.id}})
+    }
   }
 }
 

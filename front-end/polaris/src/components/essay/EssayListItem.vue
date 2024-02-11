@@ -76,7 +76,7 @@
       url: `${store.BACK_API_URL}/essay/scrap_count/${essayInfo.id}`
     })
     .then((response)=> {
-      console.log(response.data)
+      // console.log(response.data)
       localScraps.value = response.data.data;
     })
     .catch((error)=> {

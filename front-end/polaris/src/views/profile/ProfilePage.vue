@@ -191,10 +191,9 @@
   const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
   const unfollow_list = ref<Unfollowing[]>([])
-  const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
   const isMe = computed(() => {
-      return profileUser.value.id == store.loginUser.id
-})
+    return store.isMe
+  })
 
   const follow = (user: User) => {
     axios({
@@ -204,7 +203,7 @@
       },
 
       method: 'post',
-      url: `${BACK_API_URL}/profile/${store.loginUser.id}/follow`,
+      url: `${BACK_API_URL}/profile/${store.loginUserId}/follow`,
       data: {
         followingId: user.id
       }
@@ -226,7 +225,7 @@
       },
 
       method: 'delete',
-      url: `${BACK_API_URL}/profile/${store.loginUser.id}/unfollow`,
+      url: `${BACK_API_URL}/profile/${store.loginUserId}/unfollow`,
       data: {
         "unfollowings": [{followingId: profileUser.value.id},]
       }
@@ -263,7 +262,7 @@
       },
 
       method: 'DELETE',
-      url: `${BACK_API_URL}/profile/${store.loginUser.id}/unfollow`,
+      url: `${BACK_API_URL}/profile/${store.loginUserId}/unfollow`,
       data: {
         "unfollowings": unfollow_list.value
       }
@@ -304,7 +303,7 @@
 
 
   const gotoMychatList = () => {
-    router.push({name: "chat", params:{id:store.loginUser.id}});
+    router.push({name: "chat", params:{id:store.loginUserId}});
   }
 
   const chatStore = useChatStore();
@@ -358,13 +357,14 @@
   };
 
   onMounted(()=> {
+    store.getProfile(Number(route.params.id))
     // // following 명단 호출
     axios({
       headers: {
         Authorization: `${store.token}`
       },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${store.loginUser.id}/follow`,
+      url: `${BACK_API_URL}/profile/${store.loginUserId}/follow`,
     })
     .then((response)=> {
       console.log(response.data)
@@ -378,7 +378,6 @@
       console.error('요청실패: ',error)
     })
 
-    store.getProfile(Number(route.params.id))
   })
 
 </script>
