@@ -2,9 +2,7 @@ package com.ssafy.polaris.essay.service;
 
 import java.util.List;
 
-import com.ssafy.polaris.essay.dto.EssayRequestDto;
-import com.ssafy.polaris.essay.dto.EssayResponseDto;
-import com.ssafy.polaris.essay.dto.EssaySimpleResponseDto;
+import com.ssafy.polaris.essay.dto.*;
 import com.ssafy.polaris.global.SearchConditions;
 import com.ssafy.polaris.global.security.SecurityUser;
 
@@ -13,9 +11,9 @@ public interface EssayService {
 
 	EssayResponseDto getEssay(Long essayId);
 
-	void updateEssay(EssayRequestDto essayRequestDto);
+	void updateEssay(EssayRequestDto essayRequestDto, SecurityUser securityUser);
 
-	void deleteEssay(Long essayId);
+	void deleteEssay(Long essayId, SecurityUser securityUser);
 
 	List<EssayResponseDto> getEssayList(SearchConditions searchConditions);
 
@@ -24,5 +22,10 @@ public interface EssayService {
 	boolean scrapEssay(Long essayId, SecurityUser securityUser);
 
 	int getScrapCount(Long essayId);
+
 	List<EssaySimpleResponseDto> getMyEssayView(Long userId);
+
+	MostScrappedEssayResponseDto getMostScrappedEssay();
+
+	List<ScrappedEssayByUserResponseDto> getScrappedEssayByUser(Long userId);
 }

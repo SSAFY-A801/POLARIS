@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -30,13 +32,13 @@ public class SecurityConfig {
 
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserRepository userRepository;
+	private final StringRedisTemplate redisTemplate;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 			.httpBasic(HttpBasicConfigurer::disable)
 			.csrf(CsrfConfigurer::disable)
-			// .cors(Customizer.withDefaults())
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.sessionManagement(configurer ->
 				configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -49,7 +51,7 @@ public class SecurityConfig {
 			// .requestMatchers("/user/email_cert").permitAll()
 			// .requestMatchers("/send-mail/**").permitAll()
 			// .anyRequest().authenticated())
-			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userRepository),
+			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userRepository, redisTemplate),
 				UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
@@ -66,7 +68,6 @@ public class SecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-	// 빈 익스클루드
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {

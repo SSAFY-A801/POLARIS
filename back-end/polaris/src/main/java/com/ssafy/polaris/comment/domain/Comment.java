@@ -2,6 +2,9 @@ package com.ssafy.polaris.comment.domain;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.user.domain.User;
@@ -23,6 +26,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@SQLDelete(sql = "update comment set deleted_at = CURRENT_TIMESTAMP where id = ?")
+@SQLRestriction("deleted_at is NULL")
 public class Comment extends BaseEntity {
 	@NotNull
 	@ManyToOne
@@ -38,7 +43,7 @@ public class Comment extends BaseEntity {
 	@JoinColumn(name = "essay_id")
 	private Essay essay;
 
-	public void deleteComment(LocalDateTime now) {
-		setDeletedAt(now);
+	public void updateComment(String content) {
+		this.content = content;
 	}
 }
