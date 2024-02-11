@@ -11,9 +11,9 @@ public interface EssayService {
 
 	EssayResponseDto getEssay(Long essayId);
 
-	void updateEssay(EssayRequestDto essayRequestDto);
+	void updateEssay(EssayRequestDto essayRequestDto, SecurityUser securityUser);
 
-	void deleteEssay(Long essayId);
+	void deleteEssay(Long essayId, SecurityUser securityUser);
 
 	List<EssayResponseDto> getEssayList(SearchConditions searchConditions);
 
