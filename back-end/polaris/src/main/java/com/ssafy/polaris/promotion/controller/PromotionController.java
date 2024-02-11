@@ -85,7 +85,7 @@ public class PromotionController {
 	}
 
 	@PutMapping("/{promotionId}")
-	public ResponseEntity favoritePromotion(
+	public ResponseEntity<DefaultResponse<Void>> favoritePromotion(
 		@PathVariable("promotionId") Long promotionId,
 		@AuthenticationPrincipal SecurityUser securityUser) {
 
@@ -96,7 +96,7 @@ public class PromotionController {
 	}
 
 	@GetMapping("/favorite_count/{promotionId}")
-	public ResponseEntity getFavoriteCount(@PathVariable("promotionId") Long promotionId) {
+	public ResponseEntity<DefaultResponse<Integer>> getFavoriteCount(@PathVariable("promotionId") Long promotionId) {
 		int favoriteCount= promotionService.getFavoriteCount(promotionId);
 
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAVORITE_COUNT_SUCCESS, favoriteCount);
