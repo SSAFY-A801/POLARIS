@@ -1,5 +1,6 @@
 <template>
-  <div class="flex justify-center">
+  <Navvar></Navvar>
+  <div class="flex justify-center mt-40">
     <div id="app" class="container relative border-2 shadow-gray-300 shadow-lg border-maintheme1 w-full m-16 rounded-lg max-w-4xl p-8">
       <div class="flex justify-between">
         <div class="text-2xl font-bold mb-6"> 독후감 쓰기 </div>
@@ -40,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+import Navvar from '@/components/common/Navvar.vue'
 import { onMounted, ref, computed } from 'vue';
 import Editor from '../../components/essay/TiptapEditor.vue';
 import { useRouter } from 'vue-router';

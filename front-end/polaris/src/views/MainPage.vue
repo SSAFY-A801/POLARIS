@@ -1,8 +1,8 @@
 <template>
   <main>
-    <Nav></Nav>
+    <Navvar></Navvar>
 
-    <div class="mt-60"><WeeklyBook></WeeklyBook></div>
+    <div class="mt-40"><WeeklyBook></WeeklyBook></div>
     
     <div class=" mt-14 m-auto flex justify-center">
       <div class="mt-24 mb-2 ml-10">
@@ -25,7 +25,7 @@
 
 
 <script setup lang="ts">
-import Nav from '@/components/common/Nav.vue'
+import Navvar from '@/components/common/Navvar.vue'
 import Bestseller from '@/components/main/Bestseller.vue'
 import UserPopularBook from '@/components/main/UserPopularBook.vue'
 import WeeklyBook from '@/components/main/WeeklyBook.vue'

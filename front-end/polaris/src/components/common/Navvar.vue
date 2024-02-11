@@ -10,13 +10,13 @@
                  </div>
                 
 
-                 <div class="flex mr-0 flex-row">
+                 <div class="flex ml-auto flex-row">
                      <router-link :to="{name: 'login'}" v-if="!userToken" class="text-maintheme1 mr-5"><font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" class="mr-2" />로그인</router-link>
                      <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-maintheme1"><font-awesome-icon :icon="['fas', 'user-plus']" class="mr-2" />회원가입</router-link>
                      <router-link v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" 
                                  :to="{ name: 'ProfilePage', params: { id: loginUser.id }}" 
                                  class="text-maintheme1 mr-4">프로필</router-link>
-                     <button v-if="userToken" @click="logout"  class="text-maintheme1 mx-4 bg-transparent border-none outline-none focus:outline-none cursor-pointer"><font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="2xl" style="color: #323F59;" class="ml-4"/></button>
+                     <button v-if="userToken" @click="logout"  class="text-maintheme1 mx-4 bg-transparent border-none outline-none focus:outline-none cursor-pointer"><font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="2xl" style="color: #323F59;" class="ml-4 mr-2"/>로그아웃</button>
                  </div>
              </div>
 

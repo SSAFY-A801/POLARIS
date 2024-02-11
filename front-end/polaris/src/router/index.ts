@@ -4,7 +4,6 @@ import MainPage from '@/views/MainPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
 import BookSearchPage from '@/views/BookSearchPage.vue'
-import PromotionListPage from '@/views/PromotionListPage.vue'
 import PasswordSearchPage from '@/views/PasswordSearchPage.vue'
 // 프로필
 import ProfilePage from '@/views/profile/ProfilePage.vue'
@@ -57,11 +56,7 @@ const router = createRouter({
       name: 'booksearch',
       component: BookSearchPage,
     },
-    {//홍보 게시판 페이지
-      path: '/promotionlist',
-      name: 'promotionlist',
-      component: PromotionListPage,
-    },
+
     {//비밀번호 찾기
       path: '/passwordsearch',
       name: 'passwordsearch',

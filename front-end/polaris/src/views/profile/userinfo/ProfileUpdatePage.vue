@@ -1,6 +1,7 @@
 <template>
+  <Navvar></Navvar>
   <RegionModal v-if="isRegionModalOpen" @close="closeRegionModal" @confirm="updateRegion"/> 
-  <div class="container mx-auto mt-24 max-w-6xl p-4 bg-backgroundgray">
+  <div class="container mx-auto mt-60 max-w-6xl p-4 bg-backgroundgray">
     <h1 class="text-2xl font-bold p-4 m-4">프로필 수정</h1>
     <div class="flex justify-end">
       <!-- 제출 및 취소 buttons -->
@@ -72,6 +73,7 @@
 
 
 <script setup lang="ts">
+  import Navvar from '@/components/common/Navvar.vue'
   import { computed, onMounted, ref, watch } from 'vue';
   import axios from 'axios';
   import { useRouter, useRoute } from 'vue-router'
