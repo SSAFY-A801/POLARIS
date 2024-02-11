@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 		if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
 			if (accessToken.length() > 200) {
 				if (redisTemplate.hasKey("blackList:" + accessToken).booleanValue())
-					throw new UserNotAuthorizedException("만료된 토큰입니다.");
+					throw new UserNotAuthorizedException("로그아웃 된 토큰입니다.");
 
 				Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
@@ -58,6 +58,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
 				// securityContext에 전역 저장
 				SecurityContextHolder.getContext().setAuthentication(customAuthentication);
+			}
+			else {
+
 			}
 		}
 		chain.doFilter(request, response);
