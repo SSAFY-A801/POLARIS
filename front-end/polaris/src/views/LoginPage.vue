@@ -74,10 +74,12 @@ const userLogin = async () => {
   alert('로그인에 성공하였습니다')
   console.log(response.data.data)
   localStorage.setItem('user_token',(response.data.data.access))
+  localStorage.setItem('refresh_token',(response.data.data.refresh))
   localStorage.setItem('user_info' , JSON.stringify(response.data.data))
+//   console.log(localStorage.getItem('user_token'))
+//   console.log(localStorage.getItem('refresh_token'))
   const userStore = useUserStore()
   userStore.setLoginInfo(response.data.data)
-  localStorage.setItem('user_info' , JSON.stringify(response.data.data))
   router.push({ name: 'home'})
   })
   .catch(function (error) {

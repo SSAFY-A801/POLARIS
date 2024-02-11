@@ -1,10 +1,25 @@
 <template>
-    <nav class="bg-white fixed top-0 w-full z-50">
-        <div class="px-12 mx-0 flex justify-center"> 
-            <div class="flex items-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8">
-                <router-link :to="{name: 'home'}" class="text-white">
-                    <img id="logo" src="@\assets\POLARIS-logo-long.png" alt="">
-                </router-link>
+    <nav class="fixed bg-white top-20 w-full z-30 shadow-lg">
+        <div class="px-12 mx-0 ">
+            <div class="flex items-center h-24">
+              <div class=" flex items-center justify-center w-full h-24">
+                 
+                 <div class="flex items-center justify-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8">
+                     <router-link :to="{name: 'booksearch'}" class="text-maintheme1 text-2xl font-bold text-center mr-10">도서 검색</router-link>
+                     <router-link :to="{name: 'essaylist'}" class="ml-10 text-maintheme1 text-2xl font-bold text-center" >독후감 게시판</router-link>
+                 </div>
+                
+
+                 <div class="flex mr-0 flex-row">
+                     <router-link :to="{name: 'login'}" v-if="!userToken" class="text-maintheme1 mr-5"><font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" class="mr-2" />로그인</router-link>
+                     <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-maintheme1"><font-awesome-icon :icon="['fas', 'user-plus']" class="mr-2" />회원가입</router-link>
+                     <router-link v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" 
+                                 :to="{ name: 'ProfilePage', params: { id: loginUser.id }}" 
+                                 class="text-maintheme1 mr-4">프로필</router-link>
+                     <button v-if="userToken" @click="logout"  class="text-maintheme1 mx-4 bg-transparent border-none outline-none focus:outline-none cursor-pointer"><font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="2xl" style="color: #323F59;" class="ml-4"/></button>
+                 </div>
+             </div>
+
             </div>
         </div>
     </nav>
@@ -56,7 +71,7 @@ const logout = async () => {
     await axios.get('https://i10a801.p.ssafy.io:8082/user/logout', {
     headers: {
     "Authorization" : userToken.value?.replace("\"", ""),
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   }
   })
   .then(function (response) {

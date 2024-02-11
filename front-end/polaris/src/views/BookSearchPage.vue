@@ -235,7 +235,7 @@ const bookSearch = async () => {
     } 
     
 const truncateTitle = (title: string) => {
-  return title.length > 25 ? title.substring(0, 25) + "..." : title;
+  return title.length > 22 ? title.substring(0, 22) + "..." : title;
 }
 
 

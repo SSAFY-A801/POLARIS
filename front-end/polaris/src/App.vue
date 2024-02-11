@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <div class="col-span-12 mt-16">
+  <div class="col-span-12 mt-20">
     <RouterView/>
   </div>
   <Footer></Footer>
