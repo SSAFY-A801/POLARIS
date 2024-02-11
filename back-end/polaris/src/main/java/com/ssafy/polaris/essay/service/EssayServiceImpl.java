@@ -128,7 +128,7 @@ public class EssayServiceImpl implements EssayService {
 		return essayResponseDtoList;
 	}
 
-	//리턴값 true : 추가, false : 삭제
+	// 리턴값 true : 추가, false : 삭제
 	@Override
 	@Transactional
 	public boolean scrapEssay(Long essayId, SecurityUser securityUser) {

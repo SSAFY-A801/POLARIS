@@ -19,6 +19,6 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 		+ " join fetch p.promotionUserBooks as pub "
 		+ " join fetch pub.userBook as ub "
 		+ " join fetch ub.book as b "
-		+ "where p.id = :Id")
-	Optional<Promotion> getJoinedPromotionById(@Param("Id") Long Id);
+		+ "where p.id = :id")
+	Optional<Promotion> getJoinedPromotionById(@Param("id") Long id);
 }
