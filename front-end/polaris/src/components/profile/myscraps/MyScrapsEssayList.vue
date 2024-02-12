@@ -10,7 +10,11 @@
         </tr>
       </thead>
       <tbody>
-        <MyScrapsEssayListItem/>
+        <MyScrapsEssayListItem
+        v-for="(myscrap,index) in props.myscraps"
+          :key="index"
+          :myscrap="myscrap"
+        />
       </tbody>
     </table>
    </div> 
@@ -19,6 +23,7 @@
 <script setup lang="ts">
   import MyScrapsEssayListItem from "../myscraps/MyScrapsEssayListItem.vue";
 
+  const props = defineProps(['myscraps'])
 </script>
 
 <style scoped>

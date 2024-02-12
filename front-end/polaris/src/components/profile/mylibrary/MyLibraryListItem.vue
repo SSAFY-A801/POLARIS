@@ -1,6 +1,6 @@
 <template>
   <div 
-  class="bg-gray-100 inline-block rounded-lg px-4 py-1 shadow-sm shadow-stone-400 hover:bg-gray-200">
+  class=" bg-gray-50 inline-block rounded-lg px-4 py-1 shadow-sm shadow-stone-400 hover:bg-gray-100">
     <!-- checkbox -->
     <div v-if="deleteBooks == true" class="flex">
       <input id="default-checkbox" 
@@ -16,6 +16,7 @@
       <div class="flex justify-center py-2 rounded-lg">
         <div v-if="bookinfo.cover">
           <img
+              id="book-cover"
               alt="Home"
               :src="bookinfo.cover"
               class="rounded-md object-cover"
@@ -30,7 +31,7 @@
         </div>
       </div>
       <!-- 도서상태 -->
-      <div class="mt-4 flex justify-center gap-2 text-xs">
+      <div class="my-4 flex justify-center gap-2 text-xs">
         <div id="isOwned" class="col-span-3 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2 border  bg-maintheme2">
           <p v-if="bookinfo.isOwned" class="p-1.5 text-lightgray"> 보유 </p>
           <p v-else  class="p-1.5 text-lightgray"> 미보유 </p>
@@ -52,7 +53,7 @@
       </div>
       <div class="mt-2">
           <dl>
-            <div>
+            <div class="mb-2">
                 <dt class="sr-only">Title</dt>
                 
                 <dd v-if="bookinfo.title.length > 30" class="font-bold text-maintheme1">{{ bookinfo.title.slice(0,30) }}...</dd>
@@ -112,6 +113,10 @@ watch(deleteBooks,(newValue) => {
 
 
 <style scoped>
+  #book-cover {
+    @apply h-[180px]
+  }
+
   #isOwned,
   #isOpened,
   #undefined,

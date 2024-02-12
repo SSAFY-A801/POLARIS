@@ -36,7 +36,7 @@ import Navvar from '@/components/common/Navvar.vue'
 import { onMounted, ref } from 'vue';
 import Editor from '../../components/essay/TiptapEditor.vue';
 import { useRouter, useRoute } from 'vue-router';
-import axios from 'axios';
+import axiosInstance from '@/services/axios';
 import type { Essay } from '@/stores/essaycounter';
 import { essayStore } from '@/stores/essaycounter';
 
@@ -46,7 +46,7 @@ const route = useRoute();
 const router = useRouter();
 const editEssay = () => {
   if(essay.value){
-    axios({
+    axiosInstance.value({
       headers: {
         Authorization: `${store.token}`,
         "Content-Type": 'application/json'
@@ -88,7 +88,7 @@ const toggleOpened = () => {
 
 
 onMounted(()=> {
-  axios({
+  axiosInstance.value({
     headers: {
       Authorization: `${store.token}`,
       "Content-Type": 'application/json'

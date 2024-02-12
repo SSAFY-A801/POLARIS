@@ -4,7 +4,7 @@
   :key="index"
   :bookcart="item"
   @update-book-status="updateBookStatus"
-    class="border p-3"
+    class="border-b p-3"
   />
 </template>
 

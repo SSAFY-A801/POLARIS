@@ -1,8 +1,8 @@
 <template>
   <Navvar></Navvar>
   <RegionModal v-if="isRegionModalOpen" @close="closeRegionModal" @confirm="updateRegion"/> 
-  <div class="container mx-auto mt-60 max-w-6xl p-4 bg-backgroundgray">
-    <h1 class="text-2xl font-bold p-4 m-4">프로필 수정</h1>
+  <div class="container mx-auto mt-40 max-w-6xl p-4">
+    <h1 class="text-3xl font-bold p-4 m-4">프로필 수정</h1>
     <div class="flex justify-end">
       <!-- 제출 및 취소 buttons -->
       <button @click="updateProfile" id="submit-button" type="submit">
@@ -75,7 +75,7 @@
 <script setup lang="ts">
   import Navvar from '@/components/common/Navvar.vue'
   import { computed, onMounted, ref, watch } from 'vue';
-  import axios from 'axios';
+  import axiosInstance from '@/services/axios';
   import { useRouter, useRoute } from 'vue-router'
   import { profileCounterStore } from '@/stores/profilecounter';
   import RegionModal from '@/components/Auth/RegionModal.vue';
@@ -144,7 +144,7 @@
 
   // 닉네임 검사
   const nicknameCheck = () => {
-    axios({
+    axiosInstance.value({
       headers: {
         'Content-Type': 'application/json'
       },
@@ -196,9 +196,15 @@
     }
     profileData.append("introduction", introduction.value || ""); // Add introduction if it exists
     const fileInput = document.getElementById('update-image') as HTMLInputElement;
-    profileData.append("image", fileInput.files?.[0] || "");
-
-    axios({
+    if(fileInput.files?.[0]){
+      profileData.append("image", fileInput.files?.[0]);
+      console.log(typeof(profileData.get('image')))
+    } else {
+      const imageFile = new File([], 'empty-file.txt');
+      profileData.append("image", imageFile);
+    }
+    console.log(profileData.get('image'))
+    axiosInstance.value({
       method: 'patch',
       url: `${BACK_API_URL}/profile/${profileUser.value.id}`,
       headers: {
@@ -221,7 +227,7 @@
   } 
 
   const getProfile = (id: number) => {
-  axios({
+  axiosInstance.value({
     headers: {
       Authorization: `${store.token}`,
       "Content-Type": 'application/json'

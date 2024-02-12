@@ -1,27 +1,26 @@
 <template>
     <!-- 모달 제작이 되면 페이지를 없애고 다 모달로 옮길 예정-->
-  <div id="register-book"  class="container md:mx-auto min-w-[600px] mt-28 max-w-6xl border rounded-xl h-[600px]">
+  <div id="register-book"  class="container md:mx-auto min-w-[600px] mt-28 max-w-6xl rounded-md h-[600px]">
     <!-- header -->
-    <div class="flex justify-between rounded-t-lg bg-maintheme1 p-2 h-[50px]">
-      <div class="text-white text-xl ml-3">
+    <div class="flex justify-between p-4 mb-4 border-b">
+      <div class="text-3xl font-bold ml-3">
         도서 등록
       </div>
-      <div>
-        <button @click="cancelRegister" id="cancel-register-book-button">
-          <font-awesome-icon icon="fa-solid fa-xmark" size="xl" />        
-        </button>
-      </div>
+      <button @click="cancelRegister" id="cancel-register-book-button">
+        뒤로가기
+        <font-awesome-icon icon="fa-solid fa-xmark" />        
+      </button>
     </div>
-    <div class="grid grid-cols-12 gap-4 p-3 border border-gray-300 h-[550px] rounded-b-xl" >
+    <div class="grid grid-cols-12 gap-4 p-3 h-[550px] rounded-b-xl" >
         <!-- 도서 검색 -->
-        <div id="register-book" class="col-span-6 border border-gray-400 rounded-xl">
+        <div id="register-book" class="col-span-6 bg-gray-50 border border-gray-300 rounded-lg p-2">
           <!-- 검색 바 -->
           <div  class="flex flex-wrap flex-col md:flex-row justify-end border-b-2">
             <div class="flex items-center mt-4 md:mt-0">
               <div class="relative inline-block">
                 <!-- md:hidden: 화면이 중간(medium) 크기 이하일 때(select 엘리먼트가 hidden 됨) -->
                 <!-- {{  filter }} -->
-                <select v-model="filter" id="search-filter" class="m-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select v-model="filter" id="search-filter" class="m-2 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                   <option selected>도서 제목</option>
                   <option>저자</option>
                   <option>출판사</option>
@@ -30,8 +29,8 @@
             </div>
               <div>
                 <input @keyup.enter="searchAPIbook(keyword,filter)" v-model="keyword" type="text" id="book"  class="w-auto rounded-lg appearance-none border border-gray-500 py-2 px-4 m-2 bg-gray-50 text-maintheme1 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="도서 검색"/>
-                <button @click="searchAPIbook(keyword,filter)" type="button" class="w-16 text-white mx-2 md:mr-2 md:w-16 py-1 px-3 my-2 md:my-0 bg-maintheme1 hover:bg-gray-500 rounded-lg">
-                  <font-awesome-icon icon="fa-solid fa-magnifying-glass"/>
+                <button @click="searchAPIbook(keyword,filter)" type="button" class="w-16 text-white mx-2 md:mr-2 md:w-16 py-2 px-3 my-2 md:my-0 bg-maintheme1 hover:bg-gray-500 rounded-md">
+                  <font-awesome-icon icon="fa-solid fa-magnifying-glass" size="xl"/>
                 </button>
               </div>
           </div>
@@ -42,11 +41,11 @@
         </div>
 
         <!-- 도서바구니 -->
-        <div id="book-cart" class="relative col-span-6 border border-gray-400 rounded-xl">
+        <div id="book-cart" class="relative col-span-6 border border-gray-300 rounded-md">
           <!-- 도서바구니 header -->
-          <div id="cart-header" class="flex rounded-t-md border-b-2 text-maintheme1 font-bold p-2">
-            <div class="items-center text-lg">
-              도서바구니
+          <div id="cart-header" class="flex rounded-t-md border-b-2 text-maintheme1 font-bold p-2 my-2">
+            <div class="items-center text-2xl">
+              도서 바구니
               <font-awesome-icon icon="fa-solid fa-cart-shopping" />
             </div>
           </div>
@@ -162,11 +161,11 @@ img {
 }
 
 #cancel-register-book-button {
-  @apply bg-white font-bold text-maintheme1 rounded-[5px] py-1 px-2 border border-gray-400 hover:bg-gray-300;
+  @apply font-bold text-lg text-white bg-maintheme1 rounded-[5px] p-2 border border-gray-400 hover:bg-gray-300;
 }
 
 #complete-register-book-button {
-    @apply bg-[#323F59] border text-white m-[2px] px-3 py-2 rounded-[15px] hover:bg-gray-500 text-lg;
+    @apply bg-[#323F59] border text-white font-bold m-[2px] px-3 py-2 rounded-md hover:bg-gray-500 text-lg;
 }
 
 </style>
