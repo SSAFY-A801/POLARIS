@@ -35,6 +35,7 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 			" e.id, e.title, e.user.id, e.user.nickname, b.title, e.createdAt) from Scrap s " +
 			" left join s.essay e " +
 			" left join e.userBook.book b" +
-			" where s.user.id = :userId")
+			" where s.user.id = :userId " +
+			" and s.isDeleted = false")
 	List<ScrappedEssayByUserResponseDto> getUserScrappedList(@Param("userId") Long userId);
 }
