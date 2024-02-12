@@ -14,5 +14,6 @@ public class ScrappedEssayByUserResponseDto {
     String essayTitle;
     Long writeId;
     String writerNickname;
+    String bookTitle;
     LocalDateTime createdAt;
 }
