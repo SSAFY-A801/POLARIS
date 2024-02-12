@@ -19,7 +19,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.ssafy.polaris.global.security.filter.ExceptionHandlerFilter;
 import com.ssafy.polaris.global.security.filter.JwtAuthenticationFilter;
+import com.ssafy.polaris.global.security.handler.CustomAccessDeniedHandler;
 import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.user.repository.UserRepository;
 
@@ -52,7 +54,8 @@ public class SecurityConfig {
 			// .requestMatchers("/send-mail/**").permitAll()
 			// .anyRequest().authenticated())
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userRepository, redisTemplate),
-				UsernamePasswordAuthenticationFilter.class);
+				UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class);
 
 		return http.build();
 	}
@@ -73,4 +76,12 @@ public class SecurityConfig {
 	public PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
+	@Bean
+	public CustomAccessDeniedHandler accessDeniedHandler() {
+		// AccessDeniedHandler 객체를 생성하고, errorPage를 setter를 통해 설정한 후, 빈으로 등록
+		CustomAccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
+		return accessDeniedHandler;
+	}
+
 }

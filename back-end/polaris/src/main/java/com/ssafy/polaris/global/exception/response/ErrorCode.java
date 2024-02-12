@@ -18,7 +18,7 @@ public enum ErrorCode {
 	USER_NOT_AUTHORIZED(401, "로그인 된 사용자가 없습니다."),
 	TOKEN_NOT_VALID(401, "토큰이 유효하지 않습니다."),
 	MALFORMED_JWT(401, "토큰이 유효하지 않습니다."),
-	EXPIRED_JWT(401, "토큰이 만료되었습니다. 다시 로그인해주세요."),
+	EXPIRED_JWT(420, "토큰이 만료되었습니다. 다시 로그인해주세요."),
 
 
 	FORBIDDEN(403, "접근할 수 없습니다."),
@@ -32,7 +32,7 @@ public enum ErrorCode {
 
 	CERT_CODE_EXPIRED(408, "코드가 만료되었습니다."),
 
-	USER_EMAIL_OR_NICKNAME_CONFLICT(409, "사용자 이메일 혹은 닉네임이 중복됩니다.");
+	USER_EMAIL_OR_NICKNAME_CONFLICT(409, "사용자 이메일 혹은 닉네임이 중복됩니다."),
 	;
 
 	private final int status;
