@@ -6,18 +6,18 @@
                  <!-- <div class="flex m-auto flex-row"></div> -->
                  
                  <div class="flex items-center w-1/3 ml-10 justify-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8">
-                     <router-link :to="{name: 'booksearch'}" class="px-20 text-maintheme1 text-2xl font-bold text-center mr-2">도서 검색</router-link>
-                     <router-link :to="{name: 'essaylist'}" class=" text-maintheme1 text-2xl font-bold text-center" >독후감 게시판</router-link>
+                     <router-link :to="{name: 'booksearch'}" class="w-80 text-resize px-20 text-maintheme1 text-2xl font-bold text-center mr-2">도서 검색</router-link>
+                     <router-link :to="{name: 'essaylist'}" class="w-40 text-resize text-maintheme1 text-2xl font-bold text-center" >독후감 게시판</router-link>
                  </div>
                 
 
                  <div class="flex ml-auto flex-row px-20">
                      <router-link :to="{name: 'login'}" v-if="!userToken" class="text-maintheme1 mr-14 font-bold"><font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl" style="color: #323F59;"  class="mr-2" />로그인</router-link>
                      <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-maintheme1 font-bold"><font-awesome-icon :icon="['fas', 'user-plus']" size="xl" style="color: #323F59;"  class="mr-2" />회원가입</router-link>
-                     <p  v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" class="text-maintheme1 font-bold mt-4 mr-4" >{{ store.profileUser.nickname }}</p>
+                     <p  v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" class="text-maintheme1 font-bold mt-4 mr-4" >{{ userNickname }}</p>
                      <router-link v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" 
                                  :to="{ name: 'ProfilePage', params: { id: loginUser.id }}" 
-                                 class="text-maintheme1 mr-14"><img class="col-span-1 object-cover" id="profile-image" :src="store.profileUser.profileUrl ? store.profileUser.profileUrl : '@/assets/profile-default.jpg'" alt="Profile-Image"></router-link>
+                                 class="text-maintheme1 mr-14"><img class="col-span-1 object-cover" id="profile-image" :src="userProfileUrl || '@/assets/profile-default.jpg'" alt="Profile-Image"></router-link>
                      <button v-if="userToken" @click="logout"  class="text-maintheme1 font-bold  bg-transparent border-none outline-none focus:outline-none cursor-pointer"><font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="xl" style="color: #323F59;" class="ml-4 mr-2"/>로그아웃</button>
                  </div>
              </div>
@@ -59,6 +59,33 @@ try {
   loginUser = {}; // JSON 파싱에 실패한 경우 빈 객체로 기본값 설정
 }
 // loginUser를 사용할 때 loginUser.id를 체크할 때 에러가 발생하지 않습니다.
+
+
+const userNickname = ref<string | null>(null)
+const userProfileUrl = ref<string | null>(null)
+
+const getUserInfo = async() => {
+  try {
+    const response = await axios({
+      headers: {
+        "Authorization": `${userToken}`,
+        "Content-Type": 'application/json'
+      },
+      method: 'get',
+      url: `https://i10a801.p.ssafy.io:8082/profile/${loginUser.id}`,
+    })
+    userNickname.value = response.data.data.nickname
+    userProfileUrl.value = response.data.data.profileUrl
+  } catch (error) {
+    console.error("에러발생: ", error)
+  }
+}
+
+onMounted(() => {
+  getUserInfo()
+})
+
+
 
 
 watchEffect(() => {
@@ -122,6 +149,7 @@ const logout = async () => {
 </script>
 
 <style scoped>
+
 a {
   text-decoration: none;
 }
