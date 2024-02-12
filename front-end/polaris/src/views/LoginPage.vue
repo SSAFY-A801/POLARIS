@@ -41,7 +41,7 @@
                 <router-link :to="{name:'signup'}" class="ml-2">회원가입 </router-link>   
             </div>
             <hr class="mt-6 mb-2 border-t border-gray-200">
-            <button type="submit" class="flex items-center justify-center mt-4 mb-4 py-3 px-4 bg-kakao_yellow text-kakao_brown w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md rounded-lg">
+            <button @click.prevent="kakaoLogin" type="submit" class="flex items-center justify-center mt-4 mb-4 py-3 px-4 bg-kakao_yellow text-kakao_brown w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md rounded-lg">
                 <img src="@/assets/styles/kakaosymbol.png" alt="Kakao 로그인 아이콘" class="mr-2">
                 카카오 로그인
             </button>
@@ -92,6 +92,10 @@ const userLogin = async () => {
 } 
 }
 
+//카카오로그인 인가코드 받기-카카오로그인 페이지로 리다이렉트
+const kakaoLogin = () => {
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=31926718e1eea569505c9974c657cda1&redirect_uri=http://localhost:5173/kakaologin&response_type=code`
+}
 </script>
 
 <style scoped>
