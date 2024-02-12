@@ -103,6 +103,10 @@
           </tr>
         </tbody>
       </table>
+      <div v-else class="text-center py-4">
+        <div class="text-xl font-semibold">판매 가능한 도서가 없습니다.</div>
+        <div class="text-lg mt-5">나의 프로필에서 판매할 도서를 선택하여 도서의 상태를 '판매'로 변경해주세요!</div>
+      </div>
     </div>
   </div>
               </div>
@@ -123,6 +127,7 @@ import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
+import axiosInstance from '@/services/axios';
 
 
 
@@ -140,7 +145,7 @@ const chatroomId = Number(route.params.chatroomId);
 
 const completeSell = async (chatroomId: number) => {
   try {
-      const response = await axios.patch(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
+      const response = await axiosInstance.value.patch(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
   
       if (response.status === 200) {
         console.log('거래가 완료되었습니다:', response.data);
@@ -157,9 +162,7 @@ const completeSell = async (chatroomId: number) => {
     
 };
 
-  
-
-
+const originalBooks = ref<Book[]>([]);
 // 재작성
 const selectedBooks = ref<Book[]>([]);
 const isChecked = ref<Record<number, boolean>>({});
@@ -168,7 +171,8 @@ const toggleCheckbox = (bookId: number) => {
       //             || sellingData.value?.seriesBooks.books.find(book => book.id === bookId);
       const foundBook = sellingData.value?.books.find(book => book.id === bookId); 
       if (foundBook) {
-      isChecked.value[bookId] = !isChecked.value[bookId];
+        originalBooks.value = [...selectedBooks.value];
+        isChecked.value[bookId] = !isChecked.value[bookId];
 
       if (isChecked.value[bookId]) {
         // 체크된 경우에는 배열에 추가
@@ -182,13 +186,116 @@ const toggleCheckbox = (bookId: number) => {
     }
     };
 
-const sendSelectedBooks = () => {
+// const sendSelectedBooks = () => {
+//   console.log('Selected Books:', selectedBooks.value);
+//   if (sellingData?.value) {
+//     toggleModal();
+//   }
+//   chooseBook();
+// };
+
+
+const sendSelectedBooks = async () => {
   console.log('Selected Books:', selectedBooks.value);
   if (sellingData?.value) {
     toggleModal();
   }
+
+  const addedBooks = selectedBooks.value.filter(book => !originalBooks.value.includes(book));
+  const deletedBooks = originalBooks.value.filter(book => !selectedBooks.value.includes(book));
+
+  const data: UpdatedBookData = {
+    chatRoomId: chatroomId,  // chatroomId 사용
+    userId: Number(sellingData.value?.userId),  // userId 사용
+    addedBooks: addedBooks.map(book => ({ id: book.id, bookIsbn: Number(book.bookIsbn) })),
+    deletedBooks: deletedBooks.map(book => ({ id: book.id, bookIsbn: Number(book.bookIsbn) })),
+  };
+
+  await chooseBook(data);
 };
 
+// 선택된 도서의 목록에 대한 POST 요청(선택된 도서들의 id)
+export interface UpdatedBookData {
+  chatRoomId: number;
+  userId: number;
+  addedBooks: AddedBooks[];
+  deletedBooks: Deletedbooks[];
+}
+
+export interface AddedBooks {
+  id: number;
+  bookIsbn: number;
+}
+
+export interface Deletedbooks {
+  id: number;
+  bookIsbn: number;
+}
+
+export interface UpdatedBookDataResponse {
+  status: number;
+  message: string;
+  data: UpdatedBookData;
+}
+
+
+const chooseBook = async (data: UpdatedBookData) => {
+  try {
+    const response = await axiosInstance.value.post<UpdatedBookDataResponse>(
+      'https://i10a801.p.ssafy.io:8082/trade', 
+      data, 
+      {
+        headers: {
+          'Authorization': token.value?.replace("\"", "")
+        }
+      }
+    );
+    
+    if (response.status === 200) {
+      console.log(data)
+      console.log(response, '도서선택완료');
+    } else {
+      console.error('API 요청 실패:', response.status);
+    }
+  } catch (error) {
+    console.error('API 요청 중 오류 발생:', error);
+  }
+};
+
+// const chooseBook = async () => {
+//   const addedBooks = selectedBooks.value.filter(book => !originalBooks.value.includes(book));
+//   const deletedBooks = originalBooks.value.filter(book => !selectedBooks.value.includes(book));
+
+//   const data: UpdatedBookData = {
+//     chatRoomId: chatroomId,  // chatroomId 사용
+//     userId: Number(sellingData.value?.userId),  // userId 사용
+//     addedBooks: addedBooks.map(book => ({ id: book.id, bookIsbn: Number(book.bookIsbn) })),
+//     deletedBooks: deletedBooks.map(book => ({ id: book.id, bookIsbn: Number(book.bookIsbn) })),
+//   };
+
+//   try {
+//     const response = await axios.post<UpdatedBookDataResponse>(
+//       'https://i10a801.p.ssafy.io:8082/trade', 
+//       data, 
+//       {
+//         headers: {
+//           'Authorization': token.value?.replace("\"", "")
+//         }
+//       }
+//     );
+    
+//     if (response.status === 200) {
+//       console.log(response);
+//     } else {
+//       console.error('API 요청 실패:', response.status);
+//     }
+//   } catch (error) {
+//     console.error('API 요청 중 오류 발생:', error);
+//   }
+// };
+
+
+// 
 const totalAmount = computed(() => {
   return selectedBooks.value.reduce((sum, book) => sum + book.userBookPrice, 0);
 });
@@ -198,7 +305,7 @@ const sellingData = ref<ResponseData | null>(null);
 const token = ref(localStorage.getItem('user_token'))
 onMounted(async () => {
   try {
-        const response = await axios.get<ApiResponse>(`https://i10a801.p.ssafy.io:8082/trade/purchase_books`, {
+        const response = await axiosInstance.value.get<ApiResponse>(`https://i10a801.p.ssafy.io:8082/trade/purchase_books`, {
       headers: {
         'Authorization': token.value?.replace("\"", "")
         // 'Content-Type': 'application/json'
@@ -207,6 +314,7 @@ onMounted(async () => {
     
     if (response.status === 200) {
       sellingData.value = response.data.data;
+      // originalBooks.value = [...sellingData.value.books];  // 도서 목록 복사
       console.log(response)
       console.log(sellingData.value);
     } else {
@@ -218,10 +326,7 @@ onMounted(async () => {
 });
 
 
-// 판매이력 POST 요청
-
-
-//판매가능사용자도서목록 api 수정 후
+//판매가능사용자도서목록 api
 interface Book {
   id: number;
   bookIsbn: string;

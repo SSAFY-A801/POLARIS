@@ -2,6 +2,7 @@ import { ref, computed} from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
 import axios from 'axios';
+import axiosInstance from '@/services/axios';
 import { convertTypeAcquisitionFromJson } from 'typescript';
 
 
@@ -74,9 +75,7 @@ export interface ApiResponse {
 
 
 // 채팅방 생성 시 POST 요청(상대방 프로필에서 교환채팅/구매채팅 클릭 시의 api 요청)
-
-
-// 채팅방 생성 인터패이스
+// 채팅방 생성 인터패이스(이때 반환되는 데이터에 상대방 닉네임, 나의 닉네임 있어야 할듯?)
 export interface CreateChatroom {
   id: number;
   senderId: number;
@@ -97,7 +96,7 @@ export const useChatStore = defineStore('chat', () => {
   // const chatRoomId = ref<number | null>(null);
   const fetchChatInfo = async () => {
     try {
-      const response = await axios.get<ApiResponse>('https://i10a801.p.ssafy.io:8082/chat', {
+      const response = await axiosInstance.value.get<ApiResponse>('https://i10a801.p.ssafy.io:8082/chatroom', {
         headers: {
           // 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoamhAZ21haWwuY29tIiwiYXV0aCI6IkFVVEhPUklUWSIsImlkIjo4LCJlbWFpbCI6ImhqaEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iu2CueynhO2VmCIsImV4cCI6MTcyNDY4Nzg5NH0.RGSg_mX4rSNrHAIIBkfHg1AowDKwyAmzhnk2b7X8xaE',
           'Authorization': token.value?.replace("\"", "")
@@ -118,7 +117,7 @@ export const useChatStore = defineStore('chat', () => {
   const createChatRoom = async (senderId: number, receiverId: number, tradeType: string) => {
     try {
       const token = ref(localStorage.getItem('user_token'))
-      const response = await axios.post<CreateChatroomResponse>('https://i10a801.p.ssafy.io:8082/chat', {
+      const response = await axiosInstance.value.post<CreateChatroomResponse>('https://i10a801.p.ssafy.io:8082/chatroom', {
         senderId,
         receiverId,
         tradeType,

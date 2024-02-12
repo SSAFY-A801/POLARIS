@@ -104,6 +104,10 @@
           </tr>
         </tbody>
       </table>
+      <div v-else class="text-center py-4">
+        <div class="text-xl font-semibold">교환 가능한 도서가 없습니다.</div>
+        <div class="text-lg mt-5">나의 프로필에서 교환할 도서를 선택하여 도서의 상태를 '교환'으로 변경해주세요!</div>
+      </div>
     </div>
   </div>
               </div>
@@ -123,6 +127,7 @@
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
+import axiosInstance from '@/services/axios';
 // import type { traceDeprecation } from 'process';
 
 
@@ -133,7 +138,7 @@ const toggleModal = () => {
   modalOpen.value = !modalOpen.value;
 };
 
-
+const originalBooks = ref<Book[]>([]);
 // 재작성
 const selectedBooks = ref<Book[]>([]);
 const isChecked = ref<Record<number, boolean>>({});
@@ -142,6 +147,7 @@ const toggleCheckbox = (bookId: number) => {
       //             || sellingData.value?.seriesBooks.books.find(book => book.id === bookId);
       const foundBook = changingData.value?.books.find(book => book.id === bookId); 
       if (foundBook) {
+      originalBooks.value = [...selectedBooks.value];
       isChecked.value[bookId] = !isChecked.value[bookId];
 
       if (isChecked.value[bookId]) {
@@ -156,10 +162,77 @@ const toggleCheckbox = (bookId: number) => {
     }
     };
 
-const sendSelectedBooks = () => {
+// const sendSelectedBooks = () => {
+//   console.log('Selected Books:', selectedBooks.value);
+//   if (changingData?.value) {
+//     toggleModal();
+//   }
+// };
+export interface UpdatedBookData {
+  chatRoomId: number;
+  userId: number;
+  addedBooks: AddedBooks[];
+  deletedBooks: Deletedbooks[];
+}
+
+export interface AddedBooks {
+  id: number;
+  bookIsbn: number;
+}
+
+export interface Deletedbooks {
+  id: number;
+  bookIsbn: number;
+}
+
+export interface UpdatedBookDataResponse {
+  status: number;
+  message: string;
+  data: UpdatedBookData;
+}
+
+
+
+
+const sendSelectedBooks = async () => {
   console.log('Selected Books:', selectedBooks.value);
   if (changingData?.value) {
     toggleModal();
+  }
+
+  const addedBooks = selectedBooks.value.filter(book => !originalBooks.value.includes(book));
+  const deletedBooks = originalBooks.value.filter(book => !selectedBooks.value.includes(book));
+
+  const data: UpdatedBookData = {
+    chatRoomId: chatroomId,  // chatroomId 사용
+    userId: Number(changingData.value?.userId),  // userId 사용
+    addedBooks: addedBooks.map(book => ({ id: book.id, bookIsbn: Number(book.bookIsbn) })),
+    deletedBooks: deletedBooks.map(book => ({ id: book.id, bookIsbn: Number(book.bookIsbn) })),
+  };
+
+  await chooseBook(data);
+};
+
+const chooseBook = async (data: UpdatedBookData) => {
+  try {
+    const response = await axiosInstance.value.post<UpdatedBookDataResponse>(
+      'https://i10a801.p.ssafy.io:8082/trade', 
+      data, 
+      {
+        headers: {
+          'Authorization': token.value?.replace("\"", "")
+        }
+      }
+    );
+    
+    if (response.status === 200) {
+      console.log(data)
+      console.log(response, '도서선택완료');
+    } else {
+      console.error('API 요청 실패:', response.status);
+    }
+  } catch (error) {
+    console.error('API 요청 중 오류 발생:', error);
   }
 };
 
@@ -169,7 +242,7 @@ const changingData = ref<ResponseData | null>(null);
 
 onMounted(async () => {
 try {
-      const response = await axios.get<ApiResponse>(`https://i10a801.p.ssafy.io:8082/trade/exchange_books`, {
+      const response = await axiosInstance.value.get<ApiResponse>(`https://i10a801.p.ssafy.io:8082/trade/exchange_books`, {
       headers: {
         'Authorization': token.value?.replace("\"", ""),
         // 'Content-Type': 'application/json'
@@ -236,7 +309,7 @@ const chatroomId = Number(route.params.chatroomId);
 
 const completeChange = async (chatroomId: number) => {
   try {
-      const response = await axios.patch(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
+      const response = await axiosInstance.value.patch(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
       if (response.status === 200) {
         console.log('거래가 완료되었습니다:', response.data);
         alert('교환이 완료되었습니다. \n프로필에서 교환내역을 확인할 수 있습니다.')
@@ -251,6 +324,11 @@ const completeChange = async (chatroomId: number) => {
     }
     
 };
+
+
+
+
+
 </script>
 
 
