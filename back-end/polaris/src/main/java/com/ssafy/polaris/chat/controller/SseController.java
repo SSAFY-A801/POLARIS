@@ -1,5 +1,6 @@
 package com.ssafy.polaris.chat.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(value = "/chat")
+@RequiredArgsConstructor
 public class SseController {
 	private final SseServiceImpl sseService;
 	private final ChatSaveServiceImpl chatRedisCacheService;
-	public SseController(SseServiceImpl sseService, ChatSaveServiceImpl chatRedisCacheService) {
-		this.sseService = sseService;
-		this.chatRedisCacheService = chatRedisCacheService;
-	}
 
 	/**
 	 * 채팅방에 입장하기 위해 connect emitter를 생성합니다.

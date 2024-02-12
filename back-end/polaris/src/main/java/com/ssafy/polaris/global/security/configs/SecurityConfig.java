@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -17,7 +19,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.ssafy.polaris.global.security.filter.ExceptionHandlerFilter;
 import com.ssafy.polaris.global.security.filter.JwtAuthenticationFilter;
+import com.ssafy.polaris.global.security.handler.CustomAccessDeniedHandler;
 import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.user.repository.UserRepository;
 
@@ -30,13 +34,13 @@ public class SecurityConfig {
 
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserRepository userRepository;
+	private final StringRedisTemplate redisTemplate;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 			.httpBasic(HttpBasicConfigurer::disable)
 			.csrf(CsrfConfigurer::disable)
-			// .cors(Customizer.withDefaults())
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.sessionManagement(configurer ->
 				configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -49,8 +53,9 @@ public class SecurityConfig {
 			// .requestMatchers("/user/email_cert").permitAll()
 			// .requestMatchers("/send-mail/**").permitAll()
 			// .anyRequest().authenticated())
-			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userRepository),
-				UsernamePasswordAuthenticationFilter.class);
+			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userRepository, redisTemplate),
+				UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class);
 
 		return http.build();
 	}
@@ -66,10 +71,17 @@ public class SecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-	// 빈 익스클루드
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
+	@Bean
+	public CustomAccessDeniedHandler accessDeniedHandler() {
+		// AccessDeniedHandler 객체를 생성하고, errorPage를 setter를 통해 설정한 후, 빈으로 등록
+		CustomAccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
+		return accessDeniedHandler;
+	}
+
 }

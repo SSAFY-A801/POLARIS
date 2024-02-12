@@ -4,18 +4,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.ssafy.polaris.essay.dto.EssaySimpleResponseDto;
+import com.ssafy.polaris.essay.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.essay.domain.Scrap;
-import com.ssafy.polaris.essay.dto.EssayRequestDto;
-import com.ssafy.polaris.essay.dto.EssayResponseDto;
 import com.ssafy.polaris.essay.repository.EssayRepository;
 import com.ssafy.polaris.essay.repository.ScrapRepository;
 import com.ssafy.polaris.global.SearchConditions;
+import com.ssafy.polaris.global.exception.exceptions.WrongSearchConditionException;
 import com.ssafy.polaris.global.security.SecurityUser;
+import com.ssafy.polaris.user.exception.UserForbiddenException;
+import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -29,7 +30,6 @@ public class EssayServiceImpl implements EssayService {
 	private final EssayRepository essayRepository;
 	private final ScrapRepository scrapRepository;
 	private final EntityManager em;
-
 	@Override
 	@Transactional
 	public Long writeEssay(EssayRequestDto essayRequestDto, SecurityUser securityUser) {
@@ -51,7 +51,6 @@ public class EssayServiceImpl implements EssayService {
 		Essay essay = essayRepository.findJoinedEssayById(essayId)
 			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
 
-		// TODO: deletedat 없앤다.
 		// TODO: hit 올린다.
 		if (essay.getDeletedAt() != null || !essay.getIsOpened()) {
 			throw new RuntimeException("해당 게시글이 존재하지 않습니다.");
@@ -70,53 +69,52 @@ public class EssayServiceImpl implements EssayService {
 
 	@Override
 	@Transactional
-	public void updateEssay(EssayRequestDto essayRequestDto) {
+	public void updateEssay(EssayRequestDto essayRequestDto, SecurityUser securityUser) {
 		Essay essay = essayRepository.findById(essayRequestDto.getId())
 			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
-
-		if (essay.getDeletedAt() != null) {
-			throw new RuntimeException("해당 게시글이 존재하지 않습니다.");
+		if (!essay.getUser().getId().equals(securityUser.getId())) {
+			throw new UserForbiddenException("에세이 수정 권한 없음");
 		}
-
 		essay.updateEssay(essayRequestDto);
 	}
 
 	@Override
 	@Transactional
-	public void deleteEssay(Long essayId) {
-		// Essay essay = essayRepository.findById(essayId)
-		// 	.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
+	public void deleteEssay(Long essayId, SecurityUser securityUser) {
+		Essay essay = essayRepository.findById(essayId)
+			.orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
+		if (!essay.getUser().getId().equals(securityUser.getId())) {
+			throw new UserForbiddenException("에세이 삭제 권한 없음");
+		}
 		essayRepository.deleteById(essayId);
 	}
 
 	@Override
 	public List<EssayResponseDto> getEssayList(SearchConditions searchConditions) {
 		TypedQuery<Essay> query;
-		String jpql;
+		String jpql = "select e "
+			+ "from Essay e "
+			+ "	join fetch e.user "
+			+ "	left join fetch e.userBook "
+			+ " left join fetch e.userBook.book "
+			+ "where e.isOpened is true ";
 
 		searchConditions.setWord(searchConditions.getWord().trim());
 		boolean isNotSearch = searchConditions.getWord() == null || searchConditions.getWord().equals("");
 		if (isNotSearch) {
-			jpql = "select e "
-				+ "from Essay e "
-				+ "	join fetch e.user "
-				+ "	left join fetch e.userBook "
-				+ " left join fetch e.userBook.book "
-				+ "where e.deletedAt is null";
 			query = em.createQuery(jpql, Essay.class);
 		} else {
-			jpql = "select e "
-				+ "from Essay e "
-				+ "	join fetch e.user "
-				+ "	left join fetch e.userBook "
-				+ " left join fetch e.userBook.book "
-				+ "where e.deletedAt is null "
-				+ "    and e.user.nickname like concat('%', :word,'%')";
+			if (searchConditions.getKey().equals("title")) {
+				jpql += " and e.title like concat('%', :word, '%') ";
+			} else if (searchConditions.getKey().equals("user")) {
+				jpql += " and e.user.nickname like concat('%', :word, '%') ";
+			} else if (searchConditions.getKey().equals("bookTitle")) {
+				jpql += " and e.userBook.book.title like concat('%', :word, '%') ";
+			} else {
+				throw new WrongSearchConditionException("");
+			}
 			query = em.createQuery(jpql, Essay.class);
-			query
-				// .setParameter("key", searchConditions.getKey())
-				// TODO : 검색 조건에 따른 분기가 필요. (DSL을 쓰지 않는 이상..)
-				.setParameter("word", searchConditions.getWord());
+			query.setParameter("word", searchConditions.getWord());
 		}
 
 		List<Essay> essays = query
@@ -130,7 +128,7 @@ public class EssayServiceImpl implements EssayService {
 		return essayResponseDtoList;
 	}
 
-	//리턴값 true : 추가, false : 삭제
+	// 리턴값 true : 추가, false : 삭제
 	@Override
 	@Transactional
 	public boolean scrapEssay(Long essayId, SecurityUser securityUser) {
@@ -159,6 +157,26 @@ public class EssayServiceImpl implements EssayService {
 			dto.setScrapCount(scrapRepository.getScrapCount(dto.getEssayId()));
 		}
 
+		return data;
+	}
+
+	@Override
+	public MostScrappedEssayResponseDto getMostScrappedEssay() {
+		MostScrappedEssayResponseDto data = essayRepository.getMostScrappedEssay();
+		if(data == null){
+			return null;
+		}
+		data.setScrapCount(scrapRepository.getScrapCount(data.getEssayId()));
+		return data;
+	}
+
+	@Override
+	public List<ScrappedEssayByUserResponseDto> getScrappedEssayByUser(Long userId) {
+		List<ScrappedEssayByUserResponseDto> data = scrapRepository.getUserScrappedList(userId);
+		System.out.println(data);
+		if(data.isEmpty()){
+			return null;
+		}
 		return data;
 	}
 }

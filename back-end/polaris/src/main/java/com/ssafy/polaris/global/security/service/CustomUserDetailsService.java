@@ -19,9 +19,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
-		// TODO: 에러 정의
 		User user = userRepository.findUserByEmail(username)
-			.orElseThrow(() -> new UserNotFoundException("username not found exception has occurred"));
+			.orElseThrow(() -> new UserNotFoundException("토큰에 저장된 이메일이 잘못되었습니다."));
 		return new SecurityUser(user);
 	}
 

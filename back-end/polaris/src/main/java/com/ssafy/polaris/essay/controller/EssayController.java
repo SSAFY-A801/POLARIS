@@ -1,7 +1,12 @@
 package com.ssafy.polaris.essay.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import com.ssafy.polaris.comment.dto.CommentReponseDto;
+import com.ssafy.polaris.comment.service.CommentService;
+import com.ssafy.polaris.essay.dto.MostScrappedEssayResponseDto;
+import com.ssafy.polaris.essay.dto.ScrappedEssayByUserResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class EssayController {
 
 	private final EssayService essayService;
+	private final CommentService commentService;
 
 	/**
 	 * 글 작성
@@ -56,11 +62,7 @@ public class EssayController {
 		Long essayId = essayService.writeEssay(essayRequestDto, securityUser);
 		EssayResponseDto essayResponseDto = essayService.getEssay(essayId);
 
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.ESSAY_WRITE_SUCCESS,
-			essayResponseDto
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.ESSAY_WRITE_SUCCESS, essayResponseDto);
 	}
 
 	/**
@@ -76,13 +78,12 @@ public class EssayController {
 	@GetMapping("/{essayId}")
 	public ResponseEntity<DefaultResponse<EssayResponseDto>> getEssay(@PathVariable Long essayId) {
 		EssayResponseDto essayResponseDto = essayService.getEssay(essayId);
+		List<CommentReponseDto> commentList = commentService.getCommentList(essayId);
+		essayResponseDto.setComments(commentList);
+
 		essayService.updateHit(essayId);
 
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.ESSAY_READ_SUCCESS,
-			essayResponseDto
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.ESSAY_READ_SUCCESS, essayResponseDto);
 	}
 
 	/**
@@ -109,11 +110,7 @@ public class EssayController {
 	public ResponseEntity<DefaultResponse<List<EssayResponseDto>>> getEssayList(
 		@ModelAttribute SearchConditions searchConditions) {
 		List<EssayResponseDto> essayResponseDtoList = essayService.getEssayList(searchConditions);
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.ESSAY_READ_LIST_SUCCESS,
-			essayResponseDtoList
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.ESSAY_READ_LIST_SUCCESS, essayResponseDtoList);
 	}
 
 	/**
@@ -131,12 +128,10 @@ public class EssayController {
 	 * }
 	 * */
 	@PatchMapping
-	public ResponseEntity<DefaultResponse<EssayResponseDto>> updateEssay(@RequestBody EssayRequestDto essayRequestDto) {
-		essayService.updateEssay(essayRequestDto);
-		return DefaultResponse.emptyResponse(
-			HttpStatus.OK,
-			StatusCode.ESSAY_UPDATE_SUCCESS
-		);
+	public ResponseEntity<DefaultResponse<EssayResponseDto>> updateEssay(@RequestBody EssayRequestDto essayRequestDto,
+		@AuthenticationPrincipal SecurityUser securityUser) {
+		essayService.updateEssay(essayRequestDto, securityUser);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.ESSAY_UPDATE_SUCCESS);
 	}
 
 	/**
@@ -151,12 +146,10 @@ public class EssayController {
 	 * }
 	 * */
 	@DeleteMapping
-	public ResponseEntity<DefaultResponse<Void>> deleteEssay(@RequestBody EssayRequestDto essayRequestDto) {
-		essayService.deleteEssay(essayRequestDto.getId());
-		return DefaultResponse.emptyResponse(
-			HttpStatus.OK,
-			StatusCode.ESSAY_DELETE_SUCCESS
-		);
+	public ResponseEntity<DefaultResponse<Void>> deleteEssay(@RequestBody EssayRequestDto essayRequestDto,
+		@AuthenticationPrincipal SecurityUser securityUser) {
+		essayService.deleteEssay(essayRequestDto.getId(), securityUser);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.ESSAY_DELETE_SUCCESS);
 	}
 
 	/**
@@ -176,10 +169,7 @@ public class EssayController {
 		boolean isScrapped = essayService.scrapEssay(essayId, securityUser);
 		StatusCode returnStatus = isScrapped ? StatusCode.SCRAP_ADD_SUCCESS : StatusCode.SCRAP_REMOVE_SUCCESS;
 
-		return DefaultResponse.emptyResponse(
-			HttpStatus.OK,
-			returnStatus
-		);
+		return DefaultResponse.emptyResponse(HttpStatus.OK, returnStatus);
 	}
 
 	/**
@@ -196,10 +186,33 @@ public class EssayController {
 	public ResponseEntity<DefaultResponse<Integer>> getScrapCount(@PathVariable Long essayId) {
 		int scrapCount = essayService.getScrapCount(essayId);
 
-		return DefaultResponse.toResponseEntity(
-			HttpStatus.OK,
-			StatusCode.SCRAP_COUNT_SUCCESS,
-			scrapCount
-		);
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SCRAP_COUNT_SUCCESS, scrapCount);
+	}
+	/**
+	 * @return 가장 많이 스크랩된 에세이를 반환
+	 * */
+	@GetMapping("/most_scrapped")
+	public ResponseEntity<DefaultResponse<MostScrappedEssayResponseDto>> getMostScrappedEssay(){
+		MostScrappedEssayResponseDto data = essayService.getMostScrappedEssay();
+		if(data == null){
+			return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.ESSAY_READ_MOST_SCRAPPED_FAIL);
+		}
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.ESSAY_READ_MOST_SCRAPPED_SUCCESS, data);
+	}
+
+	/**
+	 * @param userId 사용자 id
+	 * @return
+	 * 	만약 비어있다면 empty response 반환,
+	 * 	그게 아니라면 스크랩된 리스트를 반환
+	 */
+	@GetMapping("/{id}/scraps")
+	public ResponseEntity<DefaultResponse<Map<String, List<ScrappedEssayByUserResponseDto>>>> getScrappedEssayList(
+			@PathVariable("id") Long userId){
+		List<ScrappedEssayByUserResponseDto> data = essayService.getScrappedEssayByUser(userId);
+		if(data == null){
+			return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.ESSAY_READ_EMPTY_SCRAPPED_SUCCESS);
+		}
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.ESSAY_READ_SCRAPPED_SUCCESS, Map.of("scrapPosts", data));
 	}
 }

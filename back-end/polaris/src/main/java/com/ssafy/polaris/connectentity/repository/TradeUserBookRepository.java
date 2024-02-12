@@ -40,4 +40,16 @@ public interface TradeUserBookRepository extends JpaRepository<TradeUserBook, Lo
 	"where tub.trade.id = :chatRoomId "
 	)
 	List<ChatRoomTradeBookResponseDto> getChatRoomTradeBookList(@Param("chatRoomId") Long chatRoomId);
+
+	 @Modifying
+	 @Query(value =
+	 "update UserBook ub "+
+			 "set ub.isOwned = false, "+
+			 "ub.userBookTradeType = 'UNDEFINED' "+
+			 "where ub.id in ( " +
+			 "    select tub.userBook.id " +
+			 "    from TradeUserBook tub " +
+			 "    where tub.trade.id = :chatRoomId) "
+	 )
+	 void completeTradeUserBooks(@Param("chatRoomId") Long chatRoomId);
 }

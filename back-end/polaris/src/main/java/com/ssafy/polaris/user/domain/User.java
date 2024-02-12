@@ -16,7 +16,6 @@ import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.promotion.domain.Promotion;
 import com.ssafy.polaris.regcode.domain.Regcode;
 import com.ssafy.polaris.report.domain.Report;
-import com.ssafy.polaris.token.domain.Token;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,6 +42,7 @@ import lombok.experimental.SuperBuilder;
 @SQLDelete(sql = "update users set deleted_at = CURRENT_TIMESTAMP where id = ?")
 @SQLRestriction("deleted_at is NULL")
 public class User extends BaseEntity {
+	// 지역코드
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "regcode_id", updatable = false, insertable = false)
@@ -53,9 +53,6 @@ public class User extends BaseEntity {
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Essay> essays;
-
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
-	private Token token;
 
 	@NotNull
 	@Column(length = 300)
