@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void logout(String accessToken, SecurityUser securityUser) {
         redisTemplate.delete("refresh:"+securityUser.getEmail());
-        redisTemplate.opsForValue().set("blackList:"+accessToken, "logout", jwtTokenProvider.getACCESS_TOKEN_EXPIRE_TIME());
+        redisTemplate.opsForValue().set("blackList:"+accessToken, "logout", jwtTokenProvider.getACCESS_TOKEN_EXPIRE_TIME(), TimeUnit.MILLISECONDS);
     }
 
     @Override
