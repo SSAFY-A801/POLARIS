@@ -1,7 +1,9 @@
 package com.ssafy.polaris.profile.service;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.ssafy.polaris.global.s3.service.S3Service;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.polaris.following.domain.Follow;
@@ -29,6 +31,7 @@ public class ProfileServiceImpl implements ProfileService {
 	private final UserRepository userRepository;
 	private final RegcodeRepository regcodeRepository;
 	private final FollowingRepository followingRepository;
+	private final S3Service s3Service;
 
 	// profile view
 	// TODO: User 조회 시 no Session 에러가 발생.
@@ -59,13 +62,13 @@ public class ProfileServiceImpl implements ProfileService {
 	// TODO: 찾는 유저가 없을 때 예외 처리 필요
 	@Override
 	@Transactional
-	public String updateProfile(Long userId, ProfileRequestDto profileRequest) {
+	public String updateProfile(Long userId, ProfileRequestDto profileRequest) throws IOException {
 		User findUser = userRepository.getReferenceById(userId);
 		Regcode newRegcode = regcodeRepository.getReferenceById(profileRequest.getRegcodeId());
 		findUser.UpdateProfile(newRegcode,
 			profileRequest.getNickname(),
 			profileRequest.getIntroduction(),
-			profileRequest.getImageUrl());
+			s3Service.uploadFile(userId, profileRequest.getImage()));
 
 		return "";
 	}

@@ -2,6 +2,7 @@ package com.ssafy.polaris.global.security.filter;
 
 import java.io.IOException;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +12,8 @@ import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.global.security.provider.JwtTokenProvider;
 import com.ssafy.polaris.global.security.util.SecurityUtil;
 import com.ssafy.polaris.user.domain.User;
+import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
+import com.ssafy.polaris.user.exception.UserNotFoundException;
 import com.ssafy.polaris.user.repository.UserRepository;
 
 import jakarta.servlet.FilterChain;
@@ -27,34 +30,38 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserRepository userRepository;
+	private final StringRedisTemplate redisTemplate;
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
-		IOException,
-		ServletException {
+		ServletException,
+		IOException {
 		// 1. 토큰 추출
 		String accessToken = SecurityUtil.getAccessToken((HttpServletRequest)request);
 
 		// 2. 유효성 검사
 		if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
-			// TODO : 레디스에 넣기
-			// ObjectUtils.isEmpty() // 로그아웃 된 토큰 검사
+			if (accessToken.length() > 200) {
+				if (redisTemplate.hasKey("blackList:" + accessToken).booleanValue())
+					throw new UserNotAuthorizedException("로그아웃 된 토큰입니다.");
 
-			// TODO: Authentication 객체 조사
-			// 토큰이 유효할 경우 토큰에서 authentication 객체(사용자 정보)를 받아온다.
-			Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-			// TODO: throw할 에러 정의
-			User user = userRepository.findUserByEmail(authentication.getName())
-				.orElseThrow();
+				Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
-			SecurityUser securityUser = new SecurityUser(user);
+				User user = userRepository.findUserByEmail(authentication.getName())
+					.orElseThrow(() -> new UserNotFoundException(""));
 
-			Authentication customAUthentication = new UsernamePasswordAuthenticationToken(
-				securityUser, "", securityUser.getAuthorities()
-			);
+				SecurityUser securityUser = new SecurityUser(user);
 
-			// securityContext에 전역 저장
-			SecurityContextHolder.getContext().setAuthentication(customAUthentication);
+				Authentication customAuthentication = new UsernamePasswordAuthenticationToken(
+					securityUser, "", securityUser.getAuthorities()
+				);
+
+				// securityContext에 전역 저장
+				SecurityContextHolder.getContext().setAuthentication(customAuthentication);
+			}
+			else {
+
+			}
 		}
 		chain.doFilter(request, response);
 	}

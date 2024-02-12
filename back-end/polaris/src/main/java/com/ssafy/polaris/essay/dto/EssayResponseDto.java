@@ -1,9 +1,11 @@
 package com.ssafy.polaris.essay.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.ssafy.polaris.book.domain.Book;
 import com.ssafy.polaris.book.domain.UserBook;
+import com.ssafy.polaris.comment.dto.CommentReponseDto;
 import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.user.domain.User;
 
@@ -33,18 +35,18 @@ public class EssayResponseDto {
 	private String bookCoverUrl;
 	private String bookTitle;
 	private String bookAuthor;
+	// comment
+	private List<CommentReponseDto> comments;
 
 	public EssayResponseDto(Essay essay) {
 		this.id = essay.getId();
 		this.title = essay.getTitle();
-		this.content = essay.getTitle();
+		this.content = essay.getContent();
 		this.hit = essay.getHit();
 		this.isOpened = essay.getIsOpened();
 		this.createdAt = essay.getCreatedAt();
 		this.updatedAt = essay.getUpdatedAt();
 		this.deletedAt = essay.getDeletedAt();
-		// TODO : 없는 값으로 만들 수 없도록 만들면 null 일 수 없다
-		// test용. join된 데이터가 없는 경우를 처리해주기 위함
 		if (essay.getUserBook() != null) {
 			UserBook userBook = essay.getUserBook();
 			Book book = userBook.getBook();

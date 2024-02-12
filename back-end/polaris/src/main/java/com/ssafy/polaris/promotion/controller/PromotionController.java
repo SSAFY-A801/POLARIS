@@ -11,16 +11,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.polaris.global.SearchConditions;
-import com.ssafy.polaris.global.exception.exceptions.UserNotAuthorizedException;
+import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.promotion.dto.PromotionListResponseDto;
 import com.ssafy.polaris.promotion.dto.PromotionRequestDto;
 import com.ssafy.polaris.promotion.dto.PromotionResponseDto;
+import com.ssafy.polaris.promotion.repository.FavoriteRepository;
 import com.ssafy.polaris.promotion.response.DefaultResponse;
 import com.ssafy.polaris.promotion.response.StatusCode;
 import com.ssafy.polaris.promotion.service.PromotionService;
@@ -73,12 +75,32 @@ public class PromotionController {
 
 		promotionService.deletePromotion(promotionRequestDto, securityUser);
 		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.PROMOTION_DELETE_SUCCESS);
-    	}
+	}
 
 	@GetMapping
 	public ResponseEntity<DefaultResponse<List<PromotionListResponseDto>>> getPromotionList(@ModelAttribute SearchConditions searchConditions) {
 		List<PromotionListResponseDto> promotionResponseDtos = promotionService.getPromotionList(searchConditions);
 
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.PROMOTION_READ_LIST_SUCCESS, promotionResponseDtos);
+	}
+
+	@PutMapping("/{promotionId}")
+	public ResponseEntity<DefaultResponse<Void>> favoritePromotion(
+		@PathVariable("promotionId") Long promotionId,
+		@AuthenticationPrincipal SecurityUser securityUser) {
+
+		boolean isFavorited = promotionService.favoritePromotion(promotionId, securityUser);
+		StatusCode returnStatus = isFavorited ? StatusCode.FAVORITE_ADD_SUCCESS: StatusCode.FAVORITE_REMOVE_SUCCESS;
+
+		return DefaultResponse.emptyResponse(HttpStatus.OK, returnStatus);
+	}
+
+	@GetMapping("/favorite_count/{promotionId}")
+	public ResponseEntity<DefaultResponse<Integer>> getFavoriteCount(@PathVariable("promotionId") Long promotionId) {
+		int favoriteCount= promotionService.getFavoriteCount(promotionId);
+
+		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.FAVORITE_COUNT_SUCCESS, favoriteCount);
+
+
 	}
 }

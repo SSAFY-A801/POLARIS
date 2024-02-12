@@ -2,24 +2,28 @@ package com.ssafy.polaris.promotion.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ssafy.polaris.connectentity.domain.PromotionUserBook;
 import com.ssafy.polaris.connectentity.repository.PromotionUserBookRepository;
 import com.ssafy.polaris.global.SearchConditions;
 import com.ssafy.polaris.global.exception.exceptions.NoBookSelectedException;
-import com.ssafy.polaris.global.exception.exceptions.PromotionNotFoundException;
-import com.ssafy.polaris.global.exception.exceptions.UserBookNotFound;
-import com.ssafy.polaris.global.exception.exceptions.UserForbiddenException;
-import com.ssafy.polaris.global.exception.exceptions.category.ForbiddenException;
-import com.ssafy.polaris.global.exception.exceptions.category.NotFoundException;
+import com.ssafy.polaris.promotion.exception.PromotionNotFoundException;
+import com.ssafy.polaris.promotion.exception.WrongSearchKeyException;
+import com.ssafy.polaris.user.exception.UserBookNotFound;
+import com.ssafy.polaris.user.exception.UserForbiddenException;
 import com.ssafy.polaris.global.security.SecurityUser;
+import com.ssafy.polaris.promotion.domain.Favorite;
 import com.ssafy.polaris.promotion.domain.Promotion;
 import com.ssafy.polaris.promotion.dto.PromotionListResponseDto;
 import com.ssafy.polaris.promotion.dto.PromotionRequestDto;
 import com.ssafy.polaris.promotion.dto.PromotionResponseDto;
+import com.ssafy.polaris.promotion.repository.FavoriteRepository;
 import com.ssafy.polaris.promotion.repository.PromotionRepository;
 
 import jakarta.persistence.EntityManager;
@@ -34,6 +38,7 @@ public class PromotionServiceImpl implements PromotionService{
 	private final EntityManager em;
 	private final PromotionRepository promotionRepository;
 	private final PromotionUserBookRepository promotionUserBookRepository;
+	private final FavoriteRepository favoriteRepository;
 
 	@Override
 	@Transactional
@@ -106,31 +111,42 @@ public class PromotionServiceImpl implements PromotionService{
 	@Override
 	public List<PromotionListResponseDto> getPromotionList(SearchConditions searchConditions) {
 		TypedQuery<PromotionListResponseDto> query = null;
-		String jpql;
+		String jpql = "select new com.ssafy.polaris.promotion.dto.PromotionListResponseDto("
+			+ "u.id, "
+			+ "u.profileUrl, "
+			+ "u.nickname, "
+			+ "concat(r.si, ' ', r.gungu, ' ', r.dong), "
+			+ "p.id, "
+			+ "p.title, "
+			+ "p.content, "
+			+ "(select sum(pub.userBook.userBookPrice) from PromotionUserBook as pub where pub.promotion = p), "
+			+ "f.isDeleted, "
+			+ "(select count(*) from Favorite as f where f.promotion = p and f.isDeleted is false) "
+			+ ") "
+			+ "from Promotion as p  "
+			+ "    left join User as u on u.id = p.user.id "
+			+ "    left join Favorite as f on f.promotion.id = p.id "
+			+ "	   join Regcode as r on u.regcode.id = r.id "
+			+ "where f.isDeleted is not true " ;
 
 		searchConditions.setWord(searchConditions.getWord().trim());
 		boolean isNotSearch = searchConditions.getWord() == null || searchConditions.getWord().equals("");
 		if (isNotSearch) {
-			jpql = "select new com.ssafy.polaris.promotion.dto.PromotionListResponseDto("
-				+ "u.id, "
-				+ "u.profileUrl, "
-				+ "u.nickname, "
-				+ "concat(r.si, ' ', r.gungu, ' ', r.dong), "
-				+ "p.id, "
-				+ "p.title, "
-				+ "p.content, "
-				+ "(select sum(pub.userBook.userBookPrice) from PromotionUserBook as pub where pub.promotion = p), "
-				+ "f.isDeleted, "
-				+ "(select count(*) from Favorite as f where f.promotion = p and f.isDeleted is false) "
-				+ ") "
-				+ "from Promotion as p  "
-				+ "    left join User as u on u.id = p.user.id "
-				+ "    left join Favorite as f on f.promotion.id = p.id "
-				+ "	   join Regcode as r on u.regcode.id = r.id ";
 			query = em.createQuery(jpql, PromotionListResponseDto.class);
 		} else {
-				// TODO : 검색 조건에 따른 분기가 필요. (DSL을 쓰지 않는 이상..)
+			if (searchConditions.getKey().equals("title")) {
+				jpql += " and p.title like concat('%', :word, '%') ";
+			} else if (searchConditions.getKey().equals("user")) {
+				jpql += " and p.user.nickname like concat('%', :word, '%') ";
+			} else if (searchConditions.getKey().equals("bookTitle")) {
+				jpql += " and p.book.title like concat('%', :word, '%') ";
+			} else {
+				throw new WrongSearchKeyException("");
+			}
+			query = em.createQuery(jpql, PromotionListResponseDto.class);
+			query.setParameter("word", searchConditions.getWord());
 		}
+
 
 		List<PromotionListResponseDto> promotions = query
 			.setFirstResult((searchConditions.getPgno() - 1) * searchConditions.getSpp())
@@ -138,7 +154,24 @@ public class PromotionServiceImpl implements PromotionService{
 			.getResultList();
 
 		return promotions;
-		// System.out.println(promotions.get(0).getUser().getRegcode().getDong());
+	}
+
+	@Override
+	@Transactional
+	public boolean favoritePromotion(Long promotionId, SecurityUser securityUser) {
+		Optional<Favorite> promotion = favoriteRepository.findFavoriteByPromotionIdAndUserId(promotionId, securityUser.getId());
+		// boolean isFavorite = favoriteRepository.existsByPromotionIdAndUserId(promotionId, securityUser.getId());
+		if (promotion.isEmpty()) {
+			favoriteRepository.saveWithPromotionIdAndUserId(promotionId, securityUser.getId());
+			return true;
+		} else {
+			return !promotion.get().toggleDeletion();
+		}
+	}
+
+	@Override
+	public int getFavoriteCount(Long promotionId) {
+		return favoriteRepository.getFavoriteCount(promotionId);
 	}
 
 }

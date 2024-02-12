@@ -1,5 +1,7 @@
 package com.ssafy.polaris.chat.domain;
 
+import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
 import com.ssafy.polaris.trade.domain.Trade;
 import com.ssafy.polaris.user.domain.User;
 
@@ -19,6 +21,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -40,12 +44,17 @@ public class ChatMessage {
 	private MessageType type;
 
 	@NotNull
+	@CreationTimestamp
+	private LocalDateTime createdAt;
+
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "trade_id")
 	private Trade trade;
 }

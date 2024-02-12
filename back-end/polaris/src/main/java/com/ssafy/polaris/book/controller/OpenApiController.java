@@ -43,7 +43,7 @@ public class OpenApiController {
 			"&SearchTarget=" + "Book" +
 			"&output=" + "js" +
 			"&Version=" + "20131101" +
-			"&Cover=" + "MidBig";
+			"&Cover=" + "Big";
 
 		try {
 			URL url = new URL(urlStr);
