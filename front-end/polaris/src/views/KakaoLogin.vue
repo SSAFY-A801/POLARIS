@@ -1,23 +1,39 @@
 <template>
 
+<p>카카오 로그인 중</p>
+
 </template>
 
 <script setup lang="ts">
+
+import { onMounted } from 'vue'
 import axios from 'axios'
 
-let code = new URL(window.location.href).searchParams.get('code');
+const code = new URL(window.location.href).searchParams.get('code');
 
-// 백으로 인가코드 전송
 const fetchToken = async () => {
   try {
     console.log(code)
-    const response = await axios.post(`https://i10a801.p.ssafy.io:8082/user/login/oauth2/code/kakao?code=${code}`)
+    await axios.post(`https://i10a801.p.ssafy.io:8082/user/login/oauth2/code/kakao?code=${code}`, {})
+    .then(function(response) {
+      if (response.data.status === 200) {
+        console.log(response)
+      } else {
+        console.log(response)
+      }
+    })
   } catch (error) {
     console.error(error);
   }
 };
 
-fetchToken();
+onMounted(() => {
+  fetchToken();
+})
+
+
+
+
 </script>
 
 <style scoped>
