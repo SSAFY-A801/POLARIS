@@ -1,5 +1,8 @@
 package com.ssafy.polaris.trade.controller;
 
+import com.ssafy.polaris.chat.dto.ChatRoomTradeBookListResponseDto;
+import com.ssafy.polaris.chat.service.ChatRoomService;
+import com.ssafy.polaris.chat.service.SseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping(value = "/trade")
 public class TradeController {
 	private final TradeService tradeService;
+	private final SseService sseService;
+	private final ChatRoomService chatRoomService;
 
 	/**
 	 * 교환 가능 도서 목록 반환
@@ -123,6 +128,12 @@ public class TradeController {
 	@PostMapping
 	public ResponseEntity<DefaultResponse<Void>> selectTradeBook(@RequestBody TradeBookSelectRequestDto request) {
 		tradeService.selectTradeBooks(request);
+
+		System.out.println("sse - event 발생 시키러 갑니다. "+ request.getChatRoomId());
+		ChatRoomTradeBookListResponseDto list = chatRoomService.getChatRoomTradeBookList(request.getChatRoomId());
+
+		// chatRoomId 로 connect 된 곳에 event 발생 시키기
+		sseService.sendChangeChatRoomTradeBookList(request.getChatRoomId(), list);
 
 		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
