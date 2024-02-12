@@ -3,6 +3,7 @@ package com.ssafy.polaris.trade.controller;
 import com.ssafy.polaris.chat.dto.ChatRoomTradeBookListResponseDto;
 import com.ssafy.polaris.chat.service.ChatRoomService;
 import com.ssafy.polaris.chat.service.SseService;
+import com.ssafy.polaris.trade.dto.ExchangeHistoryResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,6 +25,9 @@ import com.ssafy.polaris.trade.service.TradeService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -141,4 +145,21 @@ public class TradeController {
 		);
 	}
 
+	@GetMapping("/{id}/exchange_history")
+	public ResponseEntity<DefaultResponse<Map<String, List<ExchangeHistoryResponseDto>>>> getExchangeHistoroies(
+			@PathVariable("id") Long userId
+	){
+		List<ExchangeHistoryResponseDto> data = tradeService.getExchangeHistory(userId);
+		if(data == null){
+			return DefaultResponse.emptyResponse(
+					HttpStatus.OK,
+					StatusCode.SUCCESS_USER_EMPTY_EXCHANGE_HISTORY_VIEW
+			);
+		}
+		return DefaultResponse.toResponseEntity(
+				HttpStatus.OK,
+				StatusCode.SUCCESS_USER_EXCHANGE_HISTORY_VIEW,
+				Map.of("exchangeHistories", data)
+		);
+	}
 }
