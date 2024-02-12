@@ -149,14 +149,6 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void logout(String accessToken, SecurityUser securityUser) {
-        if (accessToken == null) {
-            throw new UserNotAuthorizedException("logout");
-        }
-
-        if (!jwtTokenProvider.validateToken(accessToken)) {
-            throw new UserNotAuthorizedException("logout");
-        }
-
         redisTemplate.delete("refresh:"+securityUser.getEmail());
         redisTemplate.opsForValue().set("blackList:"+accessToken, "logout", jwtTokenProvider.getACCESS_TOKEN_EXPIRE_TIME());
     }
