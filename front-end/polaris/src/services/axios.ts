@@ -2,6 +2,23 @@
 import { ref } from 'vue'
 import axios, { AxiosError, type AxiosResponse } from 'axios'
 
+const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
+// 사용자 정보를 나타내는 인터페이스 정의
+interface UserInfo {
+  email?: string | null;
+  // 다른 속성들도 필요에 따라 추가할 수 있습니다.
+}
+
+// userInfoString에서 가져온 값을 파싱하여 UserInfo 타입으로 사용
+let loginUser: UserInfo;
+
+try {
+  loginUser = JSON.parse(userInfoString.value) || {}; // 빈 객체로 기본값 설정
+} catch (error) {
+  console.error("Error parsing user_info:", error);
+  loginUser = {}; // JSON 파싱에 실패한 경우 빈 객체로 기본값 설정
+}
+
 // axios 인스턴스 생성
 const baseURL = 'https://i10a801.p.ssafy.io:8082';
 const token = ref(localStorage.getItem('user_token'))
@@ -19,7 +36,7 @@ instance.interceptors.response.use(
       // 액세스 토큰이 만료된 경우
       const refreshToken = localStorage.getItem('refresh_token');
       // 리프레시 토큰으로 새 액세스 토큰 요청
-      const response = await axios.post(`${baseURL}/user/reissue`, {}, {
+      const response = await axios.post(`${baseURL}/user/reissue`, {"email": loginUser.email }, {
         headers: { 'Authorization': refreshToken,
         'Content-Type' : 'application/json'
     }});
