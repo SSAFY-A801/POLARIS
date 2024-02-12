@@ -1,7 +1,7 @@
 <template>
   <Navvar></Navvar>
 
-<div class="mt-40">
+<div class="mt-40 font-[gowun-dodum]">
   <div class="m-auto flex justify-center">
     <div class="mt-24 mb-10 ml-10 w-2/3">
         <h1 class=" text-3xl font-bold text-maintheme1">사용자 도서 검색</h1>      
@@ -245,6 +245,11 @@ const truncateTitle = (title: string) => {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'gowun-dodum';
+  src: url('../../../../public/GowunDodum-Regular.ttf');
+}
+
 
 #booksearchcard{
     height: 400px;

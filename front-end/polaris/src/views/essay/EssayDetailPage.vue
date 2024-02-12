@@ -1,9 +1,9 @@
 <template>
   <Navvar></Navvar>
-  <div class="container mx-auto mt-64 max-w-6xl min-w-[700px] p-5">
+  <div class="container mx-auto mt-64 max-w-6xl min-w-[700px] p-5 font-[gowun-dodum]">
     <button id="back" @click="goback()" >BACK</button>
     <!-- 최상단 : 독후감 제목 & 프로필 -->
-    <div class="flex justify-between items-center p-5 m-1 shadow shadow-b-md">
+    <div class="flex justify-between items-center p-5 m-1 border-b-2 border-gray-300">
       <div class="flex items-center">
         <span class="bg-red-600 text-white text-sm rounded-xl px-2 py-1 m-2">독후감</span>
         <div class="text-xl font-semibold">{{ essay?.title }}</div>
@@ -242,6 +242,11 @@ onMounted(()=> {
 </script>
 
 <style scoped>
+  @font-face {
+    font-family: 'gowun-dodum';
+    src: url('../../../../public/GowunDodum-Regular.ttf');
+  }
+
   #nickname {
     @apply font-bold text-lg
   }

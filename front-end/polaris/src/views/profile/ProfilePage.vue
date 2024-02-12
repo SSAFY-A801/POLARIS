@@ -6,7 +6,7 @@
     id="default-modal"
     tabindex="-1"
     aria-hidden="true"
-    class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl max-h-full bg-white  shadow dark:bg-gray-700">
+    class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl max-h-full bg-white shadow dark:bg-gray-700 font-[gowun-dodum]">
     <div class="relative w-full max-w-2xl max-h-full">
         <!-- Modal content -->
         <!-- Modal header -->
@@ -41,7 +41,7 @@
 </div>
 
 <!-- 프로필 페이지 -->
-  <div class="flex justify-center">
+  <div class="flex justify-center font-[gowun-dodum]">
     <div class="container w-full mt-8 max-w-6xl p-4">
       <!-- 프로필 페이지 상단 -->
       <div class="upper-section">
@@ -386,6 +386,12 @@
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'gowun-dodum';
+  src: url("../../../public/GowunDodum-Regular.ttf");
+}
+
+
 #profile-image {
     @apply w-[150px] h-[150px] object-cover justify-items-center rounded-[70%] border-[3px] border-solid border-[#121212];
 }
@@ -396,7 +402,7 @@
 #mychat,
 #follow,
 #profile-update {
-    @apply bg-[#323F59] border text-white m-[5px] px-2.5 py-2 rounded-[10px]  hover:bg-gray-500;
+    @apply bg-[#323F59] border text-white m-[5px] px-2.5 py-2 rounded-[10px]  hover:bg-gray-500 font-['gowun-dodum'];
 }
 
 #closeModal {

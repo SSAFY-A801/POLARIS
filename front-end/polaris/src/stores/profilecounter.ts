@@ -88,8 +88,8 @@ export const profileCounterStore = defineStore('counter', () => {
       dong: "군포2동"
     },
     introduction: "스케이트 저보다 잘타시면 네고 허락해드립니다.",
-    tradingCnt: 132,
-    exchangeCnt: 54,
+    tradingCnt: 12,
+    exchangeCnt: 10,
     followingsCnt: 8,
   });
   
@@ -176,7 +176,7 @@ export const profileCounterStore = defineStore('counter', () => {
         }
         queryType.value = searchType[searchCondition]
       }
-      axios({
+      axiosInstance.value({
         method: 'get',
         url: `${BACK_API_URL}/api/search?query=${query}&queryType=${queryType.value}`
       })

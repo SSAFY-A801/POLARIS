@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="font-[gowun-dodum]">
     <Navvar></Navvar>
 
     <div class="mt-60"><WeeklyBook></WeeklyBook></div>
@@ -33,6 +33,13 @@ import WeeklyBook from '@/components/main/WeeklyBook.vue'
 </script>
 
 <style scoped>
+@font-face {
+font-family: 'gowun-dodum';
+src: url('../../../../public/GowunDodum-Regular.ttf');
+}
+
+
+
 .custom-background{
   background-color: #323F59
 }

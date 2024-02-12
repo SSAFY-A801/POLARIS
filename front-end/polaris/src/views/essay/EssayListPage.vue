@@ -1,6 +1,6 @@
 <template>
   <Navvar></Navvar>
-  <div class="mt-40 flex justify-center">
+  <div class="mt-40 flex justify-center font-[gowun-dodum]">
     <div class="container w-full mt-4 max-w-6xl p-2">
       <!-- 최상단 -->
       <div class="grid grid-cols-5 items-center mb-4 shadow-md" >
@@ -220,6 +220,11 @@ onMounted(()=> {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'gowun-dodum';
+  src: url('../../../../public/GowunDodum-Regular.ttf');
+}
+
 .active {
   @apply relative z-10 bg-blue-800 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900
 }
