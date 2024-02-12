@@ -13,7 +13,7 @@ public class S3ServiceImpl implements S3Service {
 
     private final S3Clients s3Clients;
 
-    public String uploadFile(MultipartFile file) throws IOException {
-        return s3Clients.uploadFile(file);
+    public String uploadFile(Long userId, MultipartFile file) throws IOException {
+        return s3Clients.uploadFile(userId, file);
     }
 }

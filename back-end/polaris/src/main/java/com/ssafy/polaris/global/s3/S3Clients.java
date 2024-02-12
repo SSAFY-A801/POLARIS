@@ -1,5 +1,7 @@
 package com.ssafy.polaris.global.s3;
 
+import com.ssafy.polaris.user.domain.User;
+import com.ssafy.polaris.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +18,23 @@ public class S3Clients {
 
     private final S3Client s3Client;
     private final String bucketName = "polaris-bucket";
+    private final UserRepository userRepository;
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    public String uploadFile(Long userId, MultipartFile file) throws IOException {
         // 파일이 없는 경우 처리
-        if(file.isEmpty())
-            return "https://polaris-bucket.s3.amazonaws.com/mimo.png";
+        // - 파일이 null인 경우
+        //  - 기존 프로필 사진이 존재하지 않을 경우 Default 이미지로 설정
+        //	- 기존 프로필 사진이 존재할 경우 변경하면 안됨
+        if(file.isEmpty()){
+            User user = userRepository.getReferenceById(userId);
+            if(user.getProfileUrl() == null){
+                return "https://polaris-bucket.s3.amazonaws.com/mimo.png";
+            }
+            else {
+                return user.getProfileUrl();
+            }
+        }
+
         String fileName = file.getOriginalFilename();
 
         // S3 버킷에 파일 업로드
