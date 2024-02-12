@@ -51,6 +51,7 @@ import Navvar from '@/components/common/Navvar.vue'
 import { useRouter } from 'vue-router';
 import { onMounted, ref, computed } from 'vue';
 import axios from 'axios';
+import axiosInstance from '@/services/axios';
 import { useChatStore } from '@/stores/chatcounter';
 
 const router = useRouter();
@@ -91,7 +92,7 @@ const cancelButtonClick = async (chatroomId: number) => {
     alert('거래를 취소합니다');
 
     try {
-      const response = await axios.delete(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
+      const response = await axiosInstance.value.delete(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
   
       if (response.status === 200) {
         console.log('채팅방 삭제 성공:', response.data);
@@ -108,12 +109,12 @@ const cancelButtonClick = async (chatroomId: number) => {
 }
 
 const leaveButtonClick = async (chatroomId: number) => {
-  const confirmation = confirm('정말 취소하시겠습니까? 체팅내역이 사라집니다.')
+  const confirmation = confirm('정말 나가시겠습니까? 체팅내역이 사라집니다.')
   if (confirmation) {
-    alert('거래를 취소합니다');
+    alert('채팅방을 나갑니다');
 
     try {
-      const response = await axios.delete(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
+      const response = await axiosInstance.value.delete(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
   
       if (response.status === 200) {
         console.log('채팅방 삭제 성공:', response.data);
@@ -159,7 +160,7 @@ const leaveButtonClick = async (chatroomId: number) => {
     border-radius: 50%;
     object-fit: cover;
     border: solid black 1px;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
     
   }
 
