@@ -1,9 +1,12 @@
 package com.ssafy.polaris.chat.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.polaris.chat.dto.ChatMessageListResponseDto;
@@ -28,57 +31,34 @@ public class ChatSaveServiceImpl implements ChatSaveService {
 		// mysql에 저장
 		chatMessageRepository.save(chatMessageMapper.toEntity(chatMessageSaveDto));
 
-		// chatRedisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(ChatMessageSaveDto.class));
-		// chatRedisTemplate.opsForList().rightPush(String.valueOf(chatMessageSaveDto.getChatRoomId()), chatMessageSaveDto);
-		// // 1시간 마다 메세지 캐싱을 없애도록 설정
-		// chatRedisTemplate.expire(String.valueOf(chatMessageSaveDto.getChatRoomId()), 1, TimeUnit.MINUTES);
-		//
-		// System.out.println("redis----");
-		// List<ChatMessageSaveDto> list = chatRedisTemplate.opsForList().range("20", 0, -1);
-		// for (ChatMessageSaveDto dto : list){
-		// 	System.out.println(dto.getChatRoomId()+" " + dto.getCreatedAt()+" "+ dto.getUserId()+" "+dto.getMessage());
-		// }
+		 chatRedisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(ChatMessageSaveDto.class));
+		 chatRedisTemplate.opsForList().rightPush("CHAT_MESSAGE_"+String.valueOf(chatMessageSaveDto.getChatRoomId()), chatMessageSaveDto);
 
+		 // 1시간 마다 메세지 캐싱을 없애도록 설정
+		 chatRedisTemplate.expire("CHAT_MESSAGE_"+String.valueOf(chatMessageSaveDto.getChatRoomId()), 7, TimeUnit.DAYS);
+
+//		 System.out.println("redis----");
+//		 List<ChatMessageSaveDto> list = chatRedisTemplate.opsForList().range("CHAT_MESSAGE_71", 0, -1);
+//		 for (ChatMessageSaveDto dto : list){
+//		 	System.out.println(dto.getChatRoomId()+" " + dto.getCreatedAt()+" "+ dto.getUserId()+" "+dto.getMessage());
+//		 }
 	}
 
 	@Override
 	public ChatMessageListResponseDto loadMessage(Long chatRoomId) {
 		System.out.println("load message - serviceimpl");
-		// List<ChatMessageSaveDto> chatMessageList = new ArrayList<>();
+		List<ChatMessageSaveDto> chatMessageList = new ArrayList<>();
 
 		// redis에서 해당 채팅방의 메시지 100개 가져오기
-		// List<ChatMessageSaveDto> redisMessageList = chatRedisTemplate.opsForList().range(String.valueOf(chatRoomId), 0, 99);
+		List<ChatMessageSaveDto> redisMessageList = chatRedisTemplate.opsForList().range("CHAT_MESSAGE_"+String.valueOf(chatRoomId), 0, 99);
 
-		// List<ChatMessage> dbChatMessageList = chatMessageRepository.findTop100ByTrade_IdOrderByCreatedAtAsc(chatRoomId);
-		List<ChatMessageSaveDto> dbChatMessageSaveDtoList = chatMessageRepository.getTop100ChatMessages(chatRoomId);
-
-		// for(ChatMessage chatMessage : dbChatMessageList){
-		// 	System.out.println(chatMessage.getMessage());
-		// 	ChatMessageSaveDto chatMessageSaveDto = chatMessageMapper.toDto(chatMessage);
-		// 	chatMessageList.add(chatMessageSaveDto);
-		// 	// chatRedisTemplate.opsForList().rightPush(String.valueOf(chatRoomId), chatMessageSaveDto);
-		// }
-
-		return new ChatMessageListResponseDto(dbChatMessageSaveDtoList);
+		// Redis 에서 가져온 메시지가 없다면, DB 에서 메시지 100개 가져오기
+		if (redisMessageList == null || redisMessageList.isEmpty()) {
+			System.out.println("empty redis");
+			chatMessageList = chatMessageRepository.getTop100ChatMessages(chatRoomId);
+		} else{
+			chatMessageList.addAll(redisMessageList);
+		}
+		return new ChatMessageListResponseDto(chatMessageList);
 	}
-
-		// redis에서 가져온 메세지가 없다면 -> db에서 100개 가져오기
-	// 	if (redisMessageList == null || redisMessageList.isEmpty()){
-	// 		List<ChatMessage> dbChatMessageList = chatMessageRepository.findTop100ByTrade_IdOrderByCreatedAtAsc(chatRoomId);
-	//
-	// 		for(ChatMessage chatMessage : dbChatMessageList){
-	// 			ChatMessageSaveDto chatMessageSaveDto = chatMessageMapper.toDto(chatMessage);
-	// 			chatMessageList.add(chatMessageSaveDto);
-	// 			chatRedisTemplate.opsForList().rightPush(String.valueOf(chatRoomId), chatMessageSaveDto);
-	// 		}
-	// 	} else {
-	// 		chatMessageList.addAll(redisMessageList);
-	// 	}
-	// 	return chatMessageList;
-	//}
-
-	// @Override
-	// public void addChat(ChatMessageSaveDto chatMessageSaveDto) {
-	// 	chatRedisTemplate.opsForZSet().add()
-	// }
 }
