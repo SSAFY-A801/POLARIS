@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.ssafy.polaris.chat.dto.ChatRoomTradeBookListResponseDto;
 import com.ssafy.polaris.chat.repository.TradeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -14,13 +15,10 @@ import com.ssafy.polaris.chat.repository.EmitterRepositoryImpl;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Service
+@RequiredArgsConstructor
 public class SseServiceImpl implements SseService{
 	private final EmitterRepositoryImpl emitterRepository;
 	private final TradeRepository tradeRepository;
-	public SseServiceImpl(EmitterRepositoryImpl emitterRepository, TradeRepository tradeRepository) {
-		this.emitterRepository = emitterRepository;
-		this.tradeRepository = tradeRepository;
-	}
 
 	@Override
 	public SseEmitter connection(Long chatRoomId, HttpServletResponse response) {
