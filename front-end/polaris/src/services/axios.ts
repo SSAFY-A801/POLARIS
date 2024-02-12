@@ -15,7 +15,7 @@ const instance = axios.create({
 instance.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
-    if (error.config && error.response && error.response.status === 401) {
+    if (error.config && error.response && error.response.status === 401 && (<any>error.response.data).status === 420) {
       // 액세스 토큰이 만료된 경우
       const refreshToken = localStorage.getItem('refresh_token');
       // 리프레시 토큰으로 새 액세스 토큰 요청
