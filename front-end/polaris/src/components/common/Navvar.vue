@@ -108,6 +108,8 @@ const logout = async () => {
   })
   .then(function (response) {
     localStorage.removeItem('user_token')
+    localStorage.removeItem('refresh_token')
+    localStorage.removeItem('user_info')
     userToken.value = null
     alert("로그아웃 되었습니다")
     console.log(response.status)
@@ -129,6 +131,8 @@ const logout = async () => {
                 }})
                 .then(function(response){
                   localStorage.removeItem('user_token')
+                  localStorage.removeItem('refresh_token')
+                  localStorage.removeItem('user_info')
                   userToken.value = null
                   alert("로그아웃 되었습니다")
                   console.log(response.status)

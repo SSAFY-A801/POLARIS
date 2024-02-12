@@ -123,7 +123,7 @@ watchEffect(() => {
 <style scoped>
 .modal {
   position: fixed;
-  top: 50%;
+  top: 65%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 350px; /* 원하는 너비로 조절 */
