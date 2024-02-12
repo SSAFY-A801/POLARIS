@@ -1,5 +1,5 @@
 <template>
-    <div v-if="editor" class="p-1 mb-3 border border-maintheme1 shadow-md rounded-md">
+    <div v-if="editor" class="p-1 mb-3 border border-gray-400 shadow-md rounded-md">
   <!-- 볼드, 이태릭, 취소선등 에디터 옵션. 아이콘은 Material icon에서 원하는 아이콘을 가져왔다. -->
     <button id="editor-button"
       @click="editor.chain().focus().toggleBold().run()"
@@ -68,7 +68,7 @@
 
   </div>
   <!-- 에디터 영역 -->
-  <editor-content :editor="editor" class="h-60"/>
+  <editor-content :editor="editor" class="h-80"/>
 </template>
 
 <script setup lang="ts">
@@ -126,8 +126,8 @@ onBeforeUnmount(() => {
 }
 .ProseMirror {
   height: 100%;
-  border: 1px solid black;
-  border-radius: 10px;
+  border: 1px solid rgb(156, 161, 172);
+  border-radius: 5px;
   padding: 6px;
   overflow: scroll;
 }

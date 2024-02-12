@@ -1,11 +1,18 @@
 <template>
   <Navvar></Navvar>
-  <div class="mt-60 flex justify-center">
-    <div class="container w-full mt-8 max-w-6xl bg-backgroundgray p-4">
+  <div class="mt-40 flex justify-center">
+    <div class="container w-full mt-4 max-w-6xl p-2">
       <!-- 최상단 -->
-      <div class="flex justify-between items-center p-2 m-2 border-b  border-black">
-        <div class="text-2xl font-bold">독후감 게시판</div>
-        <button @click="writeEssay" id="write-essay">독후감 작성</button>
+      <div class="grid grid-cols-5 items-center mb-4 shadow-md" >
+        <img class="col-span-3 w-full h-[400px] object-cover" src="@\assets\night-sky.jpg" alt="">
+        <div class="col-span-2 justify-items-center p-4">
+          <div class="text-xl font-bold my-4 text-center">
+            <p >마음을 담아, 책 속 세계를 함께 느껴봐요!</p>
+          </div>
+          <div class="text-center">
+            <button @click="writeEssay" id="write-essay">독후감 작성하러 가기</button>
+          </div>
+        </div>
       </div>
       <!-- 검색바 -->
       <div class="flex flex-wrap flex-col md:flex-row justify-end border-b-2 pb-4 mb-8">
@@ -64,7 +71,7 @@ import Navvar from '@/components/common/Navvar.vue'
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import EssayList from '../../components/essay/EssayList.vue';
-import axios from 'axios';
+import axiosInstance from '@/services/axios';
 import { essayStore } from '@/stores/essaycounter';
 import type { Essay } from '@/stores/essaycounter';
 
@@ -91,7 +98,6 @@ let isBtnNext = ref(true)
 let isBtnLast = ref(true)
 
 const page = (e:number) => {
-  console.log(e)
   currentPage.value = e
   essaySearch(keyword.value, filter.value);
 }
@@ -172,8 +178,7 @@ const essaySearch = (keyword: string, filter: string) => {
     } as { [key: string]: string };
     key.value = searchCondition[filter]
   } 
-  console.log(keyword, key.value)
-  axios({
+  axiosInstance.value({
     headers: {
       "Content-Type": 'application/json'
     },
@@ -182,8 +187,8 @@ const essaySearch = (keyword: string, filter: string) => {
     params: {
       pgno: 1,
       spp: 20,
-      key: "",
-      word: ""
+      key: key.value,
+      word: keyword
     }
 
   })
@@ -199,7 +204,7 @@ const essaySearch = (keyword: string, filter: string) => {
         listIdx ++;
       }
     }
-    console.log("현재 페이지:", showingList.value)
+    // console.log("현재 페이지:", showingList.value)
     paging()
     pageBtnCheck()
   })
@@ -209,7 +214,7 @@ const essaySearch = (keyword: string, filter: string) => {
 }
 
 onMounted(()=> {
-
+  essaySearch("","")
 })
 
 </script>

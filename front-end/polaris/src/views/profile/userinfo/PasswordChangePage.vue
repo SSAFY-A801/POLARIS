@@ -67,7 +67,7 @@
   import Navvar from '@/components/common/Navvar.vue'
   import { useRouter } from 'vue-router'
   import { onMounted, ref, watch } from 'vue';
-  import axios from 'axios';
+  import axiosInstance from '@/services/axios';
   import { profileCounterStore } from '@/stores/profilecounter';
 
   const store = profileCounterStore();
@@ -123,7 +123,7 @@ const changePassword = () => {
         isSame.value = false
       } else {
         // 비밀번호 변경조건 모두 충족
-        axios({
+        axiosInstance.value({
           headers: {
             Authorization: `${store.token}`,
             "Content-Type": 'application/json'

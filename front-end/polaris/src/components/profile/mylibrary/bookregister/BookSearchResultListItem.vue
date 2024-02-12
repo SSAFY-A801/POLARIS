@@ -7,7 +7,8 @@
         </div>
       </div>
       <div id="book-info" class="col-span-9">
-        <div>{{ searchResult.title }}</div>
+        <div class="mb-2 font-semibold">{{ searchResult.title }}</div>
+        <div>{{ searchResult.author }}</div>
       </div>
       <div id="register-book-cart" class="col-span-1">
         <button @click="addBookcart(searchResult)" id="register-book-cart-button" class="w-8">

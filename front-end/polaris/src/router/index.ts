@@ -9,7 +9,6 @@ import PasswordSearchPage from '@/views/PasswordSearchPage.vue'
 import ProfilePage from '@/views/profile/ProfilePage.vue'
 import MyLibraryPage from '@/views/profile/mylibrary/MyLibraryPage.vue'
 import MyScrapsPage from '@/views/profile/like/MyScrapsPage.vue'
-import MyFavoritesPage from '@/views/profile/like/MyFavoritesPage.vue'
 import MyEssayPage from '@/views/profile/myarticle/MyEssayPage.vue'
 import ProfileUpdatePage from '@/views/profile/userinfo/ProfileUpdatePage.vue'
 import PasswordChangePage from '@/views/profile/userinfo/PasswordChangePage.vue'
@@ -90,10 +89,6 @@ const router = createRouter({
           name: 'MyScrapsPage',
           component: MyScrapsPage 
         },
-        { path: 'myfavorites',
-          name: 'MyFavoritesPage',
-          component: MyFavoritesPage
-         },
         { path: 'myessay',
           name: 'MyEssayPage',
           component: MyEssayPage 

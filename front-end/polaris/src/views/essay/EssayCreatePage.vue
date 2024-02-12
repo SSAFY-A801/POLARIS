@@ -8,12 +8,12 @@
       </div>
       <div class="grid grid-cols-12 gap-8">
         <div class="text-lg col-span-2 font-semibold">제목</div>
-        <input id="title" class="col-span-10 border-maintheme1 border shadow-md h-10 p-2 rounded-lg"  v-model="title" type="text">
+        <input id="title" class="col-span-10 border-maintheme1 border-b h-10 p-2"  v-model="title" type="text" placeholder="독후감 제목">
         <div class="text-lg col-span-2 font-semibold">도서 선택</div>
         <div class="col-span-10">
-          <select v-if="essayBooks.length" v-model="selectedBook" id="product-options" class="input-field w-full border border-maintheme1 shadow-md h-10 rounded-lg"> 
+          <select v-if="essayBooks.length" v-model="selectedBook" id="book-options" class="input-field w-full border-b border-maintheme1 shadow-md h-10"> 
             <option v-for="essaybook in essayBooks" :key="essaybook.id" :value="essaybook.id">
-            {{ essaybook.title }}
+            {{ essaybook.title }} - {{ essaybook.author }}
             </option>
           </select>
           <div v-else class="text-sm text-gray-400">
@@ -47,8 +47,8 @@ import Editor from '../../components/essay/TiptapEditor.vue';
 import { useRouter } from 'vue-router';
 import { profileCounterStore } from '@/stores/profilecounter';
 import type { Book } from '@/stores/profilecounter';
+import axiosInstance from '@/services/axios';
 import axios from 'axios';
-
 
 const profileStore = profileCounterStore();
 const mybookList = profileStore.mybookLists
@@ -61,7 +61,7 @@ const router = useRouter();
 const selectedBook = ref<Book|null>(null)
 const content = ref(``)
 const writeEssay = () => {
-  axios({
+  axiosInstance.value({
     headers: {
       Authorization: `${profileStore.token}`,
       "Content-Type": 'application/json'
@@ -106,9 +106,6 @@ onMounted(()=> {
 <style lang="scss" scoped>
 /* Basic editor styles */
 
-#title {
-  @apply bg-backgroundgray
-}
 
 #back,
 #create-essay {

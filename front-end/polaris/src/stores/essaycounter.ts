@@ -12,6 +12,13 @@ export type CommentUser = {
   regionString: string,
 }
 
+export type ScrapPost = {
+  essayId: number,
+  essayTitle: string,
+  writerId: number,
+  author: string,
+  createdAt: Date
+}
 
 export type Comment = {
   comment: string,

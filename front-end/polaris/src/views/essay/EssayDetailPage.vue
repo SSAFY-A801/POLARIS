@@ -1,11 +1,11 @@
 <template>
   <Navvar></Navvar>
-  <div class="container border mx-auto mt-64 max-w-6xl min-w-[700px] bg-backgroundgray p-5">
+  <div class="container mx-auto mt-64 max-w-6xl min-w-[700px] p-5">
     <button id="back" @click="goback()" >BACK</button>
     <!-- 최상단 : 독후감 제목 & 프로필 -->
-    <div class="flex justify-between items-center p-5 m-1 border-b  border-black">
+    <div class="flex justify-between items-center p-5 m-1 shadow shadow-b-md">
       <div class="flex items-center">
-        <span class="bg-maintheme1 text-white text-sm rounded-xl px-2 py-1 m-2">독후감</span>
+        <span class="bg-red-600 text-white text-sm rounded-xl px-2 py-1 m-2">독후감</span>
         <div class="text-xl font-semibold">{{ essay?.title }}</div>
       </div>
       <div class="flex items-center">
@@ -41,13 +41,13 @@
           <button @click="editEssay" id="edit-essay">수정</button>
         </div>
         <div v-else>
-          <button id="scrap-essay" @click="scrapEssay">
-            <font-awesome-icon icon="fa-solid fa-bookmark" style="color: #323f59;" />
-            스크랩
-          </button>
-          <button id="scrap-essay" @click="scrapEssay">
+          <button v-if="scrap" id="scrap-essay" @click="scrapEssay">
             <font-awesome-icon icon="fa-solid fa-bookmark" style="color: #323f59;" />
             스크랩 취소 
+          </button>
+          <button v-else id="scrap-essay" @click="scrapEssay">
+            <font-awesome-icon icon="fa-solid fa-bookmark" style="color: #323f59;" />
+            스크랩
           </button>
         </div>
       </div>
@@ -77,16 +77,19 @@
   import Navvar from '@/components/common/Navvar.vue'
   import { computed, onMounted, ref, watch } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
-  import axios from 'axios';
-  import type { Essay } from '@/stores/essaycounter';
+  import axiosInstance from '@/services/axios';
+  import type { Essay, ScrapPost } from '@/stores/essaycounter';
   import { profileCounterStore } from '@/stores/profilecounter';
-  import CommentListItem from '@/components/essay/comment/CommentListItem.vue'; 
+  import CommentListItem from '@/components/essay/comment/CommentListItem.vue';
+  
   const scraps = ref<number>(0)
   const profileStore = profileCounterStore();
   const essay = ref<Essay|null>(null)
   const route = useRoute();
   const router  = useRouter();
-  const scrap = ref(false)
+  const scrap = computed(()=> {
+    return profileStore.myscraps.some((post:ScrapPost) => post.essayId == essay.value?.id)
+  })
   const comment = ref("")
   const isMe = computed(()=> {
     return essay.value?.userId ==  Number(profileStore.loginUserId)
@@ -100,7 +103,7 @@
   // 댓글추가
   const addComment = (comment:string) => {
     if (essay.value && comment.length){
-      axios({
+      axiosInstance.value({
         headers: {
           Authorization: `${profileStore.token}`,
           "Content-Type": 'application/json'
@@ -116,7 +119,7 @@
         console.log(response.data)
         alert("작성 완료")
         // 독후감 정보 갱신
-        axios({
+        axiosInstance.value({
           headers: {
             Authorization: `${profileStore.token}`,
             "Content-Type": 'application/json'
@@ -144,7 +147,7 @@
   // 스크랩
   const scrapEssay = () => {
     if(essay.value){
-      axios({
+      axiosInstance.value({
         headers: {
           Authorization: `${profileStore.token}`,
           "Content-Type": 'application/json'
@@ -154,6 +157,7 @@
       })
       .then((response) => {
         console.log(response.data)
+        profileStore.getMyscraps();
       })
       .catch((error) => {
         console.error(error);
@@ -171,7 +175,7 @@
   // 독후감 삭제
   const deleteEssay = () => {
     alert("정말 삭제하실건가요?")
-    axios({
+    axiosInstance.value({
     headers: {
       Authorization: `${profileStore.token}`,
       "Content-Type": 'application/json'
@@ -197,7 +201,7 @@
 }
 
 const getEssayInfo = () => {
-  axios({
+  axiosInstance.value({
     headers: {
       Authorization: `${profileStore.token}`,
       "Content-Type": 'application/json'
@@ -217,8 +221,9 @@ const getEssayInfo = () => {
 
 onMounted(()=> {
   getEssayInfo();
+  profileStore.getMyscraps();
   // 스크랩 수 조회
-  axios({
+  axiosInstance.value({
       headers: {
         "Content-Type": 'application/json'
       },

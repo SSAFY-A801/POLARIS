@@ -127,6 +127,30 @@ export const profileCounterStore = defineStore('counter', () => {
   // MyTradeListPage
   // MyExchangeListPage
   // MyScrapsPage
+  const myscraps = ref([])
+  const getMyscraps = () => {
+    if(loginUserId.value){
+      axiosInstance.value({
+        headers: {
+          Authorization: `${token}`,
+          'Content-Type': 'application/json'
+        },
+        method: 'get',
+        url: `${BACK_API_URL}/essay/${loginUserId.value}/scraps`
+      })
+      .then((response) => {
+        console.log(response.data)
+        if(response.data.status == 200){
+          const res = response.data.data
+          myscraps.value = res.scrapPosts
+        }
+    })
+      .catch((error) => {
+        console.error(error);
+        
+      })
+    }
+  }
   // MyFavoritePage
   // MyPromotionPage
   
@@ -228,5 +252,6 @@ const getMybookList = (id:string)=> {
   return { 
     profileUser, getProfile,loginUserId, userInfoString,isMe,
     searchAPIbookList, BACK_API_URL, token,
+    getMyscraps, myscraps,
     getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }
 },{persist: true})

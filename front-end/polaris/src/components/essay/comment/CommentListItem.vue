@@ -88,7 +88,7 @@
 
 <style scoped>
   #profile-image {
-    @apply w-[50px] h-[50px] rounded-full border-2 border-gray-500
+    @apply w-[50px] h-[50px] object-cover rounded-full border-2 border-gray-500
   }
 
   #nickname,

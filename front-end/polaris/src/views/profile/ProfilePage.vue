@@ -42,7 +42,7 @@
 
 <!-- 프로필 페이지 -->
   <div class="flex justify-center">
-    <div class="container w-full mt-8 max-w-6xl bg-backgroundgray p-4">
+    <div class="container w-full mt-8 max-w-6xl p-4">
       <!-- 프로필 페이지 상단 -->
       <div class="upper-section">
         <div class="flex justify-end">
@@ -175,7 +175,7 @@
   import { profileCounterStore } from "@/stores/profilecounter";
   import { useUserStore } from '@/stores/authcounter';
   import type { Following, User } from "@/stores/profilecounter";
-  import axios from 'axios';
+  import axiosInstance from '@/services/axios';
   import { useChatStore } from '@/stores/chatcounter';
 
   type Unfollowing = {
@@ -199,7 +199,7 @@
   })
 
   const follow = (user: User) => {
-    axios({
+    axiosInstance.value({
       headers: {
         Authorization: `${store.token}`,
         "Content-Type": 'application/json'
@@ -221,7 +221,7 @@
   }
 
   const unfollow = (user: User) => {
-    axios({
+    axiosInstance.value({
       headers: {
         Authorization: `${store.token}`,
         "Content-Type": 'application/json'
@@ -258,7 +258,7 @@
 
   const updateFollowings = () => {
     // 이후 추가
-    axios({
+    axiosInstance.value({
       headers: {
         Authorization: `${store.token}`,
         "Content-Type": 'application/json'
@@ -362,7 +362,7 @@
   onMounted(()=> {
     store.getProfile(Number(route.params.id))
     // // following 명단 호출
-    axios({
+    axiosInstance.value({
       headers: {
         Authorization: `${store.token}`
       },
