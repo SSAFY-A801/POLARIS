@@ -68,7 +68,7 @@ public class ProfileServiceImpl implements ProfileService {
 		findUser.UpdateProfile(newRegcode,
 			profileRequest.getNickname(),
 			profileRequest.getIntroduction(),
-			s3Service.uploadFile(profileRequest.getImage()));
+			s3Service.uploadFile(userId, profileRequest.getImage()));
 
 		return "";
 	}

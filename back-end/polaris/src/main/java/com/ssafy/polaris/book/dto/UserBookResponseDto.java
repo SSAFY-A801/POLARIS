@@ -4,19 +4,16 @@ import java.time.LocalDateTime;
 
 import com.ssafy.polaris.book.domain.UserBookTradeType;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserBookResponseDto {
 	Long id;
 	Long userId;
 	String nickname;
+	String profileUrl;
 	String cover;
 	String title;
 	String author;
