@@ -18,6 +18,9 @@ public class S3Clients {
     private final String bucketName = "polaris-bucket";
 
     public String uploadFile(MultipartFile file) throws IOException {
+        // 파일이 없는 경우 처리
+        if(file.isEmpty())
+            return "https://polaris-bucket.s3.amazonaws.com/mimo.png";
         String fileName = file.getOriginalFilename();
 
         // S3 버킷에 파일 업로드
