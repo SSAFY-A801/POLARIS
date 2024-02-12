@@ -33,8 +33,8 @@ public enum ErrorCode {
 
 	CERT_CODE_EXPIRED(408, "코드가 만료되었습니다."),
 
-	USER_EMAIL_OR_NICKNAME_CONFLICT(409, "사용자 이메일 혹은 닉네임이 중복됩니다."),
-	ALREADY_KAKAO_JOINED(409, "이미 카카오가입을 한 사용자입니다.");
+	ALREADY_KAKAO_JOINED(409, "이미 카카오가입을 한 사용자입니다."),
+	USER_EMAIL_OR_NICKNAME_CONFLICT(409, "사용자 이메일 혹은 닉네임이 중복됩니다.")
 	;
 
 	private final int status;
