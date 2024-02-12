@@ -5,6 +5,7 @@ import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
 import BookSearchPage from '@/views/BookSearchPage.vue'
 import PasswordSearchPage from '@/views/PasswordSearchPage.vue'
+import KakaoLogin from '@/views/KakaoLogin.vue'
 // 프로필
 import ProfilePage from '@/views/profile/ProfilePage.vue'
 import MyLibraryPage from '@/views/profile/mylibrary/MyLibraryPage.vue'
@@ -185,6 +186,12 @@ const router = createRouter({
       name: 'essayedit',
       component: EssayEditPage
     },
+    //카카오로그인
+    {
+      path: '/kakaologin',
+      name: 'kakaologin',
+      component: KakaoLogin
+    }
   ]
 })
 
