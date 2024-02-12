@@ -59,6 +59,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 				// securityContext에 전역 저장
 				SecurityContextHolder.getContext().setAuthentication(customAuthentication);
 			}
+			// TODO: refresh 에 대한 검사 추가
 		}
 		chain.doFilter(request, response);
 	}

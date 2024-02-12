@@ -4,10 +4,14 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import com.ssafy.polaris.user.api.KakaoApi;
+import com.ssafy.polaris.user.dto.KakaoProfile;
+import com.ssafy.polaris.user.dto.OAuthToken;
+import com.ssafy.polaris.user.dto.UserKakaoJoinRequestDto;
 import com.ssafy.polaris.user.exception.CertCodeExpiredException;
 import com.ssafy.polaris.user.exception.CertCodeNotMatch;
-import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
 import com.ssafy.polaris.user.exception.UserNotFoundException;
+import com.ssafy.polaris.user.exception.UserNotKakaoJoined;
 import com.ssafy.polaris.user.exception.WrongEmailOrPasswordException;
 import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
 import com.ssafy.polaris.global.security.SecurityUser;
@@ -37,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final RegcodeRepository regcodeRepository;
+    private final KakaoApi kakaoApi;
 
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
@@ -64,7 +69,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public UserResponseDto join(UserJoinRequestDto userJoinRequestDto) {
         boolean isEmailInUse = emailCheck(userJoinRequestDto.getEmail());
-        boolean isNicknameInUse = emailCheck(userJoinRequestDto.getEmail());
+        boolean isNicknameInUse = nicknameCheck(userJoinRequestDto.getNickname());
 
         if (isEmailInUse || isNicknameInUse)
             throw new UserConflictException("");
@@ -84,6 +89,34 @@ public class UserServiceImpl implements UserService{
         user = userRepository.save(user);
         return new UserResponseDto(user);
     }
+
+    /**
+     * @param userKakaoJoinRequestDto
+     * nickname과 region과 code만 받는다.
+     */
+    @Override
+    @Transactional
+    public UserResponseDto kakaoJoin(UserKakaoJoinRequestDto userKakaoJoinRequestDto) {
+        boolean isEmailInUse = emailCheck(userKakaoJoinRequestDto.getEmail());
+        boolean isNicknameInUse = nicknameCheck(userKakaoJoinRequestDto.getNickname());
+
+        if (isEmailInUse || isNicknameInUse)
+            throw new UserConflictException("");
+
+        Regcode regcode = regcodeRepository.getReferenceById(userKakaoJoinRequestDto.getRegion());
+
+        User user = User.builder()
+            .email(userKakaoJoinRequestDto.getEmail())
+            .nickname(userKakaoJoinRequestDto.getNickname())
+            .regcode(regcode)
+            .regcodeId(regcode.getId())
+            .oauth(String.valueOf(userKakaoJoinRequestDto.getKakaoId()))
+            .build();
+
+        user = userRepository.save(user);
+        return new UserResponseDto(user);
+    }
+
 
     @Override
     public Boolean emailCheck(String email) {
@@ -109,6 +142,47 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findById(id)
             .orElseThrow();
         user.setPassword(passwordEncoder.encode(password));
+    }
+
+    @Override
+    public Map<String, String> kakaoLogin(KakaoProfile kakaoProfile) {
+        User user = userRepository.findUserByOauth(String.valueOf(kakaoProfile.getId()))
+            .orElseThrow(() -> new UserNotKakaoJoined(""));
+
+        kakaoProfile.setNickname(user.getNickname());
+
+        // TODO : 사용자 권한 설정
+        Authentication authentication =
+            new UsernamePasswordAuthenticationToken("", "",
+                Collections.singleton(new SimpleGrantedAuthority("AUTHORITY")));
+
+        Map<String, String> tokenMap = jwtTokenProvider.generateToken(user.getId(), user.getNickname(), authentication);
+
+        tokenMap.put("id", Long.toString(user.getId()));
+        tokenMap.put("email", kakaoProfile.getEmail());
+        tokenMap.put("profileUrl", user.getProfileUrl());
+        tokenMap.put("nickname", user.getNickname());
+
+        redisTemplate.opsForValue().set("refresh:"+user.getEmail(), tokenMap.get("refresh"), jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME(), TimeUnit.MILLISECONDS);
+
+        return tokenMap;
+    }
+
+    @Override
+    public Map<String, Object> kakaoLoginProcess(String code) {
+        // 1. 인가코드 받기
+        // 2. 토큰 받기
+        OAuthToken oAuthToken = kakaoApi.getOAuthToken(code);
+
+        // 3. 사용자 정보 받기
+        KakaoProfile kakaoProfile = kakaoApi.getUserInfo(oAuthToken.getAccess_token());
+        return Map.of("kakaoProfile", kakaoProfile,
+            "oAuthToken", oAuthToken);
+    }
+
+    @Override
+    public boolean isKakaoUser(Long kakaoProfileId) {
+        return userRepository.existsByOauth(kakaoProfileId.toString());
     }
 
     @Override
@@ -149,14 +223,6 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void logout(String accessToken, SecurityUser securityUser) {
-        if (accessToken == null) {
-            throw new UserNotAuthorizedException("logout");
-        }
-
-        if (!jwtTokenProvider.validateToken(accessToken)) {
-            throw new UserNotAuthorizedException("logout");
-        }
-
         redisTemplate.delete("refresh:"+securityUser.getEmail());
         redisTemplate.opsForValue().set("blackList:"+accessToken, "logout", jwtTokenProvider.getACCESS_TOKEN_EXPIRE_TIME());
     }
@@ -193,5 +259,6 @@ public class UserServiceImpl implements UserService{
             throw new CertCodeNotMatch("");
         }
     }
+
 
 }

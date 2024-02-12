@@ -12,14 +12,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.global.security.util.SecurityUtil;
+import com.ssafy.polaris.user.dto.KakaoProfile;
 import com.ssafy.polaris.user.dto.UserJoinRequestDto;
+import com.ssafy.polaris.user.dto.UserKakaoJoinRequestDto;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 import com.ssafy.polaris.user.dto.UserResponseDto;
 import com.ssafy.polaris.user.dto.UserSetPasswordDto;
+import com.ssafy.polaris.user.exception.KakaoUserConflictException;
+import com.ssafy.polaris.user.exception.UserConflictException;
 import com.ssafy.polaris.user.response.DefaultResponse;
 import com.ssafy.polaris.user.response.StatusCode;
 import com.ssafy.polaris.user.service.UserService;
@@ -55,12 +60,36 @@ public class UserController {
 		return DefaultResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.CREATED_USER, userResponseDto);
 	}
 
+	@PostMapping("/join/oauth2/code/kakao")
+	public ResponseEntity<DefaultResponse<UserResponseDto>> kakaoJoin(@RequestBody UserKakaoJoinRequestDto userKakaoJoinRequestDto) {
+		if (userService.isKakaoUser(userKakaoJoinRequestDto.getKakaoId())) {
+			throw new KakaoUserConflictException("");
+		}
+		else {
+			UserResponseDto userResponseDto = userService.kakaoJoin(userKakaoJoinRequestDto);
+			return DefaultResponse.toResponseEntity(HttpStatus.CREATED, StatusCode.CREATED_USER, userResponseDto);
+		}
+	}
+
 	@PostMapping("/login")
 	public ResponseEntity<DefaultResponse<Map<String, String>>> login(
-		@RequestBody UserLoginRequestDto userLoginRequestDto) throws Exception {
+		@RequestBody UserLoginRequestDto userLoginRequestDto) {
 		Map<String, String> tokenMap = userService.login(userLoginRequestDto);
 		// header에 담아서 주는 것이 더 안전하다.
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_LOGIN, tokenMap);
+	}
+
+	@PostMapping("/login/oauth2/code/kakao")
+	public ResponseEntity kakaoLogin(@RequestParam String code) {
+		Map<String, Object> kakaoProfileAndOauthTokens = userService.kakaoLoginProcess(code);
+		if (userService.isKakaoUser(((KakaoProfile)kakaoProfileAndOauthTokens.get("kakaoProfile")).getId())) {
+			Map<String, String> tokenMap = userService.kakaoLogin(
+				(KakaoProfile)kakaoProfileAndOauthTokens.get("kakaoProfile"));
+			return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_LOGIN, tokenMap);
+		}
+		else {
+			return DefaultResponse.toResponseEntity(HttpStatus.ACCEPTED, StatusCode.KAKAO_JOIN_NEEDED, kakaoProfileAndOauthTokens);
+		}
 	}
 
 	@PostMapping("/reissue")
@@ -70,7 +99,6 @@ public class UserController {
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_REISSUE, tokenMap);
 	}
 
-	// TODO : 로그아웃 get으로 바꾸기. front에게도 전달
 	@GetMapping("/logout")
 	public ResponseEntity<DefaultResponse<Void>> logout(HttpServletRequest request, @AuthenticationPrincipal SecurityUser securityUser) {
 		String accessToken = SecurityUtil.getAccessToken(request);
