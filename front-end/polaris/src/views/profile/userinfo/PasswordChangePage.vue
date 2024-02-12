@@ -1,6 +1,6 @@
 <template>
   <Navvar></Navvar>
-  <div class="container mt-60">
+  <div class="container mt-60 font-[gowun-dodum]">
     <div class="flex justify-center">
       <div class="max-w-md w-full m-8 px-4  bg-white rounded-2xl shadow  border border-gray-300">
         <div class="py-4 px-4 rounded-t-2xl mb-4 border-b-2">
@@ -163,6 +163,10 @@ onMounted(()=> {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'gowun-dodum';
+  src: url('../../../../public/GowunDodum-Regular.ttf');
+}
  form {
   padding: 5px;
 

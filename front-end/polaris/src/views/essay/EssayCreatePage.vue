@@ -1,7 +1,7 @@
 <template>
   <Navvar></Navvar>
-  <div class="flex justify-center mt-40">
-    <div id="app" class="container relative border-2 shadow-gray-300 shadow-lg border-maintheme1 w-full m-16 rounded-lg max-w-4xl p-8">
+  <div class="flex justify-center mt-40 font-[gowun-dodum]">
+    <div id="app" class="container relative border-4 shadow-gray-300 shadow-lg border-maintheme1 w-full m-16 rounded-lg max-w-4xl p-8">
       <div class="flex justify-between">
         <div class="text-2xl font-bold mb-6"> 독후감 쓰기 </div>
         <button @click="goback()" id="back" class="p-2 mb-4">뒤로 가기</button>
@@ -105,7 +105,10 @@ onMounted(()=> {
 
 <style lang="scss" scoped>
 /* Basic editor styles */
-
+@font-face {
+  font-family: 'gowun-dodum';
+  src: url('../../../../public/GowunDodum-Regular.ttf');
+}
 
 #back,
 #create-essay {

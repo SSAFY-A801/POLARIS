@@ -1,5 +1,5 @@
 <template>
-    <nav class="fixed bg-white top-20 w-full z-30 shadow-lg">
+    <nav class="fixed bg-white top-20 w-full z-30 shadow-lg font-[gowun-dodum]">
         <div class="px-12 mx-0 ">
             <div class="flex items-center h-20">
               <div class=" flex items-center justif-center w-full h-20">
@@ -68,7 +68,7 @@ const getUserInfo = async() => {
   try {
     const response = await axios({
       headers: {
-        "Authorization": `${userToken}`,
+        "Authorization": `${userToken.value}`,
         "Content-Type": 'application/json'
       },
       method: 'get',
@@ -149,6 +149,10 @@ const logout = async () => {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'gowun-dodum';
+  src: url('../../../public/GowunDodum-Regular.ttf');
+}
 
 a {
   text-decoration: none;

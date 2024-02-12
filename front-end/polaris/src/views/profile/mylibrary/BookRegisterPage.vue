@@ -1,8 +1,8 @@
 <template>
     <!-- 모달 제작이 되면 페이지를 없애고 다 모달로 옮길 예정-->
-  <div id="register-book"  class="container md:mx-auto min-w-[600px] mt-28 max-w-6xl rounded-md h-[600px]">
+  <div id="register-book"  class="container md:mx-auto min-w-[600px] mt-28 max-w-6xl rounded-md h-[600px] font-[gowun-dodum]">
     <!-- header -->
-    <div class="flex justify-between p-4 mb-4 border-b">
+    <div class="flex justify-between p-4 mb-4 border-b-2 border-gray-300 ">
       <div class="text-3xl font-bold ml-3">
         도서 등록
       </div>
@@ -152,6 +152,10 @@ onMounted(()=> {
 
 
 <style scoped>
+@font-face {
+  font-family: 'gowun-dodum';
+  src: url('../../../../public/GowunDodum-Regular.ttf');
+}
 #cart-header {
   height: 50px;
 }

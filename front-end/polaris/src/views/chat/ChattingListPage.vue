@@ -1,10 +1,10 @@
 <template>
   <Navvar></Navvar>
-  <div class="first-container mt-40">
+  <div class="first-container mt-40 font-[gowun-dodum]">
     <div class="content">
   <div class="text-2xl m-3 font-semibold">나의 채팅방 목록</div>
 <div>
-<div class="container">
+<div class="container font-[gowun-dodum]">
   <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
     <thead class="ltr:text-left rtl:text-right">
       <tr>
@@ -132,6 +132,11 @@ const leaveButtonClick = async (chatroomId: number) => {
 </script>
 
 <style scoped>
+  @font-face {
+  font-family: 'gowun-dodum';
+  src: url('../../../../public/GowunDodum-Regular.ttf');
+}
+
 
   th, td {
     border: 1px solid #ddd;

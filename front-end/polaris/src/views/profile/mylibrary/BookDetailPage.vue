@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto mt-24 max-w-6xl min-w-[700px] p-4">
+  <div class="container mx-auto mt-24 max-w-6xl min-w-[700px] p-4 font-[gowun-dodum]">
     <h1 class="text-3xl font-bold ml-10">도서 상세보기</h1>
     <div class="flex justify-end">
       <div>
@@ -392,6 +392,12 @@
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'gowun-dodum';
+  src: url("../../../public/GowunDodum-Regular.ttf");
+}
+
+
   #profile-image {
       @apply w-[70px] h-[70px] rounded-full shadow-gray-600 shadow-md 
   }

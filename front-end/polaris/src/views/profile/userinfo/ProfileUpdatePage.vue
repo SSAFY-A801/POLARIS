@@ -1,7 +1,7 @@
 <template>
   <Navvar></Navvar>
   <RegionModal v-if="isRegionModalOpen" @close="closeRegionModal" @confirm="updateRegion"/> 
-  <div class="container mx-auto mt-40 max-w-6xl p-4">
+  <div class="container mx-auto mt-40 max-w-6xl p-4 font-[gowun-dodum]">
     <h1 class="text-3xl font-bold p-4 m-4">프로필 수정</h1>
     <div class="flex justify-end">
       <!-- 제출 및 취소 buttons -->
@@ -11,7 +11,7 @@
       </button>
       <button id="cancel-button" type="button" @click="cancelProfile">취소</button>
     </div>
-    <div class="container grid grid-cols-12 gap-4">
+    <div class="container grid grid-cols-12 gap-4 ">
       <!-- 프로필 사진 -->
       <div class="col-span-4">
         <div>
@@ -255,6 +255,12 @@
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'gowun-dodum';
+  src: url("../../../public/GowunDodum-Regular.ttf");
+}
+
+
 #update-image {
   opacity: 0;
   position: absolute;
