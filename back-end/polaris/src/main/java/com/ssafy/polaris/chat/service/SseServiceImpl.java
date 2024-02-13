@@ -22,7 +22,14 @@ public class SseServiceImpl implements SseService{
 
 	@Override
 	public SseEmitter connection(Long chatRoomId, HttpServletResponse response) {
-		SseEmitter emitter = emitterRepository.save(chatRoomId, new SseEmitter(60*60*1000L));
+		SseEmitter emitter = emitterRepository.findById(chatRoomId);
+
+		// if (emitter == null){
+		// SseEmitter emitter = emitterRepository.save(chatRoomId, new SseEmitter(60*60*1000L));
+		// }
+
+		System.out.println(emitter);
+		// SseEmitter emitter = emitterRepository.save(chatRoomId, new SseEmitter(60*60*1000L));
 		response.setHeader("X-Accel-Buffering", "no");
 
 		// emitter.onCompletion(() -> emitterRepository.deleteAllStartByWithId(id));
@@ -36,6 +43,7 @@ public class SseServiceImpl implements SseService{
 				.name("connect")
 				.data("connected!"+ chatRoomId)); // 더미 데이터
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		return emitter;
@@ -51,6 +59,7 @@ public class SseServiceImpl implements SseService{
 
 		// 채팅방에 해당하는 emitter에게만 보내줄 수 있도록
 		SseEmitter emitter = emitterRepository.findById(chatRoomId);
+		System.out.println(" send message " + emitter.toString());
 
 		try{
 			emitter.send(SseEmitter.event()

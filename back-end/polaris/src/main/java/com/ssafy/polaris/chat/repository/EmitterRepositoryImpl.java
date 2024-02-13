@@ -11,10 +11,19 @@ import lombok.NoArgsConstructor;
 @Repository
 @NoArgsConstructor
 public class EmitterRepositoryImpl implements EmitterRepository{
-	private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
+	private static final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
 	@Override
 	public SseEmitter save(Long chatRoomId, SseEmitter sseEmitter) {
 		emitters.put(chatRoomId, sseEmitter);
+
+		sseEmitter.onCompletion(() -> {
+			emitters.remove(chatRoomId);
+		});
+
+		sseEmitter.onTimeout(() -> {
+			sseEmitter.complete();
+		});
+
 		return sseEmitter;
 	}
 
@@ -24,13 +33,25 @@ public class EmitterRepositoryImpl implements EmitterRepository{
 		if (emitters.get(chatRoomId) == null){
 			this.save(chatRoomId, new SseEmitter(60*60*1000L));
 		}
-		return emitters.get(chatRoomId);
+
+		SseEmitter emitter = emitters.get(chatRoomId);
+
+		emitter.onCompletion(() -> {
+			emitters.remove(chatRoomId);
+		});
+
+		emitter.onTimeout(() -> {
+			emitter.complete();
+		});
+		return emitter;
 	}
 
 	@Override
 	public void deleteByWithId(Long chatRoomId) {
 		emitters.forEach((key, emitter) -> {
-			emitters.remove(key);
+			if (key.equals(chatRoomId)){
+				emitters.remove(key);
+			}
 		});
 	}
 
