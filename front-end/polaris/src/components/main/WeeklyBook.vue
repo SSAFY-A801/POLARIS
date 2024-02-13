@@ -4,7 +4,7 @@
             <div class="m-auto flex justify-center">
             <div class="mt-10 mb-2 ml-10 icon-title">
                 <font-awesome-icon icon="fa-solid fa-crown" size="2xl" style="color: #FFD43B;" />
-                <h1 class=" text-4xl font-bold text-maintheme1 mb-2">이 주의 책</h1>
+                <h1 class=" text-3xl font-bold text-maintheme1 mb-2">이 주의 책</h1>
                       
             </div>
             </div>
