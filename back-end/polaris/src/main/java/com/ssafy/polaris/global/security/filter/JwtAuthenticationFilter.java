@@ -40,6 +40,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 		String accessToken = SecurityUtil.getAccessToken((HttpServletRequest)request);
 
 		// 2. 유효성 검사
+		// TODO : 로그아웃을 먼저 검사해야 할 지도??
+		// TODO : isJWT 등을 만들어서 빈 토큰, 잘못된 토큰 검사를 먼저 한다.
+		// TODO : refresh 토큰의 경우 reissue로 항상 가는 것이므로 통과시켜준다.
+		// TODO : 빈 토큰이 아닐 때 expired 인지 검사를 한다!!!
 		if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
 			if (accessToken.length() > 150) {
 				if (redisTemplate.hasKey("blackList:" + accessToken).booleanValue())
@@ -59,9 +63,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 				// securityContext에 전역 저장
 				SecurityContextHolder.getContext().setAuthentication(customAuthentication);
 			}
-			// TODO: refresh 에 대한 검사 추가
 			else {
-
+				// refresh 에 대한 검사를 여기에 추가할 수 있다.
 			}
 		}
 		chain.doFilter(request, response);
