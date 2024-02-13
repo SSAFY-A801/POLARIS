@@ -80,6 +80,7 @@ import axios from 'axios'
 import router from '@/router'
 import { useUserStore } from '@/stores/authcounter'
 import RegionModal from '@/components/Auth/RegionModal.vue'
+import Swal from 'sweetalert2'
 
 //인가코드 빼오기
 const code = new URL(window.location.href).searchParams.get('code');
@@ -88,7 +89,11 @@ const kakaoId = ref()
 //인가코드 전송
 const fetchToken = async () => {
   try {
-    console.log(code)
+    Swal.fire({
+        title: "카카오 로그인 중",
+        text: "잠시만 기다려 주세요 ",
+        icon: "info"
+      })
     await axios.post('https://i10a801.p.ssafy.io:8082/user/login/oauth2/code/kakao', null, {
     params: {
         code: code
@@ -102,10 +107,17 @@ const fetchToken = async () => {
         localStorage.setItem('user_info' , JSON.stringify(response.data.data))
         const userStore = useUserStore()
         userStore.setLoginInfo(response.data.data)
-        alert(response.data.message)
+        Swal.fire({
+        title: "카카오 로그인 성공!",
+        icon: "success"
+      })
         router.push({ name: 'home'}) //메인페이지로 이동
       } else { // 처음 가입한 유저 일 시
-        console.log(response)
+        Swal.fire({
+        title: "처음 로그인 하셨나요?",
+        text: " 사용자 정보를 입력해주세요 ",
+        icon: "info"
+      })
         kakaoId.value = response.data.data.kakaoProfile.id
         submitKakaoLogin()
 
@@ -175,11 +187,17 @@ const checkNickname = async () => {
   .then(function (response) {
     if (response.data.data.isInUse) {
       isNicknameVerified.value = false
-      alert('이미 존재하는 닉네임 입니다')
+      Swal.fire({
+        text: "이미 존재하는 닉네임 입니다 ",
+        icon: "error"
+      })
       // console.log(isNicknameVerified.value)
 	    // console.log(response.data.message)
     } else {
-      alert('사용 가능한 닉네임 입니다')
+      Swal.fire({
+        text: "사용 가능한 닉네임 입니다 ",
+        icon: "success"
+      })
       isNicknameVerified.value = true
       // console.log(isNicknameVerified.value)
       // console.log(response.data.message)
@@ -205,12 +223,18 @@ const sendEmail = async () => {
     }}
 )
 .then(function (response) {
-  alert('이메일로 인증코드가 발송되었습니다.')
+  Swal.fire({
+        text: "이메일로 인증코드가 발송되었습니다 ",
+        icon: "success"
+      })
   isEmailVerificationInput.value = true
 	// console.log(response.status)
 })
 .catch(function () {
-	alert("인증이메일이 발송되지 않았습니다.")
+  Swal.fire({
+        text: "이메일 전송에 실패하였습니다",
+        icon: "error"
+      })
 })
 }
 
@@ -225,10 +249,16 @@ const checkEmail = async () => {
   })
   .then(function (response) {
     if (response.data.data.isInUse) {
-      alert('이미 존재하는 이메일 입니다.')
+      Swal.fire({
+        text: "이미 존재하는 이메일 입니다 ",
+        icon: "error"
+      })
       // console.log('이메일 인증 여부 검증 실패')
     } else {
-      alert('가입이 가능한 이메일 입니다.')
+      Swal.fire({
+        text: "가입 가능한 이메일 입니다 ",
+        icon: "success"
+      })
       // console.log('이메일 인증 여부 검증  성공')
       sendEmail()
     }
@@ -253,7 +283,10 @@ const checkVerifyCode = async () => {
     }}
 )
 .then(function (response) {
-  // alert('인증이 완료되었습니다.')
+  Swal.fire({
+        title: "인증 성공!",
+        icon: "success"
+      })
   isEmailVerificationInput.value =false
   isEmailVerified.value = true
 	// console.log(response.status)
@@ -266,7 +299,7 @@ const checkVerifyCode = async () => {
 
 const submitKakaoLogin = async () => {
   if (isNicknameVerified.value && isEmailVerified.value && regionInputCode.value) {
-  await axios.post('https://i10a801.p.ssafy.io:8082//user/join/oauth2/code/kakao', 
+  await axios.post('https://i10a801.p.ssafy.io:8082/user/join/oauth2/code/kakao', 
   JSON.stringify({
     nickname : nicknameInput.value,
     region : regionInputCode.value,
@@ -284,13 +317,20 @@ const submitKakaoLogin = async () => {
   localStorage.setItem('user_info' , JSON.stringify(response.data.userInfo))
   const userStore = useUserStore()
   userStore.setLoginInfo(response.data.data)
+  Swal.fire({
+        title: "카카오 로그인 성공!",
+        icon: "success"
+      })
   router.push({ name: 'home'}) //메인페이지로 이동
   })
   .catch(function (error) {
     alert(error.message)
   }) 
 } else {
-  alert('정보를 모두 입력해주세요')
+  Swal.fire({
+        text: " 정보를 모두 입력해주세요 ",
+        icon: "error"
+      })
 }}
 
 </script>
