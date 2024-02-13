@@ -176,8 +176,8 @@
   import type { Following, User } from "@/stores/profilecounter";
   import axiosInstance from '@/services/axios';
   import { useChatStore } from '@/stores/chatcounter';
-import Swal from 'sweetalert2';
-import { icon } from '@fortawesome/fontawesome-svg-core';
+  import Swal from 'sweetalert2';
+  import joinChatRoom from '@/components/chat/SellChattingBox.vue'
 
   type Unfollowing = {
     followingId: number
@@ -426,6 +426,10 @@ import { icon } from '@fortawesome/fontawesome-svg-core';
 
   })
 
+// 채팅방 sse 연결시도
+defineExpose({
+  joinChatRoom
+});
 </script>
 
 <style scoped>

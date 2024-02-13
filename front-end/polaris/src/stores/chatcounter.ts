@@ -6,53 +6,6 @@ import axiosInstance from '@/services/axios';
 import { convertTypeAcquisitionFromJson } from 'typescript';
 
 
-
-// export interface Chatroom {
-//   chatRoomId: number;
-//   receiverId: number;
-//   nickname: string;
-//   profileUrl: string;
-//   tradeStatus: string;
-//   tradeType: string;
-// }
-
-// export interface ResponseData {
-//   userId: number;
-//   chatRoomList: Chatroom[];
-// }
-
-// export interface ApiResponse {
-//   status: number;
-//   message: string;
-//   data: ResponseData;
-// }
-
-
-// export const useChatStore = defineStore('chat', {
-//   state: (): { chatData: ResponseData | null } => ({
-//     chatData: null,
-//   }),
-//   actions: {
-//     async fetchChatInfo() {
-//       try {
-//         const response = await axios.get<ResponseData>('http://i10a801.p.ssafy.io:8082/chat', {
-//           headers: {
-//             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoamhAZ21haWwuY29tIiwiYXV0aCI6IkFVVEhPUklUWSIsImlkIjo4LCJlbWFpbCI6ImhqaEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iu2CueynhO2VmCIsImV4cCI6MTcyNDY4Nzg5NH0.RGSg_mX4rSNrHAIIBkfHg1AowDKwyAmzhnk2b7X8xaE',
-//           }
-//         });
-//         if (response.status === 200) {
-//           this.chatData = response.data;
-//           console.log(response.data);
-//         } else {
-//           console.error('API 요청 실패:', response.status);
-//         }
-//       } catch (error) {
-//         console.error('API 요청 중 오류 발생:', error);
-//       }
-//     }
-//   },
-// });
-
 export interface Chatroom {
   chatRoomId: number;
   receiverId: number;
@@ -88,6 +41,14 @@ export interface CreateChatroomResponse {
   status: number;
   message: string;
   data: CreateChatroom;
+}
+
+interface SimpleMessage {
+  type: "TEXT";
+  chatRoomId : number;
+  userId : number;
+  nickname: string;
+  message: string;
 }
 
 export const useChatStore = defineStore('chat', () => {
@@ -141,24 +102,12 @@ export const useChatStore = defineStore('chat', () => {
     }
   };
 
-  // const deleteChat = async () => {
-  //   try {
-  //     const response = await axios.delete(`https://i10a801.p.ssafy.io:8082/trade/${}`);
-  
-  //     if (response.status === 200) {
-  //       console.log('채팅방 삭제 성공:', response.data);
-  //     } else {
-  //       console.error('API 요청 실패:', response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error('API 요청 중 오류 발생:', error);
-  //   }
-  // };
 
   return {
     chatData,
     fetchChatInfo,
     createChatRoom,
+    // joinChatRoom
     // deleteChat
   };
 });

@@ -74,7 +74,7 @@
 
 <script setup lang="ts">
   import Navvar from '@/components/common/Navvar.vue'
-  import { computed, onMounted, ref, watch } from 'vue';
+  import { computed, onMounted,onBeforeMount, ref, watch } from 'vue';
   import axiosInstance from '@/services/axios';
   import { useRouter, useRoute } from 'vue-router'
   import { profileCounterStore } from '@/stores/profilecounter';
@@ -223,11 +223,12 @@ import { icon } from '@fortawesome/fontawesome-svg-core';
         icon: 'success'
       })
       store.getProfile(Number(route.params.id))
+      router.push({name: "ProfilePage"})
     })
     .catch((error) => {
       console.error(error)
     })
-      router.push({name: "ProfilePage"})
+      
     }
   } 
 
@@ -256,9 +257,10 @@ import { icon } from '@fortawesome/fontawesome-svg-core';
   }
   
   
-  onMounted(()=> {
+  onBeforeMount(()=> {
     getProfile(profileUser.value.id)
   })
+
 </script>
 
 <style scoped>
