@@ -89,7 +89,10 @@ const kakaoId = ref()
 const fetchToken = async () => {
   try {
     console.log(code)
-    await axios.post(`https://i10a801.p.ssafy.io:8082/user/login/oauth2/code/kakao`, { code })
+    await axios.post('https://i10a801.p.ssafy.io:8082/user/login/oauth2/code/kakao', null, {
+    params: {
+        code: code
+    }})
     .then(function(response) {
       // 로그인 한 유저일 시
       if (response.data.status === 200) {
