@@ -41,6 +41,8 @@ const router = useRouter();
 const userToken = ref(localStorage.getItem('user_token'))
 const refreshToken = ref(localStorage.getItem('refresh_token'))
 const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
+console.log(userInfoString)
+
 // 사용자 정보를 나타내는 인터페이스 정의
 interface UserInfo {
   id?: string | null;
