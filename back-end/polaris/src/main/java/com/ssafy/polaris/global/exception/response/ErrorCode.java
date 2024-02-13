@@ -19,6 +19,7 @@ public enum ErrorCode {
 	TOKEN_NOT_VALID(401, "토큰이 유효하지 않습니다."),
 	MALFORMED_JWT(401, "토큰이 유효하지 않습니다."),
 	EXPIRED_JWT(401, "토큰이 만료되었습니다. 다시 로그인해주세요."),
+	USER_KAKAO_JOINED(401, "카카오 회원입니다. 일반로그인 할 수 없습니다."),
 	USER_NOT_KAKAO_JOINED(421, "카카오 가입 회원이 아닙니다."),
 
 

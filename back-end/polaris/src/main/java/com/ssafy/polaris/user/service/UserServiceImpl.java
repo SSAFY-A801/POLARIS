@@ -10,6 +10,7 @@ import com.ssafy.polaris.user.dto.OAuthToken;
 import com.ssafy.polaris.user.dto.UserKakaoJoinRequestDto;
 import com.ssafy.polaris.user.exception.CertCodeExpiredException;
 import com.ssafy.polaris.user.exception.CertCodeNotMatch;
+import com.ssafy.polaris.user.exception.UserKakaoJoined;
 import com.ssafy.polaris.user.exception.UserNotFoundException;
 import com.ssafy.polaris.user.exception.UserNotKakaoJoined;
 import com.ssafy.polaris.user.exception.WrongEmailOrPasswordException;
@@ -194,6 +195,9 @@ public class UserServiceImpl implements UserService{
             .orElseThrow(() -> new WrongEmailOrPasswordException("UserServiceImpl"));
         if (!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword())) {
 			throw new WrongPasswordException("UserServiceImpl");
+        }
+        if (user.getOauth() != null) {
+            throw new UserKakaoJoined("");
         }
 
         // TODO : 사용자 권한 설정
