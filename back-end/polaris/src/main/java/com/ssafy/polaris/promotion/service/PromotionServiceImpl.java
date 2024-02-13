@@ -132,6 +132,7 @@ public class PromotionServiceImpl implements PromotionService{
 		searchConditions.setWord(searchConditions.getWord().trim());
 		boolean isNotSearch = searchConditions.getWord() == null || searchConditions.getWord().equals("");
 		if (isNotSearch) {
+			jpql += " order by id desc ";
 			query = em.createQuery(jpql, PromotionListResponseDto.class);
 		} else {
 			if (searchConditions.getKey().equals("title")) {
@@ -143,6 +144,8 @@ public class PromotionServiceImpl implements PromotionService{
 			} else {
 				throw new WrongSearchKeyException("");
 			}
+			jpql += " order by id desc ";
+
 			query = em.createQuery(jpql, PromotionListResponseDto.class);
 			query.setParameter("word", searchConditions.getWord());
 		}
