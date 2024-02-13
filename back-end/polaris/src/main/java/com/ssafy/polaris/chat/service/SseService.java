@@ -9,6 +9,4 @@ public interface SseService {
 	SseEmitter connection(Long chatRoomId, HttpServletResponse response);
 	void sendMessage(Long chatRoomId, ChatMessageSaveDto data);
 	void sendChangeChatRoomTradeBookList(Long chatRoomId, ChatRoomTradeBookListResponseDto list);
-	// private void sendToClient(Long chatRoomId)
-
 }
