@@ -80,6 +80,7 @@ import { profileCounterStore } from '@/stores/profilecounter';
 import type { Book } from '@/stores/profilecounter';
 import { useRoute } from 'vue-router';
 import router from '@/router';
+import Swal from 'sweetalert2';
 
 const route = useRoute();
 const store = profileCounterStore();
@@ -123,7 +124,10 @@ const deleteBookList = computed(()=> {
 const keywordSearch = (keyword:string) => {
   booksearch.value = true
   if(keyword == ""){
-    alert("검색어를 입력해 주세요.")
+    Swal.fire({
+        title: "검색어를 입력해주세요.",
+        icon: 'error'
+      })
   } else {
     // 고민된다..... 만약 검색 후 
     // 다시 또 검색을 하면 검색대상을 어떻게 해야 할지..

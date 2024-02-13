@@ -82,6 +82,7 @@ const userLogin = async () => {
   localStorage.setItem('user_info' , JSON.stringify(response.data.data))
 //   console.log(localStorage.getItem('user_token'))
 //   console.log(localStorage.getItem('refresh_token'))
+
   const userStore = useUserStore()
   userStore.setLoginInfo(response.data.data)
   router.push({ name: 'home'})

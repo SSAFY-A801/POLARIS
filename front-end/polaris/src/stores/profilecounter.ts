@@ -1,8 +1,8 @@
 import { ref, computed, watch, watchEffect } from 'vue'
 import { defineStore } from 'pinia'
-import axios from 'axios';
+// import axios from 'axios';
 import axiosInstance from '@/services/axios'
-import type { LoginInfo } from './authcounter';
+import Swal from 'sweetalert2';
 
 export interface Searchbook  {
   isbn: string,
@@ -64,9 +64,29 @@ export type User = {
 }
 
 
+export type ExchangeInfo = {
+  bookTitle: string,
+  nickname: string,
+  tradeDate: Date,
+  tradeId: number,
+  userBookId: number,
+  userId: number
+}
+
+export type TradeInfo =  {
+  tradeId: number,
+  senderId: number,
+  userBookId: number,
+  oppositeNickname: string,
+  bookTitle: string,
+  receiverId: number,
+  price: number,
+  tradeDate: Date,
+};
+
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
-  const token = ref(localStorage.getItem('user_token'));
+  const token = ref("");
   
   // const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
   const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
@@ -96,30 +116,9 @@ export const profileCounterStore = defineStore('counter', () => {
   
 
   watch(profileUser, (newValue, oldValue) => {
-    return newValue
+    console.log(newValue)
   });
-  
-
-  // const loginUser = ref<User|null>(null)
-
-  // const getloginUser = (id: number) => {
-  //   axiosInstance.value({
-  //     headers: {
-  //       Authorization: `${token}`,
-  //       "Content-Type": 'application/json'
-  //     },
-  //     method: 'get',
-  //     url: `${BACK_API_URL}/profile/${id}`,
-  //   })  
-  //   .then((response) => {
-  //     const userData = response.data['data']
-  //     loginUser.value = userData
-  //   })
-  //   .catch((error)=> {
-  //     console.error("에러발생: ",error)
-  //   })
-  // }
-  
+   
 
   const getProfile = (id: number) => {
     axiosInstance.value({
@@ -189,7 +188,10 @@ export const profileCounterStore = defineStore('counter', () => {
 
   const searchAPIbookList = (query:string, searchCondition: string|null) => {
     if (query == ""){
-      alert('검색어를 입력해주세요.')
+      Swal.fire({
+        title: "검색어를 입력해주세요.",
+        icon: 'error'
+      })
     } else {
       const queryType = ref<string|null>(null)
       if (searchCondition == null) {
