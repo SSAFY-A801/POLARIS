@@ -151,7 +151,7 @@ public class TradeController {
 			@PathVariable("id") Long userId
 	){
 		List<ExchangeHistoryResponseDto> data = tradeService.getExchangeHistory(userId);
-		if(data == null){
+		if(data.isEmpty()){
 			return DefaultResponse.emptyResponse(
 					HttpStatus.OK,
 					StatusCode.SUCCESS_USER_EMPTY_EXCHANGE_HISTORY_VIEW
@@ -169,16 +169,15 @@ public class TradeController {
 		@PathVariable("id") Long userId
 	){
 		List<PurchaseHistoryResponseDto> data = tradeService.getPurchaseHistory(userId);
-		// TODO: StatusCode 수정
-		if(data == null){
+		if(data.isEmpty()){
 			return DefaultResponse.emptyResponse(
 					HttpStatus.OK,
-					StatusCode.SUCCESS_USER_EMPTY_EXCHANGE_HISTORY_VIEW
+					StatusCode.SUCCESS_USER_EMPTY_PURCHASE_HISTORY_VIEW
 			);
 		}
 		return DefaultResponse.toResponseEntity(
 				HttpStatus.OK,
-				StatusCode.SUCCESS_USER_EXCHANGE_HISTORY_VIEW,
+				StatusCode.SUCCESS_USER_PURCHASE_HISTORY_VIEW,
 				Map.of("purchaseHistories", data)
 		);
 	}

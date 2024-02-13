@@ -78,19 +78,11 @@ public class TradeServiceImpl implements TradeService {
 
 	@Override
 	public List<ExchangeHistoryResponseDto> getExchangeHistory(Long userId) {
-		List<ExchangeHistoryResponseDto> exchangeHistories = tradeRepository.getExchangeHistory(userId);
-		if(exchangeHistories.isEmpty()){
-			return null;
-		}
-		return exchangeHistories;
+		return tradeRepository.getExchangeHistory(userId);
 	}
 
 	@Override
 	public List<PurchaseHistoryResponseDto> getPurchaseHistory(Long userId) {
-		List<PurchaseHistoryResponseDto> purchaseHistories = tradeRepository.getPurchaseHistory(userId);
-		if(purchaseHistories.isEmpty()){
-			return null;
-		}
-		return purchaseHistories;
+		return tradeRepository.getPurchaseHistory(userId);
 	}
 }
