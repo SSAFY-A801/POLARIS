@@ -9,7 +9,7 @@
         <div class="text-xl font-semibold">{{ essay?.title }}</div>
       </div>
       <div class="flex items-center">
-        <button><img id="profile-image" :src="essay?.profileUrl" alt=""></button>
+        <button @click="gotoProfile"><img id="profile-image" :src="essay?.profileUrl" alt=""></button>
         <div id="nickname">{{ essay?.nickname }}</div>
       </div>
     </div>
@@ -87,18 +87,27 @@
   const essay = ref<Essay|null>(null)
   const route = useRoute();
   const router  = useRouter();
-  const scrap = computed(()=> {
-    return profileStore.myscraps.some((post:ScrapPost) => post.essayId == essay.value?.id)
-  })
+  const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
+  const scrap = ref(false)
+
+  
+  watch(() => profileStore.myscraps,(newList) => {
+    scrap.value = newList.some((post:ScrapPost) => post.essayId == essay.value?.id)
+  });
+
   const comment = ref("")
   const isMe = computed(()=> {
     return essay.value?.userId ==  Number(profileStore.loginUserId)
   })
 
+  // 프로필로 가기
+  const gotoProfile = () => {
+    router.push({name: 'ProfilePage', params:{id: essay.value?.userId}})
+  }
+
   watch(() => essay.value?.comments, (newComments) => {
   // 댓글이 변경될 때마다 수행할 로직 작성
-  console.log("댓글이 변경되었습니다:", newComments);
-});
+  });
 
   // 댓글추가
   const addComment = (comment:string) => {
@@ -154,10 +163,11 @@
         },
         method: 'put',
         url: `${profileStore.BACK_API_URL}/essay/${essay.value.id}`
+
       })
       .then((response) => {
         console.log(response.data)
-        profileStore.getMyscraps();
+        profileStore.getMyscraps(loginUserId);
       })
       .catch((error) => {
         console.error(error);
@@ -221,7 +231,7 @@ const getEssayInfo = () => {
 
 onMounted(()=> {
   getEssayInfo();
-  profileStore.getMyscraps();
+  profileStore.getMyscraps(loginUserId);
   // 스크랩 수 조회
   axiosInstance.value({
       headers: {

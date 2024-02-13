@@ -36,7 +36,6 @@ import { profileCounterStore } from '@/stores/profilecounter'
 import axiosInstance from '@/services/axios'
 
 
-const store = profileCounterStore();
 // const props = defineProps(['userToken'])
 const router = useRouter();
 const userToken = ref(localStorage.getItem('user_token'))
@@ -90,7 +89,7 @@ onMounted(() => {
 
 watchEffect(() => {
     userToken.value = localStorage.getItem('user_token')
-    console.log(localStorage.getItem('user_token'))
+    // console.log(localStorage.getItem('user_token'))
     // console.log("watchEffect is running") 
     // console.log("watchEffect",userToken.value)
 

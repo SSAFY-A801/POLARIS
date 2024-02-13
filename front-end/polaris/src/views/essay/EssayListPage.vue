@@ -4,7 +4,7 @@
     <div class="container w-full mt-4 max-w-6xl p-2">
       <!-- 최상단 -->
       <div class="grid grid-cols-5 items-center mb-4 shadow-md" >
-        <img class="col-span-3 w-full h-[400px] object-cover" src="@\assets\night-sky.jpg" alt="">
+        <img class="col-span-3 w-full h-[350px] object-cover" src="@\assets\night-sky.jpg" alt="">
         <div class="col-span-2 justify-items-center p-4">
           <div class="text-xl font-bold my-4 text-center">
             <p >마음을 담아, 책 속 세계를 함께 느껴봐요!</p>

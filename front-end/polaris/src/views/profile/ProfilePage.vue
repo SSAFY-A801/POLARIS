@@ -170,7 +170,7 @@
 <script setup lang="ts">
   import Navvar from '@/components/common/Navvar.vue'
   import followingListitem from '@/components/profile/following/followingListitem.vue';
-  import { ref, onMounted, computed } from "vue";
+  import { ref, onMounted, computed, watch, onBeforeMount, onBeforeUpdate } from "vue";
   import { useRouter, useRoute } from 'vue-router'
   import { profileCounterStore } from "@/stores/profilecounter";
   import { useUserStore } from '@/stores/authcounter';
@@ -191,12 +191,15 @@
   // 현재 접속자와 현재 profileuser의 id 일치 여부
   // 나의 팔로잉 명단 중에서 profileuser의 id가 있는지 여부
   const myFollwing = ref<boolean>(false)
+  const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
   const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
   const unfollow_list = ref<Unfollowing[]>([])
-  const isMe = computed(() => {
-    return store.isMe
+  const isMe = computed(()=> {
+    return profileUser.value.id == Number(loginUserId)
   })
+
+
 
   const follow = (user: User) => {
     axiosInstance.value({
@@ -206,7 +209,7 @@
       },
 
       method: 'post',
-      url: `${BACK_API_URL}/profile/${store.loginUserId}/follow`,
+      url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
       data: {
         followingId: user.id
       }
@@ -228,7 +231,7 @@
       },
 
       method: 'delete',
-      url: `${BACK_API_URL}/profile/${store.loginUserId}/unfollow`,
+      url: `${BACK_API_URL}/profile/${loginUserId}/unfollow`,
       data: {
         "unfollowings": [{followingId: profileUser.value.id},]
       }
@@ -265,7 +268,7 @@
       },
 
       method: 'DELETE',
-      url: `${BACK_API_URL}/profile/${store.loginUserId}/unfollow`,
+      url: `${BACK_API_URL}/profile/${loginUserId}/unfollow`,
       data: {
         "unfollowings": unfollow_list.value
       }
@@ -306,7 +309,7 @@
 
 
   const gotoMychatList = () => {
-    router.push({name: "chat", params:{id:store.loginUserId}});
+    router.push({name: "chat", params:{id:loginUserId}});
   }
 
   const chatStore = useChatStore();
@@ -359,15 +362,16 @@
     }
   };
 
-  onMounted(()=> {
-    store.getProfile(Number(route.params.id))
+  onBeforeMount(() => {
+    store.getProfile(Number(route.params.id));
+    // console.log(isMe.value)
     // // following 명단 호출
     axiosInstance.value({
       headers: {
         Authorization: `${store.token}`
       },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${store.loginUserId}/follow`,
+      url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
     })
     .then((response)=> {
       console.log(response.data)
