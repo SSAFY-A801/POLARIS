@@ -38,7 +38,7 @@ public class OpenApiController {
 			"ttbkey=" + serviceKey +
 			"&Query=" + query +
 			"&QueryType=" + queryType +
-			"&MaxResults=" + "20" +
+			"&MaxResults=" + "50" +
 			"&start=" + "1" +
 			"&SearchTarget=" + "Book" +
 			"&output=" + "js" +
