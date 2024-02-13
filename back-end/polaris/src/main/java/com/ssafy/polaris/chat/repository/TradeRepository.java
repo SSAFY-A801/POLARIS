@@ -3,6 +3,7 @@ package com.ssafy.polaris.chat.repository;
 import java.util.List;
 
 import com.ssafy.polaris.trade.dto.ExchangeHistoryResponseDto;
+import com.ssafy.polaris.trade.dto.PurchaseHistoryResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -98,8 +99,27 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 			"order by t.id, u.id ")
 	List<ExchangeHistoryResponseDto> getExchangeHistory(@Param("userId") Long userId);
 
-
-
-
+	/**
+	 * if 가격 0 -> 나눔
+	 * 	if 내가 보낸 사람이라면 -> 구매
+	 * 	else -> 판매
+	 * 도서는 무조건 receiver 의 도서!
+	 *
+	 *  finished at을 통해서 가져오면 안되는 이유 -> 거래 취소한 경우에도 포함되기 때문이다.
+	 * */
+	@Query("select new com.ssafy.polaris.trade.dto.PurchaseHistoryResponseDto( " +
+			"	t.id, t.sender.id, ub.id, b.title, t.receiver.id, ub.userBookPrice, " +
+			"	case when t.sender.id = :userId then t.receiver.nickname else t.sender.nickname end," +
+			"	t.finishedAt) " +
+			"from Trade t " +
+			"	inner join TradeUserBook tub on t.id = tub.trade.id " +
+			"	inner join User u on (t.sender.id = u.id or t.receiver.id = u.id) " +
+			"	inner join UserBook ub on (u.id = ub.user.id and tub.userBook.id = ub.id)" +
+			"	inner join Book b on ub.book.isbn = b.isbn " +
+			"where (t.sender.id = :userId or t.receiver.id = :userId) " +
+			"	and t.tradeType = 'PURCHASE' " +
+			"	and t.status = 'COMPLETED' " +
+			"order by t.id, u.id")
+	List<PurchaseHistoryResponseDto> getPurchaseHistory(@Param("userId") Long userId);
 
 }
