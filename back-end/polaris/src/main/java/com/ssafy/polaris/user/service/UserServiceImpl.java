@@ -92,8 +92,9 @@ public class UserServiceImpl implements UserService{
     }
 
     /**
-     * @param userKakaoJoinRequestDto
      * nickname과 region과 code만 받는다.
+     * @throws UserConflictException 사용중인 이메일, 닉네임 입력이 들어올 때
+     * @param userKakaoJoinRequestDto
      */
     @Override
     @Transactional
@@ -141,7 +142,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void setPassword(Long id, String password) {
         User user = userRepository.findById(id)
-            .orElseThrow();
+            .orElseThrow(() -> new UserNotFoundException("UserServiceImpl::setPassword"));
         user.setPassword(passwordEncoder.encode(password));
     }
 
