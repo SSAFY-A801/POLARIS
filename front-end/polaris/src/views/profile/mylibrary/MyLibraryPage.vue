@@ -1,14 +1,10 @@
 <template>
   <div>
     <div class="flex justify-between m-2">
-      <div v-if="mybookList.length == 0" class="text-center text-xl m-4">
+      <div v-if="mybookList.length == 0" class="text-center text-xl mt-5 ml-40">
         <div>
-          현재 서재에 도서가 존재하지 않습니다.
+          현재 서재에 도서가 존재하지 않습니다. 원하는 도서를 내 서재에 담아보세요.
         </div>
-        <div>
-          원하는 도서를 내 서재에 담아보세요.
-        </div>
-        
       </div>
       <div v-if="isMe">
         <div>
@@ -80,6 +76,7 @@ import { profileCounterStore } from '@/stores/profilecounter';
 import type { Book } from '@/stores/profilecounter';
 import { useRoute } from 'vue-router';
 import router from '@/router';
+import Swal from 'sweetalert2';
 
 const route = useRoute();
 const store = profileCounterStore();
@@ -123,7 +120,10 @@ const deleteBookList = computed(()=> {
 const keywordSearch = (keyword:string) => {
   booksearch.value = true
   if(keyword == ""){
-    alert("검색어를 입력해 주세요.")
+    Swal.fire({
+        title: "검색어를 입력해주세요.",
+        icon: 'error'
+      })
   } else {
     // 고민된다..... 만약 검색 후 
     // 다시 또 검색을 하면 검색대상을 어떻게 해야 할지..
@@ -164,33 +164,48 @@ const selectWatch = watch(selectValue, (newValue) => {
 // 도서 삭제 요청
 const deleteBooks = () => {
   console.log(deleteBookList.value)
-  axios({
-    headers: {
-      Authorization: `${store.token}`,
-      "Content-Type": 'application/json'
-    },
-    method: 'delete',
-    url: `${store.BACK_API_URL}/book/${route.params.id}/library`,
-    data: {
-      "books": deleteBookList.value
-    }
+  Swal.fire({
+    title: `도서 삭제를 실시합니다.`,
+    text: '정말 삭제시겠습니까?',
+    icon: 'question',
+    showDenyButton: true,
+    confirmButtonText: "삭제",
+    denyButtonText: `취소`  
   })
-  .then((response)=> [
-    console.log(response.data)
-  ])
-  .catch((error)=> [
-    console.error(error)
-  ])
-  store.deleteBookList = []
-  selectValue.value = "전체도서"
-  alert("도서 삭제를 실시합니다.")
-  router.go(0)
+  .then((result) => {
+    if (result.isConfirmed) {
+      axios({
+        headers: {
+          Authorization: `${store.token}`,
+          "Content-Type": 'application/json'
+        },
+        method: 'delete',
+        url: `${store.BACK_API_URL}/book/${route.params.id}/library`,
+        data: {
+          "books": deleteBookList.value
+        }
+      })
+      .then((response)=> {
+        console.log(response.data)
+        router.go(0)
+      })
+      .catch((error)=> {
+        console.error(error)
+        Swal.fire(`도서 삭제에 실패했습니다.`, "", "error");
+    })
+      store.deleteBookList = []
+      selectValue.value = "전체도서"
+    } 
+  });
 }
 
 // 도서 선택 후 삭제 버튼 클릭
 const clickbutton = () => { 
   if(deleteState.value && deleteBookList.value.length == 0){
-    alert("도서목록을 선택하세요.")
+    Swal.fire({
+      title: "도서목록을 선택하세요.",
+      icon: 'error'
+  })
   } else if(deleteState.value && deleteBookList.value.length){
     deleteBooks();
     store.toggledeletebutton();

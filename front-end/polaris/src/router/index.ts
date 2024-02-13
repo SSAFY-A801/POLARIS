@@ -77,8 +77,7 @@ const router = createRouter({
     // 프로필
     {
       path: '/profile/:id',
-      redirect: to => {
-        return `/profile/${to.params.id}/library`},
+      redirect: {name: 'MyLibraryPage'},
       name: 'ProfilePage',
       component: ProfilePage,
       children: [

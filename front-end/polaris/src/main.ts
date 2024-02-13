@@ -27,9 +27,6 @@ import { faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCartSh
 
 import SockJS from 'sockjs-client'
 import Stomp from 'stompjs';
-// import VueSweetalert2 from 'vue-sweetalert2';
-// import 'sweetalert2/dist/sweetalert2.min.css';
-
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
@@ -79,8 +76,6 @@ app.config.globalProperties.$sock = sock;
 app.config.globalProperties.$stomp = stompClient;
 
 app.component('font-awesome-icon',FontAwesomeIcon)
-// app.use(VueSweetalert2)
-
 app.mount('#app')
 
 

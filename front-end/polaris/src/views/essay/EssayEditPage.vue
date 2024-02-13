@@ -39,6 +39,7 @@ import { useRouter, useRoute } from 'vue-router';
 import axiosInstance from '@/services/axios';
 import type { Essay } from '@/stores/essaycounter';
 import { essayStore } from '@/stores/essaycounter';
+import Swal from 'sweetalert2';
 
 const store = essayStore();
 const essay = ref<Essay|null>(null)
@@ -67,9 +68,15 @@ const editEssay = () => {
     .catch((error) => {
       console.error(error)
     })
-    alert("독후감 수정!")
+    Swal.fire({
+      icon: 'success',
+      title: '독후감이 작성되었습니다.'
+    })
     if(!essay.value.isOpened){
-      alert("독후감이 비공개로 전환됩니다.")
+      Swal.fire({
+      icon: 'info',
+      title: '독후감이 비공개로 전환됩니다.'
+    })
       router.push({name: 'essaylist'})
     } else{
       router.push({name: 'essaydetail', params: {essayId: essay.value.id}})

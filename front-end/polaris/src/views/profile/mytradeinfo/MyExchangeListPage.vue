@@ -7,7 +7,9 @@
         뒤로가기
       </button>
     </div>
-    <MyExchangeList/>
+    <MyExchangeList
+    :exchangehistory="Exchangehistory"
+    />
   </div>
 </template>
 
@@ -15,13 +17,19 @@
 <script setup lang="ts">
 import Navvar from '@/components/common/Navvar.vue'
 import MyExchangeList from '@/components/profile/myexchange/MyExchangeList.vue';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { profileCounterStore } from '@/stores/profilecounter';
 import axiosInstance from '@/services/axios';
 import { useRouter } from 'vue-router';
+import type { ExchangeInfo } from '@/stores/profilecounter';
+
+type ExchangeHistory = {
+  [key:number]: ExchangeInfo[]
+}
 
 const router = useRouter();
 const store = profileCounterStore();
+const Exchangehistory = ref<ExchangeHistory>({})
 const loginUserId = Number(JSON.parse(localStorage.getItem('user_info')||"").id)
 
 const backtoProfile = () => {
@@ -40,6 +48,15 @@ onMounted(()=> {
   })
   .then((response) => {
     console.log(response.data)
+    const res = response.data.data['exchangeHistories']
+    res.forEach((exchange:ExchangeInfo) => {
+      if(exchange['tradeId'] in Exchangehistory.value){
+        Exchangehistory.value[exchange['tradeId']].push(exchange)
+      } else {
+        Exchangehistory.value[exchange['tradeId']] = [exchange]
+      }
+    });
+    console.log(Exchangehistory.value)
   })
   .catch((error)=> {
     console.error(error);

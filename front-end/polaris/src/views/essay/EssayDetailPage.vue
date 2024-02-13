@@ -76,12 +76,13 @@
 <script setup lang="ts">
   import Navvar from '@/components/common/Navvar.vue'
   import { computed, onMounted, ref, watch } from 'vue';
-  import { useRouter, useRoute } from 'vue-router';
+  import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router';
   import axiosInstance from '@/services/axios';
   import type { Essay, ScrapPost } from '@/stores/essaycounter';
   import { profileCounterStore } from '@/stores/profilecounter';
   import CommentListItem from '@/components/essay/comment/CommentListItem.vue';
-  
+  import Swal from 'sweetalert2';
+
   const scraps = ref<number>(0)
   const profileStore = profileCounterStore();
   const essay = ref<Essay|null>(null)
@@ -126,7 +127,6 @@
       })
       .then((response) => {
         console.log(response.data)
-        alert("작성 완료")
         // 독후감 정보 갱신
         axiosInstance.value({
           headers: {
@@ -184,29 +184,44 @@
   
   // 독후감 삭제
   const deleteEssay = () => {
-    alert("정말 삭제하실건가요?")
-    axiosInstance.value({
-    headers: {
-      Authorization: `${profileStore.token}`,
-      "Content-Type": 'application/json'
-    },
-    method: 'delete',
-    url: `${profileStore.BACK_API_URL}/essay`,
-    data: {
-      id: essay.value?.id
-    }
+    Swal.fire({
+    title: `독후감을 삭제합니다.`,
+    text: '정말 삭제하시겠습니까?',
+    icon: 'question',
+    showDenyButton: true,
+    confirmButtonText: "삭제",
+    denyButtonText: `취소`  
   })
-  .then((response)=> {
-    console.log(response.data)
-  })
-  .catch((error)=> {
-    console.error(error)
-  })
-    alert("독후감을 삭제합니다.")
-    router.push({name: 'essaylist'})
-  }
+  .then((result) => {
+    if (result.isConfirmed) {
+      axiosInstance.value({
+      headers: {
+        Authorization: `${profileStore.token}`,
+        "Content-Type": 'application/json'
+      },
+      method: 'delete',
+      url: `${profileStore.BACK_API_URL}/essay`,
+      data: {
+        id: essay.value?.id
+      }
+    })
+    .then((response)=> {
+      console.log(response.data)
+      Swal.fire({
+        title: "독후감이 삭제되었습니다.",
+        icon: 'success'
+      })
+      router.push({name: 'essaylist'})
+    })
+    .catch((error)=> {
+      console.error(error)
+    })
+      
+    } 
+  });
+}
 
-  const goback = () => {
+const goback = () => {
   router.push({name: 'essaylist'})
 }
 
@@ -229,9 +244,13 @@ const getEssayInfo = () => {
   })
 }
 
+onBeforeRouteUpdate((to,from)=> {
+  profileStore.getMyscraps(loginUserId);
+  
+})
+
 onMounted(()=> {
   getEssayInfo();
-  profileStore.getMyscraps(loginUserId);
   // 스크랩 수 조회
   axiosInstance.value({
       headers: {

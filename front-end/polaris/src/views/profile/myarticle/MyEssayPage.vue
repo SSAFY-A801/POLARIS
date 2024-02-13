@@ -7,7 +7,7 @@
         :myessays="myEssays"
       />
     </div>
-    <div v-else>
+    <div v-else class="m-20 text-center text-xl">
       현재 작성한 독후감이 존재하지 않습니다.
     </div>
 </template>

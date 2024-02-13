@@ -11,7 +11,9 @@
       </thead>
       <tbody>
         <MyTradeListItem
-          v-for="index in items" :key="index"
+          v-for="(tradeitem,index) in props.tradehistory"
+           :key="index"
+           :tradeitem="tradeitem"
         />
       </tbody>
     </table>
@@ -20,7 +22,10 @@
 
 <script setup lang="ts">
 import MyTradeListItem from "../mytrade/MyTradeListItem.vue";
-const items = 4;
+const props = defineProps(['tradehistory'])
+
+
+
 </script>
 
 <style scoped>

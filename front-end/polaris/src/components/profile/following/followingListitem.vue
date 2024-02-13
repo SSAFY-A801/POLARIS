@@ -24,6 +24,10 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Following } from '@/stores/profilecounter';
 import { profileCounterStore } from '@/stores/profilecounter';
+import Swal from 'sweetalert2';
+import { increment } from 'firebase/firestore';
+import { icon } from '@fortawesome/fontawesome-svg-core';
+
 
 interface FollowingInfo {
   following: Following
@@ -47,11 +51,23 @@ const followchange = () => {
 const { following } = defineProps<FollowingInfo>();
 
 const gotoProfile = () => {
-  alert(`${following.nickname} 님의 프로필로 이동합니다.`)
-  clickProfile.value = true
-  emit('clickProfile', clickProfile.value)
-  router.push({name: "ProfilePage", params: {id:following.followingId }})
-  store.getProfile(following.followingId)
+  Swal.fire({
+    title: `${following.nickname}\n님의 프로필로 이동합니다.`,
+    text: '정말 이동하시겠습니까?',
+    icon: 'question',
+    showDenyButton: true,
+    confirmButtonText: "이동",
+    denyButtonText: `취소`  
+  })
+  .then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(`${following.nickname} 님의 프로필로 이동했습니다.`, "", "success");
+      router.push({name: "ProfilePage", params: {id:following.followingId }})
+      emit('clickProfile', clickProfile.value)
+      clickProfile.value = true
+      store.getProfile(following.followingId)
+    } 
+  });
 }
 </script>
 

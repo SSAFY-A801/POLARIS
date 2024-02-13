@@ -11,6 +11,9 @@
   </div>
   <div>
     <div class="bg-gray-50 shadow rounded-lg mb-8 mr-4 ml-4 mt-4 overflow-auto" style="width: 400px; height: 500px;">
+      <div v-for="(message, idx) in chatMessageList" :key="idx">
+      <div>{{ message.message }}</div>
+      </div>
       <div v-for="(item, idx) in recvList" :key="idx">
         <!-- <h4>{{item.nickname}}</h4> -->
         <div v-if="item.userId === Number(userId.id)" class="my-message max-w-[300px] rounded-lg bg-yellow-50">
@@ -277,6 +280,50 @@ interface ChatRoomTradeBooks {
   price: number | null;
   seriesId: number | null;
 }
+
+//기존 채팅 메시지 조회
+interface ChatMessageListResponse {
+  status: number;
+  message: string;
+  data: {chatMessageList: ChatMessageList[];};
+}
+
+interface ChatMessageList{
+  type: string;
+  chatRoomId: number;
+  userId: number;
+  // createAt: Date;
+  createAt: string;
+  message: string;
+}
+const chatMessageList = ref<ChatMessageList[] | null>(null);
+// const chatMessageList = ref<ChatMessageList[]>([]);
+
+onMounted(async () => {
+    try {
+      const token = ref(localStorage.getItem('user_token'))
+      const response = await axiosInstance.value.get<ChatMessageListResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/message/${chatRoomId.value}`, {
+        headers: {
+          'Authorization': token.value?.replace("\"", "")
+        }
+      });
+      if (response.status === 200) {
+        console.log(response.data.data)
+        // chatMessageList.value = response.data.data['chatMessageList'];
+        // chatMessageList.value = (response.data.data as { chatMessageList: ChatMessageList[] })['chatMessageList'];
+        chatMessageList.value = response.data.data.chatMessageList
+        // chatMessageList.value = [...response.data.data];
+        // chatMessageList.value = response.data.data;
+        console.log('기존메시지', chatMessageList.value);
+
+      } else {
+        console.error('API 요청 실패:', response.status);
+      }
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+    }
+  });
+
   </script>
   
   <style scoped>

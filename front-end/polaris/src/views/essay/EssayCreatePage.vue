@@ -49,6 +49,7 @@ import { profileCounterStore } from '@/stores/profilecounter';
 import type { Book } from '@/stores/profilecounter';
 import axiosInstance from '@/services/axios';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const profileStore = profileCounterStore();
 const mybookList = profileStore.mybookLists
@@ -79,7 +80,10 @@ const writeEssay = () => {
   .then((response) => {
     console.log(response.data)
     const essaydetail = response.data.data
-    alert("독후감 게시!")
+    Swal.fire({
+      icon: 'success',
+      title: '독후감이 작성되었습니다.'
+    })
     router.push({name: 'essaydetail', params:{essayId: essaydetail.id}})
   })
   .catch((error) => {
