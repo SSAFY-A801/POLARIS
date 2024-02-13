@@ -65,6 +65,7 @@ const userProfileUrl = ref<string | null>(null)
 
 const getUserInfo = async() => {
   try {
+    if(loginUser.id !== undefined) {
     const response = await axios({
       headers: {
         "Authorization": `${userToken.value}`,
@@ -75,7 +76,7 @@ const getUserInfo = async() => {
     })
     userNickname.value = response.data.data.nickname
     userProfileUrl.value = response.data.data.profileUrl
-  } catch (error) {
+  }} catch (error) {
     console.error("에러발생: ", error)
   }
 }
@@ -109,7 +110,6 @@ const logout = async () => {
     localStorage.removeItem('user_token')
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('user_info')
-    localStorage.removeItem('counter')
     userToken.value = null
     alert("로그아웃 되었습니다")
     console.log(response.status)
@@ -133,7 +133,6 @@ const logout = async () => {
                   localStorage.removeItem('user_token')
                   localStorage.removeItem('refresh_token')
                   localStorage.removeItem('user_info')
-                  localStorage.removeItem('counter')
                   userToken.value = null
                   alert("로그아웃 되었습니다")
                   console.log(response.status)

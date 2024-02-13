@@ -51,22 +51,11 @@ const truncateTitle = (title: string) => {
     return title.length > 30 ? title.substring(0, 30) + "..." : title;
   };
   
-// onMounted(async () => {
-//   await axios.get('https://i10a801.p.ssafy.io:8082/book/popular_books')
-//   .then(function (response) {
-//     userPopularBookList.value = response.data.data
-//     console.log(userPopularBookList.value)
-//   })
-//   .catch(function (error) {
-//     alert(error.message)
-//   })
 
-// })
 
 onMounted(async () => {
   await store.fetchPopularBooklistItem()
   userPopularBookList.value = store.userPopularBookList
-  console.log(userPopularBookList.value)
 
 })
 
