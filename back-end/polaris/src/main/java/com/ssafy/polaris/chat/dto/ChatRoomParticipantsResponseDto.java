@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class ChatRoomParticipantsResponseDto {
 	Long chatRoomId;
+	Long tradeSenderId;
+	Long tradeReceiverId;
 	Long senderId;
 	Long receiverId;
 	String receiverNickname;
