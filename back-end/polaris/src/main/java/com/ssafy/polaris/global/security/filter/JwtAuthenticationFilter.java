@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
 		// 2. 유효성 검사
 		if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
-			if (accessToken.length() > 200) {
+			if (accessToken.length() > 150) {
 				if (redisTemplate.hasKey("blackList:" + accessToken).booleanValue())
 					throw new UserNotAuthorizedException("로그아웃 된 토큰입니다.");
 
