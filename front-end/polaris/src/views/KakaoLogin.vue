@@ -245,6 +245,7 @@ const checkEmail = async () => {
 const checkVerifyCode = async () => {
   await axios.post('https://i10a801.p.ssafy.io:8082/user/email_cert', 
     JSON.stringify({
+      email: emailInput.value,
       code: verificationCode.value
     }),
     {headers: {
