@@ -170,10 +170,9 @@
 <script setup lang="ts">
   import Navvar from '@/components/common/Navvar.vue'
   import followingListitem from '@/components/profile/following/followingListitem.vue';
-  import { ref, onMounted, computed, watch, onBeforeMount, onBeforeUpdate } from "vue";
-  import { useRouter, useRoute } from 'vue-router'
+  import { ref, onMounted, computed, watch } from "vue";
+  import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
   import { profileCounterStore } from "@/stores/profilecounter";
-  import { useUserStore } from '@/stores/authcounter';
   import type { Following, User } from "@/stores/profilecounter";
   import axiosInstance from '@/services/axios';
   import { useChatStore } from '@/stores/chatcounter';
@@ -362,7 +361,12 @@
     }
   };
 
-  onBeforeMount(() => {
+
+  onBeforeRouteUpdate((to,from)=> {
+    store.getProfile(Number(to.params.id));
+  })
+
+  onMounted(() => {
     store.getProfile(Number(route.params.id));
     // console.log(isMe.value)
     // // following 명단 호출

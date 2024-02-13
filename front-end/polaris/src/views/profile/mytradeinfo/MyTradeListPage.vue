@@ -1,7 +1,12 @@
 <template>
   <Navvar></Navvar>
     <div class="container mx-auto mt-48 max-w-6xl font-[gowun-dodum]">
-      <h2 class="ml-4 my-2 text-xl underline underline-offset-8 decoration-indigo-500">나의 판매/구매내역</h2>
+      <div class="flex justify-between">
+      <h2 id="title" class="ml-4 my-2 text-xl underline underline-offset-8 decoration-maintheme1">나의 판매/구매 내역</h2>
+      <button @click="backtoProfile" id="goback">
+        뒤로가기
+      </button>
+    </div>
       <MyTradeList/>
     </div>
 </template>
@@ -12,9 +17,16 @@ import MyTradeList from '@/components/profile/mytrade/MyTradeList.vue';
 import { onMounted } from 'vue';
 import { profileCounterStore } from '@/stores/profilecounter';
 import axiosInstance from '@/services/axios';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const store = profileCounterStore();
 const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
+
+const backtoProfile = () => {
+    router.push({name: "ProfilePage"});
+  }
+
 
 
 onMounted(()=> {
@@ -41,5 +53,9 @@ onMounted(()=> {
 @font-face {
   font-family: 'gowun-dodum';
   src: url('../../../../public/GowunDodum-Regular.ttf');
+}
+
+#goback {
+  @apply w-auto hover:bg-gray-500 bg-[#323F59] text-white m-[5px] px-3 py-[5px] rounded-[10px];
 }
 </style>

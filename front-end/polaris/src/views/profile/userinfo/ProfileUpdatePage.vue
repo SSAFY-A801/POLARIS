@@ -80,6 +80,7 @@
   import { profileCounterStore } from '@/stores/profilecounter';
   import RegionModal from '@/components/Auth/RegionModal.vue';
   import type { User } from '@/stores/profilecounter';
+  import Swal from 'sweetalert2'
 
   const store = profileCounterStore();
   const BACK_API_URL = store.BACK_API_URL
@@ -154,10 +155,16 @@
     .then((response)=> {
       const res = response.data.data
       if(!res.isInUse){
-        alert("사용 가능한 닉네임입니다.")
+        Swal.fire({
+          title: '사용가능한 닉네임입니다.',
+          icon: 'success'
+        })
         isValidNickname.value = true
       } else {
-        alert("중복된 닉네임입니다. 다른 닉네임을 설정해 주세요.")
+        Swal.fire({
+          title: '중복된 닉네임입니다.\n 다시 설정해주세요.',
+          icon: 'error'
+        })
         newnickname.value = ""
       }
     })

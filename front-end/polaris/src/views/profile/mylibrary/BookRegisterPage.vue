@@ -76,7 +76,7 @@ import BookCartList from '@/components/profile/mylibrary/bookregister/BookCartLi
 import BookSearchResultList from '@/components/profile/mylibrary/bookregister/BookSearchResultList.vue';
 import { profileCounterStore } from '@/stores/profilecounter';
 import type { Searchbook }  from '@/stores/profilecounter'
-
+import Swal from 'sweetalert2';
 
 const keyword = ref<string>("")
 const filter = ref<string|null>(null)
@@ -129,19 +129,25 @@ const addAPIbook = (bookcartList:Searchbook[]) => {
     .then((response)=>{
       console.log(response.data)
       // console.log(store.mybookLists)
+      Swal.fire({
+          title: "도서 등록이 완료되었습니다.",
+          icon: 'success'
+        })
+      router.push({name: "MyLibraryPage"})
     })
     .catch((error)=>{
       console.error(error)
     })
-    store.searchbookLists = []
-    store.bookCartList = []
-    keyword.value = ""
     
-    router.push({name: "MyLibraryPage"})
-    alert("도서 등록 완료")
   } else {
-    alert("담긴 도서가 존재하지 않습니다.")
+    Swal.fire({
+      title: "담긴 도서가 존재하지 않습니다.",
+      icon: 'error'
+    })
   }
+  store.searchbookLists = []
+  store.bookCartList = []
+  keyword.value = ""
 }
 
 onMounted(()=> {

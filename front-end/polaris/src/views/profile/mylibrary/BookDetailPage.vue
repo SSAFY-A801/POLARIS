@@ -133,7 +133,7 @@
               <div class="mb-2">정가</div>
             </div>
             <div class="col-span-4 text-maintheme1 m-2">
-              <div class="mb-2">{{ bookDetail.priceStandard }}</div>
+              <div class="mb-2">{{ bookDetail.priceStandard.toLocaleString() }} 원</div>
             </div>
           </div>
           <div v-if="bookDetail.userBookTradeType=='PURCHASE'" id="sell-price" class="container grid grid-cols-6">
@@ -150,7 +150,7 @@
                   class="rounded-md border h-8 w-56"/>
               </div>
               <div v-else  class="col-span-4 text-maintheme1 m-2">
-                <div class="mb-2">{{ bookDetail.userBookPrice }}</div>
+                <div class="mb-2">{{ bookDetail.userBookPrice?.toLocaleString() }} 원</div>
               </div>
             </div>
           </div>
@@ -167,7 +167,12 @@
               <div>도서 설명</div>
             </div>
             <div class="col-span-4 text-maintheme1 m-2">
-              {{ bookDetail.bookDescription }}
+              <div v-if="bookDetail.bookDescription">
+                {{ bookDetail.bookDescription }}
+              </div>
+              <div v-else>
+                없음.
+              </div>
             </div>
           </div>
           <div id="user-book-description" class="container  grid grid-cols-6 flex mb-4">
