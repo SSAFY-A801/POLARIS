@@ -15,7 +15,7 @@
                      <router-link :to="{name: 'login'}" v-if="!userToken" class="text-maintheme1 mr-14 font-bold"><font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl" style="color: #323F59;"  class="mr-2" />로그인</router-link>
                      <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-maintheme1 font-bold"><font-awesome-icon :icon="['fas', 'user-plus']" size="xl" style="color: #323F59;"  class="mr-2" />회원가입</router-link>
                      <p  v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" class="text-maintheme1 font-bold mt-4 mr-4" >{{ userNickname }}</p>
-                     <router-link v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" 
+                     <router-link v-if="userToken && loginUser.id !== null" 
                                  :to="{ name: 'ProfilePage', params: { id: loginUser.id }}" 
                                  class="text-maintheme1 mr-14"><img class="col-span-1 object-cover" id="profile-image" :src="userProfileUrl || '@/assets/profile-default.jpg'" alt="Profile-Image"></router-link>
                      <button v-if="userToken" @click="logout"  class="text-maintheme1 font-bold  bg-transparent border-none outline-none focus:outline-none cursor-pointer"><font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="xl" style="color: #323F59;" class="ml-4 mr-2"/>로그아웃</button>
@@ -109,6 +109,7 @@ const logout = async () => {
     localStorage.removeItem('user_token')
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('user_info')
+    localStorage.removeItem('counter')
     userToken.value = null
     alert("로그아웃 되었습니다")
     console.log(response.status)
@@ -132,6 +133,7 @@ const logout = async () => {
                   localStorage.removeItem('user_token')
                   localStorage.removeItem('refresh_token')
                   localStorage.removeItem('user_info')
+                  localStorage.removeItem('counter')
                   userToken.value = null
                   alert("로그아웃 되었습니다")
                   console.log(response.status)
