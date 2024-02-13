@@ -94,7 +94,7 @@ public class SseController {
 		System.out.println("send message  "+ chatMessageSaveDto.getMessage());
 		Long chatRoomId = chatMessageSaveDto.getChatRoomId();
 		// 메세지 db에 저장
-		// chatRedisCacheService.saveChatMessage(chatMessageSaveDto);
+		chatRedisCacheService.saveChatMessage(chatMessageSaveDto);
 
 		// 메세지 sse로 보내기
 		sseService.sendMessage(chatRoomId, chatMessageSaveDto);
