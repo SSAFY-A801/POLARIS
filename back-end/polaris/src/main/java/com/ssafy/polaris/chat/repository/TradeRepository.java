@@ -118,7 +118,8 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 			"	inner join Book b on ub.book.isbn = b.isbn " +
 			"where (t.sender.id = :userId or t.receiver.id = :userId) " +
 			"	and t.tradeType = 'PURCHASE' " +
-			"	and t.status = 'COMPLETED' ")
+			"	and t.status = 'COMPLETED' " +
+			"order by t.id, u.id")
 	List<PurchaseHistoryResponseDto> getPurchaseHistory(@Param("userId") Long userId);
 
 }
