@@ -4,6 +4,7 @@ import com.ssafy.polaris.chat.dto.ChatRoomTradeBookListResponseDto;
 import com.ssafy.polaris.chat.service.ChatRoomService;
 import com.ssafy.polaris.chat.service.SseService;
 import com.ssafy.polaris.trade.dto.ExchangeHistoryResponseDto;
+import com.ssafy.polaris.trade.dto.PurchaseHistoryResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -146,7 +147,7 @@ public class TradeController {
 	}
 
 	@GetMapping("/{id}/exchange_history")
-	public ResponseEntity<DefaultResponse<Map<String, List<ExchangeHistoryResponseDto>>>> getExchangeHistoroies(
+	public ResponseEntity<DefaultResponse<Map<String, List<ExchangeHistoryResponseDto>>>> getExchangeHistories(
 			@PathVariable("id") Long userId
 	){
 		List<ExchangeHistoryResponseDto> data = tradeService.getExchangeHistory(userId);
@@ -160,6 +161,25 @@ public class TradeController {
 				HttpStatus.OK,
 				StatusCode.SUCCESS_USER_EXCHANGE_HISTORY_VIEW,
 				Map.of("exchangeHistories", data)
+		);
+	}
+
+	@GetMapping("/{id}/purchase_history")
+	public ResponseEntity<DefaultResponse<Map<String, List<PurchaseHistoryResponseDto>>>> getPurchaseHistories(
+		@PathVariable("id") Long userId
+	){
+		List<PurchaseHistoryResponseDto> data = tradeService.getPurchaseHistory(userId);
+		// TODO: StatusCode 수정
+		if(data == null){
+			return DefaultResponse.emptyResponse(
+					HttpStatus.OK,
+					StatusCode.SUCCESS_USER_EMPTY_EXCHANGE_HISTORY_VIEW
+			);
+		}
+		return DefaultResponse.toResponseEntity(
+				HttpStatus.OK,
+				StatusCode.SUCCESS_USER_EXCHANGE_HISTORY_VIEW,
+				Map.of("purchaseHistories", data)
 		);
 	}
 }
