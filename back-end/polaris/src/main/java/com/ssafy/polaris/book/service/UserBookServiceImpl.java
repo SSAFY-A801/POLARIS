@@ -146,7 +146,7 @@ public class UserBookServiceImpl implements UserBookService {
 
 	@Override
 	@Cacheable(value = "weeklyBookCache", key = "bookForAWeek")
-	@Scheduled(cron = "0 0 0/1 * * *")
+	@Scheduled(cron = "0 0/1 * * * *")
 	public void saveWeeklyBooks() {
 		List<WeeklyBooksDto> weeklyBooks = userBookRepository.getWeeklyBooks();
 
