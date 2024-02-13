@@ -104,6 +104,7 @@ export const useChatStore = defineStore('chat', () => {
 
 
   return {
+    token,
     chatData,
     fetchChatInfo,
     createChatRoom,

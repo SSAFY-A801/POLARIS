@@ -105,8 +105,8 @@ const fetchToken = async () => {
         localStorage.setItem('user_token',(response.data.data.access))
         localStorage.setItem('refresh_token',(response.data.data.refresh))
         localStorage.setItem('user_info' , JSON.stringify(response.data.data))
-        const userStore = useUserStore()
-        userStore.setLoginInfo(response.data.data)
+        // const userStore = useUserStore()
+        // userStore.setLoginInfo(response.data.data)
         Swal.fire({
         title: "카카오 로그인 성공!",
         icon: "success"
@@ -315,8 +315,8 @@ const submitKakaoLogin = async () => {
   localStorage.setItem('user_token',(response.data.data.access))
   localStorage.setItem('refresh_token',(response.data.data.refresh))
   localStorage.setItem('user_info' , JSON.stringify(response.data.data))
-  const userStore = useUserStore()
-  userStore.setLoginInfo(response.data.data)
+  // const userStore = useUserStore()
+  // userStore.setLoginInfo(response.data.data)
   Swal.fire({
         title: "카카오 로그인 성공!",
         icon: "success"

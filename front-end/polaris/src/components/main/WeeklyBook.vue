@@ -13,9 +13,9 @@
                 <p><font-awesome-icon icon="fa-solid fa-heart" /> {{ WeeklyBook.scrapCount }}</p>
             </div> -->
             <div class="book-detail">
-                <h1 class=" text-2xl font-bold text-gray-800 mb-2">[제목] {{ WeeklyBook.bookTitle }}</h1>
-                <p class="text-xl font-bold text-gray-600 mb-2">[저자] {{ WeeklyBook.author }}</p>
-                <p class="text-lg">[설명] {{ WeeklyBook.bookDescription }}</p>  
+                <h1 class=" text-center text-2xl font-bold text-gray-800 mb-2"> {{ WeeklyBook.bookTitle }}</h1>
+                <p class="text-center text-xl font-bold text-gray-600 mb-2"> {{ WeeklyBook.author }}</p>
+                <p class="text-center text-lg"> {{ WeeklyBook.bookDescription }}</p>  
             </div>
             <div class="author-info w-full ">
                 <router-link :to="{ name: 'essaydetail', params: { essayId: WeeklyBook.essayId }}" class="h-14 py-3 px-4 mt-4  bg-maintheme1  w-60 text-maintheme3 transition ease-in duration-200 text-center text-lg font-semibold shadow-md  rounded-lg ">독후감 보러가기</router-link>
@@ -24,8 +24,6 @@
             </div>
         </div>
         <div class="book-image">
-            <!-- 이미지를 이 곳에 출력 -->
-            <!-- <font-awesome-icon icon="fa-solid fa-crown" size="2xl" style="color: #FFD43B;" class="mb-16"/> -->
             <img :src="WeeklyBook.cover" alt="Book Cover" style="height: 350px;" />
         </div>
     </div>
@@ -51,7 +49,6 @@ onMounted(async () => {
   await axios.get('https://i10a801.p.ssafy.io:8082/essay/most_scrapped')
   .then(function (response) {
   WeeklyBook.value = response.data.data
-  console.log(WeeklyBook.value)
 })
 .catch(function (error) {
 	alert(error.message)

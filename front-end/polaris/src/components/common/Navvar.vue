@@ -15,7 +15,7 @@
                      <router-link :to="{name: 'login'}" v-if="!userToken" class="text-maintheme1 mr-14 font-bold"><font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl" style="color: #323F59;"  class="mr-2" />로그인</router-link>
                      <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-maintheme1 font-bold"><font-awesome-icon :icon="['fas', 'user-plus']" size="xl" style="color: #323F59;"  class="mr-2" />회원가입</router-link>
                      <p  v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" class="text-maintheme1 font-bold mt-4 mr-4" >{{ userNickname }}</p>
-                     <router-link v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" 
+                     <router-link v-if="userToken && loginUser.id !== null" 
                                  :to="{ name: 'ProfilePage', params: { id: loginUser.id }}" 
                                  class="text-maintheme1 mr-14"><img class="col-span-1 object-cover" id="profile-image" :src="userProfileUrl || '@/assets/profile-default.jpg'" alt="Profile-Image"></router-link>
                      <button v-if="userToken" @click="logout"  class="text-maintheme1 font-bold  bg-transparent border-none outline-none focus:outline-none cursor-pointer"><font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="xl" style="color: #323F59;" class="ml-4 mr-2"/>로그아웃</button>
@@ -41,6 +41,8 @@ const router = useRouter();
 const userToken = ref(localStorage.getItem('user_token'))
 const refreshToken = ref(localStorage.getItem('refresh_token'))
 const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
+console.log(userInfoString)
+
 // 사용자 정보를 나타내는 인터페이스 정의
 interface UserInfo {
   id?: string | null;
@@ -65,6 +67,7 @@ const userProfileUrl = ref<string | null>(null)
 
 const getUserInfo = async() => {
   try {
+    if(loginUser.id !== undefined) {
     const response = await axios({
       headers: {
         "Authorization": `${userToken.value}`,
@@ -75,7 +78,7 @@ const getUserInfo = async() => {
     })
     userNickname.value = response.data.data.nickname
     userProfileUrl.value = response.data.data.profileUrl
-  } catch (error) {
+  }} catch (error) {
     console.error("에러발생: ", error)
   }
 }
