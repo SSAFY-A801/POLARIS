@@ -36,7 +36,7 @@ onMounted(()=> {
       "Content-Type": 'application/json'
     },
     method: 'get',
-    url: `${store.BACK_API_URL}/profile/${loginUserId}/exchange_books`
+    url: `${store.BACK_API_URL}/trade/${loginUserId}/exchange_history`
   })
   .then((response) => {
     console.log(response.data)

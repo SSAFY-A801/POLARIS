@@ -18,12 +18,12 @@
   import { onMounted, ref } from 'vue';
   import axiosInstance from '@/services/axios';
   import { profileCounterStore } from '@/stores/profilecounter';
-
+  const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
   const store = profileCounterStore();
   const myscraps = ref(store.myscraps)
 
   onMounted(()=> {
-    store.getMyscraps();
+    store.getMyscraps(loginUserId);
 
   })
 

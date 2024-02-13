@@ -62,7 +62,7 @@
             <div>
                 <dt class="sr-only">Author</dt>
 
-                <dd class="font-normal text-maintheme1">{{ bookinfo.author }}</dd>
+                <dd  class="font-normal text-maintheme1">{{ bookinfo.author.split(',')[0] }}</dd>
             </div>
           </dl>
       </div>

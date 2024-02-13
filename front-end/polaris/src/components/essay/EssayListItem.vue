@@ -7,14 +7,25 @@
       <div id="title" class="text-center mb-4">
           <dd   class="font-bold text-maintheme1">{{ essayInfo.title }}</dd>
       </div>
-      <div class="border-b text-center pb-2 mb-4">
-          <dd   class="text-sm text-maintheme1"><font-awesome-icon icon="fa-solid fa-user" class="mr-2" />{{ essayInfo.nickname }}</dd>
+      <div class="flex items-center justify-center border-b text-center pb-2 mb-4">
+            <!-- <font-awesome-icon icon="fa-solid fa-user" class="mr-2" /> -->
+            <div class="mr-1">
+              <img id="profile-image" :src="essayInfo.profileUrl" alt="">
+            </div>
+            <div>
+              {{ essayInfo.nickname }}
+            </div>
       </div>
       <div class="flex justify-center my-2 rounded-lg ">
         <div>
-          <img
+          <img v-if="essayInfo.bookCoverUrl"
               alt="Home"
               :src="essayInfo.bookCoverUrl"
+              class="object-cover"
+          >
+          <img v-else
+              alt="Home"
+              src="@/assets/book-image.jpg"
               class="object-cover"
           >
         </div>
@@ -87,6 +98,10 @@
 </script>
 
 <style scoped>
+  #profile-image {
+    @apply w-[25px] h-[25px] rounded-full border border-gray-500
+  }
+
   #title {
     height: 40px;
   }

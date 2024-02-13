@@ -1,4 +1,4 @@
-import { ref, computed, watch, watchEffect, reactive } from 'vue'
+import { ref, computed, watch, watchEffect } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios';
 import axiosInstance from '@/services/axios'
@@ -66,11 +66,11 @@ export type User = {
 
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
-  const token = localStorage.getItem('user_token')
-  const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
+  const token = ref(localStorage.getItem('user_token'));
+  
+  // const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
   const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
-  const loginUserId = ref<string>("")
-
+  
 
   
   // ProfilePage
@@ -93,14 +93,38 @@ export const profileCounterStore = defineStore('counter', () => {
     followingsCnt: 8,
   });
   
+  
+
   watch(profileUser, (newValue, oldValue) => {
     return newValue
   });
   
+
+  // const loginUser = ref<User|null>(null)
+
+  // const getloginUser = (id: number) => {
+  //   axiosInstance.value({
+  //     headers: {
+  //       Authorization: `${token}`,
+  //       "Content-Type": 'application/json'
+  //     },
+  //     method: 'get',
+  //     url: `${BACK_API_URL}/profile/${id}`,
+  //   })  
+  //   .then((response) => {
+  //     const userData = response.data['data']
+  //     loginUser.value = userData
+  //   })
+  //   .catch((error)=> {
+  //     console.error("에러발생: ",error)
+  //   })
+  // }
+  
+
   const getProfile = (id: number) => {
     axiosInstance.value({
       headers: {
-        Authorization: `${token}`,
+        Authorization: `${token.value}`,
         "Content-Type": 'application/json'
       },
       method: 'get',
@@ -118,9 +142,9 @@ export const profileCounterStore = defineStore('counter', () => {
   
   
   // ProfileUdpatePage
-  const isMe = computed(()=> {
-    return profileUser.value.id == Number(loginUserId.value)
-  });
+  // const isMe = computed(()=> {
+  //   return profileUser.value.id == Number(loginUserId.value)
+  // });
 
 
   // MyEssayPage
@@ -128,21 +152,23 @@ export const profileCounterStore = defineStore('counter', () => {
   // MyExchangeListPage
   // MyScrapsPage
   const myscraps = ref([])
-  const getMyscraps = () => {
-    if(loginUserId.value){
+  const getMyscraps = (id: string) => {
+    if(id){
       axiosInstance.value({
         headers: {
-          Authorization: `${token}`,
+          Authorization: `${token.value}`,
           'Content-Type': 'application/json'
         },
         method: 'get',
-        url: `${BACK_API_URL}/essay/${loginUserId.value}/scraps`
+        url: `${BACK_API_URL}/essay/${id}/scraps`
       })
       .then((response) => {
         console.log(response.data)
-        if(response.data.status == 200){
-          const res = response.data.data
+        const res = response.data.data
+        if(res){
           myscraps.value = res.scrapPosts
+        } else {
+          myscraps.value = []
         }
     })
       .catch((error) => {
@@ -223,7 +249,7 @@ export const profileCounterStore = defineStore('counter', () => {
 const getMybookList = (id:string)=> {
   axiosInstance.value({
     headers: {
-      Authorization: `${token}`
+      Authorization: `${token.value}`
     },
       method: 'get',
       url: `${BACK_API_URL}/book/${id}/library`,
@@ -250,7 +276,8 @@ const getMybookList = (id:string)=> {
     deletebuttonState.value = !deletebuttonState.value
   }
   return { 
-    profileUser, getProfile,loginUserId, userInfoString,isMe,
+    profileUser, getProfile,
+    // loginUserId,isMe,
     searchAPIbookList, BACK_API_URL, token,
     getMyscraps, myscraps,
     getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }

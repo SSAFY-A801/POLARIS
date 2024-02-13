@@ -98,21 +98,18 @@
   const handleFileChange = (event: Event) => {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
-
   if (file) {
     const reader = new FileReader();
-
     reader.onload = (e) => {
       imageUrl.value = e.target?.result as string; // 주석 처리 또는 제거
     };
     reader.readAsDataURL(file);
   }
 };
-
   
+
   const triggerFileInput = () => {
     const fileInput = document.getElementById('update-image') as HTMLInputElement;
-    
     fileInput.click();
   };
 
@@ -131,9 +128,11 @@
     isRegionModalOpen.value = true
   }
 
+
   const closeRegionModal = () => {
     isRegionModalOpen.value = false
   }
+
 
   // 위치 업데이트
   const updateRegion = (newRegion: {name: string, code: string}) => {
@@ -141,6 +140,7 @@
     mylocationCode.value = Number(newRegion.code)
     closeRegionModal()
   }
+
 
   // 닉네임 검사
   const nicknameCheck = () => {
@@ -150,7 +150,6 @@
       },
       method: 'get',
       url: `${BACK_API_URL}/user/nickname_check/${newnickname.value}`
-
     })
     .then((response)=> {
       const res = response.data.data
@@ -160,9 +159,7 @@
       } else {
         alert("중복된 닉네임입니다. 다른 닉네임을 설정해 주세요.")
         newnickname.value = ""
-        
       }
-
     })
     .catch((error)=> {
       console.error(error)
@@ -170,15 +167,15 @@
   }
  
   // button 들
-  function cancelProfile() {
+  const cancelProfile = () => {
     router.push({name: "ProfilePage"});
   }
 
-  function gotoPasswordChange() {
+
+  const gotoPasswordChange = () => {
     router.push({name: "PasswordChangePage"});
   }
   
-    
     
   const updateProfile = () => {
     if (newnickname.value ==""){
@@ -198,12 +195,10 @@
     const fileInput = document.getElementById('update-image') as HTMLInputElement;
     if(fileInput.files?.[0]){
       profileData.append("image", fileInput.files?.[0]);
-      console.log(typeof(profileData.get('image')))
     } else {
       const imageFile = new File([], 'empty-file.txt');
       profileData.append("image", imageFile);
     }
-    console.log(profileData.get('image'))
     axiosInstance.value({
       method: 'patch',
       url: `${BACK_API_URL}/profile/${profileUser.value.id}`,
@@ -221,10 +216,10 @@
     .catch((error) => {
       console.error(error)
     })
-              
       router.push({name: "ProfilePage"})
     }
   } 
+
 
   const getProfile = (id: number) => {
   axiosInstance.value({
@@ -248,6 +243,7 @@
       console.error("에러발생: ",error)
     })
   }
+  
   
   onMounted(()=> {
     getProfile(profileUser.value.id)

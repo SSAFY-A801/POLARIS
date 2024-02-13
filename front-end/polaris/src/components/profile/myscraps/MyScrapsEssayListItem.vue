@@ -1,7 +1,8 @@
 <template>
   <tr>
     <td class="table-cell text-indigo-600"><button @click="gotoEssay">{{ myscrap.essayTitle }}</button></td>
-    <td class="table-cell">{{ myscrap.bookTitle }}</td>
+    <td v-if="myscrap.bookTitle.length > 30" class="table-cell">{{ myscrap.bookTitle.slice(0,30) }}...</td>
+    <td v-else class="table-cell">{{ myscrap.bookTitle }}...</td>
     <td class="table-cell">{{ myscrap.writerNickname }}</td>
     <td class="table-cell">{{ myscrap.createdAt.toString().split('T')[0] }}</td>
   </tr>
