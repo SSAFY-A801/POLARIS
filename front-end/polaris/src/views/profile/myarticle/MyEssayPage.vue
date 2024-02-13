@@ -20,7 +20,8 @@
 
   const myEssays = ref([])
   const store = profileCounterStore();
-  const loginUserId = store.loginUserId
+  const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
+
 
   onMounted(()=> {
     axiosInstance.value({
