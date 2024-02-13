@@ -11,6 +11,8 @@ import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 import com.ssafy.polaris.user.dto.UserResponseDto;
 import com.ssafy.polaris.user.dto.UserSetPasswordDto;
 
+import jakarta.servlet.http.HttpSession;
+
 public interface UserService {
 	User getUserById(Long userId);
 
@@ -45,4 +47,6 @@ public interface UserService {
 	Map<String, Object> kakaoLoginProcess(String code);
 
 	boolean isKakaoUser(Long kakaoProfileId);
+
+	User getUserByOauth(Long oauth);
 }

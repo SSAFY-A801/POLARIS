@@ -27,6 +27,7 @@ import com.ssafy.polaris.user.dto.UserSetPasswordDto;
 import com.ssafy.polaris.user.exception.UserConflictException;
 import com.ssafy.polaris.user.repository.UserRepository;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -155,7 +156,7 @@ public class UserServiceImpl implements UserService{
 
         // TODO : 사용자 권한 설정
         Authentication authentication =
-            new UsernamePasswordAuthenticationToken("", "",
+            new UsernamePasswordAuthenticationToken(kakaoProfile.getEmail(), "",
                 Collections.singleton(new SimpleGrantedAuthority("AUTHORITY")));
 
         Map<String, String> tokenMap = jwtTokenProvider.generateToken(user.getId(), user.getNickname(), authentication);
@@ -185,6 +186,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean isKakaoUser(Long kakaoProfileId) {
         return userRepository.existsByOauth(kakaoProfileId.toString());
+    }
+
+    @Override
+    public User getUserByOauth(Long oauth) {
+        return userRepository.findUserByOauth(String.valueOf(oauth))
+            .orElseThrow(() -> new UserNotKakaoJoined(""));
     }
 
     @Override
