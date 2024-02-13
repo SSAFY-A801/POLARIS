@@ -23,7 +23,7 @@
   import axios from 'axios';
 
   const store = profileCounterStore();
-  const loginUserId = store.loginUserId
+  const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
   const props = defineProps(['comment'])
   const isEdited = ref(false)
   const commentContext = ref(props.comment.comment)

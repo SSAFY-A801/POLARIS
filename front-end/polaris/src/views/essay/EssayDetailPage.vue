@@ -97,7 +97,7 @@
 
   const comment = ref("")
   const isMe = computed(()=> {
-    return essay.value?.userId ==  Number(profileStore.loginUserId)
+    return essay.value?.userId ==  Number(loginUserId)
   })
 
   // 프로필로 가기
