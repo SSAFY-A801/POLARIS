@@ -116,7 +116,7 @@ export const profileCounterStore = defineStore('counter', () => {
   
 
   watch(profileUser, (newValue, oldValue) => {
-    console.log(newValue)
+    // console.log(newValue)
   });
    
 

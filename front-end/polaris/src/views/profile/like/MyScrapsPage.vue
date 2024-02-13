@@ -7,7 +7,7 @@
         v-if="myscraps.length"
         :myscraps="myscraps"
         />
-        <div v-else class="text-center mt-10 font-bold text-xl">
+        <div v-else class="text-center m-20 text-xl">
           현재 스크랩한 독후감이 존재하지 않습니다.
         </div>
     </div>
