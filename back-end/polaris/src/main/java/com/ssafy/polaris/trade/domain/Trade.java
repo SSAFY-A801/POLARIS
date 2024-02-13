@@ -4,22 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.ssafy.polaris.connectentity.domain.TradeUserBook;
 import com.ssafy.polaris.user.domain.User;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -58,7 +48,7 @@ public class Trade {
 	@Enumerated(EnumType.STRING)
 	private TradeStatus status = TradeStatus.INPROGRESS;
 
-	@OneToMany(mappedBy = "trade")
+	@OneToMany(mappedBy = "trade" , cascade = CascadeType.REMOVE)
 	private List<TradeUserBook> tradeUserBooks = new ArrayList<>();
 
 	@NotNull

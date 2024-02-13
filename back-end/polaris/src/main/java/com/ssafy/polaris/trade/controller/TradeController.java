@@ -1,5 +1,9 @@
 package com.ssafy.polaris.trade.controller;
 
+import com.ssafy.polaris.chat.dto.ChatRoomTradeBookListResponseDto;
+import com.ssafy.polaris.chat.service.ChatRoomService;
+import com.ssafy.polaris.chat.service.SseService;
+import com.ssafy.polaris.trade.dto.ExchangeHistoryResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,11 +26,16 @@ import com.ssafy.polaris.trade.service.TradeService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(value = "/trade")
 public class TradeController {
 	private final TradeService tradeService;
+	private final SseService sseService;
+	private final ChatRoomService chatRoomService;
 
 	/**
 	 * 교환 가능 도서 목록 반환
@@ -124,10 +133,33 @@ public class TradeController {
 	public ResponseEntity<DefaultResponse<Void>> selectTradeBook(@RequestBody TradeBookSelectRequestDto request) {
 		tradeService.selectTradeBooks(request);
 
+		System.out.println("sse - event 발생 시키러 갑니다. "+ request.getChatRoomId());
+		ChatRoomTradeBookListResponseDto list = chatRoomService.getChatRoomTradeBookList(request.getChatRoomId());
+
+		// chatRoomId 로 connect 된 곳에 event 발생 시키기
+		sseService.sendChangeChatRoomTradeBookList(request.getChatRoomId(), list);
+
 		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
 			StatusCode.SUCCESS_SELECT_TRADE_USER_BOOK
 		);
 	}
 
+	@GetMapping("/{id}/exchange_history")
+	public ResponseEntity<DefaultResponse<Map<String, List<ExchangeHistoryResponseDto>>>> getExchangeHistoroies(
+			@PathVariable("id") Long userId
+	){
+		List<ExchangeHistoryResponseDto> data = tradeService.getExchangeHistory(userId);
+		if(data == null){
+			return DefaultResponse.emptyResponse(
+					HttpStatus.OK,
+					StatusCode.SUCCESS_USER_EMPTY_EXCHANGE_HISTORY_VIEW
+			);
+		}
+		return DefaultResponse.toResponseEntity(
+				HttpStatus.OK,
+				StatusCode.SUCCESS_USER_EXCHANGE_HISTORY_VIEW,
+				Map.of("exchangeHistories", data)
+		);
+	}
 }

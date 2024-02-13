@@ -2,6 +2,7 @@ package com.ssafy.polaris.chat.repository;
 
 import java.util.List;
 
+import com.ssafy.polaris.trade.dto.ExchangeHistoryResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -83,5 +84,22 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 	// 		"where " +
 	// 		"    t.sender.id = :senderId or t.receiver.id = :senderId")
 	// List<BasicChatRoomResponseDto> getChatRoomList(@Param("senderId") Long senderId);
+
+	@Query("select new com.ssafy.polaris.trade.dto.ExchangeHistoryResponseDto( " +
+			" t.id, u.id, u.nickname, ub.id, b.title, t.finishedAt)" +
+			"from Trade t " +
+			"	inner join TradeUserBook tub on t.id = tub.trade.id " +
+			"	inner join User u on (t.sender.id = u.id or t.receiver.id = u.id) " +
+			"	inner join UserBook ub on (u.id = ub.user.id and tub.userBook.id = ub.id)" +
+			"	inner join Book b on ub.book.isbn = b.isbn " +
+			"where (t.receiver.id = :userId or t.sender.id = :userId) " +
+			"	and t.tradeType = 'EXCHANGE' " +
+			"	and t.status = 'COMPLETED' " +
+			"order by t.id, u.id ")
+	List<ExchangeHistoryResponseDto> getExchangeHistory(@Param("userId") Long userId);
+
+
+
+
 
 }

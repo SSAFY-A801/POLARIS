@@ -20,7 +20,11 @@ public enum StatusCode {
 	FAIL_READ_CHATROOM_PARTICIPANT(204, "채팅방 정보가 없거나, 채팅방 상대가 없습니다."),
 
 	SUCCESS_READ_CHAT_MESSAGES(200, "기존 채팅 메세지 조회 성공"),
-	SUCCESS_READ_EMPTY_CHAT_MESSAGES(200, "저장된 채팅 메세지가 없습니다.");
+	SUCCESS_READ_EMPTY_CHAT_MESSAGES(200, "저장된 채팅 메세지가 없습니다."),
+
+	SUCCESS_READ_CHATROOM_TRADE_BOOKS(200, "채팅방 거래 도서 목록 조회 성공"),
+	SUCCESS_READ_EMPTY_CHATROOM_TRADE_BOOKS(200, "채팅방 거래 도서 목록이 비어 있습니다.");
+
 	private final int status;
 	private final String message;
 }

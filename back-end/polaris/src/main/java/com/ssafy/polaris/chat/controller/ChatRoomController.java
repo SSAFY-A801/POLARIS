@@ -15,6 +15,7 @@ import com.ssafy.polaris.chat.dto.ChatRoomCreateRequestDto;
 import com.ssafy.polaris.chat.dto.ChatRoomCreateResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomListResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomParticipantsResponseDto;
+import com.ssafy.polaris.chat.dto.ChatRoomTradeBookListResponseDto;
 import com.ssafy.polaris.chat.response.DefaultResponse;
 import com.ssafy.polaris.chat.response.StatusCode;
 import com.ssafy.polaris.chat.service.ChatSaveServiceImpl;
@@ -123,6 +124,30 @@ public class ChatRoomController {
 			HttpStatus.OK,
 			StatusCode.SUCCESS_READ_CHAT_MESSAGES,
 			chatMessageListResponseDto
+		);
+	}
+
+	/**
+	 *
+	 * @param chatRoomId
+	 * @return 채팅방에 등록되어 있는 거래 도서 리스트
+	 */
+	@GetMapping("/book_list/{chatRoomId}")
+	public ResponseEntity<DefaultResponse<ChatRoomTradeBookListResponseDto>> getChatRoomTradeBookList(@PathVariable(value = "chatRoomId") Long chatRoomId){
+		ChatRoomTradeBookListResponseDto chatRoomTradeBookList = chatRoomService.getChatRoomTradeBookList(chatRoomId);
+
+		// 채팅방에 등록해놓은 책이없으면
+		if (chatRoomTradeBookList.getChatRoomTradeBooks().isEmpty()){
+			return DefaultResponse.emptyResponse(
+				HttpStatus.OK,
+				StatusCode.SUCCESS_READ_EMPTY_CHATROOM_TRADE_BOOKS
+			);
+		}
+
+		return DefaultResponse.toResponseEntity(
+			HttpStatus.OK,
+			StatusCode.SUCCESS_READ_CHATROOM_TRADE_BOOKS,
+			chatRoomTradeBookList
 		);
 	}
 }

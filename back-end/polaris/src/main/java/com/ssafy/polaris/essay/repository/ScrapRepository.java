@@ -32,9 +32,10 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 	// void deleteWithEssayIdAndUserId(@Param("essayId") Long essayId, @Param("userId") Long userId);
 
 	@Query("select new com.ssafy.polaris.essay.dto.ScrappedEssayByUserResponseDto(" +
-			" e.id, e.title, u.id, u.nickname, e.createdAt) from Scrap s " +
-			" left join s.user u " +
+			" e.id, e.title, e.user.id, e.user.nickname, b.title, e.createdAt) from Scrap s " +
 			" left join s.essay e " +
-			" where s.user.id = :userId")
+			" left join e.userBook.book b" +
+			" where s.user.id = :userId " +
+			" and s.isDeleted = false")
 	List<ScrappedEssayByUserResponseDto> getUserScrappedList(@Param("userId") Long userId);
 }

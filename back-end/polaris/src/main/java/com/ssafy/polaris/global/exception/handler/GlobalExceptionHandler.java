@@ -82,24 +82,4 @@ public class GlobalExceptionHandler {
 		log.error(exception.getMessageKey(), exception, exception.getParams());
 		return new ErrorResponse(exception.getErrorCode());
 	} // 418
-
-	// Token 관련
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	@ExceptionHandler(SignatureException.class)
-	public ErrorResponse handleSignatureException() {
-		return new ErrorResponse(ErrorCode.TOKEN_NOT_VALID);
-	}
-
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	@ExceptionHandler(MalformedJwtException.class)
-	public ErrorResponse handleMalformedJwtException() {
-		return new ErrorResponse(ErrorCode.MALFORMED_JWT);
-	}
-
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	@ExceptionHandler(ExpiredJwtException.class)
-	public ErrorResponse handleExpiredJwtException() {
-		return new ErrorResponse(ErrorCode.EXPIRED_JWT);
-	}
-
 }

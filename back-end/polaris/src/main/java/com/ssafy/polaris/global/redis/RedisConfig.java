@@ -1,4 +1,4 @@
-package com.ssafy.polaris.config.redis;
+package com.ssafy.polaris.global.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
