@@ -1,7 +1,6 @@
 package com.ssafy.polaris.chat.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +46,8 @@ public class SseController {
 	 */
 	@GetMapping(value = "/connect/{chatRoomId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public ResponseEntity<SseEmitter> connect(@PathVariable(value = "chatRoomId") Long chatRoomId , HttpServletResponse response) {
+		System.out.println("controller - connect ");
+		SseEmitter emitter = sseService.connection(chatRoomId, response);
 		// SseEmitter emitter = new SseEmitter(30*60*1000L); // 30분 으로 설정 - 통신 객체를 만든다.
 		// 서버에 저장하고 있기
 		// SseEmitter connection = sseService.connection(chatRoomId, response);
@@ -61,24 +62,24 @@ public class SseController {
 		// 	throw new RuntimeException(e);
 		// }
 
-		response.setHeader("X-Accel-Buffering", "no");
-
-		SseEmitter emitter = new SseEmitter();
-		List<SseEmitter> emitters = chatRooms.getOrDefault(chatRoomId, new CopyOnWriteArrayList<>());
-		emitters.add(emitter);
-
-		try {
-			emitter.send(SseEmitter.event()
-				.name("connect")
-				.data("connected!"));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
-		chatRooms.put(chatRoomId, emitters);
-
-		emitter.onCompletion(() -> emitters.remove(emitter));
-		emitter.onTimeout(()-> emitters.remove(emitter));
+		// response.setHeader("X-Accel-Buffering", "no");
+		//
+		// SseEmitter emitter = new SseEmitter(60*60*1000L); // 1시간으로 설정
+		// List<SseEmitter> emitters = chatRooms.getOrDefault(chatRoomId, new CopyOnWriteArrayList<>());
+		// emitters.add(emitter);
+		//
+		// try {
+		// 	emitter.send(SseEmitter.event()
+		// 		.name("connect")
+		// 		.data("connected!"));
+		// } catch (IOException e) {
+		// 	throw new RuntimeException(e);
+		// }
+		//
+		// chatRooms.put(chatRoomId, emitters);
+		//
+		// emitter.onCompletion(() -> emitters.remove(emitter));
+		// emitter.onTimeout(()-> emitters.remove(emitter));
 
 		return ResponseEntity.ok(emitter);
 	}
@@ -96,31 +97,31 @@ public class SseController {
 		// chatRedisCacheService.saveChatMessage(chatMessageSaveDto);
 
 		// 메세지 sse로 보내기
-		// sseService.sendMessage(chatRoomId, chatMessageSaveDto);
+		sseService.sendMessage(chatRoomId, chatMessageSaveDto);
 
-		List<SseEmitter> emitters = chatRooms.get(chatRoomId);
-		if (emitters != null){
-			synchronized(emitters) {
-				Iterator<SseEmitter> iterator = emitters.iterator();
-				while(iterator.hasNext()) {
-					SseEmitter emitter = iterator.next();
-					System.out.println("emiter " + emitter);
-					// 작업 수행
-					try{
-						emitter.send(SseEmitter.event()
-							.id(String.valueOf(chatRoomId))
-							.name("message")
-							.data(chatMessageSaveDto, MediaType.APPLICATION_JSON));
-
-					} catch (ClientAbortException e){
-						e.printStackTrace();
-						System.out.println("client aboutr exception ");
-					}
-					catch (IOException e){
-						e.printStackTrace();
-					}
-				}
-			}
+		// List<SseEmitter> emitters = chatRooms.get(chatRoomId);
+		// if (emitters != null){
+		// 	synchronized(emitters) {
+		// 		Iterator<SseEmitter> iterator = emitters.iterator();
+		// 		while(iterator.hasNext()) {
+		// 			SseEmitter emitter = iterator.next();
+		// 			System.out.println("emiter " + emitter);
+		// 			// 작업 수행
+		// 			try{
+		// 				emitter.send(SseEmitter.event()
+		// 					.id(String.valueOf(chatRoomId))
+		// 					.name("message")
+		// 					.data(chatMessageSaveDto, MediaType.APPLICATION_JSON));
+		//
+		// 			} catch (ClientAbortException e){
+		// 				e.printStackTrace();
+		// 				System.out.println("client aboutr exception ");
+		// 			}
+		// 			catch (IOException e){
+		// 				e.printStackTrace();
+		// 			}
+		// 		}
+		// 	}
 
 			// emitters.forEach( emitter -> {
 			// 	System.out.println("emiiter" + emitter.toString());
@@ -134,7 +135,7 @@ public class SseController {
 			// 		e.printStackTrace();
 			// 	}
 			// });
-		}
+		// }
 
 		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
