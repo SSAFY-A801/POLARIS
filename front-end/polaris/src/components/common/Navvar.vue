@@ -6,8 +6,8 @@
                  <!-- <div class="flex m-auto flex-row"></div> -->
                  
                  <div class="flex items-center w-1/3 ml-10 justify-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8">
-                     <router-link :to="{name: 'booksearch'}" class="w-80 text-resize px-20 text-maintheme1 text-2xl font-bold text-center mr-2">도서 검색</router-link>
-                     <router-link :to="{name: 'essaylist'}" class="w-40 text-resize text-maintheme1 text-2xl font-bold text-center" >독후감 게시판</router-link>
+                     <router-link :to="{name: 'booksearch'}" class="w-80 text-resize px-20 text-maintheme1 text-xl font-bold text-center mr-2">도서 검색</router-link>
+                     <router-link :to="{name: 'essaylist'}" class="w-40 text-resize text-maintheme1 text-xl font-bold text-center" >독후감 게시판</router-link>
                  </div>
                 
 
@@ -54,7 +54,7 @@ let loginUser: UserInfo;
 try {
   loginUser = JSON.parse(userInfoString.value) || {}; // 빈 객체로 기본값 설정
 } catch (error) {
-  console.error("Error parsing user_info:", error);
+  // console.error("Error parsing user_info:", error);
   loginUser = {}; // JSON 파싱에 실패한 경우 빈 객체로 기본값 설정
 }
 // loginUser를 사용할 때 loginUser.id를 체크할 때 에러가 발생하지 않습니다.

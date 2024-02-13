@@ -15,7 +15,6 @@ let loginUser: UserInfo;
 try {
   loginUser = JSON.parse(userInfoString.value) || {}; // 빈 객체로 기본값 설정
 } catch (error) {
-  console.error("Error parsing user_info:", error);
   loginUser = {}; // JSON 파싱에 실패한 경우 빈 객체로 기본값 설정
 }
 
@@ -25,7 +24,7 @@ const token = ref(localStorage.getItem('user_token'))
 
 const instance = axios.create({
   baseURL,
-  timeout: 5000,
+  timeout: 10000,
   headers: { 'Authorization': token.value?.replace("\"", "") },
 });
 
@@ -33,12 +32,6 @@ const instance = axios.create({
 instance.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
-    console.log(token.value)
-    console.log(error)
-    console.log(error.status)
-    console.log(error.response)
-    console.log(error.response?.data)
-    console.log(error.response?.status)
     if (error.config && error.response && error.response.status === 401 && (<any>error.response.data).status === 420) {
       // 액세스 토큰이 만료된 경우
       const refreshToken = localStorage.getItem('refresh_token');

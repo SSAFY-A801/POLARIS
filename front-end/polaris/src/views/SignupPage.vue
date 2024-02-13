@@ -99,6 +99,8 @@ import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import RegionModal from '@/components/Auth/RegionModal.vue'
 import axios from 'axios'
+import Swal from 'sweetalert2'
+
 
 const router = useRouter()
 
@@ -161,11 +163,15 @@ const checkNickname = async () => {
   .then(function (response) {
     if (response.data.data.isInUse) {
       isNicknameVerified.value = false
-      alert('이미 존재하는 닉네임 입니다')
-      // console.log(isNicknameVerified.value)
-	    // console.log(response.data.message)
+      Swal.fire({
+        text: "이미 사용중인 닉네임 입니다 ",
+        icon: "error"
+      });
     } else {
-      alert('사용 가능한 닉네임 입니다')
+        Swal.fire({
+          text: "사용가능한 닉네임 입니다 ",
+          icon: "success"
+        });
       isNicknameVerified.value = true
       // console.log(isNicknameVerified.value)
       // console.log(response.data.message)
@@ -191,12 +197,18 @@ const sendEmail = async () => {
     }}
 )
 .then(function (response) {
-  alert('이메일로 인증코드가 발송되었습니다.')
+  Swal.fire({
+          text: "이메일로 인증코드가 발송되었습니다 ",
+          icon: "success"
+        });
   isEmailVerificationInput.value = true
 	// console.log(response.status)
 })
 .catch(function () {
-	alert("인증이메일이 발송되지 않았습니다.")
+	Swal.fire({
+        text: "인증코드 발송에 실패했습니다 ",
+        icon: "error"
+      });
 })
 }
 
@@ -211,10 +223,15 @@ const checkEmail = async () => {
   })
   .then(function (response) {
     if (response.data.data.isInUse) {
-      alert('이미 존재하는 이메일 입니다.')
-      // console.log('이메일 인증 여부 검증 실패')
+      Swal.fire({
+        text: "이미 존재하는 이메일 입니다 ",
+        icon: "error"
+      });
     } else {
-      alert('가입이 가능한 이메일 입니다.')
+      Swal.fire({
+          text: "가입이 가능한 이메일 입니다 ",
+          icon: "success"
+        });
       // console.log('이메일 인증 여부 검증  성공')
       sendEmail()
     }
@@ -231,6 +248,7 @@ const checkEmail = async () => {
 const checkVerifyCode = async () => {
   await axios.post('https://i10a801.p.ssafy.io:8082/user/email_cert', 
     JSON.stringify({
+      email: emailInput.value,
       code: verificationCode.value
     }),
     {headers: {
@@ -238,13 +256,19 @@ const checkVerifyCode = async () => {
     }}
 )
 .then(function (response) {
-  // alert('인증이 완료되었습니다.')
+  Swal.fire({
+          title: "인증 성공! ",
+          icon: "success"
+        });
   isEmailVerificationInput.value =false
   isEmailVerified.value = true
 	// console.log(response.status)
 })
 .catch(function (error) {
-	alert(error.message)
+	Swal.fire({
+          title: "인증 실패 ",
+          icon: "error"
+        });
 })
 }
 
@@ -278,7 +302,10 @@ const submitUserSignup = async () => {
 )
 .then(function (response) {
   console.log(response.status)
-  alert('회원가입에 성공하였습니다')
+  Swal.fire({
+          title: "회원가입 성공! ",
+          icon: "success"
+        });
   router.push({name:'login'})
 
   // localStorage.setItem('user_token',JSON.stringify(response.accessToken))
@@ -286,10 +313,17 @@ const submitUserSignup = async () => {
   // const localStorageInfo = JSON.parse(localStorage.getItem('userInfo')) localstorage에서 가져올때
   })
   .catch(function (error) {
-    alert(error.message)
+    Swal.fire({
+        title: "회원가입 실패",
+        icon: "error"
+      });
   }) 
 } else {
-  alert('정보를 모두 입력해주세요')
+  Swal.fire({
+        title: '회원가입 오류',
+        text: "정보를 모두 입력해주세요 ",
+        icon: "error"
+      });
   // console.log('닉네임:', isNicknameVerified.value)
   // console.log('이메일:', isEmailVerified.value)
   // console.log('비밀번호:', isPasswordVerified.value)

@@ -55,6 +55,7 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 import router from '@/router';
 import { useUserStore } from '@/stores/authcounter'
+import Swal from 'sweetalert2'
 
 const userEmail = ref('')
 const userPassword = ref('')
@@ -72,8 +73,10 @@ const userLogin = async () => {
   
 )
 .then(function (response) {
-  alert('로그인에 성공하였습니다')
-  console.log(response.data.data)
+    Swal.fire({
+          title: "로그인 성공! ",
+          icon: "success"
+        });
   localStorage.setItem('user_token',(response.data.data.access))
   localStorage.setItem('refresh_token',(response.data.data.refresh))
   localStorage.setItem('user_info' , JSON.stringify(response.data.data))
@@ -84,18 +87,21 @@ const userLogin = async () => {
   router.push({ name: 'home'})
   })
   .catch(function (error) {
-    alert(error.message)
+    Swal.fire({
+        title: "로그인 실패",
+        text: "다시 입력해주세요 ",
+        icon: "error"
+      })
   })
-} else {
-    alert('로그인에 실패했습니다. 다시 입력해 주세요.')
-
-} 
-}
+}}
 
 //카카오로그인 인가코드 받기-카카오로그인 페이지로 리다이렉트
 const kakaoLogin = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=31926718e1eea569505c9974c657cda1&redirect_uri=http://localhost:5173/kakaologin&response_type=code`
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=31926718e1eea569505c9974c657cda1&redirect_uri=https://i10a801.p.ssafy.io/kakaologin&response_type=code`
 }
+
+
+
 </script>
 
 <style scoped>
