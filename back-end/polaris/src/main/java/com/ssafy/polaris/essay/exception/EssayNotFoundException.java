@@ -6,6 +6,6 @@ import com.ssafy.polaris.global.exception.response.ErrorCode;
 public class EssayNotFoundException extends NotFoundException {
 	private static final ErrorCode errorCode = ErrorCode.ESSAY_NOT_FOUND;
 	public EssayNotFoundException(String detailMessageKey,	Object... params) {
-		super(MESSAGE_KEY + " : " + detailMessageKey, errorCode, params);
+		super(errorCode.getMessage() + " : " + detailMessageKey, errorCode, params);
 	}
 }

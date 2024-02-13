@@ -21,6 +21,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	boolean existsByNickname(String nickname);
 
+	boolean existsByOauth(String oauth);
+
 	@Query("select count(u) from User u inner join Trade t on u.id = t.sender.id " +
 		"where t.finishedAt is not null " +
 		"and t.sender.id = :userId " +
@@ -29,4 +31,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	int getTradeCnt(@Param("userId") Long userId,
 		@Param("tradeStatus") TradeStatus tradeStatus,
 		@Param("tradeType") TradeType tradeType);
+
+	Optional<User> findUserByOauth(String oauth);
 }
