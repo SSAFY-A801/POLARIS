@@ -61,6 +61,8 @@ public class SseController {
 		// 	throw new RuntimeException(e);
 		// }
 
+		response.setHeader("X-Accel-Buffering", "no");
+
 		SseEmitter emitter = new SseEmitter();
 		List<SseEmitter> emitters = chatRooms.getOrDefault(chatRoomId, new CopyOnWriteArrayList<>());
 		emitters.add(emitter);
