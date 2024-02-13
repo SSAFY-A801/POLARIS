@@ -45,6 +45,8 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 	"SELECT " +
 		"new com.ssafy.polaris.chat.dto.ChatRoomParticipantsResponseDto( " +
 		"t.id AS chatRoomId, "+
+		"t.sender.id AS tradeSenderId, "+
+		"t.receiver.id AS tradeReceiverId, "+
 		":userId AS senderId, "+
 		"u.id AS receiverId, "+
 		"u.nickname AS receiverNickname, "+
@@ -58,6 +60,8 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 		"SELECT " +
 		"new com.ssafy.polaris.chat.dto.ChatRoomParticipantsResponseDto( " +
 		"t.id AS chatRoomId, "+
+		"t.sender.id AS tradeSenderId, "+
+		"t.receiver.id AS tradeReceiverId, "+
 		":userId AS senderId, "+
 		"u.id AS receiverId, "+
 		"u.nickname AS receiverNickname, "+
