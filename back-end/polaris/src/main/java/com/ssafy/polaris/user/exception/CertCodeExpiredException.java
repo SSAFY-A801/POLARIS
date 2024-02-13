@@ -6,6 +6,6 @@ import com.ssafy.polaris.global.exception.response.ErrorCode;
 public class CertCodeExpiredException extends TimeOutException {
 	private static final ErrorCode errorCode = ErrorCode.CERT_CODE_EXPIRED;
 	public CertCodeExpiredException(String detailMessageKey, Object... params) {
-		super(MESSAGE_KEY + " : " + detailMessageKey, errorCode, params);
+		super(errorCode.getMessage() + " : " + detailMessageKey, errorCode, params);
 	}
 }

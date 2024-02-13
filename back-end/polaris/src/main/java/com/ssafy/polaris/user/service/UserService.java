@@ -4,7 +4,9 @@ import java.util.Map;
 
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.user.domain.User;
+import com.ssafy.polaris.user.dto.KakaoProfile;
 import com.ssafy.polaris.user.dto.UserJoinRequestDto;
+import com.ssafy.polaris.user.dto.UserKakaoJoinRequestDto;
 import com.ssafy.polaris.user.dto.UserLoginRequestDto;
 import com.ssafy.polaris.user.dto.UserResponseDto;
 import com.ssafy.polaris.user.dto.UserSetPasswordDto;
@@ -15,6 +17,8 @@ public interface UserService {
 	User getUserByEmail(String email);
 
 	User getUserByNickname(String nickname);
+
+	UserResponseDto kakaoJoin(UserKakaoJoinRequestDto userKakaoJoinRequestDto);
 
 	Map<String, String> login(UserLoginRequestDto userLoginRequestDto);
 
@@ -35,4 +39,10 @@ public interface UserService {
 	Map<String, String> reissue(String refreshToken, String email);
 
 	void emilCertification(Map<String, String> body);
+
+	Map<String, String> kakaoLogin(KakaoProfile kakaoProfile);
+
+	Map<String, Object> kakaoLoginProcess(String code);
+
+	boolean isKakaoUser(Long kakaoProfileId);
 }
