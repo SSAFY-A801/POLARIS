@@ -40,31 +40,27 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 		String accessToken = SecurityUtil.getAccessToken((HttpServletRequest)request);
 
 		// 2. 유효성 검사
-		// TODO : 로그아웃을 먼저 검사해야 할 지도??
-		// TODO : isJWT 등을 만들어서 빈 토큰, 잘못된 토큰 검사를 먼저 한다.
-		// TODO : refresh 토큰의 경우 reissue로 항상 가는 것이므로 통과시켜준다.
-		// TODO : 빈 토큰이 아닐 때 expired 인지 검사를 한다!!!
-		if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
-			if (accessToken.length() > 150) {
-				if (redisTemplate.hasKey("blackList:" + accessToken).booleanValue())
-					throw new UserNotAuthorizedException("로그아웃 된 토큰입니다.");
+		// 로그아웃 된 토큰은 없는취급
+		if (Boolean.FALSE.equals(redisTemplate.hasKey("blackList:" + accessToken))) {
+			if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
+				// access Token의 경우
+				if (accessToken.length() > 150) {
+					Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
-				Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+					User user = userRepository.findUserByEmail(authentication.getName())
+						.orElseThrow(() -> new UserNotFoundException(""));
 
-				User user = userRepository.findUserByEmail(authentication.getName())
-					.orElseThrow(() -> new UserNotFoundException(""));
+					SecurityUser securityUser = new SecurityUser(user);
 
-				SecurityUser securityUser = new SecurityUser(user);
+					Authentication customAuthentication = new UsernamePasswordAuthenticationToken(
+						securityUser, "", securityUser.getAuthorities()
+					);
 
-				Authentication customAuthentication = new UsernamePasswordAuthenticationToken(
-					securityUser, "", securityUser.getAuthorities()
-				);
-
-				// securityContext에 전역 저장
-				SecurityContextHolder.getContext().setAuthentication(customAuthentication);
-			}
-			else {
-				// refresh 에 대한 검사를 여기에 추가할 수 있다.
+					// securityContext에 전역 저장
+					SecurityContextHolder.getContext().setAuthentication(customAuthentication);
+				} else {
+					// refresh 에 대한 검사를 여기에 추가할 수 있다.
+				}
 			}
 		}
 		chain.doFilter(request, response);
