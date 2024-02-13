@@ -26,7 +26,9 @@ public enum StatusCode {
 
 	SUCCESS_RESIGNATION(200, "회원 탈퇴 성공"),
 
-	SUCCESS_PASSWORD_SET(200, "비밀번호 수정 완료")
+	SUCCESS_PASSWORD_SET(200, "비밀번호 수정 완료"),
+
+	KAKAO_JOIN_NEEDED(203, "kakao 회원이 아닙니다. 회원가입 진행 필요")
 	;
 
 
