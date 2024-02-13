@@ -16,7 +16,9 @@ public enum StatusCode {
 	SUCCESS_SELECT_TRADE_USER_BOOK(200, "거래 도서가 성공적으로 선택되었습니다. "),
 
 	SUCCESS_USER_EXCHANGE_HISTORY_VIEW(200, "교환 내역이 성공적으로 조회되었습니다."),
-	SUCCESS_USER_EMPTY_EXCHANGE_HISTORY_VIEW(204, "빈 교환 내역이 성공적으로 조회되었습니다.");
+	SUCCESS_USER_PURCHASE_HISTORY_VIEW(200, "구매 내역이 성공적으로 조회되었습니다."),
+	SUCCESS_USER_EMPTY_EXCHANGE_HISTORY_VIEW(204, "빈 교환 내역이 성공적으로 조회되었습니다."),
+	SUCCESS_USER_EMPTY_PURCHASE_HISTORY_VIEW(204, "빈 구매 내역이 성공적으로 조회되었습니다.");
 	// SUCCESS_READ_USER(200, "회원 정보 조회 성공"),
 	// SUCCESS_UPDATE_USER(200, "회원 정보 수정 성공"),
 	// SUCCESS_LEAVE_USER(200, "회원 탈퇴 성공"),

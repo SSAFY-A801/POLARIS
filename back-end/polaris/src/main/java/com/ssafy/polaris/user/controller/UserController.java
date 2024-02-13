@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.polaris.global.exception.exceptions.WrongPasswordException;
 import com.ssafy.polaris.global.security.SecurityUser;
 import com.ssafy.polaris.global.security.util.SecurityUtil;
+import com.ssafy.polaris.user.domain.User;
 import com.ssafy.polaris.user.dto.KakaoProfile;
 import com.ssafy.polaris.user.dto.UserJoinRequestDto;
 import com.ssafy.polaris.user.dto.UserKakaoJoinRequestDto;
@@ -125,6 +126,8 @@ public class UserController {
 		Map<String, Object> kakaoProfileAndOauthTokens = userService.kakaoLoginProcess(code);
 		if (userService.isKakaoUser(((KakaoProfile)kakaoProfileAndOauthTokens.get("kakaoProfile")).getId())) {
 			// kakao user일 경우 로그인 완료시키기
+			User user = userService.getUserByOauth(((KakaoProfile)kakaoProfileAndOauthTokens.get("kakaoProfile")).getId());
+			((KakaoProfile)kakaoProfileAndOauthTokens.get("kakaoProfile")).setEmail(user.getEmail());
 			Map<String, String> tokenMap = userService.kakaoLogin(
 				(KakaoProfile)kakaoProfileAndOauthTokens.get("kakaoProfile"));
 			return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_LOGIN, tokenMap);
