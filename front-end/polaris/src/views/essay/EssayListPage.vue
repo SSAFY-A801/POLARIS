@@ -1,7 +1,7 @@
 <template>
   <Navvar></Navvar>
   <div class="mt-40 flex justify-center font-[gowun-dodum]">
-    <div class="container w-full mt-4 max-w-6xl p-2">
+    <div class="container w-full max-w-6xl p-2">
       <!-- 최상단 -->
       <div class="grid grid-cols-5 items-center mb-4 shadow-md" >
         <img class="col-span-3 w-full h-[350px] object-cover" src="@\assets\night-sky.jpg" alt="">
@@ -20,14 +20,14 @@
           <!-- md:hidden: 화면이 중간(medium) 크기 이하일 때(select 엘리먼트가 hidden 됨) -->
           <!-- {{  filter }} -->
           <select v-model="filter" id="search-filter" class="m-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option selected>도서제목</option>
-            <option>독후감제목</option>
+            <option selected>도서 제목</option>
+            <option>독후감 제목</option>
             <option>작성자</option>
           </select>
         </div>
         <div>
-          <input @keyup.enter="essaySearch(keyword,filter)" v-model="keyword" type="text" id="book"  class="w-96 rounded-lg appearance-none border border-maintheme1 shadow-md py-2 px-4 m-2 bg-gray-50 text-maintheme1 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="독후감 검색"/>
-          <button @click="essaySearch(keyword, filter)" type="button" class="w-16 text-white mx-2 md:mr-2 md:w-16 py-2 px-3 my-2 md:my-0 bg-maintheme1 hover:bg-gray-500 rounded-lg">
+          <input @keyup.enter="essaySearch(keyword,filter)" v-model="keyword" type="text" id="book"  class="w-96 rounded-lg appearance-none border border-maintheme1 shadow-md py-2 px-4 my-2 bg-gray-50 text-maintheme1 placeholder-gray-400 text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="독후감 검색"/>
+          <button @click="essaySearch(keyword, filter)" type="button" class="w-16 text-white mx-2 md:mr-2 md:w-16 p-3 my-2 md:my-0 bg-maintheme1 hover:bg-gray-500 rounded-lg">
             <font-awesome-icon icon="fa-solid fa-magnifying-glass" size="xl"/>
           </button>
         </div>
@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import Navvar from '@/components/common/Navvar.vue'
 import { onMounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 import EssayList from '../../components/essay/EssayList.vue';
 import axiosInstance from '@/services/axios';
 import { essayStore } from '@/stores/essaycounter';
@@ -172,8 +172,8 @@ const essaySearch = (keyword: string, filter: string) => {
   const key = ref<string>("")
   if(filter != ""){
     const searchCondition = {
-      "도서제목": "bookTitle",
-      "독후감제목": "title",
+      "도서 제목": "bookTitle",
+      "독후감 제목": "title",
       "작성자": "user"
     } as { [key: string]: string };
     key.value = searchCondition[filter]
@@ -213,8 +213,12 @@ const essaySearch = (keyword: string, filter: string) => {
   })
 }
 
-onMounted(()=> {
+onBeforeRouteUpdate(()=> {
   essaySearch("","")
+
+})
+
+onMounted(()=> {
 })
 
 </script>

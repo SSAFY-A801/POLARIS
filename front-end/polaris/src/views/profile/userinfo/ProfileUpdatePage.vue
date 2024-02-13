@@ -81,6 +81,7 @@
   import RegionModal from '@/components/Auth/RegionModal.vue';
   import type { User } from '@/stores/profilecounter';
   import Swal from 'sweetalert2'
+import { icon } from '@fortawesome/fontawesome-svg-core';
 
   const store = profileCounterStore();
   const BACK_API_URL = store.BACK_API_URL
@@ -217,7 +218,10 @@
     })
     .then((response) => {
       console.log(response.data)
-      alert("프로필이 수정되었습니다.")
+      Swal.fire({
+        title: '프로필이 수정되었습니다.',
+        icon: 'success'
+      })
       store.getProfile(Number(route.params.id))
       router.push({name: "ProfilePage"})
     })

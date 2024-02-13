@@ -6,7 +6,7 @@
         <div class="py-4 px-4 rounded-t-2xl mb-4 border-b-2">
           <h1 class="text-xl font-bold">비밀번호 변경</h1>
         </div>
-        <div class="text-center">
+        <div class="text-center text-lg">
           안전한 비밀번호로 내 정보를 보호하세요.
         </div>
         <div class="mt-8">
@@ -24,7 +24,7 @@
             <div class="flex flex-col mb-8 mx-4 ">
               <p>새 비밀번호</p>
               <div class="flex relative ">
-                <input @click="resetRequest" type="password" v-model="newpassword" id="new-password" placeholder="새 비밀번호 조건" class=" rounded-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-500 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" />
+                <input @click="resetRequest" type="password" v-model="newpassword" id="new-password" placeholder="8~20자, 숫자, 영어, 특수문자 중 최소 1개씩 포함" class=" rounded-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-500 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" />
               </div>
               <div class="text-red-500 text-sm mt-1">
                 {{ alertMessage }}
@@ -39,7 +39,7 @@
             <div class="flex flex-col mb-8 mx-4">
               <p>새 비밀번호 확인</p>
               <div class="flex relative">
-                <input @click="resetRequest" type="password" v-model="newpassword2" id="new-password-2" placeholder="새 비밀번호 조건"  class=" rounded-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-500 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" />
+                <input @click="resetRequest" type="password" v-model="newpassword2" id="new-password-2" class=" rounded-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-500 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" />
               </div>
               <div v-if="!newpassword2 && requestChange"  class="text-red-500 text-sm p-1">
                 새 비밀번호 확인을 입력하세요.
@@ -69,6 +69,8 @@
   import { onMounted, ref, watch } from 'vue';
   import axiosInstance from '@/services/axios';
   import { profileCounterStore } from '@/stores/profilecounter';
+  import Swal from 'sweetalert2';
+
 
   const store = profileCounterStore();
   const BACK_API_URL = store.BACK_API_URL
@@ -118,7 +120,10 @@ watch(newpassword, (newValue) => {
 const changePassword = () => {
     if(newpassword.value && newpassword2.value && currentpassword.value){
       if (currentpassword.value == newpassword.value){
-        alert("새 비밀번호는 현재 비밀번호와 달라야 합니다.")
+        Swal.fire({
+          title: "새 비밀번호는 현재 비밀번호와 달라야 합니다.",
+          icon: 'error'
+        })
       } else if(newpassword.value != newpassword2.value) {
         isSame.value = false
       } else {
@@ -137,16 +142,28 @@ const changePassword = () => {
         })
         .then((response) => {
           console.log(response.data)
-          alert("비밀번호 변경 성공!")
+          Swal.fire({
+          title: "비밀번호가 변경되었습니다.\n로그인을 다시 진행해주세요.",
+          icon: 'success'
+         })
+          localStorage.removeItem('user_token')
+          localStorage.removeItem('refresh_token')
+          localStorage.removeItem('user_info')
           router.push({name: "login"})
         })
         .catch((error) => {
           console.error(error)
-          alert("현재 비밀번호가 올바르지 않습니다.\n다시 입력해주세요.")
+          Swal.fire({
+          title: "현재 비밀번호가 올바르지 않습니다.\n다시 입력해주세요.",
+          icon: 'error'
+         })
         });
       }
     } else {
-      alert('입력을 완료한 후 제출해주세요.')
+      Swal.fire({
+        title: "입력을 완료한 후 제출해주세요.",
+        icon: 'error'
+      })
     }
     requestChange.value = true
   }
@@ -191,6 +208,10 @@ onMounted(()=> {
 
  #cancelChange {
   @apply border border-gray-300 text-maintheme1 m-2 hover:bg-slate-200
+  }
+
+  #new-password::placeholder {
+    @apply text-sm
   }
 
 </style>

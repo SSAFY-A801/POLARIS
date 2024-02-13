@@ -176,6 +176,7 @@
   import type { Following, User } from "@/stores/profilecounter";
   import axiosInstance from '@/services/axios';
   import { useChatStore } from '@/stores/chatcounter';
+  import Swal from 'sweetalert2';
   import joinChatRoom from '@/components/chat/SellChattingBox.vue'
 
   type Unfollowing = {
@@ -260,28 +261,43 @@
   }
 
   const updateFollowings = () => {
+    Swal.fire({
+    title: `팔로잉 명단을 수정합니다.`,
+    text: '정말 수정하시겠습니까?',
+    icon: 'question',
+    showDenyButton: true,
+    confirmButtonText: "수정",
+    denyButtonText: `취소`  
+  })
+  .then((result) => {
+    if (result.isConfirmed) {
+      axiosInstance.value({
+        headers: {
+          Authorization: `${store.token}`,
+          "Content-Type": 'application/json'
+        },
+    
+        method: 'DELETE',
+        url: `${BACK_API_URL}/profile/${loginUserId}/unfollow`,
+        data: {
+          "unfollowings": unfollow_list.value
+        }
+      })
+      .then((response) => {
+        console.log(response.data)
+        router.go(0)
+        Swal.fire({
+          title: '팔로잉 명단이 수정되었습니다.',
+          icon: 'success'
+        })
+      })
+      .catch((error)=> {
+        console.error(error)
+      })
+      showModal.value = false
+    } 
+  });
     // 이후 추가
-    axiosInstance.value({
-      headers: {
-        Authorization: `${store.token}`,
-        "Content-Type": 'application/json'
-      },
-
-      method: 'DELETE',
-      url: `${BACK_API_URL}/profile/${loginUserId}/unfollow`,
-      data: {
-        "unfollowings": unfollow_list.value
-      }
-    })
-    .then((response) => {
-      console.log(response.data)
-      alert("팔로잉 상태 수정 완료!")
-      router.go(0)
-    })
-    .catch((error)=> {
-      console.error(error)
-    })
-    showModal.value = false
   }
 
   const handlefollow = (following: Following, follow: boolean) => {
@@ -365,6 +381,24 @@
 
   onBeforeRouteUpdate((to,from)=> {
     store.getProfile(Number(to.params.id));
+    axiosInstance.value({
+      headers: {
+        Authorization: `${store.token}`
+      },
+      method: 'get',
+      url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
+    })
+    .then((response)=> {
+      console.log(response.data)
+      const res = response.data
+      followings_list.value = res.data['followings']
+      if(followings_list.value.some((following) => following.followingId == profileUser.value.id )){
+        myFollwing.value = true
+      }
+    })
+    .catch((error)=> {
+      console.error('요청실패: ',error)
+    })
   })
 
   onMounted(() => {

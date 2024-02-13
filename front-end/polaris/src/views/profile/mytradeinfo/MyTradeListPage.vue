@@ -7,26 +7,33 @@
         뒤로가기
       </button>
     </div>
-      <MyTradeList/>
+      <MyTradeList
+      :tradehistory="Tradehistory"
+      />
     </div>
 </template>
 
 <script setup lang="ts">
 import Navvar from '@/components/common/Navvar.vue'
 import MyTradeList from '@/components/profile/mytrade/MyTradeList.vue';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { profileCounterStore } from '@/stores/profilecounter';
 import axiosInstance from '@/services/axios';
 import { useRouter } from 'vue-router';
+import type { TradeInfo } from '@/stores/profilecounter';
+
+type TradeHistory = {
+  [key:number]: TradeInfo[]
+}
 
 const router = useRouter();
 const store = profileCounterStore();
-const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
+const Tradehistory = ref<TradeHistory>({})
+const loginUserId = Number(JSON.parse(localStorage.getItem('user_info')||"").id)
 
 const backtoProfile = () => {
     router.push({name: "ProfilePage"});
   }
-
 
 
 onMounted(()=> {
@@ -36,11 +43,20 @@ onMounted(()=> {
       "Content-Type": 'application/json'
     },
     method: 'get',
-    url: `${store.BACK_API_URL}/profile/${loginUserId}/trade-books`
+    url: `${store.BACK_API_URL}/trade/${loginUserId}/purchase_history`
 
   })
   .then((response) => {
     console.log(response.data)
+    const res = response.data.data['purchaseHistories']
+    res.forEach((trade:TradeInfo) => {
+      if(trade['tradeId'] in Tradehistory.value){
+        Tradehistory.value[trade['tradeId']].push(trade)
+      } else {
+        Tradehistory.value[trade['tradeId']] = [trade]
+      }
+    });
+    console.log(Tradehistory.value)
   })
   .catch((error)=> {
     console.error(error);
