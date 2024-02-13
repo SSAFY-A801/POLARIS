@@ -40,28 +40,27 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 		String accessToken = SecurityUtil.getAccessToken((HttpServletRequest)request);
 
 		// 2. 유효성 검사
-		if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
-			if (accessToken.length() > 150) {
-				if (redisTemplate.hasKey("blackList:" + accessToken).booleanValue())
-					throw new UserNotAuthorizedException("로그아웃 된 토큰입니다.");
+		// 로그아웃 된 토큰은 없는취급
+		if (Boolean.FALSE.equals(redisTemplate.hasKey("blackList:" + accessToken))) {
+			if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
+				// access Token의 경우
+				if (accessToken.length() > 150) {
+					Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
-				Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+					User user = userRepository.findUserByEmail(authentication.getName())
+						.orElseThrow(() -> new UserNotFoundException(""));
 
-				User user = userRepository.findUserByEmail(authentication.getName())
-					.orElseThrow(() -> new UserNotFoundException(""));
+					SecurityUser securityUser = new SecurityUser(user);
 
-				SecurityUser securityUser = new SecurityUser(user);
+					Authentication customAuthentication = new UsernamePasswordAuthenticationToken(
+						securityUser, "", securityUser.getAuthorities()
+					);
 
-				Authentication customAuthentication = new UsernamePasswordAuthenticationToken(
-					securityUser, "", securityUser.getAuthorities()
-				);
-
-				// securityContext에 전역 저장
-				SecurityContextHolder.getContext().setAuthentication(customAuthentication);
-			}
-			// TODO: refresh 에 대한 검사 추가
-			else {
-
+					// securityContext에 전역 저장
+					SecurityContextHolder.getContext().setAuthentication(customAuthentication);
+				} else {
+					// refresh 에 대한 검사를 여기에 추가할 수 있다.
+				}
 			}
 		}
 		chain.doFilter(request, response);
