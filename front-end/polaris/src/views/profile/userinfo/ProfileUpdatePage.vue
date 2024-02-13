@@ -74,7 +74,7 @@
 
 <script setup lang="ts">
   import Navvar from '@/components/common/Navvar.vue'
-  import { computed, onMounted, ref, watch } from 'vue';
+  import { computed, onMounted,onBeforeMount, ref, watch } from 'vue';
   import axiosInstance from '@/services/axios';
   import { useRouter, useRoute } from 'vue-router'
   import { profileCounterStore } from '@/stores/profilecounter';
@@ -212,11 +212,12 @@
       console.log(response.data)
       alert("프로필이 수정되었습니다.")
       store.getProfile(Number(route.params.id))
+      router.push({name: "ProfilePage"})
     })
     .catch((error) => {
       console.error(error)
     })
-      router.push({name: "ProfilePage"})
+      
     }
   } 
 
@@ -245,9 +246,10 @@
   }
   
   
-  onMounted(()=> {
+  onBeforeMount(()=> {
     getProfile(profileUser.value.id)
   })
+
 </script>
 
 <style scoped>

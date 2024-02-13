@@ -29,7 +29,7 @@
 
 
 <script setup lang="ts">
-import { onMounted, ref, watchEffect, computed } from 'vue'
+import { onBeforeMount, ref, watchEffect, computed } from 'vue'
 import axios, { AxiosError } from 'axios'
 import { useRouter } from 'vue-router'
 import { profileCounterStore } from '@/stores/profilecounter'
@@ -80,7 +80,7 @@ const getUserInfo = async() => {
   }
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   getUserInfo()
 })
 

@@ -312,9 +312,9 @@ const submitKakaoLogin = async () => {
     }}
 )
 .then(function (response) {
-  localStorage.setItem('user_token',(response.data.accessToken))
-  localStorage.setItem('refresh_token',(response.data.refreshToken))
-  localStorage.setItem('user_info' , JSON.stringify(response.data.userInfo))
+  localStorage.setItem('user_token',(response.data.data.access))
+  localStorage.setItem('refresh_token',(response.data.data.refresh))
+  localStorage.setItem('user_info' , JSON.stringify(response.data.data))
   const userStore = useUserStore()
   userStore.setLoginInfo(response.data.data)
   Swal.fire({
