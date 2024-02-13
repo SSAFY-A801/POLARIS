@@ -19,8 +19,8 @@
             <td>
               <div @click="goToProfile(data.receiverId)" class="profilecontainer">
               <div class="image-container">
-                <div class="profileimage">
-                  <img :src="data.profileUrl">
+                <div>
+                  <img class="profileimage" :src="data.profileUrl">
                   </div>
               </div>
               <div>{{ data.nickname }}</div>
@@ -160,7 +160,7 @@ const leaveButtonClick = async (chatroomId: number) => {
     border-radius: 50%;
     object-fit: cover;
     border: solid black 1px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     
   }
 

@@ -11,30 +11,45 @@
   </div>
   <div>
     <div class="bg-gray-50 shadow rounded-lg mb-8 mr-4 ml-4 mt-4 overflow-auto" style="width: 400px; height: 500px;">
+      <div class="flex flex-col">
+      <div v-for="(message, idx) in chatMessageList" :key="idx">
+      <div v-if="message.userId===Number(userId.id)" class="my-message max-w-[300px] rounded-lg bg-yellow-50">{{ message.message }}</div>
+      <div v-else class="other-message max-w-[300px] rounded-lg bg-green-50">{{ message.message }}</div>
+    </div>
+
+    <!-- <div v-for="(message, idx) in chatMessageList" :key="idx">{{ message.message }}</div> -->
       <div v-for="(item, idx) in recvList" :key="idx">
+        <div v-if="(item.userId ===Number(userId.id))" class="my-message max-w-[300px] rounded-lg bg-yellow-50">
+        <div>{{ item.message }}</div>
+      </div>
+      <div v-else class="other-message max-w-[300px] rounded-lg bg-green-50">
+        {{ item.message }}
+      </div>
         <!-- <h4>{{item.nickname}}</h4> -->
-        <div v-if="item.userId === Number(userId.id)" class="my-message max-w-[300px] rounded-lg bg-yellow-50">
+        <!-- <div v-if="item.userId === Number(userId.id)" class="my-message max-w-[300px] rounded-lg bg-yellow-50">
          <div>{{ item.message }}</div>
-        </div>
+        </div> -->
         <!-- <div v-else class="other-message max-w-[300px] rounded-lg bg-green-50">
           <div v-for="participant in ChatParticipant" :key="participant.chatRoomId">
           <div>여기에 닉네임이랑 프로필</div>
           </div>
           <div>{{ item.message }}</div>
         </div> -->
-        <div v-else class="other-message max-w-[300px] rounded-lg bg-green-50">
-  <div v-for="participant in ChatParticipant" :key="participant.chatRoomId">
+        <!-- <div v-else class="other-message max-w-[300px] rounded-lg bg-green-50"> -->
+  <!-- <div v-for="participant in ChatParticipant" :key="participant.chatRoomId"> -->
     <!-- <div v-if="participant.receiverId !== item.userId">{{ participant.receiverNickname }}</div> -->
     <!-- <img v-if="participant.receiverId !== item.userId" :src="participant.receiverProfileUrl" alt="Profile" /> -->
-  </div>
-  <div>{{ item.message }}</div>
-</div>
+    <!-- <div>{{ item.message }}</div> -->
+  <!-- </div> -->
+  
+<!-- </div> -->
 
       </div>
       <!-- <ConnectSocket/> -->
      <!-- <StartChatting/> -->
      <!-- <StartChat/> -->
     </div>
+  </div>
   </div>
   <div class="flex justify-center">
       <!-- <button class="inline-block rounded bg-maintheme1 h-8 px-2 py-1 text-sm font-medium text-white mr-3">img</button> -->
@@ -44,20 +59,26 @@
     </div>
   </div>
 </div>
-<div class="ml-10">
-  <MySellingBook/>
+  <div class="ml-10">
+    <div v-if="ChatParticipant?.tradeReceiverId === Number(userId.id)">
+      <MySellingBook/>
+    </div>
+    <div v-else>
+    <MyBuyingBook :books="chatRoomTradeBooks"/>
+    </div>
+  </div>
 </div>
 </div>  
-</div></div>
+</div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, defineExpose, computed } from 'vue';
+import { ref, onMounted, defineExpose, computed, watch, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import axiosInstance from '@/services/axios';
-
 import MySellingBook from './MySellingBook.vue';
+import MyBuyingBook from './MyBuyingBook.vue';
 // import ConnectSocket from './ConnectSocket.vue'
 // import StartChatting from './StartChatting.vue';
 // import StartChat from './StartChat.vue';
@@ -66,6 +87,8 @@ import MySellingBook from './MySellingBook.vue';
 // 참여자 조회 인터페이스
 interface ChatParticipantData {
   chatRoomId: number;
+  tradeSenderId: number;
+  tradeReceiverId: number;
   senderId: number;
   receiverId: number;
   receiverNickname: string;
@@ -75,20 +98,25 @@ interface ChatParticipantData {
 interface ChatParticipantResponse {
   status: number;
   message: string;
-  data: ChatParticipantData[];
+  data: ChatParticipantData;
 }
 
 // 채팅방 아이디 불러오기
-onMounted(() => {
-  console.log(route.params.chatroomId);
-  chatRoomId.value = Number(route.params.chatroomId);
+// onMounted(() => {
+//   console.log(route.params.chatroomId);
+//   chatRoomId.value = Number(route.params.chatroomId);
 
-});
+// });
 
-const ChatParticipant = ref<ChatParticipantData[] | null>(null);
+const ChatParticipant = ref<ChatParticipantData | null>(null);
+// const senderId = ref<number|null>(null);
+
 // 채팅방 참여자 조회
 onMounted(async () => {
     try {
+      console.log(route.params.chatroomId);
+      chatRoomId.value = Number(route.params.chatroomId);
+
       const token = ref(localStorage.getItem('user_token'))
       const response = await axiosInstance.value.get<ChatParticipantResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/${chatRoomId.value}`, {
         headers: {
@@ -98,6 +126,7 @@ onMounted(async () => {
       if (response.status === 200) {
         ChatParticipant.value = response.data.data;
         console.log(response.data.data)
+        // console.log(ChatParticipant.value)
 
       } else {
         console.error('API 요청 실패:', response.status);
@@ -197,25 +226,6 @@ const sendMessage = () => {
   }
 };
 
-// 수정된 도서 정보를 가져오기??? 
-// const getChatRoomTradeBooks = async () => {
-//   try {
-//     const response = await axiosInstance.value.get('https://i10a801.p.ssafy.io:8082/chat/get_chatRoomTradeBooks', {
-
-//     });
-
-//     if (response.status === 200) {
-//       chatRoomTradeBooks.value = response.data.chatRoomTradeBooks;
-//       console.log(chatRoomTradeBooks.value)
-//     } else {
-//       console.error('API 요청 실패:', response.status);
-//     }
-//   } catch (error) {
-//     console.error('API 요청 중 오류 발생:', error);
-//   }
-// };
-
-
 
 // 도서목록조회
 interface ChatRoomTradeBooks {
@@ -227,6 +237,98 @@ interface ChatRoomTradeBooks {
   price: number | null;
   seriesId: number | null;
 }
+
+//기존 채팅 메시지 조회
+interface ChatMessageListResponse {
+  status: number;
+  message: string;
+  data: {chatMessageList: ChatMessageList[];};
+  // data: ChatMessageList;
+  // data: ChatMessageList[];
+}
+
+interface ChatMessageList{
+  type: string;
+  chatRoomId: number;
+  userId: number;
+  nickname: string;
+  // createdAt: Date;
+  createdAt: string;
+  message: string;
+}
+// const chatMessageList = ref<ChatMessageList | null>(null);
+const chatMessageList = ref<ChatMessageList[]>();
+  onMounted(async () => {
+    try {
+      const token = ref(localStorage.getItem('user_token'))
+      const response = await axiosInstance.value.get<ChatMessageListResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/message/${chatRoomId.value}`, {
+        headers: {
+          'Authorization': token.value?.replace("\"", "")
+        } 
+      });
+      if (response.status === 200) {
+        // chatMessageList.value = response.data.data.chatMessageList;
+        chatMessageList.value = response.data.data.chatMessageList;  
+        console.log(chatMessageList.value)
+        console.log(response.data.data)
+        console.log(response.data)
+
+
+      } else {
+        console.error('API 요청 실패:', response.status);
+      }
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+    }
+  });
+
+// onMounted(async () => {
+//     try {
+//       const token = ref(localStorage.getItem('user_token'))
+//       const response = await axiosInstance.value.get<ChatMessageListResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/message/${chatRoomId.value}`, {
+//         headers: {
+//           'Authorization': token.value?.replace("\"", "")
+//         }
+//       });
+//       // if (response.status === 200) {
+//       //   chatMessageList.value = response.data.data.chatMessageList;
+//       //   // console.log(response.data.data)
+//       //   console.log('기존 메시지:', chatMessageList.value);
+      
+//       // if (response.data.data) {
+//       //   chatMessageList.value = response.data.data.chatMessageList;
+//       //   console.log('기존메시지', chatMessageList.value);
+//       // } else {
+//       //   console.log('response.data.data is null or undefined');
+//       // }
+//       if (response.status === 200) {
+//         console.log(response.data.data)
+//         // chatMessageList.value = response.data.data['chatMessageList'];
+//         // chatMessageList.value = (response.data.data as { chatMessageList: ChatMessageList[] })['chatMessageList'];
+//         chatMessageList.value = response.data.data.chatMessageList
+//         // chatMessageList.value = [...response.data.data];
+//         // chatMessageList.value = response.data.data;
+//         console.log('기존메시지', chatMessageList.value);
+
+//       } else {
+//         console.error('API 요청 실패:', response.status);
+//       }
+//     } catch (error) {
+//       console.error('API 요청 중 오류 발생:', error);
+//     }
+//   });
+
+//   const receiverId = ref<number | null>(null);
+// // console.log('ChatParticipant:', ChatParticipant.value);
+//   watch(ChatParticipant, (newValue) => {
+//     if (newValue !== null) {
+//       receiverId.value = newValue.receiverId;
+//       console.log('receiverId:', receiverId.value);
+
+//     }
+//   });
+
+
 </script>
 
 <style scoped>

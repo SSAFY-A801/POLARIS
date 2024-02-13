@@ -177,6 +177,7 @@
   import type { Following, User } from "@/stores/profilecounter";
   import axiosInstance from '@/services/axios';
   import { useChatStore } from '@/stores/chatcounter';
+  import joinChatRoom from '@/components/chat/SellChattingBox.vue'
 
   type Unfollowing = {
     followingId: number
@@ -387,6 +388,10 @@
 
   })
 
+// 채팅방 sse 연결시도
+defineExpose({
+  joinChatRoom
+});
 </script>
 
 <style scoped>
