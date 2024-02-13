@@ -1,5 +1,11 @@
 package com.ssafy.polaris.chat.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +33,8 @@ public class SseController {
 	private final SseServiceImpl sseService;
 	private final ChatSaveServiceImpl chatRedisCacheService;
 
+	private final Map<Long, List<SseEmitter>> chatRooms = new ConcurrentHashMap<>();
+
 	/**
 	 * 채팅방에 입장하기 위해 connect emitter를 생성합니다.
 	 * @param chatRoomId
@@ -37,7 +45,7 @@ public class SseController {
 	public ResponseEntity<SseEmitter> connect(@PathVariable(value = "chatRoomId") Long chatRoomId , HttpServletResponse response) {
 		// SseEmitter emitter = new SseEmitter(30*60*1000L); // 30분 으로 설정 - 통신 객체를 만든다.
 		// 서버에 저장하고 있기
-		SseEmitter connection = sseService.connection(chatRoomId, response);
+		// SseEmitter connection = sseService.connection(chatRoomId, response);
 
 		// emitter를 생성하고 나서 만료시간까지 아무런 데이터도 보내지 않으면 재연결 요청 시 503 에러 발생할 수 있음
 		// 그래서 처음 연결 시 더미데이터를 전달해주는 것이 안전함.
@@ -49,7 +57,14 @@ public class SseController {
 		// 	throw new RuntimeException(e);
 		// }
 
-		return ResponseEntity.ok(connection);
+		SseEmitter emitter = new SseEmitter(60*60*1000L);
+		List<SseEmitter> emitters = chatRooms.getOrDefault(chatRoomId, new ArrayList<>());
+		emitters.add(emitter);
+		chatRooms.put(chatRoomId, emitters);
+		emitter.onCompletion(() -> emitters.remove(emitter));
+		emitter.onTimeout(()-> emitters.remove(emitter));
+
+		return ResponseEntity.ok(emitter);
 	}
 
 	/**
@@ -65,17 +80,27 @@ public class SseController {
 		chatRedisCacheService.saveChatMessage(chatMessageSaveDto);
 
 		// 메세지 sse로 보내기
-		sseService.sendMessage(chatRoomId, chatMessageSaveDto);
+		// sseService.sendMessage(chatRoomId, chatMessageSaveDto);
+
+		List<SseEmitter> emitters = chatRooms.get(chatRoomId);
+		if (emitters != null){
+			emitters.forEach( emitter -> {
+				System.out.println("emiiter" + emitter.toString());
+				try{
+					emitter.send(SseEmitter.event()
+						.id(String.valueOf(chatRoomId))
+						.name("message")
+						.data(chatMessageSaveDto, MediaType.APPLICATION_JSON));
+
+				} catch (IOException e){
+					e.printStackTrace();
+				}
+			});
+		}
 
 		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
 			StatusCode.SUCCESS_SEND_MESSAGE
 		);
 	}
-
-	// @PostMapping("/count")
-	// public ResponseEntity<Void> count() {
-	// 	sseEmitters.count();
-	// 	return ResponseEntity.ok().build();
-	// }
 }
