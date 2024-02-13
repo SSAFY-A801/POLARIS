@@ -24,7 +24,7 @@ const token = ref(localStorage.getItem('user_token'))
 
 const instance = axios.create({
   baseURL,
-  timeout: 10000,
+  timeout: 50000,
   headers: { 'Authorization': token.value?.replace("\"", "") },
 });
 
