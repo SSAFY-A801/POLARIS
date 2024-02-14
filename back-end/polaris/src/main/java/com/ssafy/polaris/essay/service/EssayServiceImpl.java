@@ -108,7 +108,8 @@ public class EssayServiceImpl implements EssayService {
 			+ "	join fetch e.user "
 			+ "	left join fetch e.userBook "
 			+ " left join fetch e.userBook.book "
-			+ "where e.isOpened is true ";
+			+ "where e.isOpened is true "
+			+ "	and e.deletedAt is null ";
 
 		searchConditions.setWord(searchConditions.getWord().trim());
 		boolean isNotSearch = searchConditions.getWord() == null || searchConditions.getWord().equals("");
