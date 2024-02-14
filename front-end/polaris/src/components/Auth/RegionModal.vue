@@ -58,7 +58,7 @@ const regionInputCode = ref('')
 const emit = defineEmits(['confirm'])
 
 const confirmRegion = () => {
-  console.log('modal:',{ name: regionInputName.value, code: regionInputCode.value })
+  // console.log('modal:',{ name: regionInputName.value, code: regionInputCode.value })
   emit('confirm', { name: regionInputName.value, code: regionInputCode.value } )
 }
 
@@ -72,7 +72,7 @@ const dongList = ref<Region[]>([])
 
 watchEffect(async () => {
   if (selectedSido.value) {
-    console.log(selectedSido.value)
+    // console.log(selectedSido.value)
     await axios.get(`https://i10a801.p.ssafy.io:8082/regcode/gugun?sido=${selectedSido.value.name}`, {
     headers: {
     "Content-Type": "application/json",
@@ -99,7 +99,7 @@ watchEffect(async () => {
 
 watchEffect(() => {
   if (selectedSido.value && selectedGugun.value && selectedDong.value) {
-    console.log(selectedSido.value)
+    // console.log(selectedSido.value)
     regionInputName.value = `${selectedSido.value.name} ${selectedGugun.value.name} ${selectedDong.value.name}`
     regionInputCode.value = selectedDong.value.code.toString()
   }

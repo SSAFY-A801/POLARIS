@@ -193,7 +193,7 @@ watchEffect(() => {
 
 //퀴리 타입
 const queryType = ref('')
-console.log(queryType.value)
+// console.log(queryType.value)
 
 //검색어
 const keyword = ref('')
@@ -228,9 +228,9 @@ const bookSearch = async () => {
 
   await axios.get('https://i10a801.p.ssafy.io:8082/book/search', { params })
     .then(function (response) {
-        console.log(response.data.data.searchBooks)
+        // console.log(response.data.data.searchBooks)
         booksearchResultList.value = response.data.data.searchBooks
-        console.log('booksearchResult.value', booksearchResultList.value)
+        // console.log('booksearchResult.value', booksearchResultList.value)
 
 
     })
