@@ -1,7 +1,12 @@
 <template>
   <div class="grid grid-cols-12 p-2 border-b items-center">
     <div class="col-span-1">
-      <img id="profile-image" :src="props.comment.user.profileUrl" alt="">
+      <button v-if="token && loginUserId" @click="gotoProfile">
+        <img id="profile-image" :src="props.comment.user.profileUrl" alt="">
+      </button>
+      <div v-else>
+        <img id="profile-image" :src="props.comment.user.profileUrl" alt="">
+      </div>
     </div>
     <div class="col-span-11">
       <div id="nickname">{{ props.comment.user.nickname }}</div>
@@ -9,10 +14,12 @@
       <div v-else>{{ props.comment.comment }}</div>
       <div id="createdAt">
         {{ props.comment.createdAt.toString().split('T')[0] }}
-        <button @click="clicktoEdit" id="edit-comment" v-if="!isEdited && props.comment.user.id == Number(loginUserId)">수정</button>
-        <button @click="editComment" id="edit-comment" v-if="isEdited && props.comment.user.id == Number(loginUserId)">수정 완료</button>
-        <button @click="cancelEdit" id="edit-comment" v-if="isEdited && props.comment.user.id == Number(loginUserId)">취소</button>
-        <button @click="deleteComment" id="delete-comment" v-if="!isEdited && props.comment.user.id == Number(loginUserId)">삭제</button>
+        <div v-if="token && loginUserId">
+          <button @click="clicktoEdit" id="edit-comment" v-if="!isEdited && props.comment.user.id == Number(loginUserId)">수정</button>
+          <button @click="editComment" id="edit-comment" v-if="isEdited && props.comment.user.id == Number(loginUserId)">수정 완료</button>
+          <button @click="cancelEdit" id="edit-comment" v-if="isEdited && props.comment.user.id == Number(loginUserId)">취소</button>
+          <button @click="deleteComment" id="delete-comment" v-if="!isEdited && props.comment.user.id == Number(loginUserId)">삭제</button>
+        </div>
       </div>
     </div>
   </div>
@@ -21,10 +28,13 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { profileCounterStore } from '@/stores/profilecounter';
+  import { useRouter } from 'vue-router';
   import axios from 'axios';
 
+  const router = useRouter();
+  const token = localStorage.getItem('user_token')
   const store = profileCounterStore();
-  const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
+  const loginUserId = JSON.parse(localStorage.getItem('user_info') || '{}').id || null;
   const props = defineProps(['comment'])
   const isEdited = ref(false)
   const commentContext = ref(props.comment.comment)
@@ -32,6 +42,10 @@
     (e: 'editComment', id: number, user: number): void
     (e: 'deleteComment', id: number, user: number): void
   }>()
+
+  const gotoProfile = () => {
+    router.push({name: 'ProfilePage', params: {id: props.comment.user.id}})
+  }
 
   const clicktoEdit = () => {
     isEdited.value = !isEdited.value

@@ -186,22 +186,36 @@
   const route = useRoute();
   const store = profileCounterStore();
   const profileUser = computed(()=> {
-    return store.profileUser
-  })
-
-  watch(store.profileUser,(newValue)=> {
-    console.log(newValue)
+    if(store.profileUser){
+      return store.profileUser
+    } else {
+      return {
+        id: 9999,
+        profileUrl: "",
+        nickname: "기본 닉네임",
+        regcode: {
+          id:0,
+          si: "",
+          gungu: "",
+          dong: ""
+        },
+        introduction: "기본 설명",
+        tradingCnt: 0,
+        exchangeCnt: 0,
+        followingsCnt: 0,
+      }
+    }
   })
   const followings_list = ref<Following[]>([])
   // 현재 접속자와 현재 profileuser의 id 일치 여부
   // 나의 팔로잉 명단 중에서 profileuser의 id가 있는지 여부
   const myFollwing = ref<boolean>(false)
-  const loginUserId = ref(JSON.parse(localStorage.getItem('user_info')||"").id)
+  const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
   const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
   const unfollow_list = ref<Unfollowing[]>([])
   const isMe = computed(()=> {
-    return profileUser.value.id == Number(loginUserId.value)
+    return profileUser.value.id == Number(loginUserId)
   })
 
 
@@ -214,7 +228,7 @@
       },
 
       method: 'post',
-      url: `${BACK_API_URL}/profile/${loginUserId.value}/follow`,
+      url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
       data: {
         followingId: user.id
       }
@@ -236,7 +250,7 @@
       },
 
       method: 'delete',
-      url: `${BACK_API_URL}/profile/${loginUserId.value}/unfollow`,
+      url: `${BACK_API_URL}/profile/${loginUserId}/unfollow`,
       data: {
         "unfollowings": [{followingId: profileUser.value.id},]
       }
@@ -282,7 +296,7 @@
         },
     
         method: 'DELETE',
-        url: `${BACK_API_URL}/profile/${loginUserId.value}/unfollow`,
+        url: `${BACK_API_URL}/profile/${loginUserId}/unfollow`,
         data: {
           "unfollowings": unfollow_list.value
         }
@@ -329,7 +343,7 @@
 
 
   const gotoMychatList = () => {
-    router.push({name: "chat", params:{id:loginUserId.value}});
+    router.push({name: "chat", params:{id:loginUserId}});
   }
 
   const chatStore = useChatStore();
@@ -390,7 +404,7 @@
         Authorization: `${store.token}`
       },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${loginUserId.value}/follow`,
+      url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
     })
     .then((response)=> {
       console.log(response.data)
@@ -407,14 +421,14 @@
 
   onMounted(() => {
     store.getProfile(Number(route.params.id));
-    // console.log(isMe.value)
+    console.log(isMe.value)
     // // following 명단 호출
     axiosInstance.value({
       headers: {
         Authorization: `${store.token}`
       },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${loginUserId.value}/follow`,
+      url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
     })
     .then((response)=> {
       console.log(response.data)

@@ -86,33 +86,19 @@ export type TradeInfo =  {
 
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
-  const token = ref(JSON.parse(localStorage.getItem('user_info')||"").id);
+  const token = computed(()=> {
+    return localStorage.getItem('user_token')
+  }) || null;
   
-  // const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
   const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
-  
+
 
   
   // ProfilePage
   // 접속자
   
   // 프로필 유저
-  const profileUser = ref<User>({
-    id: 1,
-    profileUrl:"https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2023/07/28/05455ec6-dec5-4016-81b4-97e568c8e249.jpg",
-    nickname: "김연아",
-    regcode: {
-      id: 2629010700,
-      si: "경기도",
-      gungu: "군포시",
-      dong: "군포2동"
-    },
-    introduction: "스케이트 저보다 잘타시면 네고 허락해드립니다.",
-    tradingCnt: 12,
-    exchangeCnt: 10,
-    followingsCnt: 8,
-  });
-  
+  const profileUser = ref<User|null>(null);
   
 
   watch(profileUser, (newValue, oldValue) => {
@@ -278,7 +264,6 @@ const getMybookList = (id:string)=> {
   }
   return { 
     profileUser, getProfile,
-    // loginUserId,isMe,
     searchAPIbookList, BACK_API_URL, token,
     getMyscraps, myscraps,
     getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }

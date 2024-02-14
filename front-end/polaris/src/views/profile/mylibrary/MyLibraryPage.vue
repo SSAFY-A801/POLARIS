@@ -89,7 +89,7 @@ const profileUser = computed(()=> {
 const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
 const loginUser = JSON.parse(userInfoString.value)
 const isMe = computed(() => {
-  return profileUser.value.id == loginUser.id
+  return profileUser.value?.id == loginUser.id
 })
 
 const mybookList = computed(()=> {

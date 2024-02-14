@@ -68,7 +68,6 @@ const isOpened = ref(true)
 const router = useRouter();
 const selectedBook = ref<Book|null>(null)
 const content = ref(``)
-const userToken = localStorage.getItem('user_token')
 
 
 const writeEssay = () => {
@@ -110,19 +109,6 @@ const toggleOpened = () => {
   }
 
 
-router.beforeEach((to,from,next) => {
-  if(to.name !== 'login'){
-    if(!userToken){
-        if(to.name == 'essaycreate'){
-          Swal.fire({
-            title: "로그인이 필요한 작업입니다.",
-            icon: 'error'
-          })
-        next({name: 'login'})
-      }
-    } 
-  }
-})
 
 
 onMounted(()=> {
