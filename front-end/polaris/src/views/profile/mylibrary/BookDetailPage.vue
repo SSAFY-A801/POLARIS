@@ -254,7 +254,7 @@
     if (!(bookDetail.value.isOwned && bookDetail.value.isOpened)){
       bookDetail.value.userBookTradeType = "UNDEFINED"
     }
-    console.log(bookDetail.value.userBookTradeType)
+    // console.log(bookDetail.value.userBookTradeType)
     axiosInstance.value({
       headers: {
         Authorization: `${store.token}`,
@@ -272,7 +272,7 @@
       }
     })
     .then((response)=>{
-      console.log(response.data)
+      // console.log(response.data)
       Swal.fire({
         title: '수정이 완료되었습니다.',
         icon: 'success'
@@ -346,7 +346,7 @@
       }
     })
     .then((response)=>{
-      console.log(response.data)
+      // console.log(response.data)
       getMybook.value = true
       Swal.fire({
         title: '해당 도서를 내 서재로 옮겼습니다.',
@@ -372,7 +372,7 @@
 
     })
     .then((response)=> {
-      console.log(response.data)
+      // console.log(response.data)
       const bookinfo = response.data['data']
       bookDetail.value = bookinfo
       if(mybookList.value.some((mybook) => mybook.isbn == bookDetail.value.isbn)){

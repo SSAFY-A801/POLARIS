@@ -1,6 +1,6 @@
-import { ref, computed, watch, watchEffect } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
-// import axios from 'axios';
+import axios from 'axios';
 import axiosInstance from '@/services/axios'
 import Swal from 'sweetalert2'
 
@@ -87,9 +87,7 @@ export type TradeInfo =  {
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
   const token = ref(localStorage.getItem('user_token') || null);
-  
   const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
-
 
   
   // ProfilePage
@@ -121,18 +119,7 @@ export const profileCounterStore = defineStore('counter', () => {
       console.error("에러발생: ",error)
     })
   }
-  
-  
-  
-  // ProfileUdpatePage
-  // const isMe = computed(()=> {
-  //   return profileUser.value.id == Number(loginUserId.value)
-  // });
 
-
-  // MyEssayPage
-  // MyTradeListPage
-  // MyExchangeListPage
   // MyScrapsPage
   const myscraps = ref([])
   const getMyscraps = (id: string) => {
@@ -146,7 +133,7 @@ export const profileCounterStore = defineStore('counter', () => {
         url: `${BACK_API_URL}/essay/${id}/scraps`
       })
       .then((response) => {
-        console.log(response.data)
+        // console.log(response.data)
         const res = response.data.data
         if(res){
           myscraps.value = res.scrapPosts
@@ -193,7 +180,7 @@ export const profileCounterStore = defineStore('counter', () => {
         url: `${BACK_API_URL}/api/search?query=${query}&queryType=${queryType.value}`
       })
       .then((response)=>{
-        console.log(response.data)
+        // console.log(response.data)
         const data = response.data['item']
         const searchBooks = ref<Searchbook[]>([])
         if (data.length){
@@ -217,8 +204,11 @@ export const profileCounterStore = defineStore('counter', () => {
           })
           searchbookLists.value = searchBooks.value
         } else {
-          alert("검색목록을 불러올 수 없습니다.\n다른 검색어로 시도하세요.")
-        }
+          Swal.fire({
+            title:"검색목록을 불러올 수 없습니다.\n다른 검색어로 시도하세요.",
+            icon:'error'
+        })
+      }
       })
       .catch((error)=>{
         console.error(error)

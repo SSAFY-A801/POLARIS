@@ -121,7 +121,7 @@
   } else {
     isValidNickname.value = false;
   }
-  console.log(newNickname == profileUser.value!.nickname)
+  // console.log(newNickname == profileUser.value!.nickname)
 });
 
 
@@ -216,7 +216,7 @@
       data: profileData,
     })
     .then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
       Swal.fire({
         title: '프로필이 수정되었습니다.',
         icon: 'success'

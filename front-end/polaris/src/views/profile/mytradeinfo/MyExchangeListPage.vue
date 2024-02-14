@@ -7,9 +7,14 @@
         뒤로가기
       </button>
     </div>
-    <MyExchangeList
-    :exchangehistory="Exchangehistory"
-    />
+    <div v-if="Object.keys(Exchangehistory).length">
+      <MyExchangeList
+      :exchangehistory="Exchangehistory"
+      />
+    </div>
+    <div v-else class="text-center mt-10 text-xl">
+        교환 내역이 존재하지 않습니다.
+      </div>
   </div>
 </template>
 
@@ -47,7 +52,7 @@ onMounted(()=> {
     url: `${store.BACK_API_URL}/trade/${loginUserId}/exchange_history`
   })
   .then((response) => {
-    console.log(response.data)
+    // console.log(response.data)
     const res = response.data.data['exchangeHistories']
     res.forEach((exchange:ExchangeInfo) => {
       if(exchange['tradeId'] in Exchangehistory.value){
@@ -56,7 +61,7 @@ onMounted(()=> {
         Exchangehistory.value[exchange['tradeId']] = [exchange]
       }
     });
-    console.log(Exchangehistory.value)
+    // console.log(Exchangehistory.value)
   })
   .catch((error)=> {
     console.error(error);

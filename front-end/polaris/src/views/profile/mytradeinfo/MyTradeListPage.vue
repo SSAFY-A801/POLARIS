@@ -6,10 +6,15 @@
       <button @click="backtoProfile" id="goback">
         뒤로가기
       </button>
-    </div>
-      <MyTradeList
-      :tradehistory="Tradehistory"
-      />
+      </div>
+      <div v-if="Object.keys(Tradehistory).length > 0">
+        <MyTradeList
+        :tradehistory="Tradehistory"
+        />
+      </div>
+      <div v-else class="text-center mt-10 text-xl">
+        판매/구매 내역이 존재하지 않습니다.
+      </div>
     </div>
 </template>
 
@@ -26,8 +31,8 @@ type TradeHistory = {
   [key:number]: TradeInfo[]
 }
 
-const router = useRouter();
 
+const router = useRouter();
 const store = profileCounterStore();
 const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
 const Tradehistory = ref<TradeHistory>({})
@@ -46,7 +51,7 @@ onMounted(()=> {
 
   })
   .then((response) => {
-    console.log(response.data)
+    // console.log(response.data)
     const res = response.data.data['purchaseHistories']
     res.forEach((trade:TradeInfo) => {
       if(trade['tradeId'] in Tradehistory.value){
@@ -55,7 +60,7 @@ onMounted(()=> {
         Tradehistory.value[trade['tradeId']] = [trade]
       }
     });
-    console.log(Tradehistory.value)
+    // console.log(Tradehistory.value)
   })
   .catch((error)=> {
     console.error(error);

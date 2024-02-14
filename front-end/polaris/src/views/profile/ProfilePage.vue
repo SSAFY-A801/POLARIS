@@ -214,7 +214,7 @@
   const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
   const unfollow_list = ref<Unfollowing[]>([])
-  const isMe = computed(()=> {
+    const isMe = computed(()=> {
     return profileUser.value.id == Number(loginUserId)
   })
 
@@ -234,7 +234,7 @@
       }
     })
     .then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
       myFollwing.value = !myFollwing.value
     })
     .catch((error)=> {
@@ -256,7 +256,7 @@
       }
     })
     .then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
       myFollwing.value = !myFollwing.value
 
     })
@@ -302,7 +302,7 @@
         }
       })
       .then((response) => {
-        console.log(response.data)
+        // console.log(response.data)
         router.go(0)
         Swal.fire({
           title: '팔로잉 명단이 수정되었습니다.',
@@ -326,7 +326,7 @@
     } else {
       unfollow_list.value = unfollow_list.value.filter((user)=> user.followingId != following.followingId)
     }
-    console.log(unfollow_list.value)
+    // console.log(unfollow_list.value)
   }
 
   // button 클릭
@@ -407,7 +407,7 @@
       url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
     })
     .then((response)=> {
-      console.log(response.data)
+      // console.log(response.data)
       const res = response.data
       followings_list.value = res.data['followings']
       if(followings_list.value.some((following) => following.followingId == profileUser.value.id )){
@@ -431,7 +431,7 @@
       url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
     })
     .then((response)=> {
-      console.log(response.data)
+      // console.log(response.data)
       const res = response.data
       followings_list.value = res.data['followings']
       if(followings_list.value.some((following) => following.followingId == profileUser.value.id )){

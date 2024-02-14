@@ -126,7 +126,9 @@
 <script setup lang="ts">
 import Navvar from '@/components/common/Navvar.vue'
 import { ref, watchEffect } from 'vue'
+import { useRouter } from 'vue-router';
 import axios from 'axios'
+import Swal from 'sweetalert2';
 
 //위치 필터
 interface Region {
@@ -134,6 +136,7 @@ interface Region {
   name: string
 }
 
+const router = useRouter();
 const regionInputName = ref('')
 const regionInputCode = ref('')
 
@@ -145,6 +148,26 @@ const selectedDong = ref<Region | null>(null)
 const sidoList = ref<Region[]>([])
 const gugunList = ref<Region[]>([])
 const dongList = ref<Region[]>([])
+
+
+router.beforeEach((to, from, next) => {
+  // 내부에 선언
+  const userToken = localStorage.getItem('user_token')
+  if (to.name === 'BookDetailPage' && !userToken) {
+    // 'BookDetailPage' 라우트이면서 userToken이 없는 경우
+    Swal.fire({
+      title: "로그인이 필요한 작업입니다.",
+      icon: 'error'
+    }).then(() => {
+      next({ path: '/login' });
+    });
+  } else {
+    // 'BookDetailPage' 이외의 다른 라우트 또는 'BookDetailPage'이지만 userToken이 있는 경우
+    next();
+  }
+});
+
+
 
 watchEffect(async () => {
   if (selectedSido.value) {

@@ -111,7 +111,7 @@ watch(mybookList, (newValue) => {
 
 
 const deleteBookList = computed(()=> {
-  console.log(deleteBookList.value)
+  // console.log(deleteBookList.value)
   return store.deleteBookList
 })
 
@@ -125,8 +125,6 @@ const keywordSearch = (keyword:string) => {
         icon: 'error'
       })
   } else {
-    // 고민된다..... 만약 검색 후 
-    // 다시 또 검색을 하면 검색대상을 어떻게 해야 할지..
     // 1. 전체목록으로 다시 초기화한 후에 키워드 검색
     filterMybook.value = mybookList.value
     // console.log(filterMybook.value)
@@ -186,12 +184,12 @@ const deleteBooks = () => {
         }
       })
       .then((response)=> {
-        console.log(response.data)
+        // console.log(response.data)
         router.go(0)
       })
       .catch((error)=> {
         console.error(error)
-        Swal.fire(`도서 삭제에 실패했습니다.`, "", "error");
+        Swal.fire(`도서 삭제에 실패했습니다.\n다시 시도해주세요.`, "", "error");
     })
       store.deleteBookList = []
       selectValue.value = "전체도서"
@@ -226,7 +224,7 @@ const deleteState = computed(() => {
 
 // 서재 목록 변경 watch
 watch(store.mybookLists, (newValue, oldValue) => {
-    console.log('내 서재 목록 변경:', oldValue, '->', newValue);
+    // console.log('내 서재 목록 변경:', oldValue, '->', newValue);
   });
 
 onMounted(()=> {
@@ -235,7 +233,7 @@ onMounted(()=> {
   store.deleteBookList = []
   store.deletebuttonState = false
   store.getMybookList(route.params.id as string);
-  console.log(mybookList.value)
+  // console.log(mybookList.value)
 })
 </script>
 

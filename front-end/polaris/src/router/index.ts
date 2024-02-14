@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import Swal from 'sweetalert2';
 // 메인 기능
 import MainPage from '@/views/MainPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
@@ -195,3 +196,20 @@ const router = createRouter({
 })
 
 export default router
+
+router.beforeEach((to, from, next) => {
+  // 내부에 선언
+  const userToken = localStorage.getItem('user_token')
+  if ((to.path.startsWith('/profile') || to.name === 'essaycreate') && !userToken) {
+    // 'ProfilePage' 라우트이면서 userToken이 없는 경우
+    Swal.fire({
+      title: "로그인이 필요한 작업입니다.",
+      icon: 'error'
+    }).then(() => {
+      next({ path: '/login' });
+    });
+  } else {
+    // 'ProfilePage' 이외의 다른 라우트 또는 'ProfilePage'이지만 userToken이 있는 경우
+    next();
+  }
+});

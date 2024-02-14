@@ -44,7 +44,7 @@
 import Navvar from '@/components/common/Navvar.vue'
 import { onMounted, ref, computed, watch } from 'vue';
 import Editor from '../../components/essay/TiptapEditor.vue';
-import { onBeforeRouteUpdate, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { profileCounterStore } from '@/stores/profilecounter';
 import type { Book } from '@/stores/profilecounter';
 import axiosInstance from '@/services/axios';
@@ -52,7 +52,6 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 const profileStore = profileCounterStore();
-const getMybookList = profileStore.getMybookList
 const loginUserId = ref("")
 const mybookList = ref<Book[]>([])
 const token = ref(localStorage.getItem('user_token'));
@@ -86,7 +85,7 @@ const writeEssay = () => {
     }
   })
   .then((response) => {
-    console.log(response.data)
+    // console.log(response.data)
     const essaydetail = response.data.data
     Swal.fire({
       icon: 'success',

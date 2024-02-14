@@ -57,7 +57,7 @@
   }
 
   const editComment = () => {
-    console.log(commentContext.value)
+    // console.log(commentContext.value)
     axios({
       headers: {
         Authorization: `${store.token}`,
@@ -71,7 +71,7 @@
       }
     })
     .then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
       emit('editComment', props.comment.id, props.comment.user.id)
       isEdited.value = !isEdited.value
     })
@@ -95,7 +95,7 @@
       }
     })
     .then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
       emit('deleteComment', props.comment.id, props.comment.user.id)
     })
     .catch((error) => {
