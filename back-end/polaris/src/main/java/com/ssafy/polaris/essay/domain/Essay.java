@@ -48,7 +48,7 @@ public class Essay extends BaseEntity {
 	private Long userId;
 
 	@NotNull
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name = "user_book_id", updatable = false, insertable = false)
 	private UserBook userBook;
 
