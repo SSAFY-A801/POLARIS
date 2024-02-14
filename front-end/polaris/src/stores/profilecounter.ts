@@ -86,9 +86,7 @@ export type TradeInfo =  {
 
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
-  const token = computed(()=> {
-    return localStorage.getItem('user_token')
-  }) || null;
+  const token = ref(localStorage.getItem('user_token') || null);
   
   const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
 
