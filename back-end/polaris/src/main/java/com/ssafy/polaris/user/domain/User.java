@@ -66,7 +66,7 @@ public class User extends BaseEntity {
 
 	@NotNull
 	@Column(length = 10000)
-	@ColumnDefault(value = "기본 프로필 url")
+	@ColumnDefault(value = "https://polaris-bucket.s3.amazonaws.com/polaris_logo.png")
 	private String profileUrl;
 
 	@NotNull
