@@ -11,8 +11,6 @@ import com.ssafy.polaris.chat.dto.ChatMessageSaveDto;
 
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
 
-	// List<ChatMessage> findTop100ByTrade_IdOrderByCreatedAtAsc(Long chatRoomId);
-
 	@Query(value =
 	"SELECT "+
 		"new com.ssafy.polaris.chat.dto.ChatMessageSaveDto ( " +
@@ -29,14 +27,5 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
 		"ORDER BY cm.createdAt"
 	)
 	List<ChatMessageSaveDto> getTop100ChatMessages(@Param(value = "chatRoomId") Long chatRoomId);
-
-
-	// @Query("select new com.ssafy.polaris.book.dto.SearchUserBookResponseDto(ub.id, ub.user.id, " +
-	// 	" ub.user.nickname, ub.user.regcode, b.isbn, b.title," +
-	// 	"b.author, b.cover, ub.userBookTradeType) " +
-	// 	"from UserBook ub " +
-	// 	"left join Book b on ub.book.isbn = b.isbn " +
-	// 	"left join User u on u.id = ub.user.id ")
-	// List<SearchUserBookResponseDto> searchAll();
 
 }

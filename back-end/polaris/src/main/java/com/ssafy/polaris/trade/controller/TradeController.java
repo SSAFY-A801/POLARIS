@@ -45,7 +45,7 @@ public class TradeController {
 	@GetMapping(path = "/exchange_books")
 	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getExchangeBookList(
 		@AuthenticationPrincipal SecurityUser securityUser) {
-		// TODO : userId 토큰에서 가져오기
+
 		Long userId = securityUser.getId();
 
 		TradeBookListResponseDto tradeBookListResponseDto = tradeService.getExchangeBookList(userId);
@@ -70,7 +70,7 @@ public class TradeController {
 	@GetMapping(path = "/purchase_books")
 	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getPurchaseBookList(
 		@AuthenticationPrincipal SecurityUser securityUser) {
-		// TODO : userId 토큰에서 가져오기
+
 		Long userId = securityUser.getId();
 
 		TradeBookListResponseDto tradeBookListResponseDto = tradeService.getPurchaseBookList(userId);
@@ -96,7 +96,6 @@ public class TradeController {
 	 */
 	@PatchMapping("/{chatRoomId}")
 	public ResponseEntity<DefaultResponse<Void>> completeTrade(@PathVariable("chatRoomId") Long chatRoomId) {
-		System.out.println(" controller - complete trade ");
 		tradeService.completeTrade(chatRoomId);
 		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,

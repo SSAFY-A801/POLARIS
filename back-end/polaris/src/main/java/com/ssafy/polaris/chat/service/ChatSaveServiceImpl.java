@@ -34,19 +34,13 @@ public class ChatSaveServiceImpl implements ChatSaveService {
 		 chatRedisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(ChatMessageSaveDto.class));
 		 chatRedisTemplate.opsForList().rightPush("CHAT_MESSAGE_"+String.valueOf(chatMessageSaveDto.getChatRoomId()), chatMessageSaveDto);
 
-		 // 1시간 마다 메세지 캐싱을 없애도록 설정
+		 // 일주일 마다 메세지 캐싱을 없애도록 설정
 		 chatRedisTemplate.expire("CHAT_MESSAGE_"+String.valueOf(chatMessageSaveDto.getChatRoomId()), 7, TimeUnit.DAYS);
 
-//		 System.out.println("redis----");
-//		 List<ChatMessageSaveDto> list = chatRedisTemplate.opsForList().range("CHAT_MESSAGE_71", 0, -1);
-//		 for (ChatMessageSaveDto dto : list){
-//		 	System.out.println(dto.getChatRoomId()+" " + dto.getCreatedAt()+" "+ dto.getUserId()+" "+dto.getMessage());
-//		 }
 	}
 
 	@Override
 	public ChatMessageListResponseDto loadMessage(Long chatRoomId) {
-		System.out.println("load message - serviceimpl");
 		List<ChatMessageSaveDto> chatMessageList = new ArrayList<>();
 
 		// redis에서 해당 채팅방의 메시지 100개 가져오기
@@ -54,7 +48,6 @@ public class ChatSaveServiceImpl implements ChatSaveService {
 
 		// Redis 에서 가져온 메시지가 없다면, DB 에서 메시지 100개 가져오기
 		if (redisMessageList == null || redisMessageList.isEmpty()) {
-			System.out.println("empty redis");
 			chatMessageList = chatMessageRepository.getTop100ChatMessages(chatRoomId);
 		} else{
 			chatMessageList.addAll(redisMessageList);

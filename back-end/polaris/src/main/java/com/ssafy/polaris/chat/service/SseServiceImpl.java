@@ -26,25 +26,10 @@ public class SseServiceImpl implements SseService{
 
 	@Override
 	public SseEmitter connection(Long chatRoomId, HttpServletResponse response) {
-		System.out.println("sconnection service");
-		// List<SseEmitter> emitters = emitterRepository.findEmittersById(chatRoomId);
+		System.out.println("connection service");
 
-		// if (emitter == null){
-		// SseEmitter emitter = emitterRepository.save(chatRoomId, new SseEmitter(60*60*1000L));
-		// }
-
-		// System.out.println(emitter);
-		// SseEmitter emitter = emitterRepository.save(chatRoomId, new SseEmitter(60*60*1000L));
 		response.setHeader("X-Accel-Buffering", "no");
 		SseEmitter emitter = emitterRepository.save(chatRoomId, new SseEmitter(60*60*1000L));
-
-		// List<SseEmitter> emitters = emitterRepository.findEmittersById(chatRoomId);
-
-		// emitter.onCompletion(() -> emitterRepository.deleteAllStartByWithId(id));
-		// emitter.onTimeout(() -> emitterRepository.deleteAllStartByWithId(id));
-		// emitter.onError((e) -> emitterRepository.deleteAllStartByWithId(id));
-
-		// 연결 직후, 데이터 전송이 없을 시 503 에러 발생. 에러 방지 위한 더미데이터 전송
 
 		return emitter;
 	}
@@ -53,7 +38,6 @@ public class SseServiceImpl implements SseService{
 	public void sendMessage(Long chatRoomId, ChatMessageSaveDto data) {
 		// 채팅방에 해당하는 emitters에게만 보내줄 수 있도록
 		List<SseEmitter> emitters = emitterRepository.findEmittersById(chatRoomId);
-		// System.out.println(" send message " + emitter.toString());
 
 		if (emitters != null){
 			synchronized(emitters) {
@@ -78,16 +62,6 @@ public class SseServiceImpl implements SseService{
 				}
 			}
 		}
-
-		// try{
-		// 	emitter.send(SseEmitter.event()
-		// 		.id(String.valueOf(chatRoomId))
-		// 		.name("message")
-		// 		.data(data, MediaType.APPLICATION_JSON)
-		// 	);
-		// } catch (IOException e){
-		// 	e.printStackTrace();
-		// }
 	}
 
 	@Override
@@ -117,18 +91,5 @@ public class SseServiceImpl implements SseService{
 				}
 			}
 		}
-
-		// try{
-		// 	emitter.send(SseEmitter.event()
-		// 			.id(String.valueOf(chatRoomId))
-		// 			.name("change_trade_book_list")
-		// 			.data(list, MediaType.APPLICATION_JSON)
-		// 	);
-		// } catch (IOException e){
-		// 	e.printStackTrace();
-		// }
-
 	}
-
-
 }
