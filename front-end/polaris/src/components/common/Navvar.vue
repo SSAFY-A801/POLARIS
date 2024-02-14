@@ -2,12 +2,12 @@
     <nav class="fixed bg-white top-20 w-full z-30 shadow-lg font-[gowun-dodum]">
         <div class="px-12 mx-0 ">
             <div class="flex items-center h-20">
-              <div class=" flex items-center justif-center w-full h-20">
-                 <!-- <div class="flex m-auto flex-row"></div> -->
-                 
-                 <div class="flex items-center w-1/3 ml-10 justify-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8">
+              <div class=" hidden md:flex items-center justify-center w-full h-20">
+                
+                 <div class="flex items-center w-1/2 lg:w-2/5 justify-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-2">
                      <router-link :to="{name: 'booksearch'}" class="w-80 text-resize px-20 text-maintheme1 text-xl font-bold text-center mr-2">도서 검색</router-link>
-                     <router-link :to="{name: 'essaylist'}" class="w-40 text-resize text-maintheme1 text-xl font-bold text-center" >독후감 게시판</router-link>
+                     <router-link :to="{name: 'essaylist'}" class="w-60 text-resize text-maintheme1 text-xl font-bold text-center" >독후감 게시판</router-link>
+                     
                  </div>
                 
 
@@ -15,21 +15,50 @@
                      <router-link :to="{name: 'login'}" v-if="!userToken" class="text-maintheme1 mr-14 font-bold"><font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl" style="color: #323F59;"  class="mr-2" />로그인</router-link>
                      <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-maintheme1 font-bold"><font-awesome-icon :icon="['fas', 'user-plus']" size="xl" style="color: #323F59;"  class="mr-2" />회원가입</router-link>
                      <p  v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" class="text-maintheme1 font-bold mt-4 mr-4" >{{ userNickname }}</p>
-                     <router-link v-if="userToken && loginUser.id !== null" 
+                     <router-link v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" 
                                  :to="{ name: 'ProfilePage', params: { id: loginUser.id }}" 
                                  class="text-maintheme1 mr-14"><img class="col-span-1 object-cover" id="profile-image" :src="userProfileUrl || '@/assets/profile-default.jpg'" alt="Profile-Image"></router-link>
                      <button v-if="userToken" @click="logout"  class="text-maintheme1 font-bold  bg-transparent border-none outline-none focus:outline-none cursor-pointer"><font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="xl" style="color: #323F59;" class="ml-4 mr-2"/>로그아웃</button>
                  </div>
              </div>
 
+             <div class=" md:hidden flex items-center justif-center w-full h-20">
+                <div class=" grid grid-cols-4 items-center w-full ">
+                  <router-link :to="{name: 'booksearch'}"  class="w-1/4 text-resize  text-maintheme1 text-md font-bold text-center ">
+                    <font-awesome-icon icon="fa-solid fa-magnifying-glass" size="xl" style="color: #323F59" />
+                  </router-link>
+                  
+                  <router-link :to="{name: 'essaylist'}"  class="w-1/2 text-resize text-maintheme1 text-md font-bold text-center">
+                    <font-awesome-icon icon="fa-solid fa-pen-to-square" size="xl" style="color: #323F59" />
+                  </router-link>
+
+                  <router-link :to="{name: 'login'}" v-if="!userToken" class="text-maintheme1 font-bold"><font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" size="xl" style="color: #323F59;"  class="mr-2" /></router-link>
+                  <router-link :to="{name: 'signup'}" v-if="!userToken"  class="text-maintheme1 font-bold"><font-awesome-icon :icon="['fas', 'user-plus']" size="xl" style="color: #323F59;"  class="mr-2" /></router-link>
+      
+                  <router-link v-if="userToken && loginUser.id !== undefined && loginUser.id !== null" 
+                              :to="{ name: 'ProfilePage', params: { id: loginUser.id }}" 
+                              class="text-maintheme1 mr-14"><img class="col-span-1 object-cover" id="profile-image" :src="userProfileUrl || '@/assets/profile-default.jpg'" alt="Profile-Image"></router-link>
+                  <button v-if="userToken" @click="logout"  class="text-maintheme1 font-bold  bg-transparent border-none outline-none focus:outline-none cursor-pointer"><font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="xl" style="color: #323F59;" class="ml-4 mr-2"/></button>
+
+                </div>
+
+
+              </div>
+
+
             </div>
         </div>
+
     </nav>
+
+
+
+
 </template>
 
 
 <script setup lang="ts">
-import { onBeforeMount, ref, watchEffect, computed } from 'vue'
+import { onBeforeMount, onMounted, ref, watch, watchEffect, computed } from 'vue'
 import axios, { AxiosError } from 'axios'
 import { useRouter } from 'vue-router'
 import { profileCounterStore } from '@/stores/profilecounter'
@@ -41,7 +70,7 @@ const router = useRouter();
 const userToken = ref(localStorage.getItem('user_token'))
 const refreshToken = ref(localStorage.getItem('refresh_token'))
 const userInfoString = ref<string>(localStorage.getItem('user_info') ?? "");
-console.log(userInfoString)
+
 
 // 사용자 정보를 나타내는 인터페이스 정의
 interface UserInfo {
@@ -67,10 +96,13 @@ const userProfileUrl = ref<string | null>(null)
 
 const getUserInfo = async() => {
   try {
+    console.log(loginUser.id)
     if(loginUser.id !== undefined) {
-    const response = await axios({
+      console.log(loginUser.id)
+      console.log(userToken.value)
+    const response = await axiosInstance.value({
       headers: {
-        "Authorization": `${userToken.value}`,
+        "Authorization": userToken.value,
         "Content-Type": 'application/json'
       },
       method: 'get',
@@ -83,20 +115,14 @@ const getUserInfo = async() => {
   }
 }
 
-onBeforeMount(() => {
+onMounted(() => {
   getUserInfo()
 })
 
 
 
 
-watchEffect(() => {
-    userToken.value = localStorage.getItem('user_token')
-    // console.log(localStorage.getItem('user_token'))
-    // console.log("watchEffect is running") 
-    // console.log("watchEffect",userToken.value)
-
-})
+watch(userToken, getUserInfo)
 
 
 
@@ -171,4 +197,17 @@ a {
 #profile-image {
     @apply w-[55px] h-[55px] object-cover justify-items-center rounded-[70%] border-[3px] border-solid border-[#121212];
 }
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to {
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+
 </style>

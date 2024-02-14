@@ -37,7 +37,7 @@ library.add(faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCar
    faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark,  faChevronLeft, faChevronRight, faArrowRightFromBracket,
   faComment, faComments,faFloppyDisk, faImages, faLocationDot, faLock, faMagnifyingGlass, faNoteSticky,
    faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark,  faChevronLeft, faChevronRight, faArrowRightFromBracket, faUserPlus, faArrowRightToBracket, faCrown, faPenToSquare,
-   faHeart )
+   faHeart, faMagnifyingGlass, )
 
 
 // firebase 사용을 위한 초기화
