@@ -164,25 +164,16 @@ const paging = () => {
 }
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== 'login') {
-    if (!userToken) {
-      if (to.name === 'essaycreate') {
-        Swal.fire({
-          title: "로그인이 필요한 작업입니다.",
-          icon: 'error'
-        }).then(() => {
-          next({ path: '/login' });
-        });
-      } else {
-        // 다른 인증이 필요한 라우트 처리
-        // 예를 들어: next({ name: 'someOtherRoute' })
-      }
-    } else {
-      // userToken이 있는 경우에는 해당 라우트로 이동 허용
-      next();
-    }
+  if (to.name === 'essaycreate' && !userToken) {
+    // 'essaycreate' 라우트이면서 userToken이 없는 경우
+    Swal.fire({
+      title: "로그인이 필요한 작업입니다.",
+      icon: 'error'
+    }).then(() => {
+      next({ path: '/login' });
+    });
   } else {
-    // 'login' 라우트로 이동 허용
+    // 'essaycreate' 이외의 다른 라우트 또는 'essaycreate'이지만 userToken이 있는 경우
     next();
   }
 });

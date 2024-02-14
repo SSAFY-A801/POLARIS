@@ -35,7 +35,7 @@
       </div>
       <!-- 독후감 내용 -->
       <div v-html="essay?.content" class="mt-10 prose"></div>
-      <div class="flex justify-end border-b border-gray-400 mb-4">
+      <div v-if="token" class="flex justify-end border-b border-gray-400 mb-4">
         <div v-if="isMe">
           <button @click="deleteEssay" id="delete-essay">삭제</button>
           <button @click="editEssay" id="edit-essay">수정</button>
@@ -54,8 +54,8 @@
       <!-- 댓글 작성 -->
       <div class="flex items-center">
         <div class="font-bold mr-4">{{essay?.comments.length || 0 }} 개의 댓글</div>
-        <input v-model="commentContext" type="text" id="book"  class="w-2/3 rounded-lg appearance-none border border-gray-500 py-2 px-4 m-2 bg-gray-50 text-maintheme1 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="댓글 추가"/>
-        <button id="add-comment" @click="addComment(commentContext)" type="button" class=" text-white bg-maintheme1 hover:bg-gray-500 py-2  px-6 ml-4 font-bold rounded-md">
+        <input v-if="token" v-model="commentContext" type="text" id="book"  class="w-2/3 rounded-lg appearance-none border border-gray-500 py-2 px-4 m-2 bg-gray-50 text-maintheme1 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="댓글 추가"/>
+        <button v-if="token" id="add-comment" @click="addComment(commentContext)" type="button" class=" text-white bg-maintheme1 hover:bg-gray-500 py-2  px-6 ml-4 font-bold rounded-md">
           등록
         </button>
       </div>
@@ -91,7 +91,7 @@
   const essay = ref<Essay|null>(null)
   const route = useRoute();
   const router  = useRouter();
-  const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
+  const loginUserId = JSON.parse(localStorage.getItem('user_info') || '{}').id || null;
   const scrap = ref(false)
   const getMyscraps = profileStore.getMyscraps
 
@@ -122,7 +122,7 @@
           "Content-Type": 'application/json'
         },
         method: 'post',
-        url: `${profileStore.BACK_API_URL}/comment`,
+        url: `${BACK_API_URL}/comment`,
         data: {
           essayId: essay.value.id,
           content: comment
@@ -138,7 +138,7 @@
             "Content-Type": 'application/json'
           },
           method: 'get',
-          url: `${profileStore.BACK_API_URL}/essay/${route.params.essayId}`
+          url: `${BACK_API_URL}/essay/${route.params.essayId}`
         })
         .then((response)=> {
           essay.value = response.data.data
@@ -166,7 +166,7 @@
           "Content-Type": 'application/json'
         },
         method: 'put',
-        url: `${profileStore.BACK_API_URL}/essay/${essay.value.id}`
+        url: `${BACK_API_URL}/essay/${essay.value.id}`
 
       })
       .then((response) => {
@@ -204,7 +204,7 @@
         "Content-Type": 'application/json'
       },
       method: 'delete',
-      url: `${profileStore.BACK_API_URL}/essay`,
+      url: `${BACK_API_URL}/essay`,
       data: {
         id: essay.value?.id
       }
@@ -235,7 +235,7 @@ const getEssayInfo = () => {
       "Content-Type": 'application/json'
     },
     method: 'get',
-    url: `${profileStore.BACK_API_URL}/essay/${route.params.essayId}`
+    url: `${BACK_API_URL}/essay/${route.params.essayId}`
   })
   .then((response)=> {
     console.log(response.data)
@@ -260,7 +260,7 @@ onMounted(()=> {
         "Content-Type": 'application/json'
       },
       method: 'get',
-      url: `${profileStore.BACK_API_URL}/essay/scrap_count/${route.params.essayId}`
+      url: `${BACK_API_URL}/essay/scrap_count/${route.params.essayId}`
     })
     .then((response)=> {
       console.log(response.data)
