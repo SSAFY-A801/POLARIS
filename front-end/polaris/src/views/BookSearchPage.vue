@@ -10,15 +10,15 @@
 
     
     <div class="m-auto flex justify-center">
-    <div class="w-2/3 border-2 rounded-lg">
+    <div class="w-2/3 border-2 rounded-lg ">
     <!-- 위치 정보 -->
-    <nav class="bg-white flex w-full mt-10" style="display: flex; justify-content: center;">
-        <div class="flex items-center justify-end w-1/4 h-24 bg-white">
-            <p>위치 필터</p>
+    <nav class="grid grid-cols-4 bg-white flex w-full mt-10 " style="display: flex; justify-content: center;">
+        <div class="flex items-center justify-end w-1/4 h-24 bg-white mr-4"><font-awesome-icon icon="fa-solid fa-location-dot" size='lg' />
+            <p class="ml-2">위치 필터</p>
         </div>
-        <div class='flex items-center justify-start w-3/4 h-24 bg-white ml-10'>
-        <div class='flex items-center justify-end w-1/6 h-24 bg-white ml-10'>
-        <select id="sido" v-model="selectedSido" class="mr-2 block px-3 py-2 text-gray-700 bg-white border border-gray-400 rounded-md shadow-sm w-40 focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" name="sido">
+        <div class='flex items-center justify-start w-3/4 h-24 bg-white ml-10 grid-cols-3'>
+        <div class='flex items-center justify-end w-1/5 h-24 bg-white ml-10'>
+        <select id="sido" v-model="selectedSido" class="mr-2  block px-3 py-2 text-gray-700 bg-white border border-gray-400 rounded-md shadow-sm w-40 focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent" name="sido">
             <option value="null" disabled >시/도 선택</option>
             <option v-for="sido in sidoList" :value="{code:sido.code , name:sido.name}">{{ sido.name }}</option>
         </select>
@@ -40,9 +40,13 @@
     </nav>
 
     <!-- 검색바 -->
+
+    
+
+
     <nav class="bg-white mb-10 top-0 w-full mt-4" style="display: flex; justify-content: center;">
-        <div class="flex items-center justify-end w-1/4 h-24 bg-white">
-            <p>검색 필터</p>
+        <div class="flex items-center justify-end w-1/4 h-24 bg-white"><font-awesome-icon icon="fa-solid fa-filter" size="lg"/>
+            <p class="ml-2">검색 필터</p>
         </div>
         <div class="flex items-center justify-start w-3/4 h-24 bg-white ml-10">
         <div class='flex items-center justify-end w-1/6 h-24 bg-white ml-10'>
@@ -54,9 +58,9 @@
         </div>
         <div class='flex items-center justify-start w-2/3 h-24 bg-white'>
             <div class="flex w-3/4 mx-10 rounded bg-white">
-                <input v-model="keyword" class=" mt-4 h-16 w-full border border-gray-400 bg-transparent rounded-md px-4 py-1 text-black focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent " type="search" name="search" placeholder="검색어를 입력하세요" />
-                <button @click.prevent=bookSearch type="submit" class="ml-10 m-4 h-16 rounded bg-maintheme1 px-4 py-4 text-white">
-                    <p class="text-white w-14">검색</p>
+                <input v-model="keyword" class=" mt-4 h-12 w-full border border-gray-400 bg-transparent rounded-md px-4 py-1 text-black focus:outline-none focus:ring-2 focus:ring-maintheme1 focus:border-transparent " type="search" name="search" placeholder="검색어를 입력하세요" />
+                <button @click.prevent=bookSearch type="submit" class="ml-10 m-4 h-12 rounded bg-maintheme1 px-4 py-4 text-white">
+                    <p class="text-white w-14 mt-0">검색</p>
                 </button>
             </div>
         </div>
@@ -66,8 +70,6 @@
     </div>
 
     <!-- 검색 결과 -->
-    
-
     <div v-if="booksearchResultList.length === 0" class="m-auto flex justify-center">
       <div class="mt-10 mb-10 ml-10 w-2/3">
           <h1 class=" text-2xl font-bold text-maintheme1">검색 결과를 찾을 수 없습니다</h1>      
@@ -101,8 +103,8 @@
                     </div>
 
                     <div class="flex mt-4">
-                    <img :src="booksearchResult.profileUrl" class="mx-auto object-cover rounded-full h-10 w-10 "/>
-                    <div class="flex flex-col justify-between ml-4 text-sm">
+                    <img :src="booksearchResult.profileUrl" class="mx-6 object-cover rounded-full border-2 h-10"/>
+                    <div class="flex flex-col justify-between text-sm">
                         <p class="text-gray-800 dark:text-white">{{ booksearchResult.nickname }}</p> 
                         <p class="text-gray-400 dark:text-gray-300">{{ booksearchResult.regcode ? `${booksearchResult.regcode.si} ${booksearchResult.regcode.gungu} ${booksearchResult.regcode.dong}` : '' }}</p>
                     </div>
@@ -214,7 +216,7 @@ watchEffect(() => {
 
 //퀴리 타입
 const queryType = ref('')
-console.log(queryType.value)
+// console.log(queryType.value)
 
 //검색어
 const keyword = ref('')
@@ -249,9 +251,9 @@ const bookSearch = async () => {
 
   await axios.get('https://i10a801.p.ssafy.io:8082/book/search', { params })
     .then(function (response) {
-        console.log(response.data.data.searchBooks)
+        // console.log(response.data.data.searchBooks)
         booksearchResultList.value = response.data.data.searchBooks
-        console.log('booksearchResult.value', booksearchResultList.value)
+        // console.log('booksearchResult.value', booksearchResultList.value)
 
 
     })

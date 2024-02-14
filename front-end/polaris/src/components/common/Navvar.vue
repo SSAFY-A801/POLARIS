@@ -63,6 +63,7 @@ import axios, { AxiosError } from 'axios'
 import { useRouter } from 'vue-router'
 import { profileCounterStore } from '@/stores/profilecounter'
 import axiosInstance from '@/services/axios'
+import Swal from 'sweetalert2'
 
 
 // const props = defineProps(['userToken'])
@@ -96,10 +97,10 @@ const userProfileUrl = ref<string | null>(null)
 
 const getUserInfo = async() => {
   try {
-    console.log(loginUser.id)
+    // console.log(loginUser.id)
     if(loginUser.id !== undefined) {
-      console.log(loginUser.id)
-      console.log(userToken.value)
+      // console.log(loginUser.id)
+      // console.log(userToken.value)
     const response = await axiosInstance.value({
       headers: {
         "Authorization": userToken.value,
@@ -139,8 +140,11 @@ const logout = async () => {
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('user_info')
     userToken.value = null
-    alert("로그아웃 되었습니다")
-    console.log(response.status)
+    Swal.fire({
+      text: "로그아웃 되었습니다 ",
+      icon: "success"
+    })
+    // console.log(response.status)
     router.push({name: 'home'})
   }).catch(async function (error) {
     if (error.response.data.status === 420) {
@@ -162,8 +166,11 @@ const logout = async () => {
                   localStorage.removeItem('refresh_token')
                   localStorage.removeItem('user_info')
                   userToken.value = null
-                  alert("로그아웃 되었습니다")
-                  console.log(response.status)
+                  Swal.fire({
+                    text: "로그아웃 되었습니다 ",
+                    icon: "success"
+                  })
+                  // console.log(response.status)
                   router.push({name: 'home'})
                 })
 

@@ -101,10 +101,13 @@ const fetchToken = async () => {
     .then(function(response) {
       // 로그인 한 유저일 시
       if (response.data.status === 200) {
-        console.log(response)
+        // console.log(response)
         localStorage.setItem('user_token',(response.data.data.access))
         localStorage.setItem('refresh_token',(response.data.data.refresh))
         localStorage.setItem('user_info' , JSON.stringify(response.data.data))
+        // console.log(localStorage.getItem('user_token'))
+        // console.log(localStorage.getItem('refresh_token'))
+        // console.log(localStorage.getItem('user_info'))
         // const userStore = useUserStore()
         // userStore.setLoginInfo(response.data.data)
         Swal.fire({
