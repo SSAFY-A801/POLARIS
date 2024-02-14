@@ -52,7 +52,7 @@ public class User extends BaseEntity {
 	@Column(name = "regcode_id")
 	private Long regcodeId;
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Essay> essays;
 
 	@NotNull
