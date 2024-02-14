@@ -36,6 +36,7 @@ public class EmitterRepositoryImpl implements EmitterRepository{
 		chatRooms.put(chatRoomId, emitters);
 		emitter.onCompletion(() -> emitters.remove(emitter));
 		emitter.onTimeout(()-> emitters.remove(emitter));
+		emitter.onError(throwable -> emitter.complete());
 
 		return emitter;
 	}
