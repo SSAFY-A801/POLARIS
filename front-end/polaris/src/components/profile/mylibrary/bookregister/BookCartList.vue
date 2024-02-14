@@ -34,7 +34,7 @@
         }
       }
     })
-    console.log(bookcartList.value)
+    // console.log(bookcartList.value)
 
   }
 

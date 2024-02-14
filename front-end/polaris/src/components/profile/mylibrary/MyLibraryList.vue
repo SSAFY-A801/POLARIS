@@ -55,7 +55,7 @@ const deleteBookstate = (bookId: number, deleteBook: boolean) => {
       (book) => book['id'] !== bookId
     );
   }
-  console.log(deleteBookList.value)
+  // console.log(deleteBookList.value)
   store.deleteBookList = deleteBookList.value
 };
 

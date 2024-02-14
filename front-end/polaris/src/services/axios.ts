@@ -39,8 +39,8 @@ instance.interceptors.response.use(
     if (error.config && error.response && error.response.status === 401 && (<any>error.response.data).status === 420) {
       // 액세스 토큰이 만료된 경우
       const refreshToken = localStorage.getItem('refresh_token')
-      console.log(refreshToken)
-      console.log(loginUser.email)
+      // console.log(refreshToken)
+      // console.log(loginUser.email)
       
       // 리프레시 토큰으로 새 액세스 토큰 요청
       const response = await axios.post(`${baseURL}/user/reissue`, {"email": loginUser.email }, {
@@ -49,7 +49,7 @@ instance.interceptors.response.use(
     }});
 
       // 새로 발급받은 액세스 토큰 저장
-      console.log(response.data.data)
+      // console.log(response.data.data)
       localStorage.setItem('user_token', response.data.data.access);
       localStorage.setItem('refresh_token', response.data.data.refresh);
       // localStorage.setItem('user_info', response.data.data);

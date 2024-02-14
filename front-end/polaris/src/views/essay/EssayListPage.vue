@@ -70,7 +70,6 @@
 import Navvar from '@/components/common/Navvar.vue'
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { profileCounterStore } from '@/stores/profilecounter';
 import EssayList from '../../components/essay/EssayList.vue';
 import axiosInstance from '@/services/axios';
 import { essayStore } from '@/stores/essaycounter';
@@ -209,7 +208,7 @@ const essaySearch = (keyword: string, filter: string) => {
 
   })
   .then((response) => {
-    console.log(response.data)
+    // console.log(response.data)
     const res = response.data.data
     essayList.value = res
     showingList.value = []

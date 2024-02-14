@@ -141,7 +141,7 @@ const changePassword = () => {
           }
         })
         .then((response) => {
-          console.log(response.data)
+          // console.log(response.data)
           Swal.fire({
           title: "비밀번호가 변경되었습니다.\n로그인을 다시 진행해주세요.",
           icon: 'success'

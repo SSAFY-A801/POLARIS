@@ -76,7 +76,7 @@
 <script setup lang="ts">
   import Navvar from '@/components/common/Navvar.vue'
   import { computed, onMounted, ref, watch } from 'vue';
-  import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router';
+  import { useRouter, useRoute } from 'vue-router';
   import axiosInstance from '@/services/axios';
   import type { Essay, ScrapPost } from '@/stores/essaycounter';
   import { profileCounterStore } from '@/stores/profilecounter';
@@ -94,7 +94,6 @@
   const loginUserId = JSON.parse(localStorage.getItem('user_info') || '{}').id || null;
   const myscraps = ref<ScrapPost[]>([])
   const scrap = ref(false)
-  const getMyscraps = profileStore.getMyscraps
 
 
   const commentContext = ref("")
@@ -127,7 +126,7 @@
         }
       })
       .then((response) => {
-        console.log(response.data)
+        // console.log(response.data)
         commentContext.value = ""
         // 독후감 정보 갱신
         axiosInstance.value({
@@ -151,7 +150,10 @@
         
       })
     } else {
-      alert('내용을 작성해 주세요.')
+      Swal.fire({
+        title:'내용을 작성해 주세요.',
+        icon: 'error'
+      })
     }
   }
 
@@ -168,7 +170,7 @@
 
       })
       .then((response) => {
-        console.log(response.data)
+        // console.log(response.data)
         scrap.value = !scrap.value
       })
       .catch((error) => {
@@ -208,7 +210,7 @@
       }
     })
     .then((response)=> {
-      console.log(response.data)
+      // console.log(response.data)
       Swal.fire({
         title: "독후감이 삭제되었습니다.",
         icon: 'success'
@@ -237,8 +239,7 @@ const getEssayInfo = async () => {
       method: 'get',
       url: `${BACK_API_URL}/essay/${route.params.essayId}`
     });
-
-    console.log(essayResponse.data);
+    // console.log(essayResponse.data);
     essay.value = essayResponse.data.data;
 
     // 2. loginUserId가 있다면 scraps 정보 가져오기
@@ -251,7 +252,6 @@ const getEssayInfo = async () => {
         method: 'get',
         url: `${BACK_API_URL}/essay/${loginUserId}/scraps`
       });
-
       // console.log(scrapsResponse.data);
       const res = scrapsResponse.data.data;
       myscraps.value = res ? res.scrapPosts : [];
@@ -260,7 +260,7 @@ const getEssayInfo = async () => {
     if (myscraps.value.some((scrap) => scrap.essayId == essay.value?.id)) {
       scrap.value = true;
     }
-    console.log('스크랩 여부:', scrap.value);
+    // console.log('스크랩 여부:', scrap.value);
   } catch (error) {
     console.error(error);
   }
@@ -279,7 +279,7 @@ onMounted(()=> {
       url: `${BACK_API_URL}/essay/scrap_count/${route.params.essayId}`
     })
     .then((response)=> {
-      console.log(response.data)
+      // console.log(response.data)
       scraps.value = response.data.data;
     })
     .catch((error)=> {

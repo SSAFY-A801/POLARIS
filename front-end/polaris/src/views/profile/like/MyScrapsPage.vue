@@ -15,12 +15,14 @@
 
 <script setup lang="ts">
   import MyScrapsEssayList from '@/components/profile/myscraps/MyScrapsEssayList.vue';
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed } from 'vue';
   import axiosInstance from '@/services/axios';
   import { profileCounterStore } from '@/stores/profilecounter';
   const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
   const store = profileCounterStore();
-  const myscraps = ref(store.myscraps)
+  const myscraps = computed(()=> {
+    return store.myscraps
+  })
 
   onMounted(()=> {
     store.getMyscraps(loginUserId);

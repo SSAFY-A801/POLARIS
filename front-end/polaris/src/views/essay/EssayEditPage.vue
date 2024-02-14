@@ -63,7 +63,7 @@ const editEssay = () => {
       }
     })
     .then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
     })
     .catch((error) => {
       console.error(error)
@@ -104,7 +104,7 @@ onMounted(()=> {
     url: `${store.BACK_API_URL}/essay/${route.params.essayId}`
   })
   .then((response)=> {
-    console.log(response.data)
+    // console.log(response.data)
     essay.value = response.data.data
   })
   .catch((error)=> {

@@ -19,10 +19,14 @@
   import BookSearchResultListItem from "./BookSearchResultListItem.vue";
   import { profileCounterStore } from "@/stores/profilecounter";
   import { computed } from "vue";
+  import Swal from "sweetalert2";
 
   const store = profileCounterStore();
   const handleShowAlert = () => {
-    alert('이미 서재나 도서바구니에 포함된 도서입니다.')
+    Swal.fire({
+      title: '이미 서재나 도서바구니에 포함된 도서입니다.',
+      icon: 'error'
+    })
   }
 
   const searchbookLists = computed(()=> {

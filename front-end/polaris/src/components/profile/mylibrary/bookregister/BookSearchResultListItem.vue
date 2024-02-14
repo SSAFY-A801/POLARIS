@@ -48,13 +48,13 @@ const addBookcart = (searchResult: SearchBookinfo['searchResult']) => {
   const included = libraryIncluded || bookcartIncluded
   if (included) {
     emitShowAlert();
-    console.log('현재 도서바구니목록: ',store.bookCartList)
+    // console.log('현재 도서바구니목록: ',store.bookCartList)
   } else {
     searchResult.isOpened = false
     searchResult.isOwned = false
     bookCartList.value.push(searchResult);
   }
-  console.log(searchResult)
+  // console.log(searchResult)
 };
 </script>
 

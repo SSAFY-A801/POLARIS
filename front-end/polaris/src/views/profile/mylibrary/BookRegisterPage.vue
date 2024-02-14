@@ -111,7 +111,7 @@ const mybookCartList = computed(()=> {
 })
 
 const addAPIbook = (bookcartList:Searchbook[]) => {
-  console.log('현재 내 장바구니 목록: ', bookcartList)
+  // console.log('현재 내 장바구니 목록: ', bookcartList)
   if (bookcartList.length){
     console.log("장바구니 목록이 존재함.")
     axios({
@@ -127,7 +127,7 @@ const addAPIbook = (bookcartList:Searchbook[]) => {
       }
     })
     .then((response)=>{
-      console.log(response.data)
+      // console.log(response.data)
       Swal.fire({
       title: "도서 등록이 완료되었습니다.",
       icon: 'success'
