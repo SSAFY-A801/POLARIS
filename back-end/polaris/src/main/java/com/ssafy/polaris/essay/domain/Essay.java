@@ -1,5 +1,6 @@
 package com.ssafy.polaris.essay.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +35,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
-@SQLDelete(sql = "update essay set deleted_at = CURRENT_TIMESTAMP where id = ?")
-@SQLRestriction("deleted_at is NULL")
+// @SQLDelete(sql = "update essay set deleted_at = CURRENT_TIMESTAMP where id = ?")
+// @SQLRestriction("deleted_at is NULL")
 public class Essay extends BaseEntity {
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -84,5 +85,13 @@ public class Essay extends BaseEntity {
 		this.title = essayRequestDto.getTitle();
 		this.content = essayRequestDto.getContent();
 		this.isOpened = essayRequestDto.getIsOpened();
+	}
+
+	public void openEssay() {
+		this.setDeletedAt(null);
+	}
+
+	public void delete() {
+		this.setDeletedAt(LocalDateTime.now());
 	}
 }

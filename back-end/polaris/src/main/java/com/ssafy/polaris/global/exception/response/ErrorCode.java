@@ -22,7 +22,7 @@ public enum ErrorCode {
 	USER_KAKAO_JOINED(401, "카카오 회원입니다. 일반로그인 할 수 없습니다."),
 	USER_NOT_KAKAO_JOINED(421, "카카오 가입 회원이 아닙니다."),
 
-
+	ESSAY_ALREADY_EXIST(403, "먼저 작성된 독후감이 있습니다."),
 	FORBIDDEN(403, "접근할 수 없습니다."),
 
 	USER_NOT_FOUND(404, "존재하지 않는 사용자입니다."),

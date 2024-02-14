@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.essay.domain.Scrap;
+import com.ssafy.polaris.essay.exception.EssayAlreadyExistException;
 import com.ssafy.polaris.essay.repository.EssayRepository;
 import com.ssafy.polaris.essay.repository.ScrapRepository;
 import com.ssafy.polaris.global.SearchConditions;
@@ -34,6 +35,16 @@ public class EssayServiceImpl implements EssayService {
 	@Transactional
 	public Long writeEssay(EssayRequestDto essayRequestDto, SecurityUser securityUser) {
 		System.out.println("유저정보 읽어오기" + securityUser.getId());
+		Optional<Essay> optionalEssay = essayRepository.findByUserBookIdAndUserId(essayRequestDto.getUserBookId(), securityUser.getId());
+		if (optionalEssay.isPresent()) { // 글이 이미 존재
+			if (optionalEssay.get().getDeletedAt() == null) {
+				throw new EssayAlreadyExistException("");
+			}
+			else {
+				essayRepository.deleteById(optionalEssay.get().getId());
+			}
+		}
+
 		Essay essay = essayRepository.save(Essay.builder()
 			.title(essayRequestDto.getTitle())
 			.content(essayRequestDto.getContent())
@@ -86,7 +97,7 @@ public class EssayServiceImpl implements EssayService {
 		if (!essay.getUser().getId().equals(securityUser.getId())) {
 			throw new UserForbiddenException("에세이 삭제 권한 없음");
 		}
-		essayRepository.deleteById(essayId);
+		essay.delete();
 	}
 
 	@Override
