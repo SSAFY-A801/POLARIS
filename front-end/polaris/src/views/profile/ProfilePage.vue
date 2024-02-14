@@ -421,7 +421,7 @@
 
   onMounted(() => {
     store.getProfile(Number(route.params.id));
-    console.log(isMe.value)
+    // console.log(isMe.value)
     // // following 명단 호출
     axiosInstance.value({
       headers: {

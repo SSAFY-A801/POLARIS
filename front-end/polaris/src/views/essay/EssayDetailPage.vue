@@ -92,12 +92,10 @@
   const route = useRoute();
   const router  = useRouter();
   const loginUserId = JSON.parse(localStorage.getItem('user_info') || '{}').id || null;
+  const myscraps = ref<ScrapPost[]>([])
   const scrap = ref(false)
   const getMyscraps = profileStore.getMyscraps
 
-  watch(() => profileStore.myscraps,(newList) => {
-    scrap.value = newList.some((post:ScrapPost) => post.essayId == essay.value?.id)
-  });
 
   const commentContext = ref("")
   const isMe = computed(()=> {
@@ -171,7 +169,7 @@
       })
       .then((response) => {
         console.log(response.data)
-        getMyscraps(loginUserId);
+        scrap.value = !scrap.value
       })
       .catch((error) => {
         console.error(error);
@@ -229,31 +227,49 @@ const goback = () => {
   router.push({name: 'essaylist'})
 }
 
-const getEssayInfo = () => {
-  axiosInstance.value({
-    headers: {
-      "Content-Type": 'application/json'
-    },
-    method: 'get',
-    url: `${BACK_API_URL}/essay/${route.params.essayId}`
-  })
-  .then((response)=> {
-    console.log(response.data)
-    essay.value = response.data.data
-  })
-  .catch((error)=> {
+const getEssayInfo = async () => {
+  try {
+    // 1. essay 정보 가져오기
+    const essayResponse = await axiosInstance.value({
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      method: 'get',
+      url: `${BACK_API_URL}/essay/${route.params.essayId}`
+    });
+
+    console.log(essayResponse.data);
+    essay.value = essayResponse.data.data;
+
+    // 2. loginUserId가 있다면 scraps 정보 가져오기
+    if (loginUserId) {
+      const scrapsResponse = await axiosInstance.value({
+        headers: {
+          Authorization: `${token.value}`,
+          'Content-Type': 'application/json'
+        },
+        method: 'get',
+        url: `${BACK_API_URL}/essay/${loginUserId}/scraps`
+      });
+
+      // console.log(scrapsResponse.data);
+      const res = scrapsResponse.data.data;
+      myscraps.value = res ? res.scrapPosts : [];
+    }
+    // 3. essay 정보와 scraps 정보 비교
+    if (myscraps.value.some((scrap) => scrap.essayId == essay.value?.id)) {
+      scrap.value = true;
+    }
+    console.log('스크랩 여부:', scrap.value);
+  } catch (error) {
     console.error(error);
-    
-  })
+  }
 }
 
-onBeforeRouteUpdate((to,from)=> {
-
-  
-})
 
 onMounted(()=> {
-  getEssayInfo();
+  getEssayInfo()
+
   // 스크랩 수 조회
   axiosInstance.value({
       headers: {
@@ -268,7 +284,6 @@ onMounted(()=> {
     })
     .catch((error)=> {
       console.error(error);
-      
     })
 })
 </script>
