@@ -129,7 +129,7 @@ const isPasswordVerified = ref(false)
 
 
 const regionInputName = ref('')
-console.log(regionInputName.value)
+// console.log(regionInputName.value)
 const regionInputCode = ref('')
 const isRegionModalOpen = ref(false)
 
