@@ -30,7 +30,9 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 			"    LEFT JOIN User ru ON t.receiver.id = ru.id AND t.sender.id = :senderId " +
 			"    LEFT JOIN User su ON t.sender.id = su.id AND t.receiver.id = :senderId " +
 			"WHERE " +
-			"    t.sender.id = :senderId OR t.receiver.id = :senderId")
+			"    t.sender.id = :senderId OR t.receiver.id = :senderId "+
+			"ORDER BY t.createdAt DESC "
+	)
 	List<BasicChatRoomResponseDto> getChatRoomList(@Param("senderId") Long senderId);
 
 	@Modifying
@@ -72,23 +74,6 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 		"WHERE t.id = :chatRoomId AND t.sender.id = :userId "
 	)
 	ChatRoomParticipantsResponseDto getChatRoomParticipants(@Param(value = "chatRoomId") Long chatRoomId, @Param(value = "userId") Long userId);
-
-	// @Query(value =
-	// 	"select new com.ssafy.polaris.chat.dto.BasicChatRoomResponseDto( " +
-	// 		"    coalesce(case when t.sender.id = :senderId then ru.id end, case when t.receiver.id = :senderId then su.id end) as receiverId, " +
-	// 		"    coalesce(case when t.sender.id = :senderId then ru.nickname end, case when t.receiver.id = :senderId then su.nickname end) as nickname, " +
-	// 		"    coalesce(case when t.sender.id = :senderId then ru.profileUrl end, case when t.receiver.id = :senderId then su.profileUrl end) as profileUrl, " +
-	// 		"    t.tradeType as tradeType, " +
-	// 		"    t.status as tradeStatus) " +
-	// 		"from " +
-	// 		"    Trade t " +
-	// 		"        left join " +
-	// 		"    User ru on t.receiver.id = ru.id and t.sender.id = :senderId " +
-	// 		"        left join " +
-	// 		"    User su on t.sender.id = su.id and t.receiver.id = :senderId " +
-	// 		"where " +
-	// 		"    t.sender.id = :senderId or t.receiver.id = :senderId")
-	// List<BasicChatRoomResponseDto> getChatRoomList(@Param("senderId") Long senderId);
 
 	@Query("select new com.ssafy.polaris.trade.dto.ExchangeHistoryResponseDto( " +
 			" t.id, u.id, u.nickname, ub.id, b.title, t.finishedAt)" +
