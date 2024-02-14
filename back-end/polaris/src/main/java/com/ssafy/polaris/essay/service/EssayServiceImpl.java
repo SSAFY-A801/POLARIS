@@ -22,7 +22,9 @@ import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true) // select 에 대한 transaction
 @Service
@@ -41,6 +43,7 @@ public class EssayServiceImpl implements EssayService {
 				throw new EssayAlreadyExistException("");
 			}
 			else {
+				log.info("먼저 작성된 글이 삭제됩니다.====================");
 				essayRepository.deleteById(optionalEssay.get().getId());
 			}
 		}

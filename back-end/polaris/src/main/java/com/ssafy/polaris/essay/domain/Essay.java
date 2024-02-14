@@ -15,6 +15,7 @@ import com.ssafy.polaris.essay.dto.EssayRequestDto;
 import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.user.domain.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -47,7 +48,7 @@ public class Essay extends BaseEntity {
 	private Long userId;
 
 	@NotNull
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_book_id", updatable = false, insertable = false)
 	private UserBook userBook;
 
@@ -71,10 +72,10 @@ public class Essay extends BaseEntity {
 	@NotNull
 	private Boolean isOpened;
 
-	@OneToMany(mappedBy = "essay")
+	@OneToMany(mappedBy = "essay", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 
-	@OneToMany(mappedBy = "essay")
+	@OneToMany(mappedBy = "essay", cascade = CascadeType.ALL)
 	private List<Scrap> scraps = new ArrayList<>();
 
 	public void updateHit() {
