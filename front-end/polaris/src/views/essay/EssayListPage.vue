@@ -68,8 +68,9 @@
 
 <script setup lang="ts">
 import Navvar from '@/components/common/Navvar.vue'
-import { onMounted, ref, watch } from 'vue';
-import { onBeforeRouteUpdate, useRouter } from 'vue-router';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { profileCounterStore } from '@/stores/profilecounter';
 import EssayList from '../../components/essay/EssayList.vue';
 import axiosInstance from '@/services/axios';
 import { essayStore } from '@/stores/essaycounter';
@@ -80,7 +81,6 @@ const router = useRouter();
 const filter = ref("")
 const keyword = ref("")
 const store = essayStore();
-
 // 보여지는 리스트
 const showingList = ref<Essay[]>([])
 const essayList = ref<Essay[]>([])
@@ -213,15 +213,12 @@ const essaySearch = (keyword: string, filter: string) => {
   })
 }
 
-onBeforeRouteUpdate(()=> {
-  essaySearch("","")
-
-})
-
 onMounted(()=> {
+  essaySearch("","")
 })
 
 </script>
+
 
 <style scoped>
 @font-face {

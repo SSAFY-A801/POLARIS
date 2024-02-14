@@ -202,17 +202,7 @@
                 교환 채팅
               </button>
             </div>
-            <div v-if="existEssay">
-              <button id="read-essay">
-                독후감 보기
-              </button>
-            </div>
-            <div v-if="isMybook && !existEssay">
-              <button id="write-essay">
-                독후감 쓰기
-              </button>
-            </div>  
-            </div>
+          </div>
         </div>
     </div>
   </div>

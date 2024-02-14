@@ -129,11 +129,6 @@ const addAPIbook = (bookcartList:Searchbook[]) => {
     .then((response)=>{
       console.log(response.data)
       // console.log(store.mybookLists)
-      Swal.fire({
-          title: "도서 등록이 완료되었습니다.",
-          icon: 'success'
-        })
-      router.push({name: "MyLibraryPage"})
     })
     .catch((error)=>{
       console.error(error)
