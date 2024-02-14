@@ -192,17 +192,6 @@
               {{ bookDetail.userBookDescription }}
             </div>
           </div>
-          <!-- 하단 버튼 -->
-          <div class="flex justify-end">
-            <div v-if="!isMybook">
-              <button id="purchase-chat">
-                구매 채팅
-              </button>
-              <button id="exchange-chat">
-                교환 채팅
-              </button>
-            </div>
-          </div>
         </div>
     </div>
   </div>
@@ -216,6 +205,7 @@
   import type { Book, Searchbook } from '@/stores/profilecounter';
   import { profileCounterStore } from '@/stores/profilecounter';
   import axiosInstance from '@/services/axios';
+  import Swal from 'sweetalert2';
   // 이후에는 store.ts로 옮겨서 서버에서 데이터를 받아올 예정 
   const bookDetail = ref<Book>({
     id: 9090,
@@ -225,7 +215,7 @@
     title: "무제",
     bookDescription: null,
     pubDate : new Date('2099-12-31'),
-    cover: "imagecover",
+    cover: "@/assets/book-image.jpg",
     publisher : "",
     author: "",
     priceStandard: 0,
@@ -250,7 +240,6 @@
 
   const getMybook = ref(false)
   const updateBook = ref<boolean>(false)
-  const existEssay = ref<boolean>(false)
   const route = useRoute();
   const BACK_API_URL = store.BACK_API_URL
   
@@ -284,6 +273,10 @@
     })
     .then((response)=>{
       console.log(response.data)
+      Swal.fire({
+        title: '수정이 완료되었습니다.',
+        icon: 'success'
+      })
     })
     .catch((error)=> {
       console.error(error)
@@ -309,8 +302,12 @@
 
   // 프로필 이동
   const gotoProfile = () => {
-    console.log("사용자의 프로필로 이동합니다.")
-    router.push({name: "ProfilePage" , params: {id: bookDetail.value.userId}})
+    Swal.fire({
+      title: `${bookDetail.value.nickname} 님의 프로필로 이동합니다.`,
+      icon: 'info'
+    }).then(()=> {
+      router.push({name: "ProfilePage" , params: {id: bookDetail.value.userId}})
+    })
   }
 
   // 내 서재로 옮기기
@@ -351,7 +348,10 @@
     .then((response)=>{
       console.log(response.data)
       getMybook.value = true
-      alert("해당 도서를 내 서재로 옮깁니다.")
+      Swal.fire({
+        title: '해당 도서를 내 서재로 옮겼습니다.',
+        icon: 'success'
+      })
     })
     .catch((error)=>{
       console.error(error)
