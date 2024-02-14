@@ -21,7 +21,7 @@ import { faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCartSh
     faCode,
     faQuoteRight,
     faArrowsDownToLine,
-    faUserPlus, faArrowRightToBracket, faCrown, faHeart } from '@fortawesome/free-solid-svg-icons';
+    faUserPlus, faArrowRightToBracket, faCrown, faHeart, faFilter } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -37,7 +37,7 @@ library.add(faArrowRightArrowLeft, faBookOpen, faBookmark, faCalendarDays, faCar
    faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark,  faChevronLeft, faChevronRight, faArrowRightFromBracket,
   faComment, faComments,faFloppyDisk, faImages, faLocationDot, faLock, faMagnifyingGlass, faNoteSticky,
    faPenToSquare, faPlus, faTrashCan, faUser, faUserSecret, faXmark,  faChevronLeft, faChevronRight, faArrowRightFromBracket, faUserPlus, faArrowRightToBracket, faCrown, faPenToSquare,
-   faHeart, faMagnifyingGlass, )
+   faHeart, faMagnifyingGlass, faLocationDot, faFilter )
 
 
 // firebase 사용을 위한 초기화
