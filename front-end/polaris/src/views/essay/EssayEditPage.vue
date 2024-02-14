@@ -70,7 +70,7 @@ const editEssay = () => {
     })
     Swal.fire({
       icon: 'success',
-      title: '독후감이 작성되었습니다.'
+      title: '독후감이 수정되었습니다.'
     })
     if(!essay.value.isOpened){
       Swal.fire({
