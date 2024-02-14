@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import com.ssafy.polaris.global.exception.exceptions.category.UnAuthorizedException;
 import com.ssafy.polaris.user.api.KakaoApi;
 import com.ssafy.polaris.user.dto.KakaoProfile;
 import com.ssafy.polaris.user.dto.OAuthToken;
@@ -11,6 +12,7 @@ import com.ssafy.polaris.user.dto.UserKakaoJoinRequestDto;
 import com.ssafy.polaris.user.exception.CertCodeExpiredException;
 import com.ssafy.polaris.user.exception.CertCodeNotMatch;
 import com.ssafy.polaris.user.exception.UserKakaoJoined;
+import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
 import com.ssafy.polaris.user.exception.UserNotFoundException;
 import com.ssafy.polaris.user.exception.UserNotKakaoJoined;
 import com.ssafy.polaris.user.exception.WrongEmailOrPasswordException;
@@ -241,8 +243,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Map<String, String> reissue(String refreshToken, String email) {
+        if (!("Bearer " + refreshToken).equals(redisTemplate.opsForValue().get("refresh:"+email))) {
+            System.out.println(refreshToken);
+            throw new UserNotAuthorizedException("UserService:reissue:저장된 refresh 토큰과 요청의 토큰이 다릅니다.");
+        }
+
         User user = userRepository.findUserByEmail(email)
-            .orElseThrow(() -> new UserNotFoundException("reissuance"));
+            .orElseThrow(() -> new UserNotFoundException("UserService:reissue:해당 이메일을 가진 회원이 없습니다."));
 
         Authentication authentication =
             new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(),

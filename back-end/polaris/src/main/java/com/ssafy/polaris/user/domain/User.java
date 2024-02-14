@@ -17,6 +17,7 @@ import com.ssafy.polaris.promotion.domain.Promotion;
 import com.ssafy.polaris.regcode.domain.Regcode;
 import com.ssafy.polaris.report.domain.Report;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -65,7 +66,7 @@ public class User extends BaseEntity {
 
 	@NotNull
 	@Column(length = 10000)
-	@ColumnDefault(value = "기본 프로필 url")
+	@ColumnDefault(value = "https://polaris-bucket.s3.amazonaws.com/polaris_logo.png")
 	private String profileUrl;
 
 	@NotNull
@@ -75,25 +76,25 @@ public class User extends BaseEntity {
 	@Column(length = 10)
 	private String oauth;
 
-	@OneToMany(mappedBy = "follower", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "follower", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Follow> followers = new ArrayList<>();
 
-	@OneToMany(mappedBy = "following", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "following", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Follow> followings = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<UserBook> userBooks = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Promotion> promotions = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Scrap> scraps = new ArrayList<>();
 
-	@OneToMany(mappedBy = "reporter")
+	@OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL)
 	private List<Report> reporters = new ArrayList<>();
 
-	@OneToMany(mappedBy = "reportedUser")
+	@OneToMany(mappedBy = "reportedUser", cascade = CascadeType.ALL)
 	List<Report> reportUserList = new ArrayList<>();
 
 	public void UpdateProfile(Regcode regcode, String nickname, String introduction, String profileUrl) {

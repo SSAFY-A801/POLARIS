@@ -16,6 +16,8 @@ import com.ssafy.polaris.essay.domain.Essay;
 public interface EssayRepository extends JpaRepository<Essay, Long> {
 	Optional<Essay> findById(Long id);
 
+	Optional<Essay> findByUserBookIdAndUserId(Long userBookId, Long userId);
+
 	@Query("select e "
 		+ "from Essay e "
 		+ "	left join fetch e.user "

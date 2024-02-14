@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.essay.domain.Scrap;
+import com.ssafy.polaris.essay.exception.EssayAlreadyExistException;
 import com.ssafy.polaris.essay.repository.EssayRepository;
 import com.ssafy.polaris.essay.repository.ScrapRepository;
 import com.ssafy.polaris.global.SearchConditions;
@@ -21,7 +22,9 @@ import com.ssafy.polaris.user.exception.UserNotAuthorizedException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true) // select 에 대한 transaction
 @Service
@@ -34,6 +37,17 @@ public class EssayServiceImpl implements EssayService {
 	@Transactional
 	public Long writeEssay(EssayRequestDto essayRequestDto, SecurityUser securityUser) {
 		System.out.println("유저정보 읽어오기" + securityUser.getId());
+		Optional<Essay> optionalEssay = essayRepository.findByUserBookIdAndUserId(essayRequestDto.getUserBookId(), securityUser.getId());
+		if (optionalEssay.isPresent()) { // 글이 이미 존재
+			if (optionalEssay.get().getDeletedAt() == null) {
+				throw new EssayAlreadyExistException("");
+			}
+			else {
+				log.info("먼저 작성된 글이 삭제됩니다.====================");
+				essayRepository.deleteById(optionalEssay.get().getId());
+			}
+		}
+
 		Essay essay = essayRepository.save(Essay.builder()
 			.title(essayRequestDto.getTitle())
 			.content(essayRequestDto.getContent())
@@ -86,7 +100,7 @@ public class EssayServiceImpl implements EssayService {
 		if (!essay.getUser().getId().equals(securityUser.getId())) {
 			throw new UserForbiddenException("에세이 삭제 권한 없음");
 		}
-		essayRepository.deleteById(essayId);
+		essay.delete();
 	}
 
 	@Override
@@ -97,7 +111,8 @@ public class EssayServiceImpl implements EssayService {
 			+ "	join fetch e.user "
 			+ "	left join fetch e.userBook "
 			+ " left join fetch e.userBook.book "
-			+ "where e.isOpened is true ";
+			+ "where e.isOpened is true "
+			+ "	and e.deletedAt is null ";
 
 		searchConditions.setWord(searchConditions.getWord().trim());
 		boolean isNotSearch = searchConditions.getWord() == null || searchConditions.getWord().equals("");

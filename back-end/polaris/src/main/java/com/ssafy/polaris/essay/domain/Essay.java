@@ -1,5 +1,6 @@
 package com.ssafy.polaris.essay.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import com.ssafy.polaris.essay.dto.EssayRequestDto;
 import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.user.domain.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,8 +36,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
-@SQLDelete(sql = "update essay set deleted_at = CURRENT_TIMESTAMP where id = ?")
-@SQLRestriction("deleted_at is NULL")
+// @SQLDelete(sql = "update essay set deleted_at = CURRENT_TIMESTAMP where id = ?")
+// @SQLRestriction("deleted_at is NULL")
 public class Essay extends BaseEntity {
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -70,10 +72,10 @@ public class Essay extends BaseEntity {
 	@NotNull
 	private Boolean isOpened;
 
-	@OneToMany(mappedBy = "essay")
+	@OneToMany(mappedBy = "essay", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 
-	@OneToMany(mappedBy = "essay")
+	@OneToMany(mappedBy = "essay", cascade = CascadeType.ALL)
 	private List<Scrap> scraps = new ArrayList<>();
 
 	public void updateHit() {
@@ -84,5 +86,13 @@ public class Essay extends BaseEntity {
 		this.title = essayRequestDto.getTitle();
 		this.content = essayRequestDto.getContent();
 		this.isOpened = essayRequestDto.getIsOpened();
+	}
+
+	public void openEssay() {
+		this.setDeletedAt(null);
+	}
+
+	public void delete() {
+		this.setDeletedAt(LocalDateTime.now());
 	}
 }
