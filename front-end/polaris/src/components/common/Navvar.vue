@@ -63,6 +63,7 @@ import axios, { AxiosError } from 'axios'
 import { useRouter } from 'vue-router'
 import { profileCounterStore } from '@/stores/profilecounter'
 import axiosInstance from '@/services/axios'
+import Swal from 'sweetalert2'
 
 
 // const props = defineProps(['userToken'])
@@ -139,7 +140,10 @@ const logout = async () => {
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('user_info')
     userToken.value = null
-    alert("로그아웃 되었습니다")
+    Swal.fire({
+      text: "로그아웃 되었습니다 ",
+      icon: "success"
+    })
     console.log(response.status)
     router.push({name: 'home'})
   }).catch(async function (error) {
@@ -162,7 +166,10 @@ const logout = async () => {
                   localStorage.removeItem('refresh_token')
                   localStorage.removeItem('user_info')
                   userToken.value = null
-                  alert("로그아웃 되었습니다")
+                  Swal.fire({
+                    text: "로그아웃 되었습니다 ",
+                    icon: "success"
+                  })
                   console.log(response.status)
                   router.push({name: 'home'})
                 })

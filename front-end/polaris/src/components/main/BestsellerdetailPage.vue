@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto mt-32 max-w-6xl min-w-[700px] bg-backgroundgray p-4">
+    <div class="container mx-auto mt-32 max-w-6xl min-w-[700px] bg-backgroundgray p-4 font-[gowun-dodum]">
       <h1 class="text-2xl font-bold">도서 상세보기</h1>
         <div class="container grid grid-cols-12 gap-8">
           <!-- 도서 상세 좌측 -->
@@ -39,7 +39,7 @@
                 <div class="mb-2">출간일</div>
               </div>
               <div class="col-span-4 text-maintheme1 m-2">
-                <div class="mb-2">{{ bookDetail.pubDate}}</div>
+                <div class="mb-2">{{ bookDetail.pubDate.toString().split('T')[0]}}</div>
               </div>
             </div>
             <div id="price" class="container grid grid-cols-6">
@@ -47,7 +47,7 @@
                 <div class="mb-2">정가</div>
               </div>
               <div class="col-span-4 text-maintheme1 m-2">
-                <div class="mb-2">{{ bookDetail.priceStandard}}</div>
+                <div class="mb-2">{{ bookDetail.priceStandard.toLocaleString()}}원</div>
               </div>
             </div>
             <div id="ISBN" class="container grid grid-cols-6 flex">
@@ -58,7 +58,7 @@
                 <div class="mb-2">{{ bookDetail.isbn }}</div>
               </div>
             </div>
-            <div id="book-description" class="container border-b-2 grid grid-cols-6 flex mb-4">
+            <div id="book-description" class="container grid grid-cols-6 flex mb-4">
               <div class="text-maintheme1 m-2 font-bold col-span-1">
                 <div>도서 설명</div>
               </div>
@@ -91,7 +91,10 @@ const bookDetail = computed(() => {
 </script>
   
 <style scoped>
-
+@font-face {
+  font-family: 'gowun-dodum';
+  src: url('../../../public/GowunDodum-Regular.ttf');
+}
     #book-image {
       @apply w-[240px] h-[320px] ml-10
     }
