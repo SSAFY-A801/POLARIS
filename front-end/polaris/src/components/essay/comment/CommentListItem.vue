@@ -11,6 +11,7 @@
         {{ props.comment.createdAt.toString().split('T')[0] }}
         <button @click="clicktoEdit" id="edit-comment" v-if="!isEdited && props.comment.user.id == Number(loginUserId)">수정</button>
         <button @click="editComment" id="edit-comment" v-if="isEdited && props.comment.user.id == Number(loginUserId)">수정 완료</button>
+        <button @click="cancelEdit" id="edit-comment" v-if="isEdited && props.comment.user.id == Number(loginUserId)">취소</button>
         <button @click="deleteComment" id="delete-comment" v-if="!isEdited && props.comment.user.id == Number(loginUserId)">삭제</button>
       </div>
     </div>
@@ -35,6 +36,10 @@
   const clicktoEdit = () => {
     isEdited.value = !isEdited.value
 
+  }
+
+  const cancelEdit = () => {
+    isEdited.value = !isEdited.value
   }
 
   const editComment = () => {

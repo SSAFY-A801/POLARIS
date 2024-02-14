@@ -27,14 +27,13 @@ type TradeHistory = {
 }
 
 const router = useRouter();
+
 const store = profileCounterStore();
+const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
 const Tradehistory = ref<TradeHistory>({})
-const loginUserId = Number(JSON.parse(localStorage.getItem('user_info')||"").id)
-
 const backtoProfile = () => {
-    router.push({name: "ProfilePage"});
-  }
-
+  router.push({name: "ProfilePage"});
+}
 
 onMounted(()=> {
   axiosInstance.value({

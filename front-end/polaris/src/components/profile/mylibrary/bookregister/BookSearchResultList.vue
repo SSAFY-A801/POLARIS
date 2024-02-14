@@ -1,6 +1,7 @@
 <template>
 
-  <div class="border">
+  <div v-if="searchbookLists.length" class="border">
+    {{ searchbookLists.length }}
     <BookSearchResultListItem 
       v-for="(item,index) in searchbookLists"
       :key="index"
@@ -8,6 +9,9 @@
       @show-alert="handleShowAlert"
        class="border p-3 "
        />
+  </div>
+  <div v-else class="text-lg text-center mt-10">
+    검색결과가 존재하지 않습니다.
   </div>
 </template>
 

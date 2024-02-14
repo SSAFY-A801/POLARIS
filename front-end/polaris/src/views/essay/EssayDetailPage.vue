@@ -83,15 +83,17 @@
   import CommentListItem from '@/components/essay/comment/CommentListItem.vue';
   import Swal from 'sweetalert2';
 
+  
   const scraps = ref<number>(0)
   const profileStore = profileCounterStore();
+  const token = ref(localStorage.getItem('user_token'))
   const essay = ref<Essay|null>(null)
   const route = useRoute();
   const router  = useRouter();
   const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
   const scrap = ref(false)
+  const getMyscraps = profileStore.getMyscraps
 
-  
   watch(() => profileStore.myscraps,(newList) => {
     scrap.value = newList.some((post:ScrapPost) => post.essayId == essay.value?.id)
   });
@@ -115,7 +117,7 @@
     if (essay.value && comment.length){
       axiosInstance.value({
         headers: {
-          Authorization: `${profileStore.token}`,
+          Authorization: `${token.value}`,
           "Content-Type": 'application/json'
         },
         method: 'post',
@@ -130,7 +132,7 @@
         // 독후감 정보 갱신
         axiosInstance.value({
           headers: {
-            Authorization: `${profileStore.token}`,
+            Authorization: `${token.value}`,
             "Content-Type": 'application/json'
           },
           method: 'get',
@@ -158,7 +160,7 @@
     if(essay.value){
       axiosInstance.value({
         headers: {
-          Authorization: `${profileStore.token}`,
+          Authorization: `${token.value}`,
           "Content-Type": 'application/json'
         },
         method: 'put',
@@ -167,7 +169,7 @@
       })
       .then((response) => {
         console.log(response.data)
-        profileStore.getMyscraps(loginUserId);
+        getMyscraps(loginUserId);
       })
       .catch((error) => {
         console.error(error);
@@ -196,7 +198,7 @@
     if (result.isConfirmed) {
       axiosInstance.value({
       headers: {
-        Authorization: `${profileStore.token}`,
+        Authorization: `${token.value}`,
         "Content-Type": 'application/json'
       },
       method: 'delete',
@@ -228,7 +230,6 @@ const goback = () => {
 const getEssayInfo = () => {
   axiosInstance.value({
     headers: {
-      Authorization: `${profileStore.token}`,
       "Content-Type": 'application/json'
     },
     method: 'get',
@@ -245,7 +246,7 @@ const getEssayInfo = () => {
 }
 
 onBeforeRouteUpdate((to,from)=> {
-  profileStore.getMyscraps(loginUserId);
+
   
 })
 

@@ -188,16 +188,20 @@
   const profileUser = computed(()=> {
     return store.profileUser
   })
+
+  watch(store.profileUser,(newValue)=> {
+    console.log(newValue)
+  })
   const followings_list = ref<Following[]>([])
   // 현재 접속자와 현재 profileuser의 id 일치 여부
   // 나의 팔로잉 명단 중에서 profileuser의 id가 있는지 여부
   const myFollwing = ref<boolean>(false)
-  const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
+  const loginUserId = ref(JSON.parse(localStorage.getItem('user_info')||"").id)
   const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
   const unfollow_list = ref<Unfollowing[]>([])
   const isMe = computed(()=> {
-    return profileUser.value.id == Number(loginUserId)
+    return profileUser.value.id == Number(loginUserId.value)
   })
 
 
@@ -210,7 +214,7 @@
       },
 
       method: 'post',
-      url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
+      url: `${BACK_API_URL}/profile/${loginUserId.value}/follow`,
       data: {
         followingId: user.id
       }
@@ -232,7 +236,7 @@
       },
 
       method: 'delete',
-      url: `${BACK_API_URL}/profile/${loginUserId}/unfollow`,
+      url: `${BACK_API_URL}/profile/${loginUserId.value}/unfollow`,
       data: {
         "unfollowings": [{followingId: profileUser.value.id},]
       }
@@ -278,7 +282,7 @@
         },
     
         method: 'DELETE',
-        url: `${BACK_API_URL}/profile/${loginUserId}/unfollow`,
+        url: `${BACK_API_URL}/profile/${loginUserId.value}/unfollow`,
         data: {
           "unfollowings": unfollow_list.value
         }
@@ -325,7 +329,7 @@
 
 
   const gotoMychatList = () => {
-    router.push({name: "chat", params:{id:loginUserId}});
+    router.push({name: "chat", params:{id:loginUserId.value}});
   }
 
   const chatStore = useChatStore();
@@ -386,7 +390,7 @@
         Authorization: `${store.token}`
       },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
+      url: `${BACK_API_URL}/profile/${loginUserId.value}/follow`,
     })
     .then((response)=> {
       console.log(response.data)
@@ -410,7 +414,7 @@
         Authorization: `${store.token}`
       },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
+      url: `${BACK_API_URL}/profile/${loginUserId.value}/follow`,
     })
     .then((response)=> {
       console.log(response.data)

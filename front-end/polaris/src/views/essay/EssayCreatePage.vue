@@ -42,9 +42,9 @@
 
 <script setup lang="ts">
 import Navvar from '@/components/common/Navvar.vue'
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import Editor from '../../components/essay/TiptapEditor.vue';
-import { useRouter } from 'vue-router';
+import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { profileCounterStore } from '@/stores/profilecounter';
 import type { Book } from '@/stores/profilecounter';
 import axiosInstance from '@/services/axios';
@@ -52,22 +52,30 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 const profileStore = profileCounterStore();
-const mybookList = profileStore.mybookLists
-const essayBooks = computed(()=> {
-  return mybookList.filter((mybook)=> mybook.isOwned == true)
+const getMybookList = profileStore.getMybookList
+const loginUserId = ref("")
+const mybookList = ref<Book[]>([])
+const token = ref(localStorage.getItem('user_token'));
+const BACK_API_URL = profileStore.BACK_API_URL
+const essayBooks = ref<Book[]>([])
+
+watch(mybookList,(newList)=> {
+  essayBooks.value = newList.filter((book)=> book.isOwned == true)
 })
+
 const title = ref('')
 const isOpened = ref(true)
 const router = useRouter();
 const selectedBook = ref<Book|null>(null)
 const content = ref(``)
+
+
 const writeEssay = () => {
   axiosInstance.value({
     headers: {
-      Authorization: `${profileStore.token}`,
+      Authorization: `${token.value}`,
       "Content-Type": 'application/json'
     },
-
     method: 'post',
     url: `${profileStore.BACK_API_URL}/essay`,
     data: {
@@ -100,10 +108,31 @@ const toggleOpened = () => {
     isOpened.value = !isOpened.value
   }
 
+
+
 onMounted(()=> {
+  loginUserId.value = JSON.parse(localStorage.getItem('user_info')||"").id
+  // 로그인 유저의 서재목록 조회
+  axiosInstance.value({
+    headers: {
+      Authorization: `${token.value}`
+    },
+      method: 'get',
+      url: `${BACK_API_URL}/book/${loginUserId.value}/library`,
+    })  
+  .then((response) => {
+    const res = response.data.data
+    if(res['books']){
+      mybookList.value = res['books']
+    } else{
+      mybookList.value = []
+    }
+    })
+    .catch((error)=> {
+      console.error("에러발생: ",error)
+    })
+
 })
-
-
 
 </script>
 

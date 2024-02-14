@@ -2,7 +2,7 @@ import { ref, computed, watch, watchEffect } from 'vue'
 import { defineStore } from 'pinia'
 // import axios from 'axios';
 import axiosInstance from '@/services/axios'
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2'
 
 export interface Searchbook  {
   isbn: string,
@@ -86,7 +86,7 @@ export type TradeInfo =  {
 
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
-  const token = ref("");
+  const token = ref(JSON.parse(localStorage.getItem('user_info')||"").id);
   
   // const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
   const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
@@ -116,7 +116,7 @@ export const profileCounterStore = defineStore('counter', () => {
   
 
   watch(profileUser, (newValue, oldValue) => {
-    // console.log(newValue)
+    console.log(newValue)
   });
    
 
@@ -238,6 +238,7 @@ export const profileCounterStore = defineStore('counter', () => {
       })
       .catch((error)=>{
         console.error(error)
+        searchbookLists.value = []
       })
     };
   };
@@ -267,8 +268,6 @@ const getMybookList = (id:string)=> {
     .catch((error)=> {
       console.error("에러발생: ",error)
     })
-
-    return mybookLists.value
 }
 
   const filterResult = mybookLists.value
