@@ -43,16 +43,7 @@ public class EmitterRepositoryImpl implements EmitterRepository{
 
 	@Override
 	public List<SseEmitter> findEmittersById(Long chatRoomId) {
-
 		List<SseEmitter> emitters = chatRooms.getOrDefault(chatRoomId, new CopyOnWriteArrayList<>());
-
-		// TODO: 채팅방 ID에 대한 emitters가 없는 경우에 대한 오류 처리 필요
-		// if (emitters.get(chatRoomId) == null){
-		// 	this.save(chatRoomId, new SseEmitter(60*60*1000L));
-		// }
-		//
-		// SseEmitter emitter = emitters.get(chatRoomId);
-
 		return emitters;
 	}
 

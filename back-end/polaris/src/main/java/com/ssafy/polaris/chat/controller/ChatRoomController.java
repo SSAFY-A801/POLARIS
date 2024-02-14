@@ -38,7 +38,6 @@ public class ChatRoomController {
 	public ResponseEntity<DefaultResponse<ChatRoomCreateResponseDto>> createChatRoom(
 		@RequestBody ChatRoomCreateRequestDto request) {
 		// trade 테이블에 등록하기 -> userid, receiverid, tradeType이 온다.
-		System.out.println("create chat room");
 		ChatRoomCreateResponseDto chatroom = chatRoomService.createChatRoom(request);
 		return DefaultResponse.toResponseEntity(
 			HttpStatus.CREATED,
@@ -54,7 +53,6 @@ public class ChatRoomController {
 	@GetMapping
 	public ResponseEntity<DefaultResponse<ChatRoomListResponseDto>> getChatRoomList(
 		@AuthenticationPrincipal SecurityUser securityUser) {
-		System.out.println("controller - get chat room list");
 		// 사용자 id가 필요하고, 사용자가 참여중인 채팅방 리스트를 반환한다.
 		Long senderId = securityUser.getId();
 
@@ -84,7 +82,6 @@ public class ChatRoomController {
 	 */
 	@GetMapping(path = "/{chatRoomId}")
 	public ResponseEntity<DefaultResponse<ChatRoomParticipantsResponseDto>> getChatRoomParticipants(@PathVariable(value = "chatRoomId") Long chatRoomId, @AuthenticationPrincipal SecurityUser securityUser) {
-		System.out.println("Controller - getChatRoomParticipants");
 
 		// Long userId = 71L;
 		Long userId = securityUser.getId();
@@ -109,7 +106,6 @@ public class ChatRoomController {
 	// 채팅 메세지 db에서 가져오기
 	@GetMapping("/message/{chatRoomId}")
 	public ResponseEntity<DefaultResponse<ChatMessageListResponseDto>> getChatMessageList(@PathVariable(value = "chatRoomId") Long chatRoomId){
-		// List<ChatMessageSaveDto> chatMessageSaveDtos = chatSaveService.loadMessage(chatRoomId);
 		ChatMessageListResponseDto chatMessageListResponseDto = chatSaveService.loadMessage(chatRoomId);
 		
 		// 저장된 메세지가 없는 경우

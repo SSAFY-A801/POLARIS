@@ -3,8 +3,6 @@ package com.ssafy.polaris.trade.service;
 import java.util.List;
 
 import com.ssafy.polaris.trade.dto.*;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.polaris.book.domain.UserBookTradeType;
@@ -20,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TradeServiceImpl implements TradeService {
-	private final EntityManager em;
 	private final UserBookRepository userBookRepository;
 	private final TradeRepository tradeRepository;
 	private final TradeUserBookRepository tradeUserBookRepository;

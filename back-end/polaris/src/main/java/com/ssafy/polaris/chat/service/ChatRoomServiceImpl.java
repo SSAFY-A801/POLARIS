@@ -30,7 +30,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	 * insert
 	 */
 	public ChatRoomCreateResponseDto createChatRoom(ChatRoomCreateRequestDto request) {
-		System.out.println("create chat room - service");
 		// request를 trade 엔티티로 변경
 		Trade trade = tradeMapper.toEntity(request);
 		// trade에 저장
@@ -46,7 +45,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	 */
 	@Override
 	public ChatRoomListResponseDto getChatRoomList(Long senderId) {
-		System.out.println("get chat room list - service ");
 		List<BasicChatRoomResponseDto> basicChatRoomResponseDtoList = tradeRepository.getChatRoomList(senderId);
 		return new ChatRoomListResponseDto(senderId, basicChatRoomResponseDtoList);
 	}
