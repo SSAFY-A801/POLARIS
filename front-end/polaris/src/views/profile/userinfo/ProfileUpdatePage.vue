@@ -28,7 +28,7 @@
               </label>
               <input id="update-image" type="file" @change="handleFileChange" class="hidden" />
             </div>
-            <div class="font-bold mt-2">{{ profileUser.nickname }}</div>
+            <div class="font-bold mt-2">{{ profileUser!.nickname }}</div>
           </div>
         </div>
       </div>
@@ -88,8 +88,8 @@
   const route = useRoute();
   const userInfo = ref<User|null>(null)
   const profileUser = ref(store.profileUser)
-  const newnickname = ref<string>(profileUser.value.nickname)
-  const imageUrl = ref<string | null>(profileUser.value.profileUrl);
+  const newnickname = ref<string>(profileUser.value!.nickname);
+  const imageUrl = ref<string | null>(profileUser.value!.profileUrl);
   const isValidNickname = ref(true)
   const mylocation = ref("")
   const mylocationCode = ref<number|null>(null)
@@ -116,12 +116,12 @@
 
 
   watch(() => newnickname.value, (newNickname, oldNickname) => {
-  if(newNickname == profileUser.value.nickname){
+  if(newNickname == profileUser.value!.nickname){
     isValidNickname.value = true
   } else {
     isValidNickname.value = false;
   }
-  console.log(newNickname == profileUser.value.nickname)
+  console.log(newNickname == profileUser.value!.nickname)
 });
 
 
@@ -208,7 +208,7 @@
     }
     axiosInstance.value({
       method: 'patch',
-      url: `${BACK_API_URL}/profile/${profileUser.value.id}`,
+      url: `${BACK_API_URL}/profile/${profileUser.value!.id}`,
       headers: {
         Authorization: `${store.token}`,
         "Content-Type": 'multipart/form-data'
@@ -239,7 +239,7 @@
       "Content-Type": 'application/json'
     },
       method: 'get',
-      url: `${BACK_API_URL}/profile/${profileUser.value.id}`,
+      url: `${BACK_API_URL}/profile/${profileUser.value!.id}`,
     })  
   .then((response) => {
     const userData = response.data['data']
@@ -257,7 +257,7 @@
   
   
   onBeforeMount(()=> {
-    getProfile(profileUser.value.id)
+    getProfile(profileUser.value!.id)
   })
 
 </script>
