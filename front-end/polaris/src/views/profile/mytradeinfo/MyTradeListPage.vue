@@ -31,8 +31,8 @@ type TradeHistory = {
   [key:number]: TradeInfo[]
 }
 
-const router = useRouter();
 
+const router = useRouter();
 const store = profileCounterStore();
 const loginUserId = JSON.parse(localStorage.getItem('user_info')||"").id
 const Tradehistory = ref<TradeHistory>({})

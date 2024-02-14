@@ -32,9 +32,9 @@
   const store = profileCounterStore();
 
   const deleteBookcart = (isbn:string)=> {
-    console.log('이전 카트: ',store.bookCartList)
+    // console.log('이전 카트: ',store.bookCartList)
     store.bookCartList = store.bookCartList.filter((book)=> book.isbn != isbn)
-    console.log('이후 카트: ',store.bookCartList)
+    // console.log('이후 카트: ',store.bookCartList)
   }
 
   const emit =  defineEmits<{

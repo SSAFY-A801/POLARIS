@@ -214,7 +214,7 @@
   const BACK_API_URL = store.BACK_API_URL
   const showModal = ref(false) 
   const unfollow_list = ref<Unfollowing[]>([])
-  const isMe = computed(()=> {
+    const isMe = computed(()=> {
     return profileUser.value.id == Number(loginUserId)
   })
 
@@ -431,7 +431,7 @@
       url: `${BACK_API_URL}/profile/${loginUserId}/follow`,
     })
     .then((response)=> {
-      console.log(response.data)
+      // console.log(response.data)
       const res = response.data
       followings_list.value = res.data['followings']
       if(followings_list.value.some((following) => following.followingId == profileUser.value.id )){

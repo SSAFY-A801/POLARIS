@@ -1,6 +1,6 @@
 import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
-// import axios from 'axios';
+import axios from 'axios';
 import axiosInstance from '@/services/axios'
 import Swal from 'sweetalert2'
 
@@ -204,8 +204,11 @@ export const profileCounterStore = defineStore('counter', () => {
           })
           searchbookLists.value = searchBooks.value
         } else {
-          alert("검색목록을 불러올 수 없습니다.\n다른 검색어로 시도하세요.")
-        }
+          Swal.fire({
+            title:"검색목록을 불러올 수 없습니다.\n다른 검색어로 시도하세요.",
+            icon:'error'
+        })
+      }
       })
       .catch((error)=>{
         console.error(error)
