@@ -75,8 +75,10 @@ import EssayList from '../../components/essay/EssayList.vue';
 import axiosInstance from '@/services/axios';
 import { essayStore } from '@/stores/essaycounter';
 import type { Essay } from '@/stores/essaycounter';
+import Swal from 'sweetalert2';
 
 
+const userToken = localStorage.getItem('user_token')
 const router = useRouter();
 const filter = ref("")
 const keyword = ref("")
@@ -161,6 +163,29 @@ const paging = () => {
   }
 }
 
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'login') {
+    if (!userToken) {
+      if (to.name === 'essaycreate') {
+        Swal.fire({
+          title: "로그인이 필요한 작업입니다.",
+          icon: 'error'
+        }).then(() => {
+          next({ path: '/login' });
+        });
+      } else {
+        // 다른 인증이 필요한 라우트 처리
+        // 예를 들어: next({ name: 'someOtherRoute' })
+      }
+    } else {
+      // userToken이 있는 경우에는 해당 라우트로 이동 허용
+      next();
+    }
+  } else {
+    // 'login' 라우트로 이동 허용
+    next();
+  }
+});
 
 
 

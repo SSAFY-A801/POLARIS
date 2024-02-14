@@ -54,8 +54,8 @@
       <!-- 댓글 작성 -->
       <div class="flex items-center">
         <div class="font-bold mr-4">{{essay?.comments.length || 0 }} 개의 댓글</div>
-        <input v-model="comment" type="text" id="book"  class="w-2/3 rounded-lg appearance-none border border-gray-500 py-2 px-4 m-2 bg-gray-50 text-maintheme1 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="댓글 추가"/>
-        <button id="add-comment" @click="addComment(comment)" type="button" class=" text-white bg-maintheme1 hover:bg-gray-500 py-2  px-6 ml-4 font-bold rounded-md">
+        <input v-model="commentContext" type="text" id="book"  class="w-2/3 rounded-lg appearance-none border border-gray-500 py-2 px-4 m-2 bg-gray-50 text-maintheme1 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent" placeholder="댓글 추가"/>
+        <button id="add-comment" @click="addComment(commentContext)" type="button" class=" text-white bg-maintheme1 hover:bg-gray-500 py-2  px-6 ml-4 font-bold rounded-md">
           등록
         </button>
       </div>
@@ -87,6 +87,7 @@
   const scraps = ref<number>(0)
   const profileStore = profileCounterStore();
   const token = ref(localStorage.getItem('user_token'))
+  const BACK_API_URL = profileStore.BACK_API_URL
   const essay = ref<Essay|null>(null)
   const route = useRoute();
   const router  = useRouter();
@@ -98,7 +99,7 @@
     scrap.value = newList.some((post:ScrapPost) => post.essayId == essay.value?.id)
   });
 
-  const comment = ref("")
+  const commentContext = ref("")
   const isMe = computed(()=> {
     return essay.value?.userId ==  Number(loginUserId)
   })
@@ -129,6 +130,7 @@
       })
       .then((response) => {
         console.log(response.data)
+        commentContext.value = ""
         // 독후감 정보 갱신
         axiosInstance.value({
           headers: {
