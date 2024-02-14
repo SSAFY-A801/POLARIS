@@ -243,7 +243,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Map<String, String> reissue(String refreshToken, String email) {
-        if (!refreshToken.equals(redisTemplate.opsForValue().get("refresh:"+email))) {
+        if (!("Bearer " + refreshToken).equals(redisTemplate.opsForValue().get("refresh:"+email))) {
+            System.out.println(refreshToken);
             throw new UserNotAuthorizedException("UserService:reissue:저장된 refresh 토큰과 요청의 토큰이 다릅니다.");
         }
 
