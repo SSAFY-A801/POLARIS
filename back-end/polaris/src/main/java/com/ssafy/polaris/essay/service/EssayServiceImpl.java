@@ -102,7 +102,7 @@ public class EssayServiceImpl implements EssayService {
 		searchConditions.setWord(searchConditions.getWord().trim());
 		boolean isNotSearch = searchConditions.getWord() == null || searchConditions.getWord().equals("");
 		if (isNotSearch) {
-			jpql += " order by id desc ";
+			jpql += " order by e.id desc ";
 			query = em.createQuery(jpql, Essay.class);
 		} else {
 			if (searchConditions.getKey().equals("title")) {
@@ -114,7 +114,7 @@ public class EssayServiceImpl implements EssayService {
 			} else {
 				throw new WrongSearchConditionException("");
 			}
-			jpql += " order by id desc ";
+			jpql += " order by e.id desc ";
 
 			query = em.createQuery(jpql, Essay.class);
 			query.setParameter("word", searchConditions.getWord());
