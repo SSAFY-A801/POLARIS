@@ -1,10 +1,14 @@
-👩‍💻 **Language & Frameworks**
+# 💫 POLARIS
+# 개요
 
+# 개발 환경
+⚙️ Management Tools
+
+<img alt="Jira" src="https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&amp;logoColor=white"/>
 <img alt="GitLab" src="https://img.shields.io/badge/GitLab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"/>
 <img alt="Mattermost" src="https://img.shields.io/badge/Mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white"/>
 <img alt="Notion" src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white"/>
 <img alt="Figma" src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"/>
-
 
 🖥️ **IDE**
 
@@ -20,6 +24,8 @@
 <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
 <img alt="Ubuntu" src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white"/>
 <img alt="Jenkins" src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white"/>
+
+
 
 📱 **Frontend**
 
@@ -38,3 +44,21 @@
 <img alt="JSON Web Token" src="https://img.shields.io/badge/JSON Web Token-000000?style=for-the-badge&logo=jwt&logoColor=white"/>
 <img alt="Redis" src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"/>
 <img alt="MariaDB" src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white"/>
+
+# 서비스 화면
+
+
+
+# 주요 기능
+
+
+
+# 기술 소개
+
+
+
+# 설계 문서
+
+
+
+# 팀원 소개
