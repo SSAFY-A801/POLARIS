@@ -52,7 +52,7 @@ onMounted(async () => {
     try {
       const token = ref(localStorage.getItem('user_token'))
       const ChatParticipant = ref<ChatParticipantData[] | null>(null);
-      const response = await axios.get<ChatParticipantResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/${chatRoomId.value}`, {
+      const response = await axios.get<ChatParticipantResponse>(`${import.meta.env.VITE_API_KEY}/chatroom/${chatRoomId.value}`, {
         headers: {
           'Authorization': token.value?.replace("\"", "")
         }

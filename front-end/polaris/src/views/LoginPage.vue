@@ -62,7 +62,7 @@ const userPassword = ref('')
 
 const userLogin = async () => {
     if ( userEmail.value && userPassword.value ) {
-    await axios.post('https://i10a801.p.ssafy.io:8082/user/login', 
+    await axios.post(`${import.meta.env.VITE_API_KEY}/user/login`, 
   JSON.stringify({
     email: userEmail.value,
     password: userPassword.value
@@ -97,7 +97,7 @@ const userLogin = async () => {
 
 //카카오로그인 인가코드 받기-카카오로그인 페이지로 리다이렉트
 const kakaoLogin = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=31926718e1eea569505c9974c657cda1&redirect_uri=https://i10a801.p.ssafy.io/kakaologin&response_type=code`
+    window.location.href = `${import.meta.env.VITE_KAKAO_URL}?client_id=${import.meta.env.VITE_KAKAO_ID}&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT}`
 }
 
 

@@ -160,7 +160,7 @@ const chatroomId = Number(route.params.chatroomId);
 
 const completeSell = async (chatroomId: number) => {
   try {
-      const response = await axiosInstance.value.patch(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
+      const response = await axiosInstance.value.patch(`${import.meta.env.VITE_API_KEY}/trade/${chatroomId}`);
   
       if (response.status === 200) {
         console.log('거래가 완료되었습니다:', response.data);
@@ -249,7 +249,7 @@ export interface UpdatedBookDataResponse {
 const chooseBook = async (data: UpdatedBookData) => {
   try {
     const response = await axiosInstance.value.post<UpdatedBookDataResponse>(
-      'https://i10a801.p.ssafy.io:8082/trade', 
+      `${import.meta.env.VITE_API_KEY}/trade`, 
       data, 
       {
         headers: {
@@ -279,7 +279,7 @@ const sellingData = ref<ResponseData | null>(null);
 const token = ref(localStorage.getItem('user_token'))
 onMounted(async () => {
   try {
-        const response = await axiosInstance.value.get<ApiResponse>(`https://i10a801.p.ssafy.io:8082/trade/purchase_books`, {
+        const response = await axiosInstance.value.get<ApiResponse>(`${import.meta.env.VITE_API_KEY}/trade/purchase_books`, {
       headers: {
         'Authorization': token.value?.replace("\"", "")
         // 'Content-Type': 'application/json'
@@ -348,7 +348,7 @@ const GetchatRoomTradeBooks = ref<ChatRoomTradeBooks[]>([]);
 onMounted(async () => {
     try {
       const token = ref(localStorage.getItem('user_token'))
-      const response = await axiosInstance.value.get<ChatRoomTradeBooksResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/book_list/${chatroomId}`, {
+      const response = await axiosInstance.value.get<ChatRoomTradeBooksResponse>(`${import.meta.env.VITE_API_KEY}/chatroom/book_list/${chatroomId}`, {
         headers: {
           'Authorization': token.value?.replace("\"", "")
         } 

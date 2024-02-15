@@ -229,7 +229,7 @@ const sendSelectedBooks = async () => {
 const chooseBook = async (data: UpdatedBookData) => {
   try {
     const response = await axiosInstance.value.post<UpdatedBookDataResponse>(
-      'https://i10a801.p.ssafy.io:8082/trade',
+      `${import.meta.env.VITE_API_KEY}/trade`,
       data,
       {
         headers: {
@@ -255,7 +255,7 @@ const token = ref(localStorage.getItem('user_token'))
 
 onMounted(async () => {
   try {
-    const response = await axiosInstance.value.get<ApiResponse>(`https://i10a801.p.ssafy.io:8082/trade/exchange_books`, {
+    const response = await axiosInstance.value.get<ApiResponse>(`${import.meta.env.VITE_API_KEY}/trade/exchange_books`, {
       headers: {
         'Authorization': token.value?.replace("\"", ""),
         // 'Content-Type': 'application/json'
@@ -322,7 +322,7 @@ const chatroomId = Number(route.params.chatroomId);
 
 const completeChange = async (chatroomId: number) => {
   try {
-    const response = await axiosInstance.value.patch(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
+    const response = await axiosInstance.value.patch(`${import.meta.env.VITE_API_KEY}/trade/${chatroomId}`);
     if (response.status === 200) {
       console.log('거래가 완료되었습니다:', response.data);
       alert('교환이 완료되었습니다. \n프로필에서 교환내역을 확인할 수 있습니다.')

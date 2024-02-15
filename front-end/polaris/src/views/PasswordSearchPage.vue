@@ -33,7 +33,7 @@ watch(() => passwordSearchEmail.value,  (current) => {
 })
 
 const sendTemporaryPassword =async () => {
-    await axios.post('https://i10a801.p.ssafy.io:8082/send_mail/password', {email: passwordSearchEmail.value}, {
+    await axios.post(`${import.meta.env.VITE_API_KEY}/send_mail/password`, {email: passwordSearchEmail.value}, {
     headers: {
     "Content-Type": "application/json"
   }})

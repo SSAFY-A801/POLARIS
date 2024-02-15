@@ -23,7 +23,7 @@ try {
 }
 
 // axios 인스턴스 생성
-const baseURL = 'https://i10a801.p.ssafy.io:8082';
+const baseURL = import.meta.env.VITE_API_KEY;
 const token = ref(localStorage.getItem('user_token'))
 
 const instance = axios.create({
@@ -54,14 +54,18 @@ instance.interceptors.response.use(
       localStorage.setItem('refresh_token', response.data.data.refresh);
       // localStorage.setItem('user_info', response.data.data);
       token.value = localStorage.getItem('user_token')
+      // console.log(token.value)
+      if (token.value !== null) {
       const profilestore = profileCounterStore()
       const userstore = useUserStore()
       const essaystore = essayStore()
       const chatstore = useChatStore()
-      profilestore.token = token.value?token.value : ''
+      profilestore.token = token.value
       essaystore.token = token.value
       chatstore.token = token.value
       error.config.headers['Authorization'] = token.value?.replace("\"", "")
+    }
+      
 
       // 실패한 요청 재실행
       return instance.request(error.config)

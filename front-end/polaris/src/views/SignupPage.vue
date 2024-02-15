@@ -155,7 +155,7 @@ const updateRegion = (newRegion: {name: string, code: string}) => {
 // 입력한 닉네임 서버로 전송
 // 중복 검사 성공시 isNicknameVerified = true로 바꾸기
 const checkNickname = async () => {
-  await axios.get(`https://i10a801.p.ssafy.io:8082/user/nickname_check/${nicknameInput.value}`, {
+  await axios.get(`${import.meta.env.VITE_API_KEY}/user/nickname_check/${nicknameInput.value}`, {
     headers: {
     "Content-Type": "application/json",
   }
@@ -188,7 +188,7 @@ const checkNickname = async () => {
  // 입력한 이메일을 서버로 전송
   // 성공시 isEmailVerificationInput.value =true로 바꾸기
 const sendEmail = async () => {
-  await axios.post('https://i10a801.p.ssafy.io:8082/send_mail/email', 
+  await axios.post(`${import.meta.env.VITE_API_KEY}/send_mail/email`, 
   JSON.stringify({
       email: emailInput.value
     }),
@@ -216,7 +216,7 @@ const sendEmail = async () => {
 //이메일 중복 체크
 //존재하지 않는 이메일일 경우 sendEmail 함수 실행(이메일 전송)
 const checkEmail = async () => {
-  await axios.get(`https://i10a801.p.ssafy.io:8082/user/email_check/${emailInput.value}`, {
+  await axios.get(`${import.meta.env.VITE_API_KEY}/user/email_check/${emailInput.value}`, {
     headers: {
     "Content-Type": "application/json",
   }
@@ -246,7 +246,7 @@ const checkEmail = async () => {
 // 입력받은 인증코드 서버로 전송
 // 인증 성공시 isEmailVerificationInput.value =false 로 바꾸기,  isEmailVerified = true로 바꾸기
 const checkVerifyCode = async () => {
-  await axios.post('https://i10a801.p.ssafy.io:8082/user/email_cert', 
+  await axios.post(`${import.meta.env.VITE_API_KEY}/user/email_cert`, 
     JSON.stringify({
       email: emailInput.value,
       code: verificationCode.value
@@ -289,7 +289,7 @@ const checkPassword = () => {
   //회원가입 성공시 로그인 페이지로 이동
 const submitUserSignup = async () => {
   if (isNicknameVerified.value && isEmailVerified.value && !isPasswordVerified.value && regionInputCode.value) {
-  await axios.post('https://i10a801.p.ssafy.io:8082/user', 
+  await axios.post(`${import.meta.env.VITE_API_KEY}/user`, 
   JSON.stringify({
     email: emailInput.value,
     password: passwordInput.value,

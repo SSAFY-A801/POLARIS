@@ -57,7 +57,7 @@ export const useChatStore = defineStore('chat', () => {
   // const chatRoomId = ref<number | null>(null);
   const fetchChatInfo = async () => {
     try {
-      const response = await axiosInstance.value.get<ApiResponse>('https://i10a801.p.ssafy.io:8082/chatroom', {
+      const response = await axiosInstance.value.get<ApiResponse>(`${import.meta.env.VITE_API_KEY}/chatroom`, {
         headers: {
           // 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoamhAZ21haWwuY29tIiwiYXV0aCI6IkFVVEhPUklUWSIsImlkIjo4LCJlbWFpbCI6ImhqaEBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Iu2CueynhO2VmCIsImV4cCI6MTcyNDY4Nzg5NH0.RGSg_mX4rSNrHAIIBkfHg1AowDKwyAmzhnk2b7X8xaE',
           'Authorization': token.value?.replace("\"", "")
@@ -78,7 +78,7 @@ export const useChatStore = defineStore('chat', () => {
   const createChatRoom = async (senderId: number, receiverId: number, tradeType: string) => {
     try {
       const token = ref(localStorage.getItem('user_token'))
-      const response = await axiosInstance.value.post<CreateChatroomResponse>('https://i10a801.p.ssafy.io:8082/chatroom', {
+      const response = await axiosInstance.value.post<CreateChatroomResponse>(`${import.meta.env.VITE_API_KEY}/chatroom`, {
         senderId,
         receiverId,
         tradeType,

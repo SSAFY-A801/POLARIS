@@ -344,7 +344,7 @@ onMounted(async () => {
     chatRoomId.value = Number(route.params.chatroomId);
 
     const token = ref(localStorage.getItem('user_token'))
-    const response = await axiosInstance.value.get<ChatParticipantResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/${chatRoomId.value}`, {
+    const response = await axiosInstance.value.get<ChatParticipantResponse>(`${import.meta.env.VITE_API_KEY}/chatroom/${chatRoomId.value}`, {
       headers: {
         'Authorization': token.value?.replace("\"", "")
       }
@@ -450,7 +450,7 @@ const checkEvent = ref<boolean>(false);
 
 // 채팅방 입장 요청
 const joinChatRoom = () => {
-  const eventSource = new EventSource(`https://i10a801.p.ssafy.io:8082/chat/connect/${chatRoomId.value}`);
+  const eventSource = new EventSource(`${import.meta.env.VITE_API_KEY}/chat/connect/${chatRoomId.value}`);
 
   eventSource.addEventListener('message', (event) => {
     const data: SimpleMessage = JSON.parse(event.data);
@@ -498,7 +498,7 @@ const sendMessage = () => {
       message: newmessage.value.trim(),
     };
 
-    fetch('https://i10a801.p.ssafy.io:8082/chat/send_message', {
+    fetch(`${import.meta.env.VITE_API_KEY}/chat/send_message`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -555,7 +555,7 @@ const chatMessageList = ref<ChatMessageList[]>();
 onMounted(async () => {
   try {
     const token = ref(localStorage.getItem('user_token'))
-    const response = await axiosInstance.value.get<ChatMessageListResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/message/${chatRoomId.value}`, {
+    const response = await axiosInstance.value.get<ChatMessageListResponse>(`${import.meta.env.VITE_API_KEY}/chatroom/message/${chatRoomId.value}`, {
       headers: {
         'Authorization': token.value?.replace("\"", "")
       }
@@ -580,7 +580,7 @@ onMounted(async () => {
 const getTradeBookData = async () => {
   try {
     const token = ref(localStorage.getItem('user_token'))
-    const response = await axiosInstance.value.get<ChatRoomTradeBooksResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/book_list/${chatRoomId.value}`, {
+    const response = await axiosInstance.value.get<ChatRoomTradeBooksResponse>(`${import.meta.env.VITE_API_KEY}/chatroom/book_list/${chatRoomId.value}`, {
       headers: {
         'Authorization': token.value?.replace("\"", "")
       }
@@ -778,7 +778,7 @@ const submit = async () => {
     };
     console.log(data)
     const response = await axiosInstance.value.post<UpdatedBookDataResponse>(
-      'https://i10a801.p.ssafy.io:8082/trade',
+      `${import.meta.env.VITE_API_KEY}/trade`,
       data,
       {
         headers: {
@@ -829,7 +829,7 @@ const token = ref(localStorage.getItem('user_token'))
 
 onMounted(async () => {
   try {
-    const response = await axiosInstance.value.get<ApiResponse>(`https://i10a801.p.ssafy.io:8082/trade/exchange_books`, {
+    const response = await axiosInstance.value.get<ApiResponse>(`${import.meta.env.VITE_API_KEY}/trade/exchange_books`, {
       headers: {
         'Authorization': token.value?.replace("\"", ""),
         // 'Content-Type': 'application/json'
@@ -899,7 +899,7 @@ const chatroomId = Number(route.params.chatroomId);
 
 const completeChange = async (chatroomId: number) => {
   try {
-    const response = await axiosInstance.value.patch(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
+    const response = await axiosInstance.value.patch(`${import.meta.env.VITE_API_KEY}/trade/${chatroomId}`);
     if (response.status === 200) {
       console.log('거래가 완료되었습니다:', response.data);
       alert('교환이 완료되었습니다. \n프로필에서 교환내역을 확인할 수 있습니다.')

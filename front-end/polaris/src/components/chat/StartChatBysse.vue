@@ -23,7 +23,7 @@ const token = ref(localStorage.getItem('user_token'))
 // 채팅방 입장 get요청
 const enterChat = async () => {
     try {
-      const response = await axios.get<enterChatResponse>(`https://i10a801.p.ssafy.io:8082/chat/connect/${chatroomId}`, {
+      const response = await axios.get<enterChatResponse>(`${import.meta.env.VITE_API_KEY}/chat/connect/${chatroomId}`, {
         headers: {
           'Authorization': token.value?.replace("\"", "")
 
