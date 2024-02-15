@@ -27,7 +27,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 		+ "new com.ssafy.polaris.user.dto.UserResponseDto(c.user), "
 		+ "c.createdAt, "
 		+ "c.content) "
-		+ "from Comment c where c.essay.id = :essayId")
+		+ "from Comment c where c.essay.id = :essayId and c.deletedAt is null ")
 	List<CommentReponseDto> getCommentsByEssayId(@Param("essayId")Long essayId);
 
 	Optional<Comment> findCommentById(Long id);

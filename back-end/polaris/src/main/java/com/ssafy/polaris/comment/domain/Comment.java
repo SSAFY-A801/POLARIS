@@ -26,8 +26,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@SQLDelete(sql = "update comment set deleted_at = CURRENT_TIMESTAMP where id = ?")
-@SQLRestriction("deleted_at is NULL")
 public class Comment extends BaseEntity {
 	@NotNull
 	@ManyToOne
@@ -45,5 +43,9 @@ public class Comment extends BaseEntity {
 
 	public void updateComment(String content) {
 		this.content = content;
+	}
+
+	public void deleteComment() {
+		this.setDeletedAt(LocalDateTime.now());
 	}
 }

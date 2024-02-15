@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("select count(u) from User u inner join Trade t on u.id = t.sender.id " +
 		"where t.finishedAt is not null " +
-		"and t.sender.id = :userId " +
+		"and (t.sender.id = :userId or t.receiver.id = :userId) " +
 		"and t.status = :tradeStatus " +
 		"and t.tradeType = :tradeType")
 	int getTradeCnt(@Param("userId") Long userId,
