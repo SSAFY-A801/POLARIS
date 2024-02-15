@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+  import { ref } from 'vue';
   import type { TradeInfo } from '@/stores/profilecounter';
   import Swal from 'sweetalert2';
   const props = defineProps(['tradeitem'])
