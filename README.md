@@ -258,22 +258,19 @@
 <table align=center>
   <tr>
     <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/6574af80-99e8-416d-89a4-7133bbf4468a" width=380 />
+      <img src="https://github.com/seomiii/seomiii/assets/86819719/a47e6f92-66b8-4fe7-a81d-35ff38a3d689" width=380 />
     </td>
     <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/19339f6f-8af2-41d4-84e5-7fc71de7a06b" width=380 />
+      <img src="https://github.com/seomiii/seomiii/assets/86819719/dfe1a835-6e1e-4fac-8926-ee6a04a37e7f" width=380 />
     </td>
     <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/edc02cff-da14-4898-b0bf-6ea00c92c556" width=380 />
+      <img src="https://github.com/seomiii/seomiii/assets/86819719/5853a7d7-c200-4383-8afd-b8a35ded1100" width=380 />
     </td>
     <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/1b3b8eaa-3978-4b82-a958-d131169dd24c" width=380 />
+      <img src="https://github.com/seomiii/seomiii/assets/86819719/11c2c46a-eac1-44b0-b650-1afb08907932" width=380 />
     </td>
     <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/99620d2d-145d-4f2c-9226-4e74e3defc5f" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/5aee21e0-e1b6-4340-a631-5fda0cc4dbf2" width=380 />
+      <img src="https://github.com/seomiii/seomiii/assets/86819719/d5897f3b-7dec-439b-9a1f-4b4b2e030449" width=380 />
     </td>
 
   </tr>
@@ -282,20 +279,18 @@
       <p align=center>1:1 채팅</p>
     </td>
     <td>
-      <p align=center>교환 도서 선택</p>
+      <p align=center>교환 채팅방 - 교환 도서 선택</p>
     </td>
     <td>
-      <p align=center>교환 채팅방</p>
+      <p align=center>교환 채팅방 - 교환 도서 선택 2</p>
     </td>
     <td>
-      <p align=center>판매 및 구매 채팅방</p>
+      <p align=center>구매 채팅방</p>
     </td>
     <td>
-      <p align=center>작성한 독후감 상세 페이지</p>
+      <p align=center>판매 채팅방</p>
     </td>
-    <td>
-      <p align=center>독후감 수정</p>
-    </td>
+  
   </tr>
 </table>
 
@@ -314,7 +309,7 @@
       <img src="https://github.com/seomiii/seomiii/assets/86819719/19339f6f-8af2-41d4-84e5-7fc71de7a06b" width=380 />
     </td>
     <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/edc02cff-da14-4898-b0bf-6ea00c92c556" width=380 />
+      <img src="https://github.com/seomiii/seomiii/assets/86819719/c94b3f76-3f72-49f8-b94c-920b0fb9c08c" width=380 />
     </td>
     <td>
       <img src="https://github.com/seomiii/seomiii/assets/86819719/1b3b8eaa-3978-4b82-a958-d131169dd24c" width=380 />
@@ -335,7 +330,7 @@
       <p align=center>독후감 상세페이지</p>
     </td>
     <td>
-      <p align=center>독후감 작성</p>
+      <p align=center>독후감 작성 및 스크랩</p>
     </td>
     <td>
       <p align=center>독후감 작성 완료</p>
@@ -351,6 +346,7 @@
 
 - 독후감을 통해 다양한 사용자들과 도서의 감상을 공유할 수 있습니다.
 - 독후감을 작성, 수정, 삭제를 할 수 있습니다.
+- 마음에 드는 독후감을 스크랩 할 수 있습니다.
 - 독후감에 댓글을 작성, 수정, 삭제를 할 수 있습니다.
 
 ### [ 회원 가입 ]
