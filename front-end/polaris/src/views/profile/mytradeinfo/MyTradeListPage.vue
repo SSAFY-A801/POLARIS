@@ -60,7 +60,7 @@ onMounted(()=> {
         Tradehistory.value[trade['tradeId']] = [trade]
       }
     });
-    // console.log(Tradehistory.value)
+    console.log(Tradehistory.value)
   })
   .catch((error)=> {
     console.error(error);

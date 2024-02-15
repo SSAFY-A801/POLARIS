@@ -63,7 +63,7 @@
                       <div class="align-middle inline-block min-w-full">
                         <div class="shadow overflow-y-auto h-96 sm:rounded-lg">
                           <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">{{ checkEvent }}
+                            <thead class="bg-gray-50">
                               <tr>
                                 <th scope="col"
                                   class="p-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
@@ -115,22 +115,6 @@
                                 </td>
                               </tr>
                             </tbody>
-                            <!-- <tbody v-else class="bg-white">
-                                       <tr v-for="(book, index) in selectedBooks" :key="book.id" :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
-                                          <td class="p-4 w-auto text-sm font-normal text-gray-900">
-                                            {{ book.title }}
-                                          </td>
-                                          <td class="p-4 w-auto text-sm font-normal text-gray-500">
-                                            {{ book.author }}
-                                          </td>
-                                          <td class="p-4 whitespace-nowrap text-sm font-noraml text-gray-900">
-                                            {{ book.bookIsbn }}
-                                          </td>
-                                          <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                            {{ book.userBookPrice }}원
-                                          </td>
-                                       </tr>
-                                    </tbody> -->
                           </table>
                         </div>
                       </div>
@@ -145,7 +129,7 @@
                 <div>
                 </div>
               </div>
-              <div v-if="modalOpen">
+              <div v-if="modalOpen" class="mt-20">
 
                 <!-- component -->
                 <div class="font-sans bg-gray-100 flex items-center justify-center h-screen">
@@ -183,24 +167,22 @@
                                     class="p-4 whitespace-nowrap text-center text-m font-medium text-gray-500">도서선택</th>
                                 </tr>
                               </thead>
-                              <tbody>
-                                <ModalItem v-for="(book) in sellingData.books" :key="book.id" :book="book"
+                                <tbody v-if="checkEvent">
+                                  <ModalItem v-for="(book) in sellingData.books" 
+                                  :key="book.id" 
+                                  :book="book"
+                                  :realtimebooks="realtimeBooks"
+                                  :checkEvent="checkEvent"
                                   @emit="ControllTradeBookList" />
-                                <!-- <tr v-for="(book, index) in sellingData.books" :key="book.id"
-                                  :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
-                                  <td class="p-4 text-sm font-normal text-gray-900">{{ book.title }}</td>
-                                  <td class="p-4 text-sm font-normal text-gray-900">{{ book.author }}</td>
-                                  <td class="p-4 text-sm font-normal text-gray-900">{{ book.bookIsbn }}</td>
-                                  <td class="p-4 text-sm font-normal text-gray-900">{{ book.userBookPrice }}원</td>
-                                  <td class="p-4 text-sm font-normal text-gray-500">
-                                    <div class="flex justify-center items-center h-full">
-                                      <input type="checkbox" id="myCheckbox" value="" v-model=""
-                                        @click="toggleCheckbox()"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    </div>
-                                  </td>
-                                </tr> -->
-                              </tbody>
+                                </tbody>
+                                  <tbody v-else>
+                                  <ModalItem v-for="(book) in sellingData.books" 
+                                  :key="book.id" 
+                                  :book="book"
+                                  :originalbooks="originalBooks"
+                                  :checkEvent="checkEvent"
+                                  @emit="ControllTradeBookList" />
+                                </tbody>
                             </table>
                             <div v-else class="text-center py-4">
                               <div class="text-xl font-semibold">판매 가능한 도서가 없습니다.</div>
@@ -236,7 +218,7 @@
                     <div class="align-middle inline-block min-w-full">
                       <div class="shadow overflow-y-auto h-96 sm:rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200">
-                          <thead class="bg-gray-50">{{ checkEvent }}
+                          <thead class="bg-gray-50">
                             <tr>
                               <th scope="col"
                                 class="p-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
@@ -333,12 +315,7 @@ interface ChatParticipantResponse {
   data: ChatParticipantData;
 }
 
-// 채팅방 아이디 불러오기
-// onMounted(() => {
-//   console.log(route.params.chatroomId);
-//   chatRoomId.value = Number(route.params.chatroomId);
 
-// });
 
 const ChatParticipant = ref<ChatParticipantData | null>(null);
 // const senderId = ref<number|null>(null);
@@ -428,43 +405,22 @@ const joinChatRoom = () => {
 
   // 거래 도서에 대한 정보 이벤트
   // 
+  
   eventSource.addEventListener('change_trade_book_list', (event) => {
     const data: { chatRoomTradeBooks: ChatRoomTradeBooks[] } = JSON.parse(event.data);
     // 책이 있으면 담지않도록 하는 조건문
     chatRoomTradeBooks.value = [...data.chatRoomTradeBooks];  // Spread 연산자를 사용하여 두 배열을 병합
+    realtimeBooks.value = chatRoomTradeBooks.value
     console.log('eventdata', data);
     checkEvent.value = true;
   });
 
-
-  // 거래 도서에 대한 정보 이벤트
-  // eventSource.addEventListener('change_trade_book_list', (event) => {
-  //   const data: ChatRoomTradeBooks = JSON.parse(event.data)
-  //   chatRoomTradeBooks.value.push(data)
-  //   console.log(data)
-  // })
 };
 
 onMounted(() => {
   joinChatRoom();
 });
 
-// get배열을 초기화하기 위한 코드
-// watch(chatRoomTradeBooks, (newVal, oldVal) => {
-//  // console.log("event not change");
-
-//   if ( newVal.length > 0) { 
-//     console.log("event change");
-
-//     GetchatRoomTradeBooks.value = []; 
-//     console.log("get 초기화");
-//     console.log(GetchatRoomTradeBooks.value.length);
-
-
-//   }
-// }, { deep: true });
-
-// fetchChatInfo(모든 정보가 다 옴)가 아니라 채팅방 생성 시 반환되는 정보를 가져와야 할듯? 나의 닉네임, 상대방의 닉네임 정보가 추가로 필요함
 
 const sendMessage = () => {
   if (newmessage.value.trim() !== '' && chatRoomId.value !== null) {
@@ -575,12 +531,6 @@ const getTradeBookData = async () => {
 }
 
 
-//   interface ChatRoomTradeBooksResponse {
-//     status: number;
-//     message: string;
-//     data: {
-//     chatRoomTradeBooks: ChatRoomTradeBooks[];
-//   };}
 interface ChatRoomTradeBooksResponse {
   status: number;
   message: string;
@@ -588,6 +538,7 @@ interface ChatRoomTradeBooksResponse {
 }
 
 const originalBooks = ref<ChatRoomTradeBooks[]>([]);
+const realtimeBooks = ref<ChatRoomTradeBooks[]>([]);
 const GetchatRoomTradeBooks = ref<ChatRoomTradeBooks[]>([]);
 //선택된 거래 도서 정보 요청 api
 
@@ -600,6 +551,7 @@ const modalOpen = ref(false);
 
 const toggleModal = () => {
   modalOpen.value = !modalOpen.value;
+  TradeBookList.value = []
 };
 
 
@@ -627,29 +579,6 @@ const completeSell = async (chatroomId: number) => {
 
 };
 
-// const originalBooks = ref<Book[]>([]);
-// // 재작성
-// const selectedBooks = ref<Book[]>([]);
-// const isChecked = ref<Record<number, boolean>>({});
-// const toggleCheckbox = (bookId: number) => {
-//   // const foundBook = sellingData.value?.books.find(book => book.id === bookId) 
-//   //             || sellingData.value?.seriesBooks.books.find(book => book.id === bookId);
-//   const foundBook = sellingData.value?.books.find(book => book.id === bookId);
-//   if (foundBook) {
-//     originalBooks.value = [...selectedBooks.value];
-//     isChecked.value[bookId] = !isChecked.value[bookId];
-
-//     if (isChecked.value[bookId]) {
-//       // 체크된 경우에는 배열에 추가
-//       if (!selectedBooks.value.includes(foundBook)) {
-//         selectedBooks.value.push(foundBook);
-//       }
-//     } else {
-//       // 체크가 해제된 경우에는 배열에서 제거
-//       selectedBooks.value = selectedBooks.value.filter(book => book.id !== bookId);
-//     }
-//   }
-// };
 
 interface NetBookData {
   id: number;
@@ -664,16 +593,14 @@ const ControllTradeBookList = (id: number, isbn: string, isTraded: boolean) => {
     id: id,
     bookIsbn: isbn
   }
+
   if (isTraded == true) {
-    if (!TradeBookList.value.some((book) => book.id === id)) {
-      TradeBookList.value.push(newData)
-    }
+    TradeBookList.value.push(newData)
   }
   else {
-    if (TradeBookList.value.some((book) => book.id === id)) {
-      TradeBookList.value = TradeBookList.value.filter((book) => book['id'] !== id)
-    }
+    TradeBookList.value = TradeBookList.value.filter((book) => book['id'] !== id)
   }
+  console.log(TradeBookList.value)
 }
 
 // 선택된 도서의 목록에 대한 POST 요청(선택된 도서들의 id)
@@ -690,12 +617,9 @@ export interface UpdatedBookDataResponse {
   data: UpdatedBookData;
 }
 
-// let addedBooks: AddedBooks[] = [];
-// let deletedBooks: Deletedbooks[] = [];
+
 const addedBooks = ref<NetBookData[]>([]);
 const deletedBooks = ref<NetBookData[]>([]);
-// const isChecked = ref<Record<number, boolean>>({});
-
 
 const submit = async () => {
   try {
@@ -759,29 +683,6 @@ const submit = async () => {
 };
 
 
-
-const chooseBook = async (data: UpdatedBookData) => {
-};
-
-// const sendSelectedBooks = async () => {
-//   console.log('Selected Books:', selectedBooks.value);
-//   if (sellingData?.value) {
-//     toggleModal();
-//   }
-
-//   const addedBooks = selectedBooks.value.filter(book => !originalBooks.value.includes(book));
-//   const deletedBooks = originalBooks.value.filter(book => !selectedBooks.value.includes(book));
-
-
-//   await chooseBook(data);
-// };
-
-
-
-// 판매금액의 총합
-// const totalAmount = computed(() => {
-//   return selectedBooks.value.reduce((sum, book) => sum + book.userBookPrice, 0);
-// });
 
 
 const sellingData = ref<ResponseData | null>(null);

@@ -13,16 +13,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import type { Book } from './SellChattingBox.vue';
 
 interface TradeBookData {
   book: Book
+
 }
 
-const { book } = defineProps<TradeBookData>();
 
+
+const { book } = defineProps<TradeBookData>()
 const isTraded = ref<boolean>(false)
+
 
 const emit = defineEmits<{
   (e:'emit', id: number, isbn: string, isTraded: boolean): void
@@ -31,6 +34,10 @@ const emit = defineEmits<{
 const startEmit = () => {
   emit('emit', book.id, book.bookIsbn, !isTraded.value)
 }
+
+onMounted(()=> {
+
+})
 </script>
 
 <style scoped></style>
