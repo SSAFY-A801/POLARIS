@@ -97,7 +97,7 @@ const userLogin = async () => {
 
 //카카오로그인 인가코드 받기-카카오로그인 페이지로 리다이렉트
 const kakaoLogin = () => {
-    window.location.href = `${import.meta.env.VITE_KAKAO_URL}?client_id=${import.meta.env.VITE_KAKAO_ID}&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT}`
+    window.location.href = `${import.meta.env.VITE_KAKAO_URL}?client_id=${import.meta.env.VITE_KAKAO_ID}&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT}&response_type=code`
 }
 
 
