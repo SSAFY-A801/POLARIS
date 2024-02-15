@@ -38,7 +38,7 @@ export const useBestsellerStore = defineStore({
   }),
   actions: {
     async fetchBooklistItem() {
-      const response = await axios.get('https://i10a801.p.ssafy.io:8082/api/bestseller')
+      const response = await axios.get(`${import.meta.env.VITE_API_KEY}/api/bestseller`)
       this.booklistItem = response.data
     }
   }

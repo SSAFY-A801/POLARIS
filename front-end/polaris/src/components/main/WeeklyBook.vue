@@ -46,7 +46,7 @@ const WeeklyBook = ref<WeeklyBookType>({
 })
 
 onMounted(async () => {
-  await axios.get('https://i10a801.p.ssafy.io:8082/essay/most_scrapped')
+  await axios.get(`${import.meta.env.VITE_API_KEY}/essay/most_scrapped`)
   .then(function (response) {
   WeeklyBook.value = response.data.data
 })
@@ -58,6 +58,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'gowun-dodum';
+  src: url('../../../public/GowunDodum-Regular.ttf');
+}
 .wrapper {
   display: flex;
   justify-content: center;

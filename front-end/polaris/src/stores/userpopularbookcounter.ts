@@ -19,7 +19,7 @@ export const useUserPopularBookStore = defineStore({
   }),
   actions: {
     async fetchPopularBooklistItem() {
-      const response = await axios.get('https://i10a801.p.ssafy.io:8082/book/popular_books')
+      const response = await axios.get(`${import.meta.env.VITE_API_KEY}/book/popular_books`)
       this.userPopularBookList = response.data.data
     }
   }

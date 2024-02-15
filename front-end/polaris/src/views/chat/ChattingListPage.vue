@@ -92,7 +92,7 @@ const cancelButtonClick = async (chatroomId: number) => {
     alert('거래를 취소합니다');
 
     try {
-      const response = await axiosInstance.value.delete(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
+      const response = await axiosInstance.value.delete(`${import.meta.env.VITE_API_KEY}/trade/${chatroomId}`);
   
       if (response.status === 200) {
         console.log('채팅방 삭제 성공:', response.data);
@@ -114,7 +114,7 @@ const leaveButtonClick = async (chatroomId: number) => {
     alert('채팅방을 나갑니다');
 
     try {
-      const response = await axiosInstance.value.delete(`https://i10a801.p.ssafy.io:8082/trade/${chatroomId}`);
+      const response = await axiosInstance.value.delete(`${import.meta.env.VITE_API_KEY}/trade/${chatroomId}`);
   
       if (response.status === 200) {
         console.log('채팅방 삭제 성공:', response.data);

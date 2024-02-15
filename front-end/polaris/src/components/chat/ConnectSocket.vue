@@ -41,7 +41,7 @@ export default {
     const connected = ref(false);
 
     const connect = () => {
-      const serverURL = "https://i10a801.p.ssafy.io:8082/stomp/chat";
+      const serverURL = `${import.meta.env.VITE_API_KEY}/stomp/chat`;
       let socket = new SockJS(serverURL);
       stompClient = Stomp.over(socket);
       console.log(stompClient)

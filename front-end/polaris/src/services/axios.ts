@@ -1,4 +1,3 @@
-
 import { ref } from 'vue'
 import axios, { AxiosError, type AxiosResponse } from 'axios'
 import { profileCounterStore } from '@/stores/profilecounter'
@@ -23,7 +22,7 @@ try {
 }
 
 // axios 인스턴스 생성
-const baseURL = 'https://i10a801.p.ssafy.io:8082';
+const baseURL = `${import.meta.env.VITE_API_KEY}`;
 const token = ref(localStorage.getItem('user_token'))
 
 const instance = axios.create({
@@ -73,4 +72,5 @@ instance.interceptors.response.use(
 
 const axiosInstance = ref(instance)
 export default axiosInstance
+
 

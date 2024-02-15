@@ -107,7 +107,7 @@ const getUserInfo = async() => {
         "Content-Type": 'application/json'
       },
       method: 'get',
-      url: `https://i10a801.p.ssafy.io:8082/profile/${loginUser.id}`,
+      url: `${import.meta.env.VITE_API_KEY}/profile/${loginUser.id}`,
     })
     userNickname.value = response.data.data.nickname
     userProfileUrl.value = response.data.data.profileUrl
@@ -129,7 +129,7 @@ watch(userToken, getUserInfo)
 
 // 로그아웃
 const logout = async () => {
-    await axios.get('https://i10a801.p.ssafy.io:8082/user/logout', {
+    await axios.get(`${import.meta.env.VITE_API_KEY}/user/logout`, {
     headers: {
     "Authorization" : userToken.value,
     "Content-Type": "application/json",
@@ -148,7 +148,7 @@ const logout = async () => {
     router.push({name: 'home'})
   }).catch(async function (error) {
     if (error.response.data.status === 420) {
-      await axios.post('https://i10a801.p.ssafy.io:8082/user/reissue', {"email": loginUser.email}, {
+      await axios.post(`${import.meta.env.VITE_API_KEY}/user/reissue`, {"email": loginUser.email}, {
               headers: {
                 "Authorization": refreshToken.value,
                 "Content-Type": "application/json"
@@ -156,7 +156,7 @@ const logout = async () => {
                 
             }).then(async function(response) {
               const newToken = response.data.data.access // 새로 발급받은 토큰
-              await axios.get('https://i10a801.p.ssafy.io:8082/user/logout', {
+              await axios.get(`${import.meta.env.VITE_API_KEY}/user/logout`, {
                 headers: {
                     "Authorization" : newToken,
                     "Content-Type": "application/json",

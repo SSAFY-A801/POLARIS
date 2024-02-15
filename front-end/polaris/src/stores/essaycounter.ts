@@ -51,7 +51,7 @@ export type Essay = {
 
 export const essayStore = defineStore('counter', () => {
   const token = localStorage.getItem('user_token')
-  const BACK_API_URL = 'https://i10a801.p.ssafy.io:8082'
+  const BACK_API_URL = import.meta.env.VITE_API_KEY
 
 
   return { token, BACK_API_URL, }

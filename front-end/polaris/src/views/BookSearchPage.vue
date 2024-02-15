@@ -171,7 +171,7 @@ router.beforeEach((to, from, next) => {
 
 watchEffect(async () => {
   if (selectedSido.value) {
-    await axios.get(`https://i10a801.p.ssafy.io:8082/regcode/gugun?sido=${selectedSido.value.name}`, {
+    await axios.get(`${import.meta.env.VITE_API_KEY}/regcode/gugun?sido=${selectedSido.value.name}`, {
     headers: {
     "Content-Type": "application/json",
   }
@@ -184,7 +184,7 @@ watchEffect(async () => {
 
 watchEffect(async () => {
   if (selectedSido.value && selectedGugun.value) {
-    await axios.get(`https://i10a801.p.ssafy.io:8082/regcode/dong?sido=${selectedSido.value.name}&gugun=${selectedGugun.value.name}`, {
+    await axios.get(`${import.meta.env.VITE_API_KEY}/regcode/dong?sido=${selectedSido.value.name}&gugun=${selectedGugun.value.name}`, {
     headers: {
     "Content-Type": "application/json",
   }
@@ -204,7 +204,7 @@ watchEffect(() => {
 });
 
 (async () => {
-  await axios.get('https://i10a801.p.ssafy.io:8082/regcode/sido', {
+  await axios.get(`${import.meta.env.VITE_API_KEY}/regcode/sido`, {
     headers: {
     "Content-Type": "application/json",
   }
@@ -249,7 +249,7 @@ const bookSearch = async () => {
       params.keyword = keyword.value;
   }
 
-  await axios.get('https://i10a801.p.ssafy.io:8082/book/search', { params })
+  await axios.get(`${import.meta.env.VITE_API_KEY}/book/search`, { params })
     .then(function (response) {
         // console.log(response.data.data.searchBooks)
         booksearchResultList.value = response.data.data.searchBooks
