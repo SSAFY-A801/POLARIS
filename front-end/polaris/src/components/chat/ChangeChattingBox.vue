@@ -1,5 +1,6 @@
 <template>
-  <div class="first-container">
+  <Navvar></Navvar>
+  <div class="first-container mt-40">
     <div class="content">
       <div class="text-2xl m-3 font-semibold">도서교환을 위한 채팅공간</div>
       <div class="chatcontainer">
@@ -273,6 +274,7 @@
 </template>
   
 <script setup lang="ts">
+import Navvar from '@/components/common/Navvar.vue'
 import MyChangingBook from './MyChangingBook.vue';
 import { ref, onMounted, defineExpose, computed, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
