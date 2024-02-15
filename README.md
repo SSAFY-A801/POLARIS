@@ -21,8 +21,33 @@
 <p> 더불어, 내가 원하는 도서를 등록하여 나의 서재를 내 마음대로 꾸며보세요 !  <br> 독후감 작성을 통해 다른 사람들과 다양한 감상을 나눌 수 있습니다.
 
 
-
 # 개발 환경
+💻 **Backend**
+
+<img alt="Spring Boot" src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=spring boot&logoColor=white"/>
+<img alt="Spring Security" src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=spring security&logoColor=white"/>
+<img alt="JSON Web Token" src="https://img.shields.io/badge/JSON Web Token-000000?style=for-the-badge&logo=jwt&logoColor=white"/>
+<img alt="Redis" src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"/>
+<img alt="MariaDB" src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white"/>
+
+📱 **Frontend**
+
+<img alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
+<img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=for-the-badge&logo=tailwind css&logoColor=white"/>
+<img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
+<img alt="Vue.js" src="https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"/>
+<img alt="Vite" src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white"/>
+<img alt="Axios" src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white"/>
+
+🚀 **Infrastructure**
+
+<img alt="Amazon AWS" src="https://img.shields.io/badge/Amazon AWS-232F3E?style=for-the-badge&logo=amazon aws&logoColor=white"/>
+<img alt="Amazon S3" src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=amazon s3&logoColor=white"/>
+<img alt="NGINX" src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=nginx&logoColor=white"/>
+<img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
+<img alt="Ubuntu" src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white"/>
+<img alt="Jenkins" src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white"/>
+
 ⚙️ Management Tools
 
 <img alt="Jira" src="https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&amp;logoColor=white"/>
@@ -95,53 +120,139 @@
 # 기술 소개
 
 ## BackEnd
-- 이전 채팅 메세지 저장
-    - in-memory DB인 Redis의 list 자료구조를 이용해 채팅 메세지 내역 캐싱
-- 채팅방에서 도서를 등록하거나, 수정했을 경우 참여중인 모든 채팅방에 적용
-  - Server Sent Event SSE를 이용하여 실시간 업데이트 제공
-- 프로필 사진을 올리거나 수정
-  - AWS S3를 이용, 버킷에 사진을 저장하여 해당 사진이 저장된 url을 반환함으로써 이용 가능
+- 채팅 메세지 저장
+  - Redis의 in-memory DB를 활용하여 채팅 메시지를 실시간으로 저장
+    List 자료 구조를 활용하여 메시지 내역을 캐싱
+- 도서 등록 및 수정 시 해당 채팅방 적용
+  - 채팅방에 도서를 등록하거나 수정할 경우, 해당 정보를 참여 중인 모든 채팅방에 실시간으로 적용
+  - Server Sent Event (SSE)를 활용한 실시간 업데이트 제공
+- 프로필 사진 업로드 및 수정
+  - AWS S3를 활용하여 프로필 사진을 업로드하고 수정
+    사진이 저장된 URL을 반환하여 사용 가능하게 함
 - 사용자 인기 도서
-  - MariaDB 내의 가장 많이 등록된 사용자 도서를 가져와 In-memory DB의 SortedSet 자료 구조를 이용해 순서대로 보여줌
-  
+  - MariaDB에서 가장 많이 등록된 사용자 도서를 추출
+  - In-memory DB의 SortedSet 자료 구조를 활용하여 도서의 인기 순서대로 보여줌
+- Spring Data JPA 활용
+  - 채팅, 게시글 등의 데이터베이스 쿼리 작업을 수행
+  - 이를 통해 JDBC를 직접 이용하거나 쿼리를 개별적으로 작성하는 대신, JPA를 활용하여 쿼리 옵티마이저를 활용하고 데이터베이스 상호작용을 효율적으로 구현
+- 카카오 OAuth를 통한 로그인 기능 도입
+  - 사용자가 편리하게 로그인할 수 있도록 카카오 OAuth를 도입하여 소셜 로그인 기능을 제공
+- 자체 회원 가입 기능 구현 및 메일 인증 도입
+  - Gmail의 SMTP를 활용하여 이메일을 전송하고, 발송된 코드는 Redis에 저장
+  - 이후 사용자가 입력한 코드가 Redis에 저장된 코드와 일치하는지 검사하여 인증을 완료
+
 ## FrontEnd
-
-
+- 북극성 프로젝트의 사용자 인터페이스
+  - Vue.js의 최신 버전인 Vue3를 사용하여 양방향 데이터 바인딩이 가능한 파일 컴포넌트 구조를 수립
+  - Composition API를 통해 보다 논리적이고 재사용성이 높은 로직으로 코드의 가독성과 유지보수성 확보
+- 알라딘 도서정보, 사용자 등록 도서, 채팅 메시지 등의 API 요청
+  - HTTP 클라이언트 라이브러리인 Axios를 통해 다양한 API 요청과 비동기 통신을 구현하고 AJAX를 효과적으로 구현함
+- 채팅, 독후감, 유저, 사용자 등록 도서 등 데이터 통합 관리
+  - Pinia의 store를 통해 간결하고 직관적으로 애플리케이션의 상태를 통합적으로 저장하고 관리, 변수의 재사용성 확보
+- 독후감 게시글 작성
+  - WYSIWYG 에디터 라이브러리인 Tiptap editor를 이용하여 사용자 친화적인 게시글 작성 환경을 제공
+- 로그인 및 회원가입, 도서 등록 등 사용자의 동작 성공 시 알림 제공
+  - 클래스 기반의 유틸리티 퍼스트(CSS utility-first) 접근 방식을 채택하는 Tailwind CSS와 SweetAlert2를 이용하여 보다 직관적이고 효과적인 알림 정보 제공
+  - fontawsome의 백터 아이콘을 이용하여 여러 페이지의 반응형 웹 디자인에 적용
 
 
 # 서비스 화면
+
+### [ 메인 페이지 ]
+<table align=center>
+  <tr>
+    <td>
+      <img width="380" src="https://github.com/DeveloperYard/algorithm/assets/59395755/cab94a03-7ffe-4771-9de7-87bd410c331d">
+    </td>
+    <td>
+      <img width="380" src="https://github.com/DeveloperYard/algorithm/assets/59395755/14ba7839-572b-4a69-bf64-e92852fc6d55">
+    </td>
+    <td>
+      <img width="380" src="https://github.com/DeveloperYard/algorithm/assets/59395755/7a510298-26fe-4901-9f3e-f7da0579e1ee">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p align=center>이 주의 책</p>
+    </td>
+    <td>
+      <p align=center>서점 베스트 셀러</p>
+    </td>
+    <td>
+      <p align=center>북극성 인기 도서</p>
+    </td>
+  </tr>
+</table>
+
+- 스크랩 수가 가장 많은 독후감을 보여줍니다. 해당 데이터는 7일 간격으로 갱신됩니다.
+- 알라딘 open api에서 제공하는 서점 베스트 셀러 20권을 보여줍니다.
+- 가장 많이 등록된 사용자 도서 20권을 보여줍니다. 
+
+
+### [ 나의 서재 ]
+<table align=center>
+  <tr>
+    <td>
+      <img src="https://github.com/seomiii/seomiii/assets/86819719/93c2bc62-ce74-4a07-bb5d-4600a4f2c9e8" width=380 />
+    </td>
+    <td>
+      <img src="https://github.com/DeveloperYard/algorithm/assets/59395755/52a31847-c62f-4039-8401-5f8355799e66" width="380">
+    </td>
+    <td>
+      <img src="https://github.com/DeveloperYard/algorithm/assets/59395755/3826ac8b-5d3b-415f-ba67-953fdcbdaaed" width="380">
+    </td>
+    <td>
+      <img src="https://github.com/DeveloperYard/algorithm/assets/59395755/3826ac8b-5d3b-415f-ba67-953fdcbdaaed" width="380">
+    </td>
+    <td>
+      <img width="380" alt="image" src="https://github.com/seomiii/seomiii/assets/86819719/64458940-9175-4f76-8964-e8bd314553b8">
+    </td>
+    <td>
+      <img src="https://github.com/seomiii/seomiii/assets/86819719/82a58fab-cdfe-4f45-b9bf-7d86beab91b7" width="380">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p align=center>도서 등록</p>
+    </td>
+    <td>
+      <p align=center>사용자 도서 상세 정보</p>
+    </td>
+    <td>
+      <p align=center>나의 독후감</p>
+    </td>
+    <td>
+      <p align=center>스크랩한 독후감</p>
+    </td>
+    <td>
+      <p align=center>나의 채팅 목록</p>
+    </td>
+    <td>
+      <p align=center>팔로잉</p>
+    </td>
+  </tr>
+</table>
+
+- 알라딘 open api를 활용하여 손쉽게 도서를 등록할 수 있습니다.
+- 등록한 도서의 공개 여부, 보유 여부를 설정하고 거래 유형을 지정할 수 있습니다.
+- 사용자가 작성한 독후감, 스크랩한 독후감, 채팅목록, 팔로잉 리스트를 볼 수 있습니다.
+
 
 ### [ 도서 검색 ]
 <table align=center>
   <tr>
     <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/6574af80-99e8-416d-89a4-7133bbf4468a" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/19339f6f-8af2-41d4-84e5-7fc71de7a06b" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/edc02cff-da14-4898-b0bf-6ea00c92c556" width=380 />
+      <img src="https://github.com/seomiii/seomiii/assets/86819719/36613de9-8d52-465f-b2e0-f4ac1db162dc" width=380 />
     </td>
   </tr>
   <tr>
     <td>
-      <p align=center>지역으로 검색</p>
-    </td>
-    <td>
-      <p align=center>제목으로 검색</p>
-    </td>
-    <td>
-      <p align=center>저자로 검색</p>
+      <p align=center>지역, 제목, 저자를 기준으로 도서 검색</p>
     </td>
   </tr>
 </table>
 
-- 도서를 지역으로 검색할 수 있습니다.
-- 도서를 제목으로 검색할 수 있습니다.
-- 도서를 저자로 검색할 수 있습니다.
-
-
+- 북극성에 등록된 거래가 가능한 도서를 지역, 제목, 저자 기준으로 검색할 수 있습니다.
 
 ### [ 도서 거래 채팅 ]
 <table align=center>
@@ -171,7 +282,7 @@
       <p align=center>1:1 채팅</p>
     </td>
     <td>
-      <p align=center>거래 가능 도서 선택</p>
+      <p align=center>교환 도서 선택</p>
     </td>
     <td>
       <p align=center>교환 채팅방</p>
@@ -242,7 +353,41 @@
 - 독후감을 작성, 수정, 삭제를 할 수 있습니다.
 - 독후감에 댓글을 작성, 수정, 삭제를 할 수 있습니다.
 
+### [ 회원 가입 ]
+<table align=center>
+  <tr>
+    <td>
+      <img alt="image" src="https://github.com/DeveloperYard/algorithm/assets/59395755/2c082b4b-ee12-4e07-8aaf-b61a570eab5c" width="380">
+    </td>
+    <td>
+      <img alt="image" src="https://github.com/DeveloperYard/algorithm/assets/59395755/87f6e5e6-ae9d-40de-8ae7-f6e809c2c1f8" width="380">
+    </td>
+    <td>
+      <img alt="image" src="https://github.com/DeveloperYard/algorithm/assets/59395755/f986e0ee-7124-490e-a007-af32a14ccb70" width="380">
+    </td>
+    <td>
+      <img alt="image" src="https://github.com/DeveloperYard/algorithm/assets/59395755/462e9e36-ec8f-4f2a-b4d3-74ce95524949" width="380">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p align=center>자체 로그인 회원가입 페이지</p>
+    </td>
+    <td>
+      <p align=center>이메일 인증 - 인증번호 입력 전</p>
+    </td>
+    <td>
+      <p align=center>이메일 인증 - 인증번호 입력 후</p>
+    </td>
+    <td>
+      <p align=center>이메일 인증 - 인증 메일</p>
+    </td>
 
+  </tr>
+</table>
+
+- 이메일 인증을 통하여 자체 회원가입을 진행합니다.
+- 카카오 소셜 로그인을 할 수 있습니다.
 
 # 설계 문서
 
