@@ -58,6 +58,6 @@ public class CommentServiceImpl implements CommentService{
 		if (!comment.getUser().getId().equals(securityUser.getId())) {
 			throw new UserNotAuthorizedException("");
 		}
-		commentRepository.deleteById(comment.getId());
+		comment.deleteComment();
 	}
 }
