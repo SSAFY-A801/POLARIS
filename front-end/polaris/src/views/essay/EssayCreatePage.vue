@@ -95,6 +95,10 @@ const writeEssay = () => {
   })
   .catch((error) => {
     console.error(error)
+    Swal.fire({
+      icon: 'error',
+      text: '해당 도서로 작성하신 독후감이 이미 존재합니다.\n다른 도서의 독후감을 작성해주세요.'
+    })
   })
 
 }
