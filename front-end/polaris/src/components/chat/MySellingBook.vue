@@ -33,6 +33,21 @@
                                        </tr>
                                     </thead>
                                     <tbody class="bg-white">
+                                       <tr v-for="(book, index) in GetchatRoomTradeBooks" :key="book.id" :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
+                                          <td class="p-4 w-auto text-sm font-normal text-gray-900">
+                                            {{ book.title }}
+                                          </td>
+                                          <td class="p-4 w-auto text-sm font-normal text-gray-500">
+                                            {{ book.author }}
+                                          </td>
+                                          <td class="p-4 whitespace-nowrap text-sm font-noraml text-gray-900">
+                                          </td>
+                                          <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
+                                            {{ book.price }}원
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                    <tbody class="bg-white">
                                        <tr v-for="(book, index) in selectedBooks" :key="book.id" :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
                                           <td class="p-4 w-auto text-sm font-normal text-gray-900">
                                             {{ book.title }}
@@ -186,14 +201,6 @@ const toggleCheckbox = (bookId: number) => {
     }
     };
 
-// const sendSelectedBooks = () => {
-//   console.log('Selected Books:', selectedBooks.value);
-//   if (sellingData?.value) {
-//     toggleModal();
-//   }
-//   chooseBook();
-// };
-
 
 const sendSelectedBooks = async () => {
   console.log('Selected Books:', selectedBooks.value);
@@ -262,40 +269,7 @@ const chooseBook = async (data: UpdatedBookData) => {
   }
 };
 
-// const chooseBook = async () => {
-//   const addedBooks = selectedBooks.value.filter(book => !originalBooks.value.includes(book));
-//   const deletedBooks = originalBooks.value.filter(book => !selectedBooks.value.includes(book));
-
-//   const data: UpdatedBookData = {
-//     chatRoomId: chatroomId,  // chatroomId 사용
-//     userId: Number(sellingData.value?.userId),  // userId 사용
-//     addedBooks: addedBooks.map(book => ({ id: book.id, bookIsbn: Number(book.bookIsbn) })),
-//     deletedBooks: deletedBooks.map(book => ({ id: book.id, bookIsbn: Number(book.bookIsbn) })),
-//   };
-
-//   try {
-//     const response = await axios.post<UpdatedBookDataResponse>(
-//       'https://i10a801.p.ssafy.io:8082/trade', 
-//       data, 
-//       {
-//         headers: {
-//           'Authorization': token.value?.replace("\"", "")
-//         }
-//       }
-//     );
-    
-//     if (response.status === 200) {
-//       console.log(response);
-//     } else {
-//       console.error('API 요청 실패:', response.status);
-//     }
-//   } catch (error) {
-//     console.error('API 요청 중 오류 발생:', error);
-//   }
-// };
-
-
-// 
+// 판매금액의 총합
 const totalAmount = computed(() => {
   return selectedBooks.value.reduce((sum, book) => sum + book.userBookPrice, 0);
 });
@@ -350,6 +324,45 @@ interface ApiResponse {
   messsage: string;
   data: ResponseData;
 }
+
+
+// 판매자한테도 기존에 채팅방에서 선택된 도서 정보를 알려줘야함
+
+interface ChatRoomTradeBooks {
+  userId: number;
+  id: number;
+  title: string;
+  author: string;
+  status: string;
+  price: number | null;
+  seriesId: number | null;
+}
+
+interface ChatRoomTradeBooksResponse {
+  status: number;
+  message: string;
+  data: {chatRoomTradeBooks : ChatRoomTradeBooks[];}
+}  
+const GetchatRoomTradeBooks = ref<ChatRoomTradeBooks[]>([]);
+//선택된 거래 도서 정보 요청 api
+onMounted(async () => {
+    try {
+      const token = ref(localStorage.getItem('user_token'))
+      const response = await axiosInstance.value.get<ChatRoomTradeBooksResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/book_list/${chatroomId}`, {
+        headers: {
+          'Authorization': token.value?.replace("\"", "")
+        } 
+      });
+      if (response.status === 200) {
+        GetchatRoomTradeBooks.value = response.data.data.chatRoomTradeBooks;
+        console.log('get', GetchatRoomTradeBooks.value)
+      } else {
+        console.error('API 요청 실패:', response.status);
+      }
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+    }
+  });
 
 </script>
 

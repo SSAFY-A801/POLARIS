@@ -7,7 +7,8 @@
       <p>{{ message.text }}</p>
     </div>
     <div class="input">
-    <input type="text" style="border: 1px solid black;" v-model="newMessage" @keyup.enter="sendMessage"></div>
+      <input type="text" style="border: 1px solid black;" v-model="newMessage" @keyup.enter="sendMessage">
+    </div>
   </div>
 </template>
 
@@ -42,5 +43,4 @@ const sendMessage = async () => {
 </script>
 
 
-<style scoped>
-</style>
+<style scoped></style>
