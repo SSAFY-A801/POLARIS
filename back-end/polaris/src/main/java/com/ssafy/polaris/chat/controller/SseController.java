@@ -33,7 +33,7 @@ public class SseController {
 	 * 채팅방에 입장하기 위해 connect emitter를 생성합니다.
 	 * @param chatRoomId
 	 * @param response
-	 * @return
+	 * @return emitter
 	 */
 	@GetMapping(value = "/connect/{chatRoomId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public ResponseEntity<SseEmitter> connect(@PathVariable(value = "chatRoomId") Long chatRoomId , HttpServletResponse response) {

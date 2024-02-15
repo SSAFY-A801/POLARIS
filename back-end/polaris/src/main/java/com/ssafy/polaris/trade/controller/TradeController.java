@@ -39,8 +39,10 @@ public class TradeController {
 	private final ChatRoomService chatRoomService;
 
 	/**
-	 * 교환 가능 도서 목록 반환
-	 * @return
+	 * 교환 가능 사용자 도서 목록
+	 * @param securityUser
+	 * @return userId, books
+	 * (id, bookIsbn, title, author, isOpened, isOwned, userBookTradeType, seriesId, seriesName)
 	 */
 	@GetMapping(path = "/exchange_books")
 	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getExchangeBookList(
@@ -64,8 +66,10 @@ public class TradeController {
 	}
 
 	/**
-	 * 판매 가능 사용자 도서 목록 반환
-	 * @return
+	 * 판매 가능 사용자 도서 목록
+	 * @param securityUser
+	 * @return userId, books
+	 * (id, bookIsbn, title, author, isOpened, isOwned, userBookTradeType, seriesId, seriesName, userBookPrice)
 	 */
 	@GetMapping(path = "/purchase_books")
 	public ResponseEntity<DefaultResponse<TradeBookListResponseDto>> getPurchaseBookList(
@@ -92,7 +96,7 @@ public class TradeController {
 	/**
 	 * 거래 완료
 	 * @param chatRoomId
-	 * @return
+	 * @return emptyResponse
 	 */
 	@PatchMapping("/{chatRoomId}")
 	public ResponseEntity<DefaultResponse<Void>> completeTrade(@PathVariable("chatRoomId") Long chatRoomId) {
@@ -106,16 +110,13 @@ public class TradeController {
 	/**
 	 * 거래를 취소하거나, 채팅방을 나갑니다.
 	 * @param chatRoomId
-	 * @return
+	 * @return emptyResponse
 	 */
 	@DeleteMapping("/{chatRoomId}")
 	public ResponseEntity<DefaultResponse<Void>> deleteTrade(@PathVariable("chatRoomId") Long chatRoomId) {
-		System.out.println(" controller - delete trade ");
-
 		tradeService.deleteTrade(chatRoomId);
 
 		// TODO : chatRoomId 가 없는 경우 에러처리
-
 		return DefaultResponse.emptyResponse(
 			HttpStatus.OK,
 			StatusCode.SUCCESS_DELETE_TRADE
@@ -126,7 +127,7 @@ public class TradeController {
 	 * 채팅방에서 사용자가 도서를 고르고 완료를 누릅니다.
 	 * 추가된 도서 리스트와 삭제된 도서 리스트들이 requestDto에 담겨 옵니다.
 	 * @param request
-	 * @return
+	 * @return emptyResponse
 	 */
 	@Transactional
 	@PostMapping
