@@ -7,7 +7,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.ssafy.polaris.book.dto.UserBookUpdateRequestDto;
-import com.ssafy.polaris.connectentity.domain.PromotionUserBook;
 import com.ssafy.polaris.global.BaseEntity;
 import com.ssafy.polaris.user.domain.User;
 
@@ -62,9 +61,6 @@ public class UserBook extends BaseEntity {
 	@Column(columnDefinition = "VARCHAR(10)")
 	@Enumerated(EnumType.STRING)
 	private UserBookTradeType userBookTradeType;
-
-	@OneToMany(mappedBy = "userBook")
-	List<PromotionUserBook> promotionUserBooks = new ArrayList<>();
 
 	// update method
 	public void updateUserBook(UserBookUpdateRequestDto dto) {
