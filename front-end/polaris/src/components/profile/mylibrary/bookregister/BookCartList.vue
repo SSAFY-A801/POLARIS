@@ -4,44 +4,38 @@
   :key="index"
   :bookcart="item"
   @update-book-status="updateBookStatus"
-  @delete-bookitem="deleteBookitem"
-    class="border p-3"
+    class="border-b p-3"
   />
 </template>
 
 <script setup lang="ts">
   import BookCartListItem from './BookCartListItem.vue';
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed } from 'vue';
   import { profileCounterStore } from '@/stores/profilecounter';
-  import type { Book } from '@/stores/profilecounter';
   
 
   const store = profileCounterStore();
-  const bookcartList = ref<Book[]>(store.bookCartList)
+  const bookcartList = ref(computed(()=> {
+    return store.bookCartList
+  }))
 
-  const deleteBookitem = (isbn:string)=> {
-    bookcartList.value = bookcartList.value.filter((book)=> book.isbn != isbn)
-    console.log(bookcartList.value)
-    return bookcartList.value
-  }
-
-  const updateBookStatus = (isbn:string, isOpened:boolean|string, isOwned:boolean|string ) => {
+  const updateBookStatus = (isbn:string, isOpened:boolean, isOwned:boolean ) => {
     bookcartList.value.forEach((bookinfo)=> {
-      bookinfo.tradeType = 'UNDEFINED';
       if (bookinfo.isbn == isbn){
         if(isOpened == true){
-          bookinfo.isOpened = "공개";
+          bookinfo.isOpened = true;
         } else {
-          bookinfo.isOpened = "비공개";
+          bookinfo.isOpened = false;
         }
         if(isOwned == true){
-          bookinfo.isOwned = "보유";
+          bookinfo.isOwned = true;
         } else {
-          bookinfo.isOwned = "미보유";
+          bookinfo.isOwned = false;
         }
-
       }
     })
+    // console.log(bookcartList.value)
+
   }
 
 onMounted(()=> {

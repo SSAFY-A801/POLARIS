@@ -11,7 +11,9 @@
       </thead>
       <tbody>
         <MyEssayListItem
-        v-for="index in items" :key="index"
+        v-for="(essay,index) in props.myessays" 
+        :key="index"
+        :essay="essay"
         class="mb-4"
         />
       </tbody>
@@ -21,7 +23,7 @@
 
 <script setup lang="ts">
   import MyEssayListItem from '../myessay/MyEssayListItem.vue';
-  const items:number = 7;
+  const props = defineProps(['myessays'])
 </script>
 
 <style scoped>

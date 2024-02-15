@@ -1,25 +1,39 @@
 <template>
 
-  <div class="border">
+  <div v-if="searchbookLists.length" class="border">
+    {{ searchbookLists.length }}
     <BookSearchResultListItem 
-      v-for="(item,index) in searchListResult"
+      v-for="(item,index) in searchbookLists"
       :key="index"
       :searchResult="item"
       @show-alert="handleShowAlert"
-       class="border p-3"
+       class="border p-3 "
        />
+  </div>
+  <div v-else class="text-lg text-center mt-10">
+    검색결과가 존재하지 않습니다.
   </div>
 </template>
 
 <script setup lang="ts">
   import BookSearchResultListItem from "./BookSearchResultListItem.vue";
   import { profileCounterStore } from "@/stores/profilecounter";
+  import { computed } from "vue";
+  import Swal from "sweetalert2";
 
   const store = profileCounterStore();
-  const searchListResult = store.searchbookLists
   const handleShowAlert = () => {
-    alert('이미 포함된 도서입니다.')
+    Swal.fire({
+      title: '이미 서재나 도서바구니에 포함된 도서입니다.',
+      icon: 'error'
+    })
   }
+
+  const searchbookLists = computed(()=> {
+    return store.searchbookLists
+  })
+
+
 </script>
 
 <style scoped>

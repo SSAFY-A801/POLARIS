@@ -1,5 +1,6 @@
 <template>
-<div id="logincontainer" class="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow sm:px-6 md:px-8 lg:px-10 border-2" >
+    <Navvar></Navvar>
+<div id="logincontainer" class="mt-60 flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow sm:px-6 md:px-8 lg:px-10 border-2 font-[gowun-dodum]" >
     <div class="self-center mt-4 mb-4 text-xl font-bold text-maintheme1 sm:text-2xl">
         로그인
     </div>
@@ -40,7 +41,7 @@
                 <router-link :to="{name:'signup'}" class="ml-2">회원가입 </router-link>   
             </div>
             <hr class="mt-6 mb-2 border-t border-gray-200">
-            <button type="submit" class="flex items-center justify-center mt-4 mb-4 py-3 px-4 bg-kakao_yellow text-kakao_brown w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md rounded-lg">
+            <button @click.prevent="kakaoLogin" type="submit" class="flex items-center justify-center mt-4 mb-4 py-3 px-4 bg-kakao_yellow text-kakao_brown w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md rounded-lg">
                 <img src="@/assets/styles/kakaosymbol.png" alt="Kakao 로그인 아이콘" class="mr-2">
                 카카오 로그인
             </button>
@@ -48,49 +49,72 @@
 </template>
 
 <script setup lang="ts">
-
+import Navvar from '@/components/common/Navvar.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import router from '@/router';
+import { useUserStore } from '@/stores/authcounter'
+import Swal from 'sweetalert2'
 
 const userEmail = ref('')
 const userPassword = ref('')
 
 const userLogin = async () => {
     if ( userEmail.value && userPassword.value ) {
-    await axios.post('http://i10a801.p.ssafy.io:8082/user/login', {
-    headers: {
-    "Content-Type": "application/json",
-  }, body:{
-    id: userEmail.value,
+    await axios.post(`${import.meta.env.VITE_API_KEY}/user/login`, 
+  JSON.stringify({
+    email: userEmail.value,
     password: userPassword.value
-    }
-  }
+    }),
+    {headers: {
+      "Content-Type": "application/json",
+    }}
+  
 )
 .then(function (response) {
-  alert('로그인에 성공하였습니다')
-  localStorage.setItem('user_token',JSON.stringify(response.data.accessToken))
+    Swal.fire({
+          title: "로그인 성공! ",
+          icon: "success"
+        });
+  localStorage.setItem('user_token',(response.data.data.access))
+  localStorage.setItem('refresh_token',(response.data.data.refresh))
+  localStorage.setItem('user_info' , JSON.stringify(response.data.data))
+//   console.log(localStorage.getItem('user_token'))
+//   console.log(localStorage.getItem('refresh_token'))
+//   const userStore = useUserStore()
+//   userStore.setLoginInfo(response.data.data)
   router.push({ name: 'home'})
-  // localStorage.setItem('user_info' , JSON.stringify(response.userInfo))
-  // const localStorageInfo = JSON.parse(localStorage.getItem('userInfo')) localstorage에서 가져올때
   })
   .catch(function (error) {
-    alert(error.message)
+    Swal.fire({
+        title: "로그인 실패",
+        text: "다시 입력해주세요 ",
+        icon: "error"
+      })
   })
-} else {
-    alert('로그인에 실패했습니다. 다시 입력해 주세요.')
+}}
 
-} 
+//카카오로그인 인가코드 받기-카카오로그인 페이지로 리다이렉트
+const kakaoLogin = () => {
+    window.location.href = `${import.meta.env.VITE_KAKAO_URL}?client_id=${import.meta.env.VITE_KAKAO_ID}&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT}&response_type=code`
 }
+
+
 
 </script>
 
 <style scoped>
+@font-face {
+font-family: 'gowun-dodum';
+src: url('../../../../public/GowunDodum-Regular.ttf');
+}
+
+
 #logincontainer {
   width: 1200px;
   height: 550px;
-  margin: 150px auto 50px;
+  margin: 220px auto 50px;
   display: flex;
   flex-grow:1;
 }
@@ -101,4 +125,6 @@ const userLogin = async () => {
   display: flex;
   flex-grow:1;
 }
+
+
 </style>

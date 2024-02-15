@@ -1,249 +1,259 @@
 import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios';
+import axiosInstance from '@/services/axios'
+import Swal from 'sweetalert2'
 
-export type Book =  {
-  id: number,
-  cover: string,
-  title: string,
-  author: string,
+export interface Searchbook  {
   isbn: string,
+  title: string,
+  bookDescription: string|null,
+  pubDate : Date,
+  cover: string,
   publisher : string,
-  pubDate : string,
-  bookDescription: string,
-  userBookDescription : string,
-  price_standard: number,
-  userBookPrice: number,
-  isOpened: string,
-  isOwned: string,
-  tradeType: string,
-  seriesId: number,
-  seriesName: string,
+  author: string,
+  priceStandard: number,
+  isOpened?: boolean,
+  isOwned?: boolean,
+  userBookTradeType?: string|null,
+  seriesId?: number|null,
+  seriesName?: string|null,
 }
+
+export interface Book extends Searchbook  {
+  id: number,
+  nickname: string,
+  userId: number,
+  userBookDescription : string,
+  userBookPrice: number|null,
+  profileUrl: string,
+}
+
+
+
+export type DeleteBook = {
+  id: number
+}
+
+
+export type Regcode = {
+  id: number,
+  si: string,
+  gungu: string,
+  dong: string,
+} 
+
+
+export type Following = {
+  followingId: number,
+  nickname: string,
+  profileUrl: string,
+  regcode: Regcode,
+}
+
 
 export type User = {
   id: number,
-  profile_url: string,
+  profileUrl: string|null,
   nickname: string,
-  regcode_id: string,
-  introduction: string,
-  trade_cnt: number,
-  exchange_cnt: number,
-  followings: number[],
+  regcode: Regcode,
+  introduction: string|null,
+  tradingCnt: number,
+  exchangeCnt: number,
+  followingsCnt: number,
 }
+
+
+export type ExchangeInfo = {
+  bookTitle: string,
+  nickname: string,
+  tradeDate: Date,
+  tradeId: number,
+  userBookId: number,
+  userId: number
+}
+
+export type TradeInfo =  {
+  tradeId: number,
+  senderId: number,
+  userBookId: number,
+  oppositeNickname: string,
+  bookTitle: string,
+  receiverId: number,
+  price: number,
+  tradeDate: Date,
+};
 
 export const profileCounterStore = defineStore('counter', () => {
   // 공통 변수
-  const BACK_API_URL = '백엔드서버'
-  const Aladin_API_URL = 'http://www.aladin.co.kr/ttb/api/ItemSearch.aspx'
-  const TTBKey = 'ttbonyo91219001'
+  const token = ref(localStorage.getItem('user_token') || null);
+  const BACK_API_URL = import.meta.env.VITE_API_KEY
 
   
   // ProfilePage
-  const user: User = {
-    id: 1,
-    profile_url: ("./assets/images/room1.jpg"),
-    nickname: "역삼동미친고양이",
-    regcode_id: "2629010700",
-    introduction: "네고 사절함.",
-    trade_cnt: 132,
-    exchange_cnt: 54,
-    followings: [3,6,2,8],
-  }
-  // ProfileUdpatePage
+  // 접속자
+  
+  // 프로필 유저
+  const profileUser = ref<User|null>(null);
+  
 
-  // MyEssayPage
-  // MyTradeListPage
-  // MyExchangeListPage
+  watch(profileUser, (newValue, oldValue) => {
+    // console.log(newValue)
+  });
+   
+
+  const getProfile = (id: number) => {
+    axiosInstance.value({
+      headers: {
+        Authorization: `${token.value}`,
+        "Content-Type": 'application/json'
+      },
+      method: 'get',
+      url: `${BACK_API_URL}/profile/${id}`,
+    })  
+    .then((response) => {
+      const userData = response.data['data']
+      profileUser.value = userData
+    })
+    .catch((error)=> {
+      console.error("에러발생: ",error)
+    })
+  }
+
   // MyScrapsPage
+  const myscraps = ref([])
+  const getMyscraps = (id: string) => {
+    if(id){
+      axiosInstance.value({
+        headers: {
+          Authorization: `${token.value}`,
+          'Content-Type': 'application/json'
+        },
+        method: 'get',
+        url: `${BACK_API_URL}/essay/${id}/scraps`
+      })
+      .then((response) => {
+        // console.log(response.data)
+        const res = response.data.data
+        if(res){
+          myscraps.value = res.scrapPosts
+        } else {
+          myscraps.value = []
+        }
+    })
+      .catch((error) => {
+        console.error(error);
+        
+      })
+    }
+  }
   // MyFavoritePage
   // MyPromotionPage
-  // FollowingListPage
-
-  // BookRegisterPage
-  const bookCartList = ref<Book[]>([])
-
+  
+  // BookRegisterPage  
   type searchType = {
     [key: string]: string;
   }
+  const searchbookLists = ref<Searchbook[]>([]);
+  const bookCartList = ref<Searchbook[]>([])
 
-  const searchAPIbookList = (Query:string, searchCondition: string|null) => {
-    console.log(Query, searchCondition)
-    if (Query == null){
-      alert('검색어를 입력해주세요.')
+  const searchAPIbookList = (query:string, searchCondition: string|null) => {
+    if (query == ""){
+      Swal.fire({
+        title: "검색어를 입력해주세요.",
+        icon: 'error'
+      })
     } else {
-      const QueryType = ref<string|null>(null)
+      const queryType = ref<string|null>(null)
       if (searchCondition == null) {
-        QueryType.value = 'Keyword'
+        queryType.value = 'Keyword'
       } else {
         const searchType:searchType = {
           '도서 제목': 'Title',
           '저자': 'Author',
           '출판사': 'Publisher',
         }
-        QueryType.value = searchType[searchCondition]
+        queryType.value = searchType[searchCondition]
       }
-      axios({
+      axiosInstance.value({
         method: 'get',
-        url: `${Aladin_API_URL}?ttbkey=[${TTBKey}]&Query=${Query}&QueryType=${QueryType.value}&MaxResults=10&start=1&SearchTarget=Book&output=json`,
+        url: `${BACK_API_URL}/api/search?query=${query}&queryType=${queryType.value}`
       })
       .then((response)=>{
-        console.log(response.data)
+        // console.log(response.data)
+        const data = response.data['item']
+        const searchBooks = ref<Searchbook[]>([])
+        if (data.length){
+          data.forEach((book:any)=> {
+            const date = new Date(book.pubDate)
+            const searchBook :Searchbook = {
+              isbn: book.isbn13,
+              title: book.title,
+              bookDescription: book.description,
+              pubDate : date,
+              cover: book.cover,
+              publisher : book.publisher,
+              author: book.author,
+              priceStandard: book.priceStandard,
+            }
+            if(book.seriesInfo){
+              searchBook.seriesId = book.seriesInfo.seriesId,
+              searchBook.seriesName = book.seriesInfo.seriesName
+            }
+            searchBooks.value.push(searchBook)
+          })
+          searchbookLists.value = searchBooks.value
+        } else {
+          Swal.fire({
+            title:"검색목록을 불러올 수 없습니다.\n다른 검색어로 시도하세요.",
+            icon:'error'
+        })
+      }
       })
-      .catch(()=>{
-  
+      .catch((error)=>{
+        console.error(error)
+        searchbookLists.value = []
       })
-    }
-  }
-  
-  
-  // const logBookCartList = computed(() => {
-  //   return bookCartList.value;
-  // });
-  
-  // watch(logBookCartList, () => {});
+    };
+  };
 
-
-
+  
   // MyLibraryPage
-  // const getMybookList = () => {
-  //   axios({
-  //     method: 'get',
-  //     url: '/profile/library',
-  //   })
-  //   .then((response) => {
-  //     console.log(response.data)
-  //   })
-  //   .catch((error) => {
-  //     console.log(error)
-  //   })
-  // }
-  const deleteBookList = ref<string[]>([])
-  const bookSearchResultList = ref([])
-  const mybookLists = ref([
-    {
-      id: 1,
-      cover : "image_url",
-      title: "아포리즘",
-      author: "쇼펜하우어",
-      isbn: "111",
-      publisher : "포레스트 북스",
-      pubDate : "2023-06-01",
-      bookDescription: "blah blah",
-      userBookDescription : "좋은 책!",
-      price_standard: 10000,
-      userBookPrice: 5000,
-      isOpened: "공개",
-      isOwned: "보유",
-      tradeType: "TRADE",
-      seriesId: 1,
-      seriesName: "seriesName",
+  const deleteBookList = ref<DeleteBook[]>([])
+  const bookSearchResultList = ref([]);
+  const mybookLists = ref<Book[]>([]);
+  
+const getMybookList = (id:string)=> {
+  axiosInstance.value({
+    headers: {
+      Authorization: `${token.value}`
     },
-    {
-      id: 2,
-      cover : "image_url",
-      title: "쇼펜하 아포",
-      author: "쇼펜하우어",
-      isbn: "222",
-      publisher : "포레스트 북스",
-      pubDate : "2023-06-01",
-      bookDescription: "blah blah",
-      userBookDescription : "좋은 책!",
-      price_standard: 10000,
-      userBookPrice: 5000,
-      isOpened: "공개",
-      isOwned: "보유",
-      tradeType: "TRADE",
-      seriesId: 1,
-      seriesName: "seriesName",
-    },
-    {
-      id: 3,
-      cover : "image_url",
-      title: "쇼펜하우 아포리즘",
-      author: "쇼펜하우어",
-      isbn: "555",
-      publisher : "포레스트 북스",
-      pubDate : "2023-06-01",
-      bookDescription: "blah blah",
-      userBookDescription : "좋은 책!",
-      price_standard: 10000,
-      userBookPrice: 5000,
-      isOpened: "공개",
-      isOwned: "보유",
-      tradeType: "EXCHANGE",
-      seriesId: 4,
-      seriesName: "seriesName",
-    },
-  ]);
-  const searchbookLists = ref([
-    {
-      id: 1,
-      cover : "image_url",
-      title: "오펜하이머",
-      author: "줄리어스",
-      isbn: "090",
-      publisher : "포레스트 북스",
-      pubDate : "2023-06-01",
-      bookDescription: "blah blah",
-      userBookDescription : "좋은 책!",
-      price_standard: 10000,
-      userBookPrice: 5000,
-      isOpened: "공개",
-      isOwned: "보유",
-      tradeType: "TRADE",
-      seriesId: 7,
-      seriesName: "seriesName",
-    },
-    {
-      id: 2,
-      cover : "image_url",
-      title: "그대만을",
-      author: "쇼펜하우어",
-      isbn: "971",
-      publisher : "포레스트 북스",
-      pubDate : "2023-06-11",
-      bookDescription: "blah blah",
-      userBookDescription : "좋은 책!",
-      price_standard: 1000,
-      userBookPrice: 50000,
-      isOpened: "공개",
-      isOwned: "보유",
-      tradeType: "TRADE",
-      seriesId: 1,
-      seriesName: "seriesName",
-    },
-    {
-      id: 3,
-      cover : "image_url",
-      title: "아프니깐 청춘이다",
-      author: "김난도",
-      isbn: "88865",
-      publisher : "포레스트 북스",
-      pubDate : "2018-06-01",
-      bookDescription: "blah blah",
-      userBookDescription : "좋은 책!",
-      price_standard: 10000,
-      userBookPrice: 5000,
-      isOpened: "비공개",
-      isOwned: "보유",
-      tradeType: "UNDEFINED",
-      seriesId: 14,
-      seriesName: "seriesName",
-    },
-  ]);
+      method: 'get',
+      url: `${BACK_API_URL}/book/${id}/library`,
+    })  
+  .then((response) => {
+    
+    const res = response.data.data
+    if(res){
+      mybookLists.value = res['books']
+    } else{
+      mybookLists.value = []
+    }
+    })
+    .catch((error)=> {
+      console.error("에러발생: ",error)
+    })
+}
 
-  const filterResult = ref<Book[]>(mybookLists.value)
-
-
-
+  const filterResult = mybookLists.value
 
   const deletebuttonState = ref(false)
   function toggledeletebutton() {
     deletebuttonState.value = !deletebuttonState.value
   }
   return { 
-    user,
-    searchAPIbookList,
-    toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }
+    profileUser, getProfile,
+    searchAPIbookList, BACK_API_URL, token,
+    getMyscraps, myscraps,
+    getMybookList, toggledeletebutton, deletebuttonState, mybookLists, deleteBookList, searchbookLists, filterResult, bookCartList, bookSearchResultList }
 },{persist: true})
