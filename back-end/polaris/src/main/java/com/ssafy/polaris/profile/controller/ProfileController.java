@@ -32,12 +32,7 @@ public class ProfileController {
 
 	/**
 	 * @param userId 사용자 id
-	 * @return ProfileDto
-	 * {
-	 *   "status": Integer,
-	 *   "message": String,
-	 *   "data": Object,
-	 * }
+	 * @return ProfileDto : 사용자 유저 정보를 반환한다.
 	 * */
 	@GetMapping("/{id}")
 	public ResponseEntity<DefaultResponse<ProfileResponseDto>> getProfile(@PathVariable("id") Long userId) {
@@ -50,9 +45,9 @@ public class ProfileController {
 
 	/**
 	 * @param userId 사용자 id,
-	 * @param nickname
-	 * @param regcodeId
-	 * @param introduction
+	 * @param nickname 사용자 닉네임
+	 * @param regcodeId 사용자의 지역 코드
+	 * @param introduction 사용자의 자기 소개
 	 * @param image Multipart file 로서, 사진을 file 형태로 받는다.
 	 * */
 	@PatchMapping("/{id}")
@@ -103,7 +98,7 @@ public class ProfileController {
 	/**
 	 * @param userId 언팔로우 작업을 수행할 나의 id
 	 * @param data 언팔로우할 유저들을 담고 있는 리스트
-	 * @return
+	 * @return void
 	 */
 	@DeleteMapping("/{id}/unfollow")
 	public ResponseEntity<DefaultResponse<Void>> unfollow(@PathVariable("id") Long userId,

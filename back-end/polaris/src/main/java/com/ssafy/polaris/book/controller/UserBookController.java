@@ -34,7 +34,9 @@ public class UserBookController {
 	private final UserBookService userBookService;
 
 	/**
-	 * @param userId user identifier
+	 * 유저의 서재에 있는 도서 리스트를 가져오는 API
+	 *
+	 * @param userId 사용자 id
 	 * @return 해당 사용자가 가지고 있는 모든 사용자 도서 정보
 	 * */
 	@GetMapping("/{id}/library")
@@ -52,12 +54,15 @@ public class UserBookController {
 	}
 
 	/**
+	 * 검색된 도서 정보를 통해 사용자 도서를 생성하는 API
+	 * 도서는 알라딘 API에서 검색된 도서이고, 사용자 도서는 사용자가 가지고 있는 도서이다.
+	 * 여러 명이 같은 도서를 가질 수 있기에 도서의 isbn과 사용자의 id로 사용자 도서를 구분한다.
+	 *
 	 * @param userId user identifier
 	 * @param bookListRequestDto 등록할 도서 리스트 정보
 	 *
 	 * @return 빈 문자열을 가진 ResponseEntity
 	 * */
-	// TODO: 사용자 등록 도서 예외 처리 필요
 	@PostMapping("/{id}/library")
 	public ResponseEntity<DefaultResponse<String>> createUserBooks(
 		@PathVariable("id") Long userId, @RequestBody BookListRequestDto bookListRequestDto) {
@@ -66,6 +71,8 @@ public class UserBookController {
 	}
 
 	/**
+	 * 사용자의 id와 isbn을 이용해 사용자 도서를 가져오는 API
+	 *
 	 * @param userId 사용자 id
 	 * @param isbn 도서 식별 번호
 	 * @return 사용자 도서 상세 정보
@@ -89,6 +96,8 @@ public class UserBookController {
 	}
 
 	/**
+	 * 사용자 도서의 상태를 업데이트 시켜주는 API
+	 *
 	 * @param userId 사용자 id
 	 * @param data 변경할 사용자 도서 정보
 	 * @return void
@@ -104,6 +113,8 @@ public class UserBookController {
 	}
 
 	/**
+	 * 사용자의 서재에서 도서를 삭제해주는 API
+	 *
 	 * @param userId 사용자 id
 	 * @param data 삭제할 사용자 등록 도서의 id들
 	 * @return void
@@ -114,13 +125,15 @@ public class UserBookController {
 		@RequestBody UserBookListDeleteRequestDto data) {
 		int result = userBookService.deleteUserBook(userId, data);
 		if (result == 0) {
-			// TODO: 삭제하려고 하는 책이 이미 삭제가 된 경우라면? 이런 상황은 발생할 수 없는 것인가?
 			return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.FAIL_USER_BOOK_DELETE);
 		}
 		return DefaultResponse.emptyResponse(HttpStatus.OK, StatusCode.SUCCESS_USER_BOOK_DELETE);
 	}
 
 	/**
+	 * 지역 정보, 검색 조건 및 키워드로 사용자 도서를 검색하는 API.
+	 * 검색 조건에는 Title, Author 가 있다.
+	 * 
 	 * @param queryType 검색 조건
 	 * @param keyword 검색어
 	 * @return 조건에 따라 검색된 것들 리턴
@@ -137,7 +150,13 @@ public class UserBookController {
 		}
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_SEARCH_USER_BOOK, data);
 	}
-
+	
+	/**
+	 * 사용자의 도서에 가장 많이 담긴 20권의 도서를 가져오는 API이다.
+	 * Redis에 저장된 도서를 캐싱해 가져온다.
+	 *
+	 * @return 사용자의 도서에 가장 많이 담긴 20권의 도서
+	 * */
 	@GetMapping("/popular_books")
 	public ResponseEntity<DefaultResponse<List<WeeklyBooksDto>>> getWeeklyUserBook() {
 		return DefaultResponse.toResponseEntity(
@@ -147,6 +166,9 @@ public class UserBookController {
 		);
 	}
 
+	/**
+	 * 사용자 인기 도서를 생성해주는 API, 테스트 용
+	 * */
 	@GetMapping("/popular_books/create")
 	public ResponseEntity<DefaultResponse<Void>> createWeeklyUserBook() {
 		userBookService.saveWeeklyBooks();

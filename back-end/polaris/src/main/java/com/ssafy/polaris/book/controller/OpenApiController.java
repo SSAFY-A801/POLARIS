@@ -27,6 +27,13 @@ public class OpenApiController {
 	@Value("${aladinApiConfig.searchCallBackUrl}")
 	private String searchCallBackUrl;
 
+	/**
+	 * 검색 조건 및 키워드에 따라 도서 검색 결과를 반환해주는 API
+	 * 
+	 * @param query 검색할 타입 ) Title, Author
+	 * @param queryType 검색어 (키워드)
+	 * @return query 및 query type에 따른 검색 결과   
+	 * */
 	@GetMapping("/search")
 	public ResponseEntity<String> callSearchType(@RequestParam("query") String query,
 		@RequestParam("queryType") String queryType) {
@@ -64,7 +71,14 @@ public class OpenApiController {
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
+	
+	
+	
+	/**
+	 * 베스트 셀러를 가져오는 API
+	 * 
+	 * @return 베스트 셀러 리스트 20개
+	 * */
 	@GetMapping("/bestseller")
 	public ResponseEntity<String> callBestSellerApi() {
 		HttpURLConnection urlConnection = null;

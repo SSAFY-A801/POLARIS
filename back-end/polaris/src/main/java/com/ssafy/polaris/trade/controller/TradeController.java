@@ -146,6 +146,10 @@ public class TradeController {
 		);
 	}
 
+	/**
+	 * @param userId 사용자 id
+	 * @return 사용자에 해당하는 교환 내역
+	 * */
 	@GetMapping("/{id}/exchange_history")
 	public ResponseEntity<DefaultResponse<Map<String, List<ExchangeHistoryResponseDto>>>> getExchangeHistories(
 			@PathVariable("id") Long userId
@@ -164,6 +168,10 @@ public class TradeController {
 		);
 	}
 
+	/**
+	 * @param userId 사용자 id
+	 * @return 사용자에 해당하는 구매 내역
+	 * */
 	@GetMapping("/{id}/purchase_history")
 	public ResponseEntity<DefaultResponse<Map<String, List<PurchaseHistoryResponseDto>>>> getPurchaseHistories(
 		@PathVariable("id") Long userId

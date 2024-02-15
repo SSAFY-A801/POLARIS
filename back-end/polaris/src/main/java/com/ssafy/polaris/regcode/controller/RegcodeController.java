@@ -20,18 +20,27 @@ import lombok.RequiredArgsConstructor;
 public class RegcodeController {
 	private final RegcodeService regcodeService;
 
+	/**
+	 * @return 시, 도 정보
+	 * */
 	@GetMapping("/sido")
-	public ResponseEntity<DefaultResponse<RegcodeListResponseDto>> si() {
+	public ResponseEntity<DefaultResponse<RegcodeListResponseDto>> getSi() {
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_VIEW_SI, regcodeService.si());
 	}
 
+	/**
+	 * @return 구, 군 정보
+	 * */
 	@GetMapping("/gugun")
-	public ResponseEntity<DefaultResponse<RegcodeListResponseDto>> gungu(@RequestParam("sido") String sido) {
+	public ResponseEntity<DefaultResponse<RegcodeListResponseDto>> getGungu(@RequestParam("sido") String sido) {
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_VIEW_SI, regcodeService.gungu(sido));
 	}
 
+	/**
+	 * @return 동 정보
+	 * */
 	@GetMapping("/dong")
-	public ResponseEntity<DefaultResponse<RegcodeListResponseDto>> dong(@RequestParam("sido") String sido,
+	public ResponseEntity<DefaultResponse<RegcodeListResponseDto>> getDong(@RequestParam("sido") String sido,
 		@RequestParam("gugun") String gugun) {
 		return DefaultResponse.toResponseEntity(HttpStatus.OK, StatusCode.SUCCESS_VIEW_SI, regcodeService.dong(
 			sido,
