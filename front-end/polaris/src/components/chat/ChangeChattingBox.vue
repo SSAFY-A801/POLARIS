@@ -44,7 +44,7 @@
               <div class="book-list-header mb-4 flex items-center justify-between">
                 <div>
                   <h3 class="text-xl font-bold text-gray-900 mb-2">교환받을 도서목록</h3>
-                  <span class="text-base font-normal text-gray-500">내가 빌릴 도서의 목록입니다.</span>
+                  <span class="text-base font-normal text-gray-500">내가 상대방에게 받을 도서의 목록입니다.</span>
                 </div>
               </div>
               <div class="book-list-content flex flex-col mt-8">
@@ -96,7 +96,7 @@
                   <div class="mb-4 flex items-center justify-between">
                     <div>
                       <h3 class="text-xl font-bold text-gray-900 mb-2">교환할 도서 목록</h3>
-                      <span class="text-base font-normal text-gray-500">상대방에게 빌려줄 도서를 선택하여 추가해주세요</span>
+                      <span class="text-base font-normal text-gray-500">상대방에게 줄 도서를 선택하여 추가해주세요</span>
                     </div>
                     <div class="flex-shrink-0">
                       <button v-if="selectedBooks.length > 0"
@@ -139,17 +139,6 @@
                                 </td>
                               </tr>
                             </tbody>
-                            <!-- <tbody v-else class="bg-white">
-                              <tr v-for="(book, index) in GetchatRoomTradeBooks" :key="book.id"
-                                :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
-                                <td class="p-4 w-auto text-sm font-normal text-gray-900">
-                                  {{ book.title }}
-                                </td>
-                                <td class="p-4 w-auto text-sm font-normal text-gray-500">
-                                  {{ book.author }}
-                                </td>
-                              </tr>
-                            </tbody> -->
                           </table>
                         </div>
                       </div>
@@ -285,12 +274,6 @@ interface ChatParticipantResponse {
   data: ChatParticipantData;
 }
 
-// 채팅방 아이디 불러오기
-// onMounted(() => {
-//   console.log(route.params.chatroomId);
-//   chatRoomId.value = Number(route.params.chatroomId);
-
-// });
 
 const ChatParticipant = ref<ChatParticipantData | null>(null);
 // const senderId = ref<number|null>(null);
@@ -320,50 +303,6 @@ onMounted(async () => {
   }
 });
 
-// 채팅방 참여자 조회 get 요청
-// 참여자 조회 인터페이스
-// interface ChatParticipantData {
-//   chatRoomId: number;
-//   senderId: number;
-//   receiverId: number;
-//   receiverNickname: string;
-//   receiverProfileUrl: string;
-// }
-
-// interface ChatParticipantResponse {
-//   status: number;
-//   message: string;
-//   data: ChatParticipantData[];
-// }
-
-// // 채팅방 아이디 불러오기
-// onMounted(() => {
-//   console.log(route.params.chatroomId);
-//   chatRoomId.value = Number(route.params.chatroomId);
-
-// });
-
-// const ChatParticipant = ref<ChatParticipantData[] | null>(null);
-// // 채팅방 참여자 조회
-// onMounted(async () => {
-//     try {
-//       const token = ref(localStorage.getItem('user_token'))
-//       const response = await axiosInstance.value.get<ChatParticipantResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/${chatRoomId.value}`, {
-//         headers: {
-//           'Authorization': token.value?.replace("\"", "")
-//         }
-//       });
-//       if (response.status === 200) {
-//         ChatParticipant.value = response.data.data;
-//         console.log(response.data.data)
-
-//       } else {
-//         console.error('API 요청 실패:', response.status);
-//       }
-//     } catch (error) {
-//       console.error('API 요청 중 오류 발생:', error);
-//     }
-//   });
 
 // 유저아이디 조회
 const userIdString = ref<string>(localStorage.getItem('user_info') ?? "");
@@ -389,18 +328,12 @@ interface SimpleMessage {
   nickname: string;
   message: string;
 }
+
 const route = useRoute();
-
 const chatRoomId = ref<number | null>(null);
-
-
-// const chatData = ref(chatStore.$state.chatData);
-// const chatRoomId = ref<number | null>(null);
-// const chatRoomId = Number(ref(route.params.chatroomId))
 const newmessage = ref('');
 const recvList = ref<SimpleMessage[]>([]);
 const chatRoomTradeBooks = ref<ChatRoomTradeBooks[]>([]);
-
 const chatArea: Ref<HTMLDivElement | null> = ref(null);
 
 //이벤트 관련 변수
@@ -421,17 +354,6 @@ const joinChatRoom = () => {
       }
     });
   });
-
-  // eventSource.addEventListener('change_trade_book_list', (event) => {
-  //   const data: ChatRoomTradeBooks = JSON.parse(event.data)
-  //   chatRoomTradeBooks.value.push(data)
-  //   console.log(data)
-  // })
-  // eventSource.addEventListener('change_trade_book_list', (event) => {
-  //   const data: { chatRoomTradeBooks: ChatRoomTradeBooks[] } = JSON.parse(event.data);
-  //   chatRoomTradeBooks.value = [...chatRoomTradeBooks.value, ...data.chatRoomTradeBooks];  // Spread 연산자를 사용하여 두 배열을 병합
-  //   console.log(data);
-  // });
 
   eventSource.addEventListener('change_trade_book_list', (event) => {
     const data: { chatRoomTradeBooks: ChatRoomTradeBooks[] } = JSON.parse(event.data);
@@ -507,8 +429,7 @@ interface ChatMessageListResponse {
   status: number;
   message: string;
   data: { chatMessageList: ChatMessageList[]; };
-  // data: ChatMessageList;
-  // data: ChatMessageList[];
+
 }
 
 interface ChatMessageList {
@@ -632,45 +553,6 @@ const ControllTradeBookList = (id: number, isbn: string, isTraded: boolean) => {
 }
 
 
-
-// // const chatRoomTradeBooks = ref<ChatRoomTradeBooks[]>([]);
-// const originalBooks = ref<Book[]>([]);
-// // 재작성
-// const selectedBooks = ref<Book[]>([]);
-// const isChecked = ref<Record<number, boolean>>({});
-// const toggleCheckbox = (bookId: number) => {
-//   // const foundBook = sellingData.value?.books.find(book => book.id === bookId) 
-//   //             || sellingData.value?.seriesBooks.books.find(book => book.id === bookId);
-//   const foundBook = changingData.value?.books.find(book => book.id === bookId);
-//   if (foundBook) {
-//     originalBooks.value = [...selectedBooks.value];
-//     isChecked.value[bookId] = !isChecked.value[bookId];
-
-//     if (isChecked.value[bookId]) {
-//       // 체크된 경우에는 배열에 추가
-//       if (!selectedBooks.value.includes(foundBook)) {
-//         selectedBooks.value.push(foundBook);
-//       }
-//     } else {
-//       // 체크가 해제된 경우에는 배열에서 제거
-//       selectedBooks.value = selectedBooks.value.filter(book => book.id !== bookId);
-//     }
-//   }
-// };
-
-// const sendSelectedBooks = () => {
-//   console.log('Selected Books:', selectedBooks.value);
-//   if (changingData?.value) {
-//     toggleModal();
-//   }
-// };
-// export interface UpdatedBookData {
-//   chatRoomId: number;
-//   userId: number;
-//   addedBooks: AddedBooks[];
-//   deletedBooks: Deletedbooks[];
-// }
-
 export interface UpdatedBookData {
   chatRoomId: number;
   userId: number;
@@ -749,29 +631,6 @@ const submit = async () => {
     console.error('API 요청 중 오류 발생:', error);
   }
 };
-
-// const chooseBook = async (data: UpdatedBookData) => {
-//   try {
-//     const response = await axiosInstance.value.post<UpdatedBookDataResponse>(
-//       'https://i10a801.p.ssafy.io:8082/trade',
-//       data,
-//       {
-//         headers: {
-//           'Authorization': token.value?.replace("\"", "")
-//         }
-//       }
-//     );
-
-//     if (response.status === 200) {
-//       console.log(data)
-//       console.log(response, '도서선택완료');
-//     } else {
-//       console.error('API 요청 실패:', response.status);
-//     }
-//   } catch (error) {
-//     console.error('API 요청 중 오류 발생:', error);
-//   }
-// };
 
 
 const changingData = ref<ResponseData | null>(null);
