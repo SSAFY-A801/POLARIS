@@ -1,6 +1,6 @@
 <template>
   <Navvar></Navvar>
-  <div class="container mx-auto mt-24 max-w-6xl min-w-[700px] p-4 font-[gowun-dodum]">
+  <div class="container mt-60 mx-auto mt-24 max-w-6xl min-w-[700px] p-4 font-[gowun-dodum]">
     <h1 class="text-3xl font-bold ml-10">도서 상세보기</h1>
     <div class="flex justify-end">
       <div>

@@ -1,7 +1,7 @@
 <template>
   <Navvar></Navvar>
 
-    <div class="container mx-auto mt-32 max-w-6xl min-w-[700px] bg-backgroundgray p-4 font-[gowun-dodum]">
+    <div class="container mt-60 mx-auto mt-32 max-w-6xl min-w-[700px] bg-backgroundgray p-4 font-[gowun-dodum]">
       <h1 class="text-2xl font-bold">도서 상세보기</h1>
         <div class="container grid grid-cols-12 gap-8">
           <!-- 도서 상세 좌측 -->

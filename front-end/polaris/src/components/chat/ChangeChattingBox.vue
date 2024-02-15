@@ -1,6 +1,6 @@
 <template>
   <Navvar></Navvar>
-  <div class="first-container">
+  <div class="first-container mt-40">
     <div class="content">
       <div class="text-2xl m-3 font-semibold">도서교환을 위한 채팅공간</div>
       <div class="chatcontainer">
