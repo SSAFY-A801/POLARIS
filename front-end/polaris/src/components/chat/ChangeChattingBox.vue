@@ -694,8 +694,9 @@ const submit = async () => {
   try {
     addedBooks.value = [];
     deletedBooks.value = [];
+    console.log(myBooks.value);
     // 1. original(채팅목록)을 foreach를 돌려서 TradeBookLIst(모달) 목록에 없으면, deleted
-    originalBooks.value.forEach((book) => {
+    myBooks.value.forEach((book) => {
       const isIncluded = ref(false)
       TradeBookList.value.forEach((tradebook) => {
         if (tradebook.id === book.id) {
@@ -709,7 +710,7 @@ const submit = async () => {
     // 2. selected(모달) foreach 돌려서 original에 없으면, added
     TradeBookList.value.forEach((book) => {
       const isIncluded = ref(false)
-      originalBooks.value.forEach((tradebook) => {
+      myBooks.value.forEach((tradebook) => {
         if (tradebook.id === book.id) {
           isIncluded.value = true
         }
@@ -718,9 +719,7 @@ const submit = async () => {
         addedBooks.value.push({ id: book.id, bookIsbn: book.bookIsbn })
       }
     })
-    // console.log(originalBooks.value)
-    // console.log(deletedBooks.value)
-    // console.log(addedBooks.value)
+
     const data: UpdatedBookData = {
       chatRoomId: chatroomId,  // chatroomId 사용
       userId: Number(changingData.value?.userId),  // userId 사용
