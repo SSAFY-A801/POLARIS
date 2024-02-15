@@ -33,7 +33,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	public ChatRoomCreateResponseDto createChatRoom(ChatRoomCreateRequestDto request) {
 		// request를 trade 엔티티로 변경
 		Trade trade = tradeMapper.toEntity(request);
-		if (trade.getSender() == trade.getReceiver()) {
+		if (trade.getReceiver().getId() == trade.getReceiver().getId()) {
 			throw new UnavailableChatUserException("ChatRoomServiceImpl::createChatRoom");
 		}
 		// trade에 저장
