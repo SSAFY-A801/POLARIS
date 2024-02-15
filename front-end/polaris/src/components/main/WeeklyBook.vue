@@ -4,19 +4,25 @@
             <div class="m-auto flex justify-center">
             <div class="mt-10 mb-2 ml-10 icon-title">
                 <font-awesome-icon icon="fa-solid fa-crown" size="2xl" style="color: #FFD43B;" />
-                <h1 class=" text-3xl font-bold text-maintheme1 mb-2">이 주의 책</h1>
+                <h1 class=" text-3xl font-bold text-maintheme1 mb-2">이 주의 독후감</h1>
                       
             </div>
             </div>
-            <!-- <div class="w-full">
-                <p><font-awesome-icon icon="fa-solid fa-pen-to-square" /> {{ WeeklyBook.nickname }}</p>
-                <p><font-awesome-icon icon="fa-solid fa-heart" /> {{ WeeklyBook.scrapCount }}</p>
-            </div> -->
-            <div class="book-detail">
+            
+            <div class="book-detail mt-4 mb-4">
                 <h1 class=" text-center text-2xl font-bold text-gray-800 mb-2"> {{ WeeklyBook.bookTitle }}</h1>
                 <p class="text-center text-xl font-bold text-gray-600 mb-2"> {{ WeeklyBook.author }}</p>
                 <p class="text-center text-lg"> {{ WeeklyBook.bookDescription }}</p>  
             </div>
+            <div class="w-full text-center" style="display: flex; justify-content: center;">
+                <p class="text-lg font-bold mr-6">
+                    <font-awesome-icon icon="fa-solid fa-pen-to-square" size="lg"/> {{ WeeklyBook.nickname }}
+                </p>
+                <p class="text-lg font-bold ml-6">
+                    <font-awesome-icon icon="fa-solid fa-heart" size="lg"/> {{ WeeklyBook.scrapCount }}
+                </p>
+            </div>
+
             <div class="author-info w-full ">
                 <router-link :to="{ name: 'essaydetail', params: { essayId: WeeklyBook.essayId }}" class="h-14 py-3 px-4 mt-4  bg-maintheme1  w-60 text-maintheme3 transition ease-in duration-200 text-center text-lg font-semibold shadow-md  rounded-lg ">독후감 보러가기</router-link>
                
