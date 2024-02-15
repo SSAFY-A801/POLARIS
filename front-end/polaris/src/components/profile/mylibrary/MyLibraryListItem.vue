@@ -101,6 +101,7 @@ const emitDeleteState = () => {
 
 const showMybookdetail = () => {
   // params 추가
+  console.log(bookinfo.userId)
   router.push({name: 'BookDetailPage', params: { id: bookinfo.userId, isbn: bookinfo.isbn} })
 
 }

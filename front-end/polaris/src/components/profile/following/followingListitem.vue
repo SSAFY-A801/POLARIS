@@ -51,23 +51,13 @@ const followchange = () => {
 const { following } = defineProps<FollowingInfo>();
 
 const gotoProfile = () => {
-  Swal.fire({
-    title: `${following.nickname}\n님의 프로필로 이동합니다.`,
-    text: '정말 이동하시겠습니까?',
-    icon: 'question',
-    showDenyButton: true,
-    confirmButtonText: "이동",
-    denyButtonText: `취소`  
-  })
-  .then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire(`${following.nickname} 님의 프로필로 이동했습니다.`, "", "success");
-      router.push({name: "ProfilePage", params: {id:following.followingId }})
-      emit('clickProfile', clickProfile.value)
-      clickProfile.value = true
-      store.getProfile(following.followingId)
-    } 
-  });
+  router.push({ name: "ProfilePage", params: { id: following.followingId } });
+  emit('clickProfile', clickProfile.value);
+  clickProfile.value = true;
+  // Assuming store.getProfile and store.getMybookList return Promises
+  store.getProfile(following.followingId);
+  store.mybookLists = []
+
 }
 </script>
 
