@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import com.ssafy.polaris.essay.dto.EssaySimpleResponseDto;
 import com.ssafy.polaris.essay.dto.MostScrappedEssayResponseDto;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -42,4 +44,9 @@ public interface EssayRepository extends JpaRepository<Essay, Long> {
 			" group by e.id " +
 			" order by count(e.id) desc limit 1")
 	MostScrappedEssayResponseDto getMostScrappedEssay();
+
+	@Transactional
+	@Modifying
+	@Query("delete from Essay e where e.userBookId = :userBookId ")
+	void deleteEssayByUserBookId(@Param("userBookId") Long userBookId);
 }

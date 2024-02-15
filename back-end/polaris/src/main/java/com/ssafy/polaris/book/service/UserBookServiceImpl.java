@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import com.ssafy.polaris.essay.repository.EssayRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -44,6 +45,7 @@ public class UserBookServiceImpl implements UserBookService {
 	private final UserBookRepository userBookRepository;
 	private final BookRepository bookRepository;
 	private final SeriesRepository seriesRepository;
+	private final EssayRepository essayRepository;
 	private final StringRedisTemplate redisTemplate;
 	private final EntityManager em;
 
@@ -82,11 +84,13 @@ public class UserBookServiceImpl implements UserBookService {
 
 	@Override
 	public int deleteUserBook(Long userId, UserBookListDeleteRequestDto data) {
+		// TODO: 자신의 책인지 확인하는 로직 필요
 		for (UserBookDeleteRequestDto dto : data.getBooks()) {
 			UserBook userBook = userBookRepository.getReferenceById(dto.getId());
 			if (!em.contains(userBook)) {
 				return 0;
 			}
+			essayRepository.deleteEssayByUserBookId(userBook.getId());
 			userBookRepository.deleteById(userBook.getId());
 		}
 		return 1;

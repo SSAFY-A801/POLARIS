@@ -1,7 +1,6 @@
 <template>
 
   <div v-if="searchbookLists.length" class="border">
-    {{ searchbookLists.length }}
     <BookSearchResultListItem 
       v-for="(item,index) in searchbookLists"
       :key="index"
