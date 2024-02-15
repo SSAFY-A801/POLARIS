@@ -59,7 +59,7 @@
 
 props.tradeitem.forEach((tradeInfo: TradeInfo) => {
   // 구매인 경우
-  if(tradeInfo.receiverId == loginUser){
+  if(tradeInfo.receiverId != loginUser){
     tradeType.value ="구매"
   } else {
     tradeType.value ="판매"

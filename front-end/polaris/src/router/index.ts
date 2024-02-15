@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2'
 // 메인 기능
 import MainPage from '@/views/MainPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
@@ -36,40 +36,46 @@ import EssayEditPage from '@/views/essay/EssayEditPage.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-
-    {//메인페이지
+    {
+      //메인페이지
       path: '/',
       name: 'home',
-      component: MainPage,
+      component: MainPage
     },
-    { // 로그인 페이지
+    {
+      // 로그인 페이지
       path: '/login',
       name: 'login',
-      component: LoginPage,
+      component: LoginPage
     },
-    { // 회원가입 페이지
+    {
+      // 회원가입 페이지
       path: '/signup',
       name: 'signup',
-      component: SignupPage,
+      component: SignupPage
     },
-    {//도서검색 페이지
+    {
+      //도서검색 페이지
       path: '/booksearch',
       name: 'booksearch',
-      component: BookSearchPage,
+      component: BookSearchPage
     },
 
-    {//비밀번호 찾기
+    {
+      //비밀번호 찾기
       path: '/passwordsearch',
       name: 'passwordsearch',
-      component: PasswordSearchPage,
+      component: PasswordSearchPage
     },
-    {//베스트셀러 상세 페이지
+    {
+      //베스트셀러 상세 페이지
       path: '/bestseller/:id',
       name: 'bestsellerdatail',
       component: BestsellerdetailPage,
       props: true
     },
-    {//사용자 인기 도서 상세 페이지
+    {
+      //사용자 인기 도서 상세 페이지
       path: '/userpopularbook/:id',
       name: 'userpopularbookdatail',
       component: UserPopularBookDatailPage,
@@ -78,60 +84,50 @@ const router = createRouter({
     // 프로필
     {
       path: '/profile/:id',
-      redirect: {name: 'MyLibraryPage'},
+      redirect: { name: 'MyLibraryPage' },
       name: 'ProfilePage',
       component: ProfilePage,
       children: [
-        { path: 'library',
-          name: 'MyLibraryPage',
-          component: MyLibraryPage,
-        },
-        { path: 'myscraps',
-          name: 'MyScrapsPage',
-          component: MyScrapsPage 
-        },
-        { path: 'myessay',
-          name: 'MyEssayPage',
-          component: MyEssayPage 
-        }
-      ],
+        { path: 'library', name: 'MyLibraryPage', component: MyLibraryPage },
+        { path: 'myscraps', name: 'MyScrapsPage', component: MyScrapsPage },
+        { path: 'myessay', name: 'MyEssayPage', component: MyEssayPage }
+      ]
     },
     // Profile 수정
-    { 
+    {
       path: '/profile/:id/update',
       name: 'ProfileUpdatePage',
-      component: ProfileUpdatePage, 
+      component: ProfileUpdatePage
     },
     // Password 변경
-    { 
+    {
       path: '/profile/:id/password',
       name: 'PasswordChangePage',
-      component: PasswordChangePage, 
+      component: PasswordChangePage
     },
 
     // 서재에 도서등록 => 모달 제작이 되면 없앨 예정
-    { 
+    {
       path: '/book/:id/library',
       name: 'BookRegisterPage',
-      component: BookRegisterPage,
+      component: BookRegisterPage
     },
     // 거래내역 확인
-    { 
+    {
       path: '/profile/:id/trade-books',
       name: 'MyTradeListPage',
-      component: MyTradeListPage,
+      component: MyTradeListPage
     },
-    { 
+    {
       path: '/profile/:id/exchange-books',
       name: 'MyExchangeListPage',
-      component: MyExchangeListPage,
+      component: MyExchangeListPage
     },
     // 사용자 도서 상세 페이지
     {
       path: '/profile/:id/libray/:isbn',
       name: 'BookDetailPage',
-      component: BookDetailPage,
-
+      component: BookDetailPage
     },
     // 채팅방 관련 라우터
     {
@@ -164,12 +160,12 @@ const router = createRouter({
       name: 'testfirebase',
       component: TestFirebase
     },
-    
+
     // 독후감
     {
       path: '/essaylist',
       name: 'essaylist',
-      component: EssayListPage,
+      component: EssayListPage
     },
     {
       path: '/essaylist/:essayId',
@@ -203,13 +199,13 @@ router.beforeEach((to, from, next) => {
   if ((to.path.startsWith('/profile') || to.name === 'essaycreate') && !userToken) {
     // 'ProfilePage' 라우트이면서 userToken이 없는 경우
     Swal.fire({
-      title: "로그인이 필요한 작업입니다.",
+      title: '로그인이 필요한 작업입니다.',
       icon: 'error'
     }).then(() => {
-      next({ path: '/login' });
-    });
+      next({ path: '/login' })
+    })
   } else {
     // 'ProfilePage' 이외의 다른 라우트 또는 'ProfilePage'이지만 userToken이 있는 경우
-    next();
+    next()
   }
-});
+})

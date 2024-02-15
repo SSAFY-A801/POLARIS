@@ -44,7 +44,7 @@
               <div class="book-list-header mb-4 flex items-center justify-between">
                 <div>
                   <h3 class="text-xl font-bold text-gray-900 mb-2">교환받을 도서목록</h3>
-                  <span class="text-base font-normal text-gray-500">내가 빌릴 도서의 목록입니다.</span>
+                  <span class="text-base font-normal text-gray-500">상대에게 받을 도서의 목록입니다.</span>
                 </div>
               </div>
               <div class="book-list-content flex flex-col mt-8">
@@ -69,8 +69,8 @@
                         </thead>
                         <!-- <div>Getchat이 아니라 이벤트로 불러온애들을 보여줘야함.</div> -->
                         <!-- 지금 로그인된 사람한테는 이게 보이면 안됨 -->
-                        <tbody v-if="checkEvent" class="bg-white">
-                          <tr v-for="(book, index) in chatRoomTradeBooks" :key="index"
+                        <tbody class="bg-white">
+                          <tr v-for="(book, index) in yourBooks" :key="index"
                             class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
                             <td
                               class="p-4 w-auto text-sm font-normal text-gray-900">
@@ -81,51 +81,6 @@
                               {{ book.author }}</td>
                           </tr>
                         </tbody>
-                        <tbody v-else class="bg-white">
-                          <tr v-for="(book, index) in GetchatRoomTradeBooks" :key="index"
-                            class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
-                            <td
-                              class="p-4 w-auto text-sm font-normal text-gray-900">
-                              {{ book.title }}
-                            </td>
-                            <td
-                              class="p-4 w-auto text-sm font-normal text-gray-500">
-                              {{ book.author }}</td>
-                          </tr>
-                        </tbody>
-                        <!-- <tbody v-if="ChatParticipant?.receiverId === Number(userId.id)" class="bg-white">
-                  <tr v-for="(book, index) in selectedBooks" :key="index" class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
-                      <td class="p-4 w-auto text-sm font-normal text-gray-900">
-                    {{ book.title }}  
-                    </td>
-                      <td class="p-4 w-auto text-sm font-normal text-gray-500">
-                      {{ book.author }}</td>
-                  </tr>
-                </tbody> -->
-                        <!-- <tbody v-else class="bg-white">
-                  <tr v-for="(book, index) in GetchatRoomTradeBooks" :key="index" class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
-                      <td class="p-4 w-auto text-sm font-normal text-gray-900">
-                    {{ book.title }}  
-                    </td>
-                      <td class="p-4 w-auto text-sm font-normal text-gray-500">
-                      {{ book.author }}</td>
-                  </tr>
-                </tbody> -->
-                        <!-- <tbody class="bg-white">
-                                <tr v-for="(book, index) in GetchatRoomTradeBooks" :key="index" class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
-                                    <td class="p-4 w-auto text-sm font-normal text-gray-900">
-                                  {{ book.title }}  
-                                  </td>
-                                    <td class="p-4 w-auto text-sm font-normal text-gray-500">
-                                    {{ book.author }}</td>
-                                </tr>
-                              </tbody> -->
-                        <!-- <tbody class="bg-white">
-                  <tr v-for="(book, index) in chatRoomTradeBooks" :key="index">
-                    <td class="p-4 w-auto text-sm font-normal text-gray-900">{{ book.title }}</td>
-                    <td class="p-4 w-auto text-sm font-normal text-gray-500">{{ book.author }}</td>
-                  </tr>
-                </tbody> -->
                       </table>
                     </div>
                   </div>
@@ -141,12 +96,12 @@
                   <div class="mb-4 flex items-center justify-between">
                     <div>
                       <h3 class="text-xl font-bold text-gray-900 mb-2">교환할 도서 목록</h3>
-                      <span class="text-base font-normal text-gray-500">상대방에게 빌려줄 도서를 선택하여 추가해주세요</span>
+                      <span class="text-base font-normal text-gray-500">상대방에게 줄 도서를 선택하여 추가해주세요</span>
                     </div>
                     <div class="flex-shrink-0">
                       <button v-if="selectedBooks.length > 0"
                         class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg p-2"
-                        @click="toggleModal">제거</button>
+                        @click="toggleModal">수정</button>
                       <button v-else class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg p-2"
                         @click="toggleModal">추가</button>
                     </div>
@@ -154,7 +109,7 @@
                   <div class="flex flex-col mt-8">
                     <div class="overflow-x-auto rounded-lg">
                       <div class="align-middle inline-block min-w-full">
-                        <div class="shadow overflow-y-auto h-96 sm:rounded-lg max-h-[208px]">
+                        <div class="shadow overflow-y-hidden h-96 sm:rounded-lg">
                           <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                               <tr>
@@ -173,19 +128,8 @@
                               </tr>
                             </thead>
                             <!-- 여기에 조건을 추가. 내것만 보여야 함 -->
-                            <tbody v-if="checkEvent" class="bg-white">
-                              <tr v-for="(book, index) in chatRoomTradeBooks" :key="book.id"
-                                :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
-                                <td class="p-4 w-auto text-sm font-normal text-gray-900">
-                                  {{ book.title }}
-                                </td>
-                                <td class="p-4 w-auto text-sm font-normal text-gray-500">
-                                  {{ book.author }}
-                                </td>
-                              </tr>
-                            </tbody>
-                            <tbody v-else class="bg-white">
-                              <tr v-for="(book, index) in GetchatRoomTradeBooks" :key="book.id"
+                            <tbody class="bg-white">
+                              <tr v-for="(book, index) in myBooks" :key="book.id"
                                 :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
                                 <td class="p-4 w-auto text-sm font-normal text-gray-900">
                                   {{ book.title }}
@@ -252,7 +196,10 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                <SecondModalItem v-for="(book) in changingData.books" :key="book.id" :secondbook="book" @emit="ControllTradeBookList" />
+                                <SecondModalItem v-for="(book) in changingData.books" 
+                                :key="book.id" 
+                                :secondbook="book" 
+                                @emit="ControllTradeBookList" />
                                 <!-- <tr v-for="book in changingData.books" :key="book.id">
                                   <td class="pr-4 pl-4 border border-gray-300 text-right">{{ book.title }}</td>
                                   <td class="pr-4 pl-4 border border-gray-300 text-right">{{ book.author }}</td>
@@ -297,7 +244,7 @@
 <script setup lang="ts">
 import Navvar from '@/components/common/Navvar.vue'
 import MyChangingBook from './MyChangingBook.vue';
-import { ref, onMounted, defineExpose, computed, nextTick } from 'vue';
+import { watch, ref, onMounted, defineExpose, computed, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import axiosInstance from '@/services/axios';
@@ -327,12 +274,6 @@ interface ChatParticipantResponse {
   data: ChatParticipantData;
 }
 
-// 채팅방 아이디 불러오기
-// onMounted(() => {
-//   console.log(route.params.chatroomId);
-//   chatRoomId.value = Number(route.params.chatroomId);
-
-// });
 
 const ChatParticipant = ref<ChatParticipantData | null>(null);
 // const senderId = ref<number|null>(null);
@@ -362,50 +303,6 @@ onMounted(async () => {
   }
 });
 
-// 채팅방 참여자 조회 get 요청
-// 참여자 조회 인터페이스
-// interface ChatParticipantData {
-//   chatRoomId: number;
-//   senderId: number;
-//   receiverId: number;
-//   receiverNickname: string;
-//   receiverProfileUrl: string;
-// }
-
-// interface ChatParticipantResponse {
-//   status: number;
-//   message: string;
-//   data: ChatParticipantData[];
-// }
-
-// // 채팅방 아이디 불러오기
-// onMounted(() => {
-//   console.log(route.params.chatroomId);
-//   chatRoomId.value = Number(route.params.chatroomId);
-
-// });
-
-// const ChatParticipant = ref<ChatParticipantData[] | null>(null);
-// // 채팅방 참여자 조회
-// onMounted(async () => {
-//     try {
-//       const token = ref(localStorage.getItem('user_token'))
-//       const response = await axiosInstance.value.get<ChatParticipantResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/${chatRoomId.value}`, {
-//         headers: {
-//           'Authorization': token.value?.replace("\"", "")
-//         }
-//       });
-//       if (response.status === 200) {
-//         ChatParticipant.value = response.data.data;
-//         console.log(response.data.data)
-
-//       } else {
-//         console.error('API 요청 실패:', response.status);
-//       }
-//     } catch (error) {
-//       console.error('API 요청 중 오류 발생:', error);
-//     }
-//   });
 
 // 유저아이디 조회
 const userIdString = ref<string>(localStorage.getItem('user_info') ?? "");
@@ -431,18 +328,12 @@ interface SimpleMessage {
   nickname: string;
   message: string;
 }
+
 const route = useRoute();
-
 const chatRoomId = ref<number | null>(null);
-
-
-// const chatData = ref(chatStore.$state.chatData);
-// const chatRoomId = ref<number | null>(null);
-// const chatRoomId = Number(ref(route.params.chatroomId))
 const newmessage = ref('');
 const recvList = ref<SimpleMessage[]>([]);
 const chatRoomTradeBooks = ref<ChatRoomTradeBooks[]>([]);
-
 const chatArea: Ref<HTMLDivElement | null> = ref(null);
 
 //이벤트 관련 변수
@@ -464,19 +355,21 @@ const joinChatRoom = () => {
     });
   });
 
-  // eventSource.addEventListener('change_trade_book_list', (event) => {
-  //   const data: ChatRoomTradeBooks = JSON.parse(event.data)
-  //   chatRoomTradeBooks.value.push(data)
-  //   console.log(data)
-  // })
-  // eventSource.addEventListener('change_trade_book_list', (event) => {
-  //   const data: { chatRoomTradeBooks: ChatRoomTradeBooks[] } = JSON.parse(event.data);
-  //   chatRoomTradeBooks.value = [...chatRoomTradeBooks.value, ...data.chatRoomTradeBooks];  // Spread 연산자를 사용하여 두 배열을 병합
-  //   console.log(data);
-  // });
   eventSource.addEventListener('change_trade_book_list', (event) => {
     const data: { chatRoomTradeBooks: ChatRoomTradeBooks[] } = JSON.parse(event.data);
     chatRoomTradeBooks.value = [...data.chatRoomTradeBooks];  // Spread 연산자를 사용하여 두 배열을 병합
+    realtimeBooks.value = chatRoomTradeBooks.value
+    const mine =  ref<ChatRoomTradeBooks[]>([]);
+    const yours = ref<ChatRoomTradeBooks[]>([]);
+    realtimeBooks.value.forEach((book)=> {
+        if(book.userId == Number(userId.id)){
+          mine.value.push(book)
+        } else {
+          yours.value.push(book)
+        }
+      })
+      myBooks.value = mine.value
+      yourBooks.value = yours.value
     console.log(data);
     checkEvent.value = true;
   });
@@ -536,8 +429,7 @@ interface ChatMessageListResponse {
   status: number;
   message: string;
   data: { chatMessageList: ChatMessageList[]; };
-  // data: ChatMessageList;
-  // data: ChatMessageList[];
+
 }
 
 interface ChatMessageList {
@@ -577,6 +469,10 @@ onMounted(async () => {
 });
 
 //추가되는 부분
+const myBooks = ref<ChatRoomTradeBooks[]>([]);
+const yourBooks = ref<ChatRoomTradeBooks[]>([]);
+
+
 const getTradeBookData = async () => {
   try {
     const token = ref(localStorage.getItem('user_token'))
@@ -589,7 +485,19 @@ const getTradeBookData = async () => {
       GetchatRoomTradeBooks.value = response.data.data.chatRoomTradeBooks;
       // og에 get 데이터를 저장
       originalBooks.value = GetchatRoomTradeBooks.value
+      myBooks.value = []
+      yourBooks.value = []
+      originalBooks.value.forEach((book)=> {
+        if(book.userId == Number(userId.id)){
+          myBooks.value.push(book)
+        } else {
+          yourBooks.value.push(book)
+        }
+      })
+
       console.log('get', GetchatRoomTradeBooks.value)
+      console.log('내책:',myBooks.value)
+      console.log('너책:',yourBooks.value)
     } else {
       console.error('API 요청 실패:', response.status);
     }
@@ -608,27 +516,8 @@ interface ChatRoomTradeBooksResponse {
 }
 
 const originalBooks = ref<ChatRoomTradeBooks[]>([]);
+const realtimeBooks = ref<ChatRoomTradeBooks[]>([]);
 const GetchatRoomTradeBooks = ref<ChatRoomTradeBooks[]>([]);
-
-//선택된 거래 도서 정보 요청 api
-// onMounted(async () => {
-//   try {
-//     const token = ref(localStorage.getItem('user_token'))
-//     const response = await axiosInstance.value.get<ChatRoomTradeBooksResponse>(`https://i10a801.p.ssafy.io:8082/chatroom/book_list/${chatRoomId.value}`, {
-//       headers: {
-//         'Authorization': token.value?.replace("\"", "")
-//       }
-//     });
-//     if (response.status === 200) {
-//       GetchatRoomTradeBooks.value = response.data.data.chatRoomTradeBooks;
-//       console.log('get', GetchatRoomTradeBooks.value)
-//     } else {
-//       console.error('API 요청 실패:', response.status);
-//     }
-//   } catch (error) {
-//     console.error('API 요청 중 오류 발생:', error);
-//   }
-// });
 
 
 //mychangingbook 컴포넌트 스크립트
@@ -636,6 +525,7 @@ const modalOpen = ref(false);
 
 const toggleModal = () => {
   modalOpen.value = !modalOpen.value;
+  TradeBookList.value = []
 };
 
 interface NetBookData {
@@ -643,65 +533,25 @@ interface NetBookData {
   bookIsbn: string;
 }
 
-const TradeBookList = ref<NetBookData[]>([]);
 const selectedBooks = ref<Book[]>([]);
+const TradeBookList = ref<NetBookData[]>([]);
 
 const ControllTradeBookList = (id: number, isbn: string, isTraded: boolean) => {
+  console.log(isTraded)
   const newData = {
     id: id,
     bookIsbn: isbn
   }
   if (isTraded == true) {
-    if (!TradeBookList.value.some((book) => book.id === id)) {
       TradeBookList.value.push(newData)
-    }
+      console.log('담겨라!',TradeBookList.value)
   }
   else {
-    if (TradeBookList.value.some((book) => book.id === id)) {
       TradeBookList.value = TradeBookList.value.filter((book) => book['id'] !== id)
-    }
   }
+  console.log('현재 담긴 도서:',TradeBookList.value)
 }
 
-
-
-// // const chatRoomTradeBooks = ref<ChatRoomTradeBooks[]>([]);
-// const originalBooks = ref<Book[]>([]);
-// // 재작성
-// const selectedBooks = ref<Book[]>([]);
-// const isChecked = ref<Record<number, boolean>>({});
-// const toggleCheckbox = (bookId: number) => {
-//   // const foundBook = sellingData.value?.books.find(book => book.id === bookId) 
-//   //             || sellingData.value?.seriesBooks.books.find(book => book.id === bookId);
-//   const foundBook = changingData.value?.books.find(book => book.id === bookId);
-//   if (foundBook) {
-//     originalBooks.value = [...selectedBooks.value];
-//     isChecked.value[bookId] = !isChecked.value[bookId];
-
-//     if (isChecked.value[bookId]) {
-//       // 체크된 경우에는 배열에 추가
-//       if (!selectedBooks.value.includes(foundBook)) {
-//         selectedBooks.value.push(foundBook);
-//       }
-//     } else {
-//       // 체크가 해제된 경우에는 배열에서 제거
-//       selectedBooks.value = selectedBooks.value.filter(book => book.id !== bookId);
-//     }
-//   }
-// };
-
-// const sendSelectedBooks = () => {
-//   console.log('Selected Books:', selectedBooks.value);
-//   if (changingData?.value) {
-//     toggleModal();
-//   }
-// };
-// export interface UpdatedBookData {
-//   chatRoomId: number;
-//   userId: number;
-//   addedBooks: AddedBooks[];
-//   deletedBooks: Deletedbooks[];
-// }
 
 export interface UpdatedBookData {
   chatRoomId: number;
@@ -720,31 +570,15 @@ export interface UpdatedBookDataResponse {
 const addedBooks = ref<NetBookData[]>([]);
 const deletedBooks = ref<NetBookData[]>([]);
 
-// const sendSelectedBooks = async () => {
-//   console.log('Selected Books:', selectedBooks.value);
-//   if (changingData?.value) {
-//     toggleModal();
-//   }
-
-//   const addedBooks = selectedBooks.value.filter(book => !originalBooks.value.includes(book));
-//   const deletedBooks = originalBooks.value.filter(book => !selectedBooks.value.includes(book));
-
-//   const data: UpdatedBookData = {
-//     chatRoomId: chatroomId,  // chatroomId 사용
-//     userId: Number(changingData.value?.userId),  // userId 사용
-//     addedBooks: addedBooks.map(book => ({ id: book.id, bookIsbn: Number(book.bookIsbn) })),
-//     deletedBooks: deletedBooks.map(book => ({ id: book.id, bookIsbn: Number(book.bookIsbn) })),
-//   };
-
-//   await chooseBook(data);
-// };
-// const originalBooks = ref<ChatRoomTradeBooks[]>([]);
 const submit = async () => {
+  console.log('채팅방:',myBooks.value)
+  console.log('모달:', TradeBookList.value)
   try {
     addedBooks.value = [];
     deletedBooks.value = [];
+    console.log(myBooks.value);
     // 1. original(채팅목록)을 foreach를 돌려서 TradeBookLIst(모달) 목록에 없으면, deleted
-    originalBooks.value.forEach((book) => {
+    myBooks.value.forEach((book) => {
       const isIncluded = ref(false)
       TradeBookList.value.forEach((tradebook) => {
         if (tradebook.id === book.id) {
@@ -758,7 +592,7 @@ const submit = async () => {
     // 2. selected(모달) foreach 돌려서 original에 없으면, added
     TradeBookList.value.forEach((book) => {
       const isIncluded = ref(false)
-      originalBooks.value.forEach((tradebook) => {
+      myBooks.value.forEach((tradebook) => {
         if (tradebook.id === book.id) {
           isIncluded.value = true
         }
@@ -767,9 +601,7 @@ const submit = async () => {
         addedBooks.value.push({ id: book.id, bookIsbn: book.bookIsbn })
       }
     })
-    // console.log(originalBooks.value)
-    // console.log(deletedBooks.value)
-    // console.log(addedBooks.value)
+
     const data: UpdatedBookData = {
       chatRoomId: chatroomId,  // chatroomId 사용
       userId: Number(changingData.value?.userId),  // userId 사용
@@ -799,29 +631,6 @@ const submit = async () => {
     console.error('API 요청 중 오류 발생:', error);
   }
 };
-
-// const chooseBook = async (data: UpdatedBookData) => {
-//   try {
-//     const response = await axiosInstance.value.post<UpdatedBookDataResponse>(
-//       'https://i10a801.p.ssafy.io:8082/trade',
-//       data,
-//       {
-//         headers: {
-//           'Authorization': token.value?.replace("\"", "")
-//         }
-//       }
-//     );
-
-//     if (response.status === 200) {
-//       console.log(data)
-//       console.log(response, '도서선택완료');
-//     } else {
-//       console.error('API 요청 실패:', response.status);
-//     }
-//   } catch (error) {
-//     console.error('API 요청 중 오류 발생:', error);
-//   }
-// };
 
 
 const changingData = ref<ResponseData | null>(null);
