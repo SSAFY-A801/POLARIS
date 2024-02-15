@@ -254,28 +254,9 @@
 
 
 # 팀원 소개
-<hr>
 
-### ✔️Back-end
-<table>
-    <tbody>
-        <tr>
-    <td align="center"><a href="https://github.com/DeveloperYard"><img src="" width="100px;" alt=""/><br /><sub><b>팀장 : 김승우</b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>BE 팀장 : 김미서</b></sub></a><br /></td>
-      <td align="center"><a href="https://github.com/madcom96"><img src="" width="100px;" alt=""/><br /><sub><b>BE 팀원 : 황진하</b></sub></a><br /></td>
-</tr>
-    </tbody>
-<table>
+| ![image](https://avatars.githubusercontent.com/u/59395755?v=4) | ![image](https://avatars.githubusercontent.com/u/86819719) | ![image](https://avatars.githubusercontent.com/u/70102600?v=4) | ![image](https://avatars.githubusercontent.com/u/139421101?v=4) | ![image](https://avatars.githubusercontent.com/u/139318088?v=4) | ![image](https://avatars.githubusercontent.com/u/139318338?v=4) |
+|:----------------------------------------------------------:|:--------------------------------------------------------------:|:--------------------------------------------------------------:|:---------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|:----------:|
+|                   Team Leader & Back-End                   |                        Back-End Leader                         |                            Back-End                            |                        Front-End Leader                         |                                                Front-End                                                | Front-End  |
+|          [김승우](https://github.com/DeveloperYard)           |                [김미서](ttps://github.com/seomiii)                |               [황진하](ttps://github.com/madcom96)                |              [권원영](https://github.com/iamadreamer10)              |                                        [조서현](https://github.com/jojoo99)                                         |  [박주현](https://github.com/Park0Juhyun)   |
 
-### ✔️Frond-end
-<table>
-  <tbody>
-<tr>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>FE 팀장 : 권원영</b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>FE 팀원 : 박주현 </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>FE 팀원 : 조서현 </b></sub></a><br /></td>
-     <tr/>
-      
-    
-  </tbody>
-</table>
