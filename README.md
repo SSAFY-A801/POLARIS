@@ -104,6 +104,7 @@
 
 
 
+
 # 서비스 화면
 
 ### [ 도서 검색 ]
@@ -239,17 +240,15 @@
 
 
 
-
-
-
-
 # 설계 문서
 
-### ERD
+### 📄 ERD
 ![polaris_erd](https://github.com/seomiii/seomiii/assets/86819719/4f688444-8efd-4943-9fcf-01c81cb141a7)
-
-### 아키텍쳐
+### 📄 아키텍쳐
 ![최종 아키텍쳐](https://github.com/seomiii/seomiii/assets/86819719/e6b22e13-bc11-4221-ab87-a607e1331c71)
+### 📄 [요구사항 정의서](https://fresh-fang-cb0.notion.site/7c27960a8fd54b18a1d729632fef056c)
+### 📄 [기능 명세서](https://fresh-fang-cb0.notion.site/068178a6068145d4867c4c8be4302253?pvs=4)
+
 
 
 
