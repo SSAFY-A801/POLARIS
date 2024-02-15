@@ -12,6 +12,7 @@ import com.ssafy.polaris.chat.dto.ChatRoomParticipantsResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomTradeBookListResponseDto;
 import com.ssafy.polaris.chat.dto.ChatRoomTradeBookResponseDto;
 import com.ssafy.polaris.chat.dto.TradeMapper;
+import com.ssafy.polaris.chat.exception.UnavailableChatUserException;
 import com.ssafy.polaris.chat.repository.TradeRepository;
 import com.ssafy.polaris.connectentity.repository.TradeUserBookRepository;
 import com.ssafy.polaris.trade.domain.Trade;
@@ -32,6 +33,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	public ChatRoomCreateResponseDto createChatRoom(ChatRoomCreateRequestDto request) {
 		// request를 trade 엔티티로 변경
 		Trade trade = tradeMapper.toEntity(request);
+		if (trade.getReceiver().getId() == trade.getReceiver().getId()) {
+			throw new UnavailableChatUserException("ChatRoomServiceImpl::createChatRoom");
+		}
 		// trade에 저장
 		tradeRepository.save(trade);
 		// trade를 reponsedto로 변경해서 리턴
