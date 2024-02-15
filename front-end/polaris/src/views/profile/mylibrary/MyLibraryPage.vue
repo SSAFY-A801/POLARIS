@@ -161,7 +161,7 @@ const selectWatch = watch(selectValue, (newValue) => {
 
 // 도서 삭제 요청
 const deleteBooks = () => {
-  console.log(deleteBookList.value)
+  // console.log(deleteBookList.value)
   Swal.fire({
     title: `도서 삭제를 실시합니다.`,
     text: '정말 삭제시겠습니까?',
@@ -227,12 +227,13 @@ watch(store.mybookLists, (newValue, oldValue) => {
     // console.log('내 서재 목록 변경:', oldValue, '->', newValue);
   });
 
-onMounted(()=> {
+onMounted(async () => {
+  store.mybookLists = []
+  await store.getMybookList(route.params.id as string);
   selectWatch;
   filterMybook.value = mybookList.value;
   store.deleteBookList = []
   store.deletebuttonState = false
-  store.getMybookList(route.params.id as string);
   // console.log(mybookList.value)
 })
 </script>

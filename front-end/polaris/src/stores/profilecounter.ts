@@ -222,7 +222,7 @@ export const profileCounterStore = defineStore('counter', () => {
   const deleteBookList = ref<DeleteBook[]>([])
   const bookSearchResultList = ref([]);
   const mybookLists = ref<Book[]>([]);
-
+  
 const getMybookList = (id:string)=> {
   axiosInstance.value({
     headers: {
@@ -232,6 +232,7 @@ const getMybookList = (id:string)=> {
       url: `${BACK_API_URL}/book/${id}/library`,
     })  
   .then((response) => {
+    
     const res = response.data.data
     if(res){
       mybookLists.value = res['books']

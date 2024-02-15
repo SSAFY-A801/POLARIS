@@ -399,6 +399,7 @@
 
   onBeforeRouteUpdate((to,from)=> {
     store.getProfile(Number(to.params.id));
+    store.getMybookList(to.params.id as string)
     axiosInstance.value({
       headers: {
         Authorization: `${store.token}`
