@@ -302,12 +302,7 @@
 
   // 프로필 이동
   const gotoProfile = () => {
-    Swal.fire({
-      title: `${bookDetail.value.nickname} 님의 프로필로 이동합니다.`,
-      icon: 'info'
-    }).then(()=> {
-      router.push({name: "ProfilePage" , params: {id: bookDetail.value.userId}})
-    })
+    router.push({name: "ProfilePage" , params: {id: bookDetail.value.userId}})
   }
 
   // 내 서재로 옮기기
