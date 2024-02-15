@@ -90,7 +90,6 @@ public class UserBookServiceImpl implements UserBookService {
 			if (!em.contains(userBook)) {
 				return 0;
 			}
-			// userBook과 연관된 essay도 soft delete
 			essayRepository.deleteEssayByUserBookId(userBook.getId());
 			userBookRepository.deleteById(userBook.getId());
 		}
