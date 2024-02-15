@@ -9,6 +9,7 @@ public enum ErrorCode {
 	BAD_REQUEST(400, "잘못된 요청입니다."),
 	WRONG_ARGUMENT(400, "잘못된 파라미터 입력입니다."),
 	NO_BOOK_SELECTED(400, "책이 선택되지 않았습니다."),
+	UNAVAILABLE_CHAT_USER(400, "스스로에게 교환을 걸 수 없습니다."),
 
 	CERT_CODE_NOT_MATCH(400, "입력된 입력코드가 일치하지 않습니다."),
 
