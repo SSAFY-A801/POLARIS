@@ -44,7 +44,7 @@
               <div class="book-list-header mb-4 flex items-center justify-between">
                 <div>
                   <h3 class="text-xl font-bold text-gray-900 mb-2">교환받을 도서목록</h3>
-                  <span class="text-base font-normal text-gray-500">내가 상대방에게 받을 도서의 목록입니다.</span>
+                  <span class="text-base font-normal text-gray-500">상대에게 받을 도서의 목록입니다.</span>
                 </div>
               </div>
               <div class="book-list-content flex flex-col mt-8">
@@ -101,7 +101,7 @@
                     <div class="flex-shrink-0">
                       <button v-if="selectedBooks.length > 0"
                         class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg p-2"
-                        @click="toggleModal">제거</button>
+                        @click="toggleModal">수정</button>
                       <button v-else class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg p-2"
                         @click="toggleModal">추가</button>
                     </div>
@@ -109,7 +109,7 @@
                   <div class="flex flex-col mt-8">
                     <div class="overflow-x-auto rounded-lg">
                       <div class="align-middle inline-block min-w-full">
-                        <div class="shadow overflow-y-auto h-96 sm:rounded-lg max-h-[208px]">
+                        <div class="shadow overflow-y-hidden h-96 sm:rounded-lg">
                           <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                               <tr>

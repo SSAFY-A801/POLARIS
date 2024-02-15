@@ -110,16 +110,12 @@
                                 >
                                   저자
                                 </th>
-                                <th
-                                  scope="col"
-                                  class="p-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                  ISBN
+                                <th scope="col"
+                                  class="p-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                
                                 </th>
-                                <th
-                                  scope="col"
-                                  class="p-4 whitespace-nowrap text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
-                                >
+                                <th scope="col"
+                                  class="p-4 whitespace-wrap text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                                   판매가격
                                 </th>
                               </tr>
