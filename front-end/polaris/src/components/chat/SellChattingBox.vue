@@ -1,4 +1,5 @@
 <template>
+  <Navvar></Navvar>
   <div class="first-container">
     <div class="content">
       <div class="text-2xl m-3 font-semibold">도서 거래를 위한 채팅공간</div>
@@ -297,6 +298,7 @@
 </template>
 
 <script setup lang="ts">
+import Navvar from '@/components/common/Navvar.vue'
 import { ref, onMounted, defineExpose, nextTick, computed, watch, reactive, onUpdated } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';

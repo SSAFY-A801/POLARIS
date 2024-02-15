@@ -1,4 +1,5 @@
 <template>
+  <Navvar></Navvar>
     <!-- 모달 제작이 되면 페이지를 없애고 다 모달로 옮길 예정-->
   <div id="register-book"  class="container md:mx-auto min-w-[600px] mt-28 max-w-6xl rounded-md h-[600px] font-[gowun-dodum]">
     <!-- header -->
@@ -69,6 +70,7 @@
 </template>
 
 <script setup lang="ts">
+import Navvar from '@/components/common/Navvar.vue'
 import { onMounted, ref, computed, watch } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router'

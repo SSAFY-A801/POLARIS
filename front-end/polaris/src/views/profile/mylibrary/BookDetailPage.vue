@@ -1,4 +1,5 @@
 <template>
+  <Navvar></Navvar>
   <div class="container mx-auto mt-24 max-w-6xl min-w-[700px] p-4 font-[gowun-dodum]">
     <h1 class="text-3xl font-bold ml-10">도서 상세보기</h1>
     <div class="flex justify-end">
@@ -200,6 +201,7 @@
 </template>
 
 <script setup lang="ts">
+import Navvar from '@/components/common/Navvar.vue'
   import { onMounted, ref, computed, watch } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import type { Book, Searchbook } from '@/stores/profilecounter';
