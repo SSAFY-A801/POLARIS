@@ -13,9 +13,7 @@ import com.ssafy.polaris.essay.domain.Essay;
 import com.ssafy.polaris.essay.domain.Scrap;
 import com.ssafy.polaris.following.domain.Follow;
 import com.ssafy.polaris.global.BaseEntity;
-import com.ssafy.polaris.promotion.domain.Promotion;
 import com.ssafy.polaris.regcode.domain.Regcode;
-import com.ssafy.polaris.report.domain.Report;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -86,16 +84,7 @@ public class User extends BaseEntity {
 	private List<UserBook> userBooks = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Promotion> promotions = new ArrayList<>();
-
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Scrap> scraps = new ArrayList<>();
-
-	@OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL)
-	private List<Report> reporters = new ArrayList<>();
-
-	@OneToMany(mappedBy = "reportedUser", cascade = CascadeType.ALL)
-	List<Report> reportUserList = new ArrayList<>();
 
 	public void UpdateProfile(Regcode regcode, String nickname, String introduction, String profileUrl) {
 		this.regcode = regcode;
