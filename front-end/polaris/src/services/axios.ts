@@ -1,4 +1,3 @@
-
 import { ref } from 'vue'
 import axios, { AxiosError, type AxiosResponse } from 'axios'
 import { profileCounterStore } from '@/stores/profilecounter'
@@ -23,7 +22,7 @@ try {
 }
 
 // axios 인스턴스 생성
-const baseURL = import.meta.env.VITE_API_KEY;
+const baseURL = `${import.meta.env.VITE_API_KEY}`;
 const token = ref(localStorage.getItem('user_token'))
 
 const instance = axios.create({
@@ -54,18 +53,14 @@ instance.interceptors.response.use(
       localStorage.setItem('refresh_token', response.data.data.refresh);
       // localStorage.setItem('user_info', response.data.data);
       token.value = localStorage.getItem('user_token')
-      // console.log(token.value)
-      if (token.value !== null) {
       const profilestore = profileCounterStore()
       const userstore = useUserStore()
       const essaystore = essayStore()
       const chatstore = useChatStore()
-      profilestore.token = token.value
+      profilestore.token = token.value?token.value : ''
       essaystore.token = token.value
       chatstore.token = token.value
       error.config.headers['Authorization'] = token.value?.replace("\"", "")
-    }
-      
 
       // 실패한 요청 재실행
       return instance.request(error.config)
@@ -77,4 +72,5 @@ instance.interceptors.response.use(
 
 const axiosInstance = ref(instance)
 export default axiosInstance
+
 
