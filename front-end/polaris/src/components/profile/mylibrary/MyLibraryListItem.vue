@@ -90,6 +90,7 @@ const emit = defineEmits<{
 (e: 'deleteBooks', id: number, deleteBook: boolean): void
 }>()
 
+
 const emitDeleteState = () => {
   emit('deleteBooks', bookinfo.id, !deleteBook.value)
 }
