@@ -24,14 +24,12 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Following } from '@/stores/profilecounter';
 import { profileCounterStore } from '@/stores/profilecounter';
-import Swal from 'sweetalert2';
-import { increment } from 'firebase/firestore';
-import { icon } from '@fortawesome/fontawesome-svg-core';
 
 
 interface FollowingInfo {
   following: Following
 }
+const { following } = defineProps<FollowingInfo>();
 
 const emit = defineEmits<{
   (e: 'followToggle', following: Following, follow: boolean): void
@@ -48,7 +46,6 @@ const followchange = () => {
   emit('followToggle',following, follow.value)
 }
 
-const { following } = defineProps<FollowingInfo>();
 
 const gotoProfile = () => {
   router.push({ name: "ProfilePage", params: { id: following.followingId } });
