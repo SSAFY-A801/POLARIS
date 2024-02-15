@@ -32,7 +32,9 @@ public class ChatRoomController {
 	private final ChatSaveServiceImpl chatSaveService;
 
 	/**
-	 * 유저가 새로운 채팅방을 생성하고, 채팅방이 열립니다.
+	 * 사용자가 채팅방을 생성합니다.
+	 * @param request (senderId, receiverId, tradeType)
+	 * @return 채팅 id, senderId, receiverId, tradeType
 	 */
 	@PostMapping
 	public ResponseEntity<DefaultResponse<ChatRoomCreateResponseDto>> createChatRoom(
@@ -47,8 +49,10 @@ public class ChatRoomController {
 	}
 
 	/**
-	 *
-	 * @return 사용자 채팅방 목록
+	 * 사용자가 참여한 채팅방 목록
+	 * @param securityUser
+	 * @return chatRoomList
+	 * (chatRoomId, receiverId, nickname(상대방 닉네임), profileUrl(상대방 이미지 url), tradeType, tradeStatus)
 	 */
 	@GetMapping
 	public ResponseEntity<DefaultResponse<ChatRoomListResponseDto>> getChatRoomList(
@@ -79,6 +83,7 @@ public class ChatRoomController {
 	 * 채팅방 참여자 조회
 	 * 채팅방 id로 채팅방의 참여자를 조회합니다.
 	 * @param chatRoomId
+	 * @return chatRoomId, tradeSenderId, tradeReceiverId, senderId, receiverId, receiverNickname, receiverProfileUrl
 	 */
 	@GetMapping(path = "/{chatRoomId}")
 	public ResponseEntity<DefaultResponse<ChatRoomParticipantsResponseDto>> getChatRoomParticipants(@PathVariable(value = "chatRoomId") Long chatRoomId, @AuthenticationPrincipal SecurityUser securityUser) {
@@ -103,7 +108,12 @@ public class ChatRoomController {
 		);
 	}
 
-	// 채팅 메세지 db에서 가져오기
+	/**
+	 * 이전 채팅 메세지 조회
+	 * @param chatRoomId
+	 * @return chatMessageList
+	 * (type,chatRoomId,userId,nickname,createdAt,message)
+	 */
 	@GetMapping("/message/{chatRoomId}")
 	public ResponseEntity<DefaultResponse<ChatMessageListResponseDto>> getChatMessageList(@PathVariable(value = "chatRoomId") Long chatRoomId){
 		ChatMessageListResponseDto chatMessageListResponseDto = chatSaveService.loadMessage(chatRoomId);
@@ -124,9 +134,10 @@ public class ChatRoomController {
 	}
 
 	/**
-	 *
+	 * 채팅방에 등록되어 있는 거래 도서 리스트
 	 * @param chatRoomId
-	 * @return 채팅방에 등록되어 있는 거래 도서 리스트
+	 * @return chatRoomTradeBooks
+	 * (userId,id,title,author,status,price,seriesId)
 	 */
 	@GetMapping("/book_list/{chatRoomId}")
 	public ResponseEntity<DefaultResponse<ChatRoomTradeBookListResponseDto>> getChatRoomTradeBookList(@PathVariable(value = "chatRoomId") Long chatRoomId){
