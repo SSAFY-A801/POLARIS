@@ -33,9 +33,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	public ChatRoomCreateResponseDto createChatRoom(ChatRoomCreateRequestDto request) {
 		// request를 trade 엔티티로 변경
 		Trade trade = tradeMapper.toEntity(request);
-		if (trade.getReceiver().getId() == trade.getReceiver().getId()) {
-			throw new UnavailableChatUserException("ChatRoomServiceImpl::createChatRoom");
-		}
+		// if (trade.getReceiver().getId() == trade.getReceiver().getId()) {
+		// 	throw new UnavailableChatUserException("ChatRoomServiceImpl::createChatRoom");
+		// }
 		// trade에 저장
 		tradeRepository.save(trade);
 		// trade를 reponsedto로 변경해서 리턴
