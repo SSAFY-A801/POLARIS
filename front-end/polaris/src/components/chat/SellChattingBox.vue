@@ -441,7 +441,8 @@ onMounted(async () => {
 
     const token = ref(localStorage.getItem('user_token'))
     const response = await axiosInstance.value.get<ChatParticipantResponse>(
-      `https://i10a801.p.ssafy.io:8082/chatroom/${chatRoomId.value}`,
+      // `https://i10a801.p.ssafy.io:8082/chatroom/${chatRoomId.value}`,
+      `https://i10a801.p.ssafy.io/api/chatroom/${chatRoomId.value}`,
       {
         headers: {
           Authorization: token.value?.replace('"', '')
@@ -498,7 +499,8 @@ const checkEvent = ref<boolean>(false)
 // 채팅방 입장 요청
 const joinChatRoom = () => {
   const eventSource = new EventSource(
-    `https://i10a801.p.ssafy.io:8082/chat/connect/${chatRoomId.value}`
+    // `https://i10a801.p.ssafy.io:8082/chat/connect/${chatRoomId.value}`
+    `https://i10a801.p.ssafy.io/api/chat/connect/${chatRoomId.value}`
   )
 
   eventSource.addEventListener('message', (event) => {
@@ -539,7 +541,8 @@ const sendMessage = () => {
       message: newmessage.value.trim()
     }
 
-    fetch('https://i10a801.p.ssafy.io:8082/chat/send_message', {
+    // fetch('https://i10a801.p.ssafy.io:8082/chat/send_message', {
+    fetch('https://i10a801.p.ssafy.io/api/chat/send_message', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -592,7 +595,8 @@ onMounted(async () => {
   try {
     const token = ref(localStorage.getItem('user_token'))
     const response = await axiosInstance.value.get<ChatMessageListResponse>(
-      `https://i10a801.p.ssafy.io:8082/chatroom/message/${chatRoomId.value}`,
+      // `https://i10a801.p.ssafy.io:8082/chatroom/message/${chatRoomId.value}`,
+      `https://i10a801.p.ssafy.io/api/chatroom/message/${chatRoomId.value}`,
       {
         headers: {
           Authorization: token.value?.replace('"', '')
@@ -616,7 +620,8 @@ const getTradeBookData = async () => {
   try {
     const token = ref(localStorage.getItem('user_token'))
     const response = await axiosInstance.value.get<ChatRoomTradeBooksResponse>(
-      `https://i10a801.p.ssafy.io:8082/chatroom/book_list/${chatRoomId.value}`,
+      // `https://i10a801.p.ssafy.io:8082/chatroom/book_list/${chatRoomId.value}`,
+      `https://i10a801.p.ssafy.io/api/chatroom/book_list/${chatRoomId.value}`,
       {
         headers: {
           Authorization: token.value?.replace('"', '')
@@ -667,7 +672,8 @@ const chatroomId = Number(route.params.chatroomId)
 const completeSell = async (chatroomId: number) => {
   try {
     const response = await axiosInstance.value.patch(
-      `https://i10a801.p.ssafy.io:8082/trade/${chatRoomId.value}`
+      // `https://i10a801.p.ssafy.io:8082/trade/${chatRoomId.value}`
+      `https://i10a801.p.ssafy.io/api/trade/${chatRoomId.value}`
     )
 
     if (response.status === 200) {
@@ -759,7 +765,8 @@ const submit = async () => {
     }
     console.log(data)
     const response = await axiosInstance.value.post<UpdatedBookDataResponse>(
-      'https://i10a801.p.ssafy.io:8082/trade',
+      // 'https://i10a801.p.ssafy.io:8082/trade',
+      'https://i10a801.p.ssafy.io/api/trade',
       data,
       {
         headers: {
@@ -786,7 +793,8 @@ const token = ref(localStorage.getItem('user_token'))
 onMounted(async () => {
   try {
     const response = await axiosInstance.value.get<ApiResponse>(
-      `https://i10a801.p.ssafy.io:8082/trade/purchase_books`,
+      // `https://i10a801.p.ssafy.io:8082/trade/purchase_books`,
+      `https://i10a801.p.ssafy.io/api/trade/purchase_books`,
       {
         headers: {
           Authorization: token.value?.replace('"', '')

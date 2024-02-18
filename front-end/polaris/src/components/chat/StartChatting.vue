@@ -106,7 +106,8 @@ const recvList = ref<SimpleMessage[]>([]);
 
 // 채팅방 입장 요청
 const joinChatRoom = () => {
-  const eventSource = new EventSource(`https://i10a801.p.ssafy.io:8082/chat/connect/${chatRoomId.value}`);
+  // const eventSource = new EventSource(`https://i10a801.p.ssafy.io:8082/chat/connect/${chatRoomId.value}`);
+  const eventSource = new EventSource(`https://i10a801.p.ssafy.io/api/chat/connect/${chatRoomId.value}`);
 
   eventSource.addEventListener('message', (event) => {
     const data: SimpleMessage = JSON.parse(event.data);
@@ -129,7 +130,8 @@ const sendMessage = () => {
       nickname: '닉네임', 
       message: newmessage.value.trim() };
 
-    fetch('https://i10a801.p.ssafy.io:8082/chat/send_message', {
+    // fetch('https://i10a801.p.ssafy.io:8082/chat/send_message', {
+    fetch('https://i10a801.p.ssafy.io/api/chat/send_message', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
