@@ -25,7 +25,7 @@ import com.ssafy.polaris.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping(value = "/chatroom")
+@RequestMapping(value = "/api/chatroom")
 @RequiredArgsConstructor
 public class ChatRoomController {
 	private final ChatRoomService chatRoomService;

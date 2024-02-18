@@ -32,7 +32,7 @@ import com.ssafy.polaris.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/essay")
+@RequestMapping("/api/essay")
 @RequiredArgsConstructor
 public class EssayController {
 

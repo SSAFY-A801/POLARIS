@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/send_mail")
+@RequestMapping("/api/send_mail")
 @RestController
 @RequiredArgsConstructor
 public class EmailController {

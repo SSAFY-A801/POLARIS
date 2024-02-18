@@ -23,7 +23,7 @@ import com.ssafy.polaris.chat.service.SseServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping(value = "/chat")
+@RequestMapping(value = "/api/chat")
 @RequiredArgsConstructor
 public class SseController {
 	private final SseServiceImpl sseService;

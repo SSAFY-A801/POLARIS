@@ -25,7 +25,7 @@ import com.ssafy.polaris.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping("/comment")
+@RequestMapping("/api/comment")
 @RequiredArgsConstructor
 public class CommentController {
 	private final CommentService commentService;

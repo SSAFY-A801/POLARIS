@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/regcode")
+@RequestMapping("/api/regcode")
 public class RegcodeController {
 	private final RegcodeService regcodeService;
 

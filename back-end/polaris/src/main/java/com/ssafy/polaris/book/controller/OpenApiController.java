@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/api")
 public class OpenApiController {
 	@Value("${aladinApiConfig.serviceKey}")
 	private String serviceKey;

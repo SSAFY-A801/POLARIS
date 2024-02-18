@@ -32,7 +32,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/trade")
+@RequestMapping(value = "/api/trade")
 public class TradeController {
 	private final TradeService tradeService;
 	private final SseService sseService;
