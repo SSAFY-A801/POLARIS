@@ -113,30 +113,9 @@
 # 서비스 화면
 
 ### [ 메인 페이지 ]
-<table align=center>
-  <tr>
-    <td>
-      <img width="380" src="https://github.com/DeveloperYard/algorithm/assets/59395755/cab94a03-7ffe-4771-9de7-87bd410c331d">
-    </td>
-    <td>
-      <img width="380" src="https://github.com/DeveloperYard/algorithm/assets/59395755/14ba7839-572b-4a69-bf64-e92852fc6d55">
-    </td>
-    <td>
-      <img width="380" src="https://github.com/DeveloperYard/algorithm/assets/59395755/7a510298-26fe-4901-9f3e-f7da0579e1ee">
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <p align=center>이 주의 책</p>
-    </td>
-    <td>
-      <p align=center>서점 베스트 셀러</p>
-    </td>
-    <td>
-      <p align=center>북극성 인기 도서</p>
-    </td>
-  </tr>
-</table>
+|![](https://github.com/DeveloperYard/algorithm/assets/59395755/cab94a03-7ffe-4771-9de7-87bd410c331d)|![](https://github.com/DeveloperYard/algorithm/assets/59395755/14ba7839-572b-4a69-bf64-e92852fc6d55)|![](https://github.com/DeveloperYard/algorithm/assets/59395755/7a510298-26fe-4901-9f3e-f7da0579e1ee)|
+|:---:|:---:|:---:|
+|이 주의 책|서점 베스트 셀러|북극성 인기 도서|
 
 - 스크랩 수가 가장 많은 독후감을 보여줍니다. 해당 데이터는 7일 간격으로 갱신됩니다.
 - 알라딘 open api에서 제공하는 서점 베스트 셀러 20권을 보여줍니다.
@@ -144,48 +123,13 @@
 
 
 ### [ 나의 서재 ]
-<table align=center>
-  <tr>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/93c2bc62-ce74-4a07-bb5d-4600a4f2c9e8" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/DeveloperYard/algorithm/assets/59395755/52a31847-c62f-4039-8401-5f8355799e66" width="380">
-    </td>
-    <td>
-      <img src="https://github.com/DeveloperYard/algorithm/assets/59395755/3826ac8b-5d3b-415f-ba67-953fdcbdaaed" width="380">
-    </td>
-    <td>
-      <img src="https://github.com/DeveloperYard/algorithm/assets/59395755/3826ac8b-5d3b-415f-ba67-953fdcbdaaed" width="380">
-    </td>
-    <td>
-      <img width="380" alt="image" src="https://github.com/seomiii/seomiii/assets/86819719/64458940-9175-4f76-8964-e8bd314553b8">
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/82a58fab-cdfe-4f45-b9bf-7d86beab91b7" width="380">
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <p align=center>도서 등록</p>
-    </td>
-    <td>
-      <p align=center>사용자 도서 상세 정보</p>
-    </td>
-    <td>
-      <p align=center>나의 독후감</p>
-    </td>
-    <td>
-      <p align=center>스크랩한 독후감</p>
-    </td>
-    <td>
-      <p align=center>나의 채팅 목록</p>
-    </td>
-    <td>
-      <p align=center>팔로잉</p>
-    </td>
-  </tr>
-</table>
+|![](https://github.com/seomiii/seomiii/assets/86819719/93c2bc62-ce74-4a07-bb5d-4600a4f2c9e8)|![](https://github.com/DeveloperYard/algorithm/assets/59395755/52a31847-c62f-4039-8401-5f8355799e66)|![](https://github.com/DeveloperYard/algorithm/assets/59395755/3826ac8b-5d3b-415f-ba67-953fdcbdaaed)|
+|:---:|:---:|:---:|
+|도서 등록|사용자 도서 상세 정보|나의 독후감|
+
+|![](https://github.com/DeveloperYard/algorithm/assets/59395755/3826ac8b-5d3b-415f-ba67-953fdcbdaaed)|![](https://github.com/seomiii/seomiii/assets/86819719/64458940-9175-4f76-8964-e8bd314553b8)|![](https://github.com/seomiii/seomiii/assets/86819719/82a58fab-cdfe-4f45-b9bf-7d86beab91b7)|
+|:---:|:---:|:---:|
+|스크랩한 독후감|나의 채팅 목록|팔로잉|
 
 - 알라딘 open api를 활용하여 손쉽게 도서를 등록할 수 있습니다.
 - 등록한 도서의 공개 여부, 보유 여부를 설정하고 거래 유형을 지정할 수 있습니다.
@@ -209,44 +153,14 @@
 - 북극성에 등록된 거래가 가능한 도서를 지역, 제목, 저자 기준으로 검색할 수 있습니다.
 
 ### [ 도서 거래 채팅 ]
-<table align=center>
-  <tr>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/a47e6f92-66b8-4fe7-a81d-35ff38a3d689" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/dfe1a835-6e1e-4fac-8926-ee6a04a37e7f" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/5853a7d7-c200-4383-8afd-b8a35ded1100" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/11c2c46a-eac1-44b0-b650-1afb08907932" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/d5897f3b-7dec-439b-9a1f-4b4b2e030449" width=380 />
-    </td>
+| ![1:1 채팅](https://github.com/seomiii/seomiii/assets/86819719/a47e6f92-66b8-4fe7-a81d-35ff38a3d689) | ![교환 채팅방 - 교환 도서 선택](https://github.com/seomiii/seomiii/assets/86819719/dfe1a835-6e1e-4fac-8926-ee6a04a37e7f) | ![교환 채팅방 - 교환 도서 선택 2](https://github.com/seomiii/seomiii/assets/86819719/5853a7d7-c200-4383-8afd-b8a35ded1100) |
+|:---:|:---:|:---:|
+| 1:1 채팅 | 교환 채팅방 - 교환 도서 선택 | 교환 채팅방 - 교환 도서 선택 2 |
 
-  </tr>
-  <tr>
-    <td>
-      <p align=center>1:1 채팅</p>
-    </td>
-    <td>
-      <p align=center>교환 채팅방 - 교환 도서 선택</p>
-    </td>
-    <td>
-      <p align=center>교환 채팅방 - 교환 도서 선택 2</p>
-    </td>
-    <td>
-      <p align=center>구매 채팅방</p>
-    </td>
-    <td>
-      <p align=center>판매 채팅방</p>
-    </td>
-  
-  </tr>
-</table>
+| ![구매 채팅방](https://github.com/seomiii/seomiii/assets/86819719/11c2c46a-eac1-44b0-b650-1afb08907932) | ![판매 채팅방](https://github.com/seomiii/seomiii/assets/86819719/d5897f3b-7dec-439b-9a1f-4b4b2e030449) |
+|:---:|:---:|
+| 구매 채팅방 | 판매 채팅방 |
+
 
 - 거래자와 실시간 1:1 채팅을 할 수 있습니다.
 - 거래자와 N:M 도서 거래가 가능합니다.
@@ -254,49 +168,13 @@
 - 채팅방 안의 거래 도서가 변경되면 해당 채팅방에는 도서 목록이 실시간으로 업데이트 됩니다.
 
 ### [ 독후감 게시판 ]
-<table align=center>
-  <tr>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/6574af80-99e8-416d-89a4-7133bbf4468a" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/19339f6f-8af2-41d4-84e5-7fc71de7a06b" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/c94b3f76-3f72-49f8-b94c-920b0fb9c08c" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/1b3b8eaa-3978-4b82-a958-d131169dd24c" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/99620d2d-145d-4f2c-9226-4e74e3defc5f" width=380 />
-    </td>
-    <td>
-      <img src="https://github.com/seomiii/seomiii/assets/86819719/5aee21e0-e1b6-4340-a631-5fda0cc4dbf2" width=380 />
-    </td>
+| ![독후감 리스트](https://github.com/seomiii/seomiii/assets/86819719/6574af80-99e8-416d-89a4-7133bbf4468a) | ![독후감 상세페이지](https://github.com/seomiii/seomiii/assets/86819719/19339f6f-8af2-41d4-84e5-7fc71de7a06b) | ![독후감 작성 및 스크랩](https://github.com/seomiii/seomiii/assets/86819719/c94b3f76-3f72-49f8-b94c-920b0fb9c08c) |
+|:---:|:---:|:---:|
+| 독후감 리스트 | 독후감 상세페이지 | 독후감 작성 및 스크랩 |
 
-  </tr>
-  <tr>
-    <td>
-      <p align=center>독후감 리스트</p>
-    </td>
-    <td>
-      <p align=center>독후감 상세페이지</p>
-    </td>
-    <td>
-      <p align=center>독후감 작성 및 스크랩</p>
-    </td>
-    <td>
-      <p align=center>독후감 작성 완료</p>
-    </td>
-    <td>
-      <p align=center>작성한 독후감 상세 페이지</p>
-    </td>
-    <td>
-      <p align=center>독후감 수정</p>
-    </td>
-  </tr>
-</table>
+| ![독후감 작성 완료](https://github.com/seomiii/seomiii/assets/86819719/1b3b8eaa-3978-4b82-a958-d131169dd24c) | ![작성한 독후감 상세 페이지](https://github.com/seomiii/seomiii/assets/86819719/99620d2d-145d-4f2c-9226-4e74e3defc5f) | ![독후감 수정](https://github.com/seomiii/seomiii/assets/86819719/5aee21e0-e1b6-4340-a631-5fda0cc4dbf2) |
+|:---:|:---:|:---:|
+| 독후감 작성 완료 | 작성한 독후감 상세 페이지 | 독후감 수정 |
 
 - 독후감을 통해 다양한 사용자들과 도서의 감상을 공유할 수 있습니다.
 - 독후감을 작성, 수정, 삭제를 할 수 있습니다.
